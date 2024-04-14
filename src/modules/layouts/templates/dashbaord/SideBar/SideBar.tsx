@@ -1,0 +1,26 @@
+import clsx from "clsx";
+import React from "react";
+import ButtonSignOut from "./ButtonSignOut";
+import OptionsList from "./OptionsList";
+
+import { menuOptions } from "./options";
+
+const SideBar = () => {
+  return (
+    <div
+      className={clsx(
+        "fixed left-0 top-16 z-20 hidden h-[calc(100vh-56px)] w-60 flex-col justify-between border-r  bg-white pb-4 pt-2 text-white md:flex dark:border-white/10 dark:bg-slate-950 ",
+      )}
+    >
+      <nav className="mt-0 flex-grow px-6">
+        {menuOptions.map((list) => {
+          return <OptionsList key={list.id} list={list} />;
+        })}
+      </nav>
+
+      <ButtonSignOut />
+    </div>
+  );
+};
+
+export default SideBar;

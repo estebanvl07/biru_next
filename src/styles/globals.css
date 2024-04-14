@@ -1,3 +1,48 @@
+@import url("https://fonts.googleapis.com/css2?family=Encode+Sans:wght@100;600;700&display=swap&family=Montserrat:wght@400;600;800&display=swap");
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+body {
+  box-sizing: border-box;
+  @apply text-sm text-slate-900 dark:text-slate-300;
+}
+
+/* @media (prefers-color-scheme: dark) { */
+/* body { */
+/* @apply text-slate-100; */
+/* } */
+/* } */
+
+h1,
+h2,
+h3 {
+  @apply text-black dark:text-white;
+}
+
+h2 {
+  @apply text-2xl font-semibold;
+}
+
+h3 {
+  @apply text-xl font-semibold;
+}
+
+/* width */
+.scrollbar-customize::-webkit-scrollbar {
+  @apply h-[5px] w-1.5 bg-gray-300 dark:bg-slate-800;
+}
+
+.scrollbar-y-customize::-webkit-scrollbar {
+  @apply h-[5px] w-1 bg-indigo-300 dark:bg-slate-800/80;
+}
+
+/* Track */
+.scrollbar-customize .scrollbar-y-customize::-webkit-scrollbar-track {
+  @apply rounded-full bg-slate-100 dark:bg-gray-900;
+}
+
+/* Handle */
+.scrollbar-customize::-webkit-scrollbar-thumb {
+  @apply rounded-full bg-indigo-400 dark:!bg-slate-300;
+}

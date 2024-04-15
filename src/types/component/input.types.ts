@@ -35,4 +35,5 @@ export interface PropsInput
   labelClassName?: string;
   children?: React.ReactNode;
   showInputField?: boolean;
+  ref?: any;
 }

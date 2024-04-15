@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState } from "react";
+import { forwardRef, useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import clsx from "clsx";
 import { Icon } from "@iconify/react/dist/iconify.js";
@@ -15,18 +15,21 @@ import useInputSearch from "~/lib/hooks/useInputSearch";
 import { ISelectOptions } from "~/types/root.types";
 import { Dropdown } from "primereact/dropdown";
 
-const Select = ({
-  options,
-  setOption,
-  changeOption,
-  UListClassName,
-  optionListClassName,
-  directionList = "bottom",
-  defaultValue,
-  readOnly,
-  label,
-  ...props
-}: ISelectProps) => {
+const Select: React.ForwardRefRenderFunction<HTMLInputElement, ISelectProps> = (
+  {
+    options,
+    setOption,
+    changeOption,
+    UListClassName,
+    optionListClassName,
+    directionList = "bottom",
+    defaultValue,
+    readOnly,
+    label,
+    ...props
+  },
+  ref,
+) => {
   const [showOptions, setShowOptions] = useState<boolean>(false);
   const [query, setQuery] = useState<string>("");
   const { newList, onSearch, refreshList } = useInputSearch({
@@ -162,4 +165,4 @@ const Select = ({
   );
 };
 
-export default Select;
+export default forwardRef(Select);

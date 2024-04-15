@@ -8,9 +8,11 @@ import Link from "next/link";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import { useRouter } from "next/navigation";
 import WhitoutSideBar from "~/modules/layouts/templates/dashbaord/whitout-sidebar";
+import { api } from "~/utils/api";
 
 const AccountPage = () => {
   const router = useRouter();
+  const { data: category } = api.category.getAll.useQuery();
   const { data: session } = useSession();
 
   const accounts = [
@@ -42,6 +44,8 @@ const AccountPage = () => {
       updatedAt: "",
     },
   ];
+
+  console.log(category);
 
   const setAccount = (id: number) => {
     router.push(`/account/${id}/main`);

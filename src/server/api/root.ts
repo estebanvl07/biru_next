@@ -1,5 +1,8 @@
 import { postRouter } from "~/server/api/routers/post";
+import { categoriesRouter } from "./routers/category";
+import { transactionsRouter } from "./routers/transaction";
 import { createCallerFactory, createTRPCRouter } from "~/server/api/trpc";
+import { userAccountRouter } from "./routers/userAccount";
 
 /**
  * This is the primary router for your server.
@@ -8,7 +11,12 @@ import { createCallerFactory, createTRPCRouter } from "~/server/api/trpc";
  */
 export const appRouter = createTRPCRouter({
   post: postRouter,
+  category: categoriesRouter,
+  transaction: transactionsRouter,
+  userAccount: userAccountRouter,
 });
+
+console.log("appRouter:", appRouter);
 
 // export type definition of API
 export type AppRouter = typeof appRouter;

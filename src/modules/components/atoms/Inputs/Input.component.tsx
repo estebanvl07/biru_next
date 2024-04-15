@@ -3,27 +3,31 @@ import clsx from "clsx";
 
 import type { PropsInput } from "~/types/component/input.types";
 import { Icon } from "@iconify/react/dist/iconify.js";
+import { forwardRef } from "react";
 
-const Input = ({
-  label,
-  error,
-  className,
-  iconPath,
-  eventIcon,
-  onContentClick,
-  buttonIconClassName,
-  containerClassName,
-  inputContentClassName,
-  labelClassName,
-  id,
-  register,
-  name,
-  onBlur,
-  mainClassName,
-  showInputField = true,
-  children,
-  ...props
-}: PropsInput) => {
+const Input: React.ForwardRefRenderFunction<HTMLInputElement, PropsInput> = (
+  {
+    label,
+    error,
+    className,
+    iconPath,
+    eventIcon,
+    onContentClick,
+    buttonIconClassName,
+    containerClassName,
+    inputContentClassName,
+    labelClassName,
+    id,
+    register,
+    name,
+    onBlur,
+    mainClassName,
+    showInputField = true,
+    children,
+    ...props
+  },
+  ref,
+) => {
   return (
     <div className={clsx("h-full w-full", mainClassName)}>
       <div
@@ -73,6 +77,7 @@ const Input = ({
           )}
           {showInputField && (
             <input
+              ref={ref}
               className={clsx(
                 "focus:--tw-ring-color:transparent w-full border-none bg-transparent !px-0 !py-0 text-sm text-zinc-600 placeholder-slate-400 !outline-none focus:border-transparent dark:text-zinc-300 dark:placeholder-zinc-600",
                 className,
@@ -84,7 +89,6 @@ const Input = ({
               name={name}
               id={id}
               onBlur={onBlur}
-              // ref={ref}
               {...register}
               {...props}
             />
@@ -105,4 +109,4 @@ const Input = ({
   );
 };
 
-export default Input;
+export default forwardRef(Input);

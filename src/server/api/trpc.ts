@@ -84,6 +84,8 @@ const t = initTRPC.context<typeof createTRPCContext>().create({
   },
 });
 
+console.log("Argumentos recibidos por initTRPC.context:", t);
+
 /**
  * Create a server-side caller.
  *

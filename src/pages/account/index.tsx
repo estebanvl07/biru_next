@@ -9,43 +9,44 @@ import { Icon } from "@iconify/react/dist/iconify.js";
 import { useRouter } from "next/navigation";
 import WhitoutSideBar from "~/modules/layouts/templates/dashbaord/whitout-sidebar";
 import { api } from "~/utils/api";
+import { UserAccount } from "@prisma/client";
 
 const AccountPage = () => {
   const router = useRouter();
-  const { data: category } = api.category.getAll.useQuery();
+  const { data: accounts } = api.userAccount.getAll.useQuery();
   const { data: session } = useSession();
 
-  const accounts = [
-    {
-      balance: 321439,
-      name: "Cuenta de Ahorros",
-      createdAt: "",
-      reference: "12",
-      type: "1",
-      id: 1,
-      updatedAt: "",
-    },
-    {
-      balance: 321439,
-      name: "Tienda",
-      createdAt: "",
-      reference: "12",
-      type: "1",
-      id: 2,
-      updatedAt: "",
-    },
-    {
-      balance: 3212439,
-      name: "Inversiones",
-      createdAt: "",
-      reference: "12",
-      type: "1",
-      id: 3,
-      updatedAt: "",
-    },
-  ];
+  // const accounts = [
+  //   {
+  //     balance: 321439,
+  //     name: "Cuenta de Ahorros",
+  //     createdAt: "",
+  //     reference: "12",
+  //     type: "1",
+  //     id: 1,
+  //     updatedAt: "",
+  //   },
+  //   {
+  //     balance: 321439,
+  //     name: "Tienda",
+  //     createdAt: "",
+  //     reference: "12",
+  //     type: "1",
+  //     id: 2,
+  //     updatedAt: "",
+  //   },
+  //   {
+  //     balance: 3212439,
+  //     name: "Inversiones",
+  //     createdAt: "",
+  //     reference: "12",
+  //     type: "1",
+  //     id: 3,
+  //     updatedAt: "",
+  //   },
+  // ];
 
-  console.log(category);
+  console.log(accounts);
 
   const setAccount = (id: number) => {
     router.push(`/account/${id}/main`);
@@ -74,11 +75,11 @@ const AccountPage = () => {
           <h2>Mis cuentas</h2>
           <p>Seleccione alguna de sus cuentas para continuar.</p>
           <div className="flex flex-wrap gap-2 py-2">
-            {accounts.map((account) => {
+            {accounts?.map((account) => {
               return (
                 <AccountCard
                   key={account.id}
-                  account={account}
+                  account={account as any}
                   onclick={() => setAccount(account.id)}
                 />
               );

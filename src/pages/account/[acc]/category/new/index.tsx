@@ -7,14 +7,18 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { IconSearcher } from "~/modules/category/IconSelector";
 import { type CreateCategory, createCategory } from "~/modules/category/schema";
-// import { api } from "~/trpc/react";
+import { api } from "~/utils/api";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import clsx from "clsx";
 import DashboardLayout from "~/modules/layouts/Dashboard";
+import { useRouter } from "next/router";
+import { useParams } from "next/navigation";
 // import { Icon } from "@iconify/react/dist/iconify.js";
 // import { classNames } from "primereact/utils";
 
 const NewCategory = ({ hasEdit = false }: { hasEdit?: boolean }) => {
+  const router = useRouter();
+  const { acc } = useParams();
   const [modalActive, setModalActive] = useState(false);
 
   // const helloNoArgs = api.post.hello.useQuery({ text: "Hola desde cliente" });
@@ -30,17 +34,20 @@ const NewCategory = ({ hasEdit = false }: { hasEdit?: boolean }) => {
     resolver: zodResolver(createCategory),
   });
 
-  // const category = api.category.create.useMutation();
+  const category = api.category.create.useMutation();
 
   const icon = watch("icon") || "fe:smile-plus";
 
   const onSubmit = (data: CreateCategory) => {
     console.log({ data });
-    // return category.mutateAsync(data, {
-    //   onError(error, variables, context) {
-    //     console.log({ error, variables, context });
-    //   },
-    // });
+    return category.mutateAsync(data, {
+      onError(error, variables, context) {
+        console.log({ error, variables, context });
+      },
+      onSuccess() {
+        router.back();
+      },
+    });
   };
 
   console.log({ errors });

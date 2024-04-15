@@ -12,8 +12,8 @@ export const userAccountRouter = createTRPCRouter({
         userId,
       });
     }),
-  //   getAll: protectedProcedure.query(async ({ ctx }) => {
-  //     const userId = ctx.session.user.id;
-  //     return categoryServices.getAllCategories(ctx.db, userId);
-  //   }),
+  getAll: protectedProcedure.query(async ({ ctx }) => {
+    const userId = ctx.session.user.id;
+    return userAccount.getAllAccounts(ctx.db, userId);
+  }),
 });

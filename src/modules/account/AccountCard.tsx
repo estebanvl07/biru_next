@@ -1,11 +1,11 @@
 "use client";
 import clsx from "clsx";
-import { IAccount } from "~/types/account";
+import { type UserAccount } from "@prisma/client";
 
 interface AccountCardProps {
-  account: IAccount;
+  account: UserAccount;
   index?: number;
-  onclick?: (account: IAccount) => void;
+  onclick?: (account: UserAccount) => void;
   className?: string;
 }
 
@@ -28,7 +28,7 @@ const AccoundCard = ({
       </h4>
       <span className="hidden text-sm md:block">Balance</span>
       <span className="text-xl font-semibold md:mb-2 md:text-2xl">
-        $ {account?.balance.toLocaleString()}
+        $ {account.balance && account?.balance.toLocaleString()}
       </span>
       {/* {reference && <span className="text-sm">{reference}</span>} */}
     </div>

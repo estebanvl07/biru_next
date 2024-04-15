@@ -17,8 +17,6 @@ export function createAccount(
   db: PrismaClient,
   data: Prisma.UserAccountUncheckedCreateInput,
 ) {
-  console.log(data);
-
   return db.userAccount.create({
     data: {
       ...data,
@@ -27,8 +25,8 @@ export function createAccount(
   });
 }
 
-export function getAllCategories(db: PrismaClient, userId: string) {
-  return db.category.findMany({
+export function getAllAccounts(db: PrismaClient, userId: string) {
+  return db.userAccount.findMany({
     where: {
       userId,
     },

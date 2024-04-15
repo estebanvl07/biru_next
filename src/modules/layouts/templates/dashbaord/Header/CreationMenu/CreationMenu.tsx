@@ -48,11 +48,7 @@ const CreationMenu = () => {
         title="Crear"
         onClick={() => setShowMenu(!showMenu)}
       >
-        <Icon
-          icon="fluent:form-new-20-regular"
-          className="text-primary"
-          width={24}
-        />
+        <Icon icon="uil:plus-circle" className="text-primary" width={24} />
       </button>
       {showMenu && (
         <motion.div className="absolute right-0 top-12 flex w-[165px] flex-col rounded-md border bg-white py-2 shadow-xl dark:border-white/10 dark:bg-slate-900">

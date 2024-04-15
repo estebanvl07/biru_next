@@ -41,17 +41,16 @@ const CreateAccount = ({ hasEdit = false }: { hasEdit?: boolean }) => {
     formState: { errors },
     register,
   } = useForm();
-  // useForm<CreateUserAccount>({
-  //   resolver: zodResolver(createUserAccount),
-  // });
 
   const onsubmit = (data: any) => {
-    console.log(data);
     return userAccount?.mutateAsync(
       { ...data, balance: Number(data.balance) },
       {
         onError(error, variables, context) {
           console.log({ error, variables, context });
+        },
+        onSuccess() {
+          router.push("/account");
         },
       },
     );

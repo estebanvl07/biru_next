@@ -29,16 +29,14 @@ const CategoryPage = () => {
       <div className="mx-auto max-w-[900px] py-2">
         <nav className="mb-4 flex items-center justify-between">
           <h2>Categorías</h2>
-          <Button>
-            <Link
-              href={{
-                pathname: "/account/[acc]/category/new",
-                query: { acc: params?.acc },
-              }}
-            >
-              Crear categoría
-            </Link>
-          </Button>
+          <Link
+            href={{
+              pathname: "/account/[acc]/category/new",
+              query: { acc: params?.acc },
+            }}
+          >
+            <Button>Crear categoría</Button>
+          </Link>
         </nav>
         {categories?.length === 0 ? (
           <span>No tienes categorías creadas</span>

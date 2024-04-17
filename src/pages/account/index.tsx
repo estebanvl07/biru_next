@@ -1,6 +1,6 @@
 "use client";
 import { useSession } from "next-auth/react";
-import React from "react";
+import React, { useEffect } from "react";
 
 import AccountCard from "~/modules/account/AccountCard";
 import { Button } from "~/modules/components";
@@ -51,6 +51,12 @@ const AccountPage = () => {
   const setAccount = (id: number) => {
     router.push(`/account/${id}/main`);
   };
+
+  useEffect(() => {
+    if (accounts?.length === 0) {
+      router.push(`/account/new`);
+    }
+  }, [accounts]);
 
   return (
     <WhitoutSideBar>

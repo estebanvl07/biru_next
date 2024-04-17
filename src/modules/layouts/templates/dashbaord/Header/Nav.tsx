@@ -33,7 +33,7 @@ export default function HeaderMenu({ type = "dashboard" }: Props) {
       className="relative flex items-center justify-end gap-3 pr-6"
       // ref={navRef}
     >
-      {params.acc && <CreationMenu />}
+      {params?.acc && <CreationMenu />}
       <HandlerTheme />
       <div className="ml-4 flex flex-col items-end">
         <p

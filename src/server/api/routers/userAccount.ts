@@ -1,6 +1,7 @@
 import { createTRPCRouter, protectedProcedure } from "~/server/api/trpc";
 import { createUserAccount } from "~/modules/account/schema";
 import * as userAccount from "~/server/api/services/userAccount.services";
+import { z } from "zod";
 
 export const userAccountRouter = createTRPCRouter({
   create: protectedProcedure
@@ -16,4 +17,10 @@ export const userAccountRouter = createTRPCRouter({
     const userId = ctx.session.user.id;
     return userAccount.getAllAccounts(ctx.db, userId);
   }),
+  getOne: protectedProcedure
+    .input(z.object({ id: z.number() }))
+    .query(async ({ ctx, input }) => {
+      const userId = ctx.session.user.id;
+      return userAccount.getAccountById(ctx.db, { ...input, userId });
+    }),
 });

@@ -18,8 +18,10 @@ import { useParams } from "next/navigation";
 
 const NewCategory = ({ hasEdit = false }: { hasEdit?: boolean }) => {
   const router = useRouter();
-  const { acc } = useParams();
   const [modalActive, setModalActive] = useState(false);
+
+  const params = useParams();
+  const { type } = router.query;
 
   // const helloNoArgs = api.post.hello.useQuery({ text: "Hola desde cliente" });
   // const userCreator = api.post.create.useMutation();
@@ -50,16 +52,16 @@ const NewCategory = ({ hasEdit = false }: { hasEdit?: boolean }) => {
     });
   };
 
-  console.log({ errors });
+  console.log(params);
 
   return (
     <DashboardLayout>
-      <Card className="mx-auto flex w-full max-w-[40rem] flex-col items-center justify-center border-none !bg-transparent !p-0 md:border md:!bg-white md:!p-6 dark:!bg-transparent md:dark:!bg-slate-900">
+      <Card className="mx-auto flex w-full max-w-[40rem] flex-col items-center justify-center border !bg-transparent !p-0 md:border md:!bg-white md:!p-6 dark:!bg-transparent md:dark:!bg-slate-900">
+        <h2 className="mb-4 w-full">Nueva categoría</h2>
         <form
           className="flex w-full flex-col gap-2 pt-6 md:pt-0"
           onSubmit={handleSubmit(onSubmit)}
         >
-          <h2 className="mb-4 w-full">Crear nueva categoría</h2>
           <Input
             label="Nombre"
             iconPath="mdi:rename-outline"
@@ -71,19 +73,28 @@ const NewCategory = ({ hasEdit = false }: { hasEdit?: boolean }) => {
             iconPath="fluent:money-hand-24-regular"
             label="Tipo"
             name="type"
+            defaultValue={type ?? 1}
             register={register("type")}
             options={[
               {
                 label: "Ingreso",
                 value: 1,
-                className:
+                className: clsx(
                   "has-[input:checked]:bg-green-500 has-[input:checked]:text-white",
+                  {
+                    "bg-green-500 text-white": type && Number(type) === 1,
+                  },
+                ),
               },
               {
                 label: "Gasto",
                 value: 2,
-                className:
+                className: clsx(
                   "has-[input:checked]:bg-red-500 has-[input:checked]:text-white",
+                  {
+                    "bg-red-500 text-white": type && Number(type) === 2,
+                  },
+                ),
               },
             ]}
           />

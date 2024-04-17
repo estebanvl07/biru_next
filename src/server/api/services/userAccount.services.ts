@@ -32,3 +32,15 @@ export function getAllAccounts(db: PrismaClient, userId: string) {
     },
   });
 }
+
+export function getAccountById(
+  db: PrismaClient,
+  { userId, id }: { userId: string; id: number },
+) {
+  return db.userAccount.findUnique({
+    where: {
+      userId,
+      id,
+    },
+  });
+}

@@ -25,6 +25,7 @@ const RadioGroup = ({
   buttonIconClassName,
   containerClassName,
   inputContentClassName,
+  defaultValue,
   labelClassName,
   id,
   register,
@@ -82,12 +83,12 @@ const RadioGroup = ({
             </span>
           )}
 
-          <div className="flex w-full">
+          <div className="mt-1 flex w-full gap-0 overflow-hidden rounded-md">
             {options.map((option) => (
               <label
                 key={option.value}
                 className={clsx(
-                  "flex-1 cursor-pointer rounded-sm bg-slate-100",
+                  "flex-1 cursor-pointer bg-slate-100 px-1 py-0.5 dark:bg-slate-800",
                   labelClassName,
                   option.className,
                 )}
@@ -95,7 +96,7 @@ const RadioGroup = ({
               >
                 <input
                   type="radio"
-                  value={option.value}
+                  value={defaultValue ?? option.value}
                   className="appearance-none"
                   {...register}
                   // checked={option.value === value}

@@ -4,6 +4,10 @@ import * as userAccount from "~/server/api/services/userAccount.services";
 import { z } from "zod";
 
 export const userAccountRouter = createTRPCRouter({
+  seed: protectedProcedure.mutation(async ({ ctx }) => {
+    const userId = ctx.session.user.id;
+    return userAccount.setSeed(ctx.db, userId);
+  }),
   create: protectedProcedure
     .input(createUserAccount)
     .mutation(async ({ ctx, input }) => {

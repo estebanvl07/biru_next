@@ -7,16 +7,16 @@ import LoginForm from "~/modules/signin/LoginForm";
 const LoginPage = () => {
   return (
     <BasicLayout>
-      <div className="my-auto flex h-full w-full flex-col justify-center px-4 py-6 md:flex-row">
-        <section className="relative flex h-full w-full max-w-[28rem] flex-grow flex-col items-center justify-center gap-2">
-          <h1 className="mb-1 text-pretty text-4xl font-bold tracking-tight  text-primary dark:text-indigo-300">
+      <div className="my-auto flex h-full w-full flex-row justify-center px-4 py-6">
+        <section className="relative flex h-full w-full max-w-[25rem] flex-grow flex-col items-center justify-center gap-2">
+          <h1 className=" text-pretty text-2xl font-bold tracking-tight  text-primary dark:text-indigo-300">
             ¡Bienvenido de vuelta!
           </h1>
-          <p className="max-w-52 text-pretty text-center text-slate-400">
+          <p className="text-pretty text-center text-slate-400">
             Introduzca sus datos para iniciar sesión
           </p>
+          <SignInOptions title="" />
           <LoginForm />
-          <SignInOptions />
           <span className="mt-6 flex w-full items-center justify-center gap-2 text-sm">
             ¿No tienes cuenta?,
             <Link

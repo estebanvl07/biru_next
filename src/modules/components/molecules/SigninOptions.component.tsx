@@ -6,10 +6,10 @@ import React from "react";
 import { Button } from "~/modules/components";
 import { CALLBACK_SIGNIN_URL } from "~/lib/constants/config";
 
-const SigninOptions = () => {
+const SigninOptions = ({ title }: { title?: string }) => {
   return (
     <div className="flex w-full flex-col items-center gap-3">
-      <span className="text-sm">Iniciar con</span>
+      <span className="text-sm">{title ?? "Iniciar con"}</span>
       <section className="flex w-full items-center justify-center overflow-hidden rounded-lg border">
         <Button
           className="w-full flex-1 rounded-none !py-2 hover:bg-slate-100"

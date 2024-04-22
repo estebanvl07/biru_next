@@ -13,6 +13,21 @@ import { Prisma, PrismaClient } from "@prisma/client";
 //     userId    String
 //   }
 
+export function setSeed(db: PrismaClient, userId: string) {
+  const data: Prisma.UserAccountUncheckedCreateInput = {
+    name: "Ahorro",
+    type: 1,
+    balance: 0,
+    reference: "",
+    state: 1,
+    userId,
+  };
+
+  return db.userAccount.create({
+    data,
+  });
+}
+
 export function createAccount(
   db: PrismaClient,
   data: Prisma.UserAccountUncheckedCreateInput,

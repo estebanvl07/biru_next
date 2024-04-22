@@ -20,7 +20,7 @@ const BasicLayout: FC<LayoutProps> = ({
         <meta name="description" content={description} />
       </Head>
       <Header />
-      <main className="h-[calc(100vh-78.19px)]">{children}</main>
+      <main className="h-[calc(100vh-78.19px)] px-2 sm:px-0">{children}</main>
     </>
   );
 };

@@ -32,7 +32,7 @@ const Input: React.ForwardRefRenderFunction<HTMLInputElement, PropsInput> = (
     <div className={clsx("h-full w-full", mainClassName)}>
       <div
         className={clsx(
-          "relative flex w-full items-center rounded-md border bg-white px-4 py-2 dark:border-white/50 dark:bg-transparent",
+          "relative flex w-full items-center rounded-md border bg-slate-50/50 px-4 py-2 dark:border-white/10 dark:bg-transparent",
           containerClassName,
           {
             "!border-red-600": error,
@@ -104,7 +104,9 @@ const Input: React.ForwardRefRenderFunction<HTMLInputElement, PropsInput> = (
           />
         )}
       </div>
-      {error && <span className="px-2 text-sm text-gray-400">{error}</span>}
+      {error && (
+        <span className="px-2 text-xs italic text-gray-400">{error}</span>
+      )}
     </div>
   );
 };

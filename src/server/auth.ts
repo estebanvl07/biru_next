@@ -4,7 +4,7 @@ import {
   getServerSession,
   type DefaultSession,
   type NextAuthOptions,
-  type User
+  type User,
 } from "next-auth";
 import { type Adapter } from "next-auth/adapters";
 import GoogleProvider from "next-auth/providers/google";
@@ -13,6 +13,10 @@ import CredentialsProvider from "next-auth/providers/credentials";
 
 import { env } from "~/env";
 import { db } from "~/server/db";
+import { PrismaClient } from "@prisma/client";
+import { RequestError } from "~/lib/utility/errorClass";
+
+import bcrypt from "bcrypt";
 
 /**
  * Module augmentation for `next-auth` types. Allows us to add custom properties to the `session`
@@ -40,6 +44,9 @@ declare module "next-auth" {
  *
  * @see https://next-auth.js.org/configuration/options
  */
+
+const prisma = new PrismaClient();
+
 export const authOptions: NextAuthOptions = {
   adapter: PrismaAdapter(db) as Adapter,
   providers: [
@@ -59,6 +66,7 @@ export const authOptions: NextAuthOptions = {
       // e.g. domain, username, password, 2FA token, etc.
       // You can pass any HTML attribute to the <input> tag through the object.
       credentials: {
+        name: { type: "text" },
         email: { label: "Correo", type: "text", placeholder: "Jhon@Doe.com" },
         password: {
           label: "Contraseña",
@@ -76,31 +84,78 @@ export const authOptions: NextAuthOptions = {
 
         // console.log(credentials);
 
-        const res = await fetch(`${process.env.NEXT_BACK_URL}/auth/sign-in`, {
-          method: "POST",
-          body: JSON.stringify({
-            email: credentials?.email,
-            password: credentials?.password,
-          }),
-          headers: { "Content-Type": "application/json" },
+        if (!credentials) return null;
+
+        const referer = req?.headers?.referer || "";
+
+        if (referer.includes("/register")) {
+          const existingUser = await prisma.user.findUnique({
+            where: { email: credentials?.email ?? "" },
+          });
+
+          if (existingUser) {
+            throw new RequestError({
+              status: 400,
+              code: "USER_EXISTING",
+              message: "El email ya está en uso",
+            });
+          }
+
+          const newUser = await prisma.user.create({
+            data: {
+              email: credentials?.email,
+              name: credentials?.name || null,
+              image: null,
+            },
+          });
+
+          // create user password
+          const passwordHash = bcrypt.hashSync(
+            credentials.password,
+            bcrypt.genSaltSync(10),
+          );
+
+          await prisma.userPassword.create({
+            data: {
+              email: credentials?.email,
+              password: passwordHash,
+              userId: newUser.id,
+              state: 1,
+            },
+          });
+
+          return newUser;
+        }
+
+        const userFound = await prisma.user.findUnique({
+          where: { email: credentials?.email ?? "" },
+          include: {
+            userPassword: true,
+          },
         });
-        const user = await res.json().then((data) => data as unknown);
 
-        // console.log(user);
+        const validate_user_error = {
+          code: "INVALID_EMAIL_OR_PASSWORD",
+          status: 400,
+          message: "Correo o contraseña incorrecta",
+        };
 
-        // If no error and we have user data, return it
-        if (res.ok && user) {
-          return user as User;
+        if (!userFound) {
+          throw new RequestError(validate_user_error);
+        }
+
+        const isPasswordMatching = await bcrypt.compare(
+          credentials.password,
+          userFound?.userPassword?.password ?? "",
+        );
+
+        if (!isPasswordMatching) {
+          throw new RequestError(validate_user_error);
         }
         // Return null if user data could not be retrieved
-        return null;
+        return userFound;
       },
     }),
-
-    // DiscordProvider({
-    //   clientId: env.DISCORD_CLIENT_ID,
-    //   clientSecret: env.DISCORD_CLIENT_SECRET,
-    // }),
     /**
      * ...add more providers here.
      *
@@ -112,19 +167,22 @@ export const authOptions: NextAuthOptions = {
      */
   ],
   callbacks: {
-    async jwt({ token, user, }) {
-      return { ...token, user };
-    },
-    async session({ session, user }) {
-      return {
+    async session({ session, token }) {
+      const options = {
         ...session,
         user: {
           ...session.user,
-          id: user.id,
+          id: token.sub,
         },
       };
+
+      return options;
     },
   },
+  session: {
+    strategy: "jwt",
+  },
+  secret: process.env.NEXTAUTH_SECRET,
   pages: {
     signIn: "/login",
   },

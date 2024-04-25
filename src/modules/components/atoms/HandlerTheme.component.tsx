@@ -28,11 +28,7 @@ const DarkMode = ({ className }: { className?: string }) => {
   }, [darkMode]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
-    <Button
-      variantStyle="empty"
-      className={clsx("!m-0 !p-0", className)}
-      onClick={handleDarkMode}
-    >
+    <button className={clsx("!m-0 !p-0", className)} onClick={handleDarkMode}>
       {darkMode ? (
         <Icon
           icon="akar-icons:sun-fill"
@@ -46,7 +42,7 @@ const DarkMode = ({ className }: { className?: string }) => {
           className="text-primary"
         />
       )}
-    </Button>
+    </button>
   );
 };
 

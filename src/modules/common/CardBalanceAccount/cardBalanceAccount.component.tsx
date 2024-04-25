@@ -6,12 +6,18 @@ import { LineChart } from "~/modules/charts";
 import type { Series } from "~/types/root.types";
 import { IAccount } from "~/types/account";
 import { ITransaction } from "~/types/transactions";
+import { useParams } from "next/navigation";
+import { api } from "~/utils/api";
 
 // TODO: filter by options
 const CardBalanceAccount = () => {
+  const params = useParams();
   const [serie, setSerie] = useState<Series[]>();
   const [keys, setKeys] = useState<string[]>([]);
   const [date, setDate] = useState<{ from: string; to: string }>();
+  const { data: account } = api.userAccount.getOne.useQuery({
+    id: Number(params?.acc),
+  });
 
   const desktopMediQuery = true;
 
@@ -19,14 +25,15 @@ const CardBalanceAccount = () => {
   const accountSelected = [] as IAccount[];
 
   const setChartSeries = () => {
-    if (!transactions)
-      return setSerie([
-        {
-          name: "Balance",
-          color: "#3E1FE9",
-          data: [],
-        },
-      ]);
+    if (!transactions && account)
+      console.log(account.balance, typeof account.balance);
+    return setSerie([
+      {
+        name: "Balance",
+        color: "#3E1FE9",
+        data: [0, account?.balance as number],
+      },
+    ]);
 
     const lastIndex = transactions.length - 1;
 
@@ -51,27 +58,26 @@ const CardBalanceAccount = () => {
     setKeys([]);
   };
 
-  // useEffect(() => {
-  //   if (!accountSelected) return;
-  //   if (!transactions) {
-  //     // dispatch(getTransactions());
-  //     return;
-  //   }
-
-  //   setChartSeries();
-  // }, [transactions, accountSelected]);
+  useEffect(() => {
+    if (!account) return;
+    setChartSeries();
+  }, [account]);
 
   return (
     <Card className="flex h-full !w-full flex-col md:px-2 md:pr-4">
       <header className="mb-2 flex flex-col items-center justify-between px-2 md:flex-row md:px-4">
         <div className="flex w-full flex-col items-start justify-center">
-          <h3>Transacciones</h3>
+          <h3 className="font-normal">Balance</h3>
+          <h2 className="text-3xl">
+            $ {account?.balance?.toLocaleString() ?? "0.00"}
+          </h2>
+
           {date?.from ? (
             <span className="text text-sm">
               {date?.from} - {date?.to}
             </span>
           ) : (
-            <span className="text-sm"> Sin transacciones </span>
+            <span className="text-sm"> </span>
           )}
         </div>
         {/* <ChartsFilterList filterbyType={() => {}} /> */}

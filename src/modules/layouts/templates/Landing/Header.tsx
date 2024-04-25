@@ -10,9 +10,14 @@ const Header = () => {
         <Link href="/">
           <Image src="/logo.svg" alt="Logo de Biru" width={120} height={60} />
         </Link>
-        <Link href="/login">
-          <Button variantStyle="outline">Entrar</Button>
-        </Link>
+        <div className="flex gap-2">
+          <Link href="/register">
+            <Button variantStyle="outline">Registrarme</Button>
+          </Link>
+          <Link href="/login">
+            <Button>Ingresar</Button>
+          </Link>
+        </div>
       </div>
     </header>
   );

@@ -21,47 +21,26 @@ const HomePage = () => {
   const loading = false;
   return (
     <DashboardLayout>
-      <div className="mx-auto max-w-[65rem]">
+      <div className="">
         {/* {!desktopMediaQuery ? (
         <HomeMobile />
       ) : (
       )} */}
-        <div className="flex w-full flex-col">
-          <section className="mb-2 flex items-center justify-between">
-            <div className="flex flex-col">
-              <span className="text-sm">Saldo estimado</span>
-              {loading ? (
-                <span>loading</span>
-              ) : (
-                // <LoaderSkeleton skeletonType="Balance" />
-                <h2 className="text-3xl md:text-4xl">
-                  $ {account?.balance?.toLocaleString() ?? "0.00"}
-                </h2>
-              )}
-            </div>
-            <Link href="/transactions/new">
-              <Button className="">Crear transacción</Button>
-            </Link>
-          </section>
-          <div
-            className={clsx(
-              "bento-container w-full gap-4",
-              style["bento-container"],
-            )}
-          >
-            <article className="row-span-4 lg:col-span-5">
+        <div className="mt-4 flex w-full flex-col gap-4">
+          <section className="flex flex-row gap-4">
+            <article className="flex-grow">
               <CardBalanceAccount />
             </article>
-            <article className="col-span-12 row-span-4 lg:col-span-5">
-              <DetailAmounts cardClassName="h-full" />
+            <article className="flex-grow-0">
+              <DetailAmounts cardClassName="h-full min-w-[24rem] w-full" />
             </article>
-            <div className="col-span-10 row-span-4">
-              <LastTransactions
-                loading={loading}
-                cardClassName="px-4 py-4"
-                transactions={[]}
-              />
-            </div>
+          </section>
+          <div className="">
+            <LastTransactions
+              loading={loading}
+              cardClassName="px-4 py-4"
+              transactions={[]}
+            />
           </div>
         </div>
       </div>

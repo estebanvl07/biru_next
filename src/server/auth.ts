@@ -109,6 +109,17 @@ export const authOptions: NextAuthOptions = {
             },
           });
 
+          await prisma.userAccount.create({
+            data: {
+              userId: newUser.id,
+              name: "Ahorros",
+              reference: "",
+              balance: 0,
+              state: 1,
+              type: 1,
+            },
+          });
+
           // create user password
           const passwordHash = bcrypt.hashSync(
             credentials.password,

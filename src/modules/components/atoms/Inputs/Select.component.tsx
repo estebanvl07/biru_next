@@ -111,13 +111,19 @@ const Select: React.ForwardRefRenderFunction<HTMLInputElement, ISelectProps> = (
         onBlur={() => onValidityOption()}
         {...props}
       >
-        <button
-          className="absolute right-4 top-3 transition-transform hover:-rotate-6"
-          type="button"
-          onClick={onClean}
-        >
-          <Icon icon="healthicons:cleaning-outline" width={26} />
-        </button>
+        {query && (
+          <button
+            className="absolute right-4 top-5 transition-transform"
+            type="button"
+            onClick={onClean}
+          >
+            <Icon
+              icon="f7:xmark-circle-fill"
+              className="text.slate-800 dark:text-white/30"
+              width={18}
+            />
+          </button>
+        )}
       </Input>
 
       <motion.ul

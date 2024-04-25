@@ -7,46 +7,66 @@ import { signOut } from "next-auth/react";
 import type { ListMenu } from "~/types/root.types";
 import { CALLBACK_SIGNOUT_URL } from "~/lib/constants/config";
 import AccountsOptions from "./AccountsOptions";
-import LinkOption from "../Linkoption";
+
+import { Listbox, ListboxItem } from "@nextui-org/react";
+import { useRouter } from "next/router";
+
+const OPTIONS: ListMenu[] = [
+  {
+    label: "Perfil",
+    href: "/profile",
+    icon: "mdi:account-outline",
+  },
+  {
+    label: "Configuración",
+    href: "/settings",
+    icon: "mingcute:settings-6-line",
+  },
+  {
+    label: "Ayuda",
+    href: "/help",
+    showLine: true,
+    icon: "material-symbols:help-outline",
+  },
+  {
+    label: "Cerrar Sesión",
+    icon: "humbleicons:logout",
+    href: "",
+    onClick: () => {
+      signOut({
+        callbackUrl: CALLBACK_SIGNOUT_URL,
+      });
+    },
+  },
+];
 
 const Menu = ({ onHide }: { onHide: () => void }) => {
-  const options: ListMenu[] = [
-    {
-      label: "Perfil",
-      href: "/profile",
-      icon: "mdi:account-outline",
-    },
-    {
-      label: "Configuración",
-      href: "/settings",
-      icon: "mingcute:settings-6-line",
-    },
-    {
-      label: "Ayuda",
-      href: "/help",
-      icon: "material-symbols:help-outline",
-    },
-  ];
+  const router = useRouter();
 
   return (
-    <motion.div className="absolute right-0 top-16 flex w-52 flex-col rounded-md border bg-white py-2 shadow-xl dark:border-white/10 dark:bg-slate-900">
+    <motion.div className="absolute right-0 top-16 flex w-52 flex-col rounded-md border bg-white/80 pb-1 pt-2 shadow-xl backdrop-blur-xl dark:border-white/10 dark:bg-slate-900/70">
       <AccountsOptions />
       <ul className="flex w-full flex-col">
-        {options.map((option) => {
-          return <LinkOption onHide={onHide} key={option.label} {...option} />;
-        })}
-        <hr />
-        <button
-          className="mt-2 flex items-center !justify-start gap-2 rounded-none !px-4 !py-2 text-sm font-normal hover:bg-gray-100 dark:hover:bg-slate-950"
-          onClick={() =>
-            signOut({
-              callbackUrl: CALLBACK_SIGNOUT_URL,
-            })
-          }
-        >
-          <Icon icon="humbleicons:logout" width={18} />
-          Cerrar Sesión
-        </button>
+        <Listbox variant="flat">
+          {OPTIONS.map((option) => {
+            return (
+              <ListboxItem
+                onClick={() => {
+                  if (option.href) return router.push(option.href);
+                  option.onClick && option.onClick();
+                  onHide();
+                }}
+                color="primary"
+                className="px-3 hover:rounded-md dark:hover:!text-white"
+                showDivider={option.showLine}
+                startContent={<Icon icon={option.icon ?? ""} />}
+                key={option.label}
+              >
+                {option.label}
+              </ListboxItem>
+            );
+          })}
+        </Listbox>
       </ul>
     </motion.div>
   );

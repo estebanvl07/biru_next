@@ -21,7 +21,7 @@ const Card = ({ children, className, id, ref, onClick }: Props) => {
   return (
     <div
       className={clsx(
-        "z-20 flex rounded-md border border-gray-400/20 bg-white p-4 backdrop-blur-md md:rounded-xl dark:border-white/5 dark:bg-slate-900 dark:shadow-md",
+        "z-20 flex rounded-lg border border-gray-400/20 bg-white p-4 shadow-md backdrop-blur-md md:rounded-xl dark:border-white/5 dark:bg-slate-900 dark:shadow-md",
         className,
       )}
       ref={ref}

@@ -5,6 +5,8 @@ import { Montserrat } from "next/font/google";
 
 import { api } from "~/utils/api";
 
+import { NextUIProvider } from "@nextui-org/react";
+
 import "~/styles/globals.css";
 
 const montserrat = Montserrat({
@@ -18,9 +20,11 @@ const MyApp: AppType<{ session: Session | null }> = ({
 }) => {
   return (
     <SessionProvider session={session}>
-      <main className={`font-sans ${montserrat.variable}`}>
-        <Component {...pageProps} />
-      </main>
+      <NextUIProvider>
+        <main className={`font-sans ${montserrat.variable}`}>
+          <Component {...pageProps} />
+        </main>
+      </NextUIProvider>
     </SessionProvider>
   );
 };

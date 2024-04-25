@@ -17,11 +17,8 @@ import clsx from "clsx";
 
 const AnalyticsPage = () => {
   return (
-    <DashboardLayout>
-      <div className="mx-auto h-full w-full max-w-[90rem]">
-        <h2 className="mb-4 font-encode md:text-4xl">
-          Análisis y Estadisticas
-        </h2>
+    <DashboardLayout title="Análisis y estadisticas">
+      <div className="mx-auto mt-4   h-full w-full max-w-[90rem]">
         <div
           className={clsx(
             "bento-container gap-2 md:gap-4",

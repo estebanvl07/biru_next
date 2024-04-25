@@ -4,7 +4,6 @@ import { Button, Card, Input, Select } from "~/modules/components";
 import { useRouter } from "next/navigation";
 
 import { Icon } from "@iconify/react/dist/iconify.js";
-import { InputNumber } from "primereact/inputnumber";
 import { api } from "~/utils/api";
 import WhitoutSideBar from "~/modules/layouts/templates/dashbaord/whitout-sidebar";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -58,14 +57,14 @@ const CreateAccount = ({ hasEdit = false }: { hasEdit?: boolean }) => {
 
   return (
     <WhitoutSideBar>
-      <div className="flex min-h-calc-48 w-full items-center justify-center md:min-h-calc-64">
+      <div className="flex w-full items-center justify-center">
         <Card className="m-auto flex w-full max-w-[40rem] flex-col items-center justify-center border-none !bg-transparent !p-0 md:border md:!bg-white md:!p-6 dark:!bg-transparent md:dark:!bg-slate-900">
           <form
             className="flex w-full flex-col gap-2 pt-6 md:pt-0"
             onSubmit={handleSubmit(onsubmit)}
           >
             <header className="mb-2 flex w-full items-center justify-between">
-              <h2>Crear nueva cuenta</h2>
+              <h2>Nueva cuenta</h2>
               <Button
                 className="flex items-center gap-2 !px-0 !py-0"
                 variantStyle="empty"

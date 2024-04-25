@@ -1,5 +1,6 @@
 "use client";
 import React from "react";
+import { useForm } from "react-hook-form";
 import {
   Card,
   Input,
@@ -11,13 +12,25 @@ import {
 import DashboardLayout from "~/modules/layouts/Dashboard";
 
 const NewTransactionPage = () => {
+  const {
+    handleSubmit,
+    register,
+    formState: { errors },
+    setValue,
+  } = useForm();
+
+  const onSubmit = (data: any) => {
+    console.log(data);
+  };
+
   return (
     <DashboardLayout>
-      <Card className="mx-auto flex w-full max-w-[40rem] flex-col items-center justify-center border-none !bg-transparent !p-0 md:border md:!bg-white md:!p-6 dark:!bg-transparent md:dark:!bg-slate-900">
-        <form className="flex w-full flex-col gap-2 pt-6 md:pt-0">
-          <h2 className="mb-4 hidden w-full md:block">
-            Crear nueva transación
-          </h2>
+      <Card className="mx-auto flex w-full max-w-[40rem] flex-col items-center justify-center !bg-transparent !p-0 md:border md:!bg-white md:!p-6 dark:!bg-transparent md:dark:!bg-slate-900">
+        <form
+          className="flex w-full flex-col items-center justify-center gap-2 pt-6 md:pt-0"
+          onSubmit={handleSubmit(onSubmit)}
+        >
+          <h2 className="mb-4 hidden w-full md:block">Nueva transación</h2>
 
           <div className="flex w-full flex-col rounded-md border bg-white dark:border-white/50 dark:bg-transparent">
             <Input
@@ -29,8 +42,8 @@ const NewTransactionPage = () => {
               label="Valor"
               type="number"
               className="w-full"
-              // {...register("amount")}
-              // error={errors.amount?.message}
+              {...register("amount")}
+              error={errors.amount?.message as any}
             />
             <section className="p-1">
               <ButtonGroup
@@ -42,7 +55,7 @@ const NewTransactionPage = () => {
                     id: 1,
                     label: "Ingreso",
                     onClick: () => {
-                      // setValue("type", 1);
+                      setValue("type", 1);
                     },
                     colorSelected:
                       "!bg-green-500 border border-green-500 text-white",
@@ -51,7 +64,7 @@ const NewTransactionPage = () => {
                     id: 2,
                     label: "Egreso",
                     onClick: () => {
-                      // setValue("type", 2);
+                      setValue("type", 2);
                     },
                     colorSelected:
                       "!bg-red-500 border border-red-500 text-white",
@@ -70,8 +83,8 @@ const NewTransactionPage = () => {
             iconPath="fluent:text-description-24-filled"
             label="Descripción"
             placeholder="Mercado del mes"
-            // {...register("description")}
-            // error={errors.description?.message}
+            {...register("description")}
+            error={errors.description?.message as any}
             required
           />
           <Select
@@ -80,21 +93,20 @@ const NewTransactionPage = () => {
             // eventIcon={() => navigation("/category/new")}
             // setOption={detail?.categoryId}
             options={[]}
-            changeOption={
-              (option) => console.log(option)
-              // setValue("categoryId", Number(option.value))
+            changeOption={(option) =>
+              setValue("categoryId", Number(option.value))
             }
             name="category"
             label="Categoría"
             placeholder="Mercado, Servicios, Arriendo"
-            // error={errors.categoryId?.message}
+            error={errors.categoryId?.message as any}
           />
           <Input
             iconPath="streamline:travel-map-triangle-flag-navigation-map-maps-flag-gps-location-destination-goal"
             label="Destinatario"
             placeholder="Andres, Juan, Omar"
-            // {...register("destinatary")}
-            // error={errors.destinatary?.message}
+            {...register("destinatary")}
+            error={errors.destinatary?.message as any}
           />
 
           <div className="flex w-full flex-col gap-2 pt-3 md:flex-row">

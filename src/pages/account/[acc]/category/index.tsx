@@ -25,7 +25,7 @@ const CategoryPage = () => {
   const { data: categories } = api.category.getAll.useQuery();
 
   return (
-    <DashboardLayout>
+    <DashboardLayout title="Categorías">
       <div className="mx-auto max-w-[900px] py-2">
         <nav className="mb-4 flex items-center justify-between">
           <h2>Categorías</h2>

@@ -12,7 +12,7 @@ type Props = {
 
 const ListTransactions = React.memo(({ data, emptyText, maxLength }: Props) => {
   return (
-    <ul className="flex w-full flex-col scrollbar-customize overflow-auto rounded-md border-black/20 bg-white text-sm dark:border-white/10 dark:bg-slate-900">
+    <ul className="scrollbar-customize flex h-fit w-full flex-col overflow-auto rounded-md border-black/20 bg-white text-sm dark:border-white/10 dark:bg-slate-900">
       {data?.map((item, index) => {
         if (maxLength && index + 1 === maxLength) return null;
         return (
@@ -25,7 +25,7 @@ const ListTransactions = React.memo(({ data, emptyText, maxLength }: Props) => {
         );
       })}
       {data?.length === 0 && (
-        <p className="py-4 font-extralight text-zinc-400 text-center">
+        <p className="py-4 text-center font-extralight text-zinc-400">
           {emptyText ?? "No se encontraron datos"}
         </p>
       )}

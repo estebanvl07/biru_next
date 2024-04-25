@@ -1,6 +1,6 @@
 import { FC } from "react";
 import clsx from "clsx";
-
+import { Button as ButtonLayout } from "@nextui-org/button";
 interface Props extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   variantStyle?: "outline" | "fill" | "empty";
   children?: React.ReactNode;
@@ -12,26 +12,24 @@ const Button: FC<Props> = ({
   children,
   type = "button",
   className,
+  onClick,
   ...props
 }) => {
   const variantStyles = {
     empty: "p-0",
     outline: "border border-indigo-500 text-primary dark:text-primary-light",
-    fill: "bg-primary border border-primary text-blue-50 hover:shadow-2xl shadow-primary",
+    fill: "bg-primary border border-primary text-blue-50 hover:shadow-lg shadow-primary",
   }[variantStyle];
 
   return (
-    <button
+    <ButtonLayout
       type={type}
-      className={clsx(
-        "flex items-center justify-center gap-1 rounded-md px-5 py-3 text-sm font-medium transition-all lg:gap-2",
-        variantStyles,
-        className,
-      )}
-      {...props}
+      className={clsx("w-full bg-white py-5", variantStyles, className)}
+      radius="sm"
+      onClick={onClick}
     >
       {children}
-    </button>
+    </ButtonLayout>
   );
 };
 

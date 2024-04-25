@@ -7,6 +7,7 @@ import { ListTransactions } from "~/modules/common";
 
 import type { ITransaction } from "~/types/transactions";
 import Link from "next/link";
+import { useParams } from "next/navigation";
 
 interface LastTransactionsProps {
   transactions?: ITransaction[];
@@ -23,6 +24,7 @@ const LastTransactions: FC<LastTransactionsProps> = ({
   cardClassName,
   loading,
 }) => {
+  const params = useParams<{ acc: string }>();
   const { transactions: LastTransactions, loading: isLoading } = {
     transactions: [] as ITransaction[],
     loading: false,
@@ -34,7 +36,10 @@ const LastTransactions: FC<LastTransactionsProps> = ({
         <div className="mb-4 flex items-center justify-between md:px-2">
           <h2 className="text-xl font-semibold">Transacciones</h2>
           <Link
-            href={"/transactions/all"}
+            href={{
+              pathname: "account/[acc]/transactions",
+              query: { acc: params?.acc },
+            }}
             className="text-sm text-gray-600 dark:text-gray-300"
           >
             Ver todas

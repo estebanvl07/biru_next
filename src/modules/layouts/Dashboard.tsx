@@ -1,17 +1,22 @@
-import WhitoutSideBar from "./templates/dashbaord/whitout-sidebar";
-import LayoutWitheSidebar from "./templates/dashbaord/white-sidebar";
-import { SideBar } from "./templates/dashbaord";
+import { HeaderApp, SideBar } from "./templates/dashbaord";
 
-const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
+const DashboardLayout = ({
+  children,
+  title,
+}: {
+  children: React.ReactNode;
+  title?: string;
+}) => {
   return (
-    <WhitoutSideBar>
-      <div className="flex">
-        <SideBar />
-        <section className="h-full w-full flex-grow p-4 md:pl-64">
+    <div className="flex dark:bg-slate-950">
+      <SideBar />
+      <section className="z-0 h-full w-full flex-grow py-3 md:pl-60">
+        <div className="px-8">
+          <HeaderApp title={title} />
           {children}
-        </section>
-      </div>
-    </WhitoutSideBar>
+        </div>
+      </section>
+    </div>
   );
 };
 

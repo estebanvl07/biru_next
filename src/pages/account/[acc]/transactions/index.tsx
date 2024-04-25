@@ -8,7 +8,7 @@ const TransactionPage = () => {
   // const { query } = useRouter();
 
   return (
-    <DashboardLayout>
+    <DashboardLayout title="Transacciones">
       <Card className="mx-auto max-w-[65rem] flex-col px-8 py-6">
         <header className="flex items-center justify-between">
           <h2>Transacciones</h2>

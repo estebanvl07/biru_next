@@ -21,6 +21,7 @@ const SideBar = () => {
           return <OptionsList key={list.id} list={list} />;
         })}
       </nav>
+      <hr className="mx-4 mb-6" />
       <ButtonSignOut />
     </div>
   );

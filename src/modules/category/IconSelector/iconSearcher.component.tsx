@@ -1,4 +1,4 @@
-import { Dialog } from "primereact/dialog";
+// import { Dialog } from "primereact/dialog";
 import IconSelector from "./iconSelector.component";
 
 type IconSearcherProps = {
@@ -8,14 +8,17 @@ type IconSearcherProps = {
 
 const IconSearcher = ({ selected, onHideModal }: IconSearcherProps) => {
   return (
-    <Dialog
-      header="Icono de categoría"
-      visible
-      style={{ width: "50vw" }}
-      onHide={onHideModal}
-    >
+    // <Dialog
+    //   header="Icono de categoría"
+    //   visible
+    //   style={{ width: "50vw" }}
+    //   onHide={onHideModal}
+    // >
+      <div>
+
       <IconSelector selected={selected} onHideModal={onHideModal} />
-    </Dialog>
+      </div>
+    // </Dialog>
   );
 };
 

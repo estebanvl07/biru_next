@@ -32,7 +32,7 @@ const Input: React.ForwardRefRenderFunction<HTMLInputElement, PropsInput> = (
     <div className={clsx("h-full w-full", mainClassName)}>
       <div
         className={clsx(
-          "relative flex w-full items-center rounded-md border bg-slate-50/50 px-4 py-2 dark:border-white/10 dark:bg-transparent",
+          "relative flex w-full items-center rounded-xl border bg-slate-50/50 px-4 py-2 dark:border-white/10 dark:bg-slate-900",
           containerClassName,
           {
             "!border-red-600": error,
@@ -52,7 +52,7 @@ const Input: React.ForwardRefRenderFunction<HTMLInputElement, PropsInput> = (
             )}
             onClick={eventIcon}
           >
-            <Icon icon={iconPath} width={18} />
+            <Icon icon={iconPath} width={18} className="dark:text-white" />
           </button>
         )}
         <div

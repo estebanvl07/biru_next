@@ -16,7 +16,7 @@ const HeaderApp = ({ title }: { title?: string }) => {
     <header className="z-10 mb-2 flex w-full items-center justify-between bg-white md:h-16 dark:border-white/10 dark:bg-slate-950">
       <section className="flex w-full flex-grow items-center justify-between">
         <section className="flex items-center gap-3">
-          {!pathname.includes("main") && <NavigationBack />}
+          {!pathname?.includes("main") && <NavigationBack />}
           <div
             className={clsx("flex flex-col items-start justify-center", {
               // "!pl-7": location.pathname === "/home",

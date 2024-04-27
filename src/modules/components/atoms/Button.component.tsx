@@ -16,15 +16,16 @@ const Button: FC<Props> = ({
   ...props
 }) => {
   const variantStyles = {
-    empty: "p-0",
-    outline: "border border-indigo-500 text-primary dark:text-primary-light",
-    fill: "bg-primary border border-primary text-blue-50 hover:shadow-lg shadow-primary",
+    empty: "p-0 !bg-transparent",
+    outline:
+      "border border-indigo-500 text-primary dark:text-primary-light bg-white dark:bg-transparent",
+    fill: "!bg-primary border border-primary hover:shadow-lg shadow-primary dark:!bg-indigo-600 text-white",
   }[variantStyle];
 
   return (
     <ButtonLayout
       type={type}
-      className={clsx("w-full bg-white py-5", variantStyles, className)}
+      className={clsx("flex py-5", variantStyles, className)}
       radius="sm"
       onClick={onClick}
     >

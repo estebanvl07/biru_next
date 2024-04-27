@@ -13,8 +13,8 @@ const OptionItem = ({ item }: { item: any }) => {
       className={clsx(
         "flex w-full items-center gap-2 rounded-lg px-4 py-2 text-sm transition-all hover:pl-6",
         {
-          "text-medium bg-indigo-100 font-semibold dark:bg-indigo-900/40 dark:font-normal dark:text-white":
-            pathname === item.href,
+          "bg-indigo-100 font-semibold text-primary dark:bg-indigo-900/40 dark:font-normal dark:text-white":
+            pathname?.includes(item.href),
         },
       )}
     >

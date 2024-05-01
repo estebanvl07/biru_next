@@ -1,4 +1,6 @@
 import { z } from "zod";
+import { createTransaction } from "~/modules/transactions/schema";
+import * as TransactionServices from "~/server/api/services/transactions.services";
 
 import {
   createTRPCRouter,
@@ -7,23 +9,24 @@ import {
 } from "~/server/api/trpc";
 
 export const transactionsRouter = createTRPCRouter({
-  //   getTransactions: protectedProcedure
-  //     .input(z.object({ id: z.string() }))
-  //     .query(({ input, ctx }) => {
-  //       return ctx.db.transaction.findMany({ where: { id: 1 } });
-  //     }),
-  //   create: protectedProcedure
-  //     .input(z.object({ name: z.string().min(1) }))
-  //     .mutation(async ({ ctx, input }) => {
-  //       // simulate a slow db call
-  //       await new Promise((resolve) => setTimeout(resolve, 1000));
-  //       return ctx.db.post.create({
-  //         data: {
-  //           name: input.name,
-  //           createdBy: { connect: { id: ctx.session.user.id } },
-  //         },
-  //       });
-  //     }),
+  getTransactions: protectedProcedure
+    .input(z.object({ accountId: z.string() }))
+    .query(({ input, ctx }) => {
+      return TransactionServices.getTransactionsByAccount(
+        ctx.db,
+        Number(input.accountId),
+      );
+    }),
+  create: protectedProcedure
+    .input(createTransaction)
+    .mutation(async ({ ctx, input }) => {
+      const userId = ctx.session.user.id;
+      // simulate a slow db call
+      return TransactionServices.createTransaction(ctx.db, {
+        ...input,
+        userId,
+      });
+    }),
   //   getLatest: protectedProcedure.query(({ ctx }) => {
   //     return ctx.db.post.findFirst({
   //       orderBy: { createdAt: "desc" },

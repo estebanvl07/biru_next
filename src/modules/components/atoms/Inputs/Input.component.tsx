@@ -1,17 +1,17 @@
 "use client";
 import clsx from "clsx";
 
-import type { PropsInput } from "~/types/component/input.types";
+import type { InputProps } from "./input.types";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import { forwardRef } from "react";
 
-const Input: React.ForwardRefRenderFunction<HTMLInputElement, PropsInput> = (
+const Input: React.ForwardRefRenderFunction<HTMLInputElement, InputProps> = (
   {
     label,
     error,
     className,
     iconPath,
-    eventIcon,
+    onIconClick,
     onContentClick,
     buttonIconClassName,
     containerClassName,
@@ -44,13 +44,14 @@ const Input: React.ForwardRefRenderFunction<HTMLInputElement, PropsInput> = (
           <button
             type="button"
             className={clsx(
-              "m-0  border-r border-zinc-600 pr-4 outline-none",
+              "m-0 border-r border-zinc-600 pr-4 outline-none",
               buttonIconClassName,
               {
-                "cursor-default": !eventIcon,
+                "cursor-default": !onIconClick,
+                "!border-red-600": error,
               },
             )}
-            onClick={eventIcon}
+            onClick={onIconClick}
           >
             <Icon icon={iconPath} width={18} className="dark:text-white" />
           </button>
@@ -108,7 +109,7 @@ const Input: React.ForwardRefRenderFunction<HTMLInputElement, PropsInput> = (
         )}
       </div>
       {error && (
-        <span className="px-2 text-xs italic text-gray-400">{error}</span>
+        <span className="px-2 text-xs italic text-red-600">{error}</span>
       )}
     </div>
   );

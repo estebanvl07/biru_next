@@ -1,65 +1,25 @@
-"use client";
 import { useSession } from "next-auth/react";
 import React, { useEffect } from "react";
 
+import Image from "next/image";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+
 import AccountCard from "~/modules/account/AccountCard";
 import { Button } from "~/modules/components";
-import Link from "next/link";
-import { Icon } from "@iconify/react/dist/iconify.js";
-import { useRouter } from "next/navigation";
-import WhitoutSideBar from "~/modules/layouts/templates/dashbaord/whitout-sidebar";
-import { api } from "~/utils/api";
-import { UserAccount } from "@prisma/client";
 import { HeaderApp } from "~/modules/layouts/templates/dashbaord";
-import Image from "next/image";
+
+import { api } from "~/utils/api";
 
 const AccountPage = () => {
   const router = useRouter();
-  const { data: accounts } = api.userAccount.getAll.useQuery();
   const { data: session } = useSession();
+  const { data: accounts } = api.userAccount.getAll.useQuery();
 
-  console.log(accounts);
-
-  // const accounts = [
-  //   {
-  //     balance: 321439,
-  //     name: "Cuenta de Ahorros",
-  //     createdAt: "",
-  //     reference: "12",
-  //     type: "1",
-  //     id: 1,
-  //     updatedAt: "",
-  //   },
-  //   {
-  //     balance: 321439,
-  //     name: "Tienda",
-  //     createdAt: "",
-  //     reference: "12",
-  //     type: "1",
-  //     id: 2,
-  //     updatedAt: "",
-  //   },
-  //   {
-  //     balance: 3212439,
-  //     name: "Inversiones",
-  //     createdAt: "",
-  //     reference: "12",
-  //     type: "1",
-  //     id: 3,
-  //     updatedAt: "",
-  //   },
-  // ];
-
-  console.log(accounts);
-
-  const setAccount = (id: number) => {
-    router.push(`/account/${id}/main`);
-  };
+  const setAccount = (id: number) => router.push(`/account/${id}/main`);
 
   useEffect(() => {
-    if (accounts?.length === 0) {
-      router.push(`/account/new`);
-    }
+    if (accounts?.length === 0) router.push(`/account/new`);
   }, [accounts]);
 
   return (

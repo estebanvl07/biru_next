@@ -18,10 +18,10 @@ import { capitalize } from "./utils";
 import { Icon } from "@iconify/react/dist/iconify.js";
 
 import { type TopContentProps } from "./types";
+import Link from "next/link";
 
 const TopContent = React.memo(
   ({
-    handleCreate,
     title,
     lenght,
     hasExport = true,
@@ -30,8 +30,11 @@ const TopContent = React.memo(
     filterValue,
     setFilterValue,
     setPage,
+    redirectTo,
     setRowsPerPage,
   }: TopContentProps) => {
+    console.log(hasNew, redirectTo);
+
     const onSearchChange = React.useCallback((e: any) => {
       const value = e.target.value;
       if (value) {
@@ -70,10 +73,12 @@ const TopContent = React.memo(
               </Button>
             )}
             {hasNew && (
-              <Button onClick={handleCreate}>
-                <Icon icon="ic:round-plus" width={18} />
-                Crear Transacción
-              </Button>
+              <Link href={redirectTo ?? "new"}>
+                <Button>
+                  <Icon icon="ic:round-plus" width={18} />
+                  Crear Transacción
+                </Button>
+              </Link>
             )}
           </div>
         </div>

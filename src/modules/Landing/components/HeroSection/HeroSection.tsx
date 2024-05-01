@@ -1,21 +1,20 @@
-"use client";
-
 import clsx from "clsx";
 
 import { Icon, InlineIcon } from "@iconify/react/dist/iconify.js";
 import { Button, Badge } from "~/modules/components";
 import Image from "next/image";
 import Link from "next/link";
-// import Logo from "~/assets/logo-isotype.svg";
 
-const PrincipalSection = () => {
+import type { InfoCardProps } from "./HeroSection.types";
+
+export const HeroSection = () => {
   return (
     <section className="mx-auto flex h-full w-full flex-col items-center justify-around gap-8 px-4 md:max-w-[72rem] md:px-0 lg:flex-row lg:gap-0">
       <aside className="order-2 flex flex-col justify-center lg:order-1">
         <h1 className="text-center font-encode text-4xl font-bold !leading-none tracking-tight md:text-[2.6rem] lg:text-start">
           Domina
           <br />
-          tu {""}
+          tu
           <span className="highlight font-encode text-primary dark:text-primary-light">
             futuro financiero
           </span>
@@ -29,18 +28,6 @@ const PrincipalSection = () => {
           <Link href="/register" aria-label="registrate ahora">
             <Button className="w-full !py-3 lg:w-auto">
               <span className="whitespace-nowrap">Descubre más</span>
-              {/* <Image
-                src="/logo-isotype.svg"
-                alt="Logo de Biru"
-                className="!text-white"
-                width={24}
-                height={24}
-                style={{
-                  color: "white",
-                  fill: "white !important",
-                }}
-              /> */}
-              {/* <Logo /> */}
             </Button>
           </Link>
           <Link href="#" aria-label="Conoce como funciona aqui">
@@ -74,7 +61,7 @@ const PrincipalSection = () => {
             <div className="h-full w-3/5 rounded-full bg-primary dark:bg-primary-light" />
           </div>
         </InfoCard>
-        <span className="relative flex h-[16rem] w-[16rem] items-center justify-center rounded-full bg-primary shadow-2xl shadow-primary md:h-[20rem] md:w-[20rem] lg:h-[24rem] lg:w-[24rem] 2xl:h-[28rem] 2xl:w-[28rem] dark:shadow-black">
+        <span className="relative flex h-[16rem] w-[16rem] items-center justify-center rounded-full bg-primary shadow-2xl shadow-primary dark:shadow-black md:h-[20rem] md:w-[20rem] lg:h-[24rem] lg:w-[24rem] 2xl:h-[28rem] 2xl:w-[28rem]">
           <Image
             src="/dashboard_representation_mobile.webp"
             width={224}
@@ -90,15 +77,11 @@ const PrincipalSection = () => {
   );
 };
 
-const InfoCard: React.FC<{
-  children: React.ReactNode;
-  className?: string;
-  title: string;
-}> = ({ className, title, children }) => {
+const InfoCard: React.FC<InfoCardProps> = ({ className, title, children }) => {
   return (
     <div
       className={clsx(
-        "absolute z-10 grid min-w-[30%] scale-75 grid-flow-col grid-cols-2 rounded-md border bg-white/80 px-4 py-2.5 shadow-lg shadow-indigo-800/10 backdrop-blur-md lg:scale-100 dark:text-slate-950",
+        "absolute z-10 grid min-w-[30%] scale-75 grid-flow-col grid-cols-2 rounded-md border bg-white/80 px-4 py-2.5 shadow-lg shadow-indigo-800/10 backdrop-blur-md dark:text-slate-950 lg:scale-100",
         className,
       )}
     >
@@ -107,5 +90,3 @@ const InfoCard: React.FC<{
     </div>
   );
 };
-
-export default PrincipalSection;

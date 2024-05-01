@@ -2,11 +2,11 @@ import Image from "next/image";
 import Link from "next/link";
 import { Button } from "~/modules/components";
 
-const Explore = () => {
+export const Explore = () => {
   return (
     <section className="mx-auto mt-16 flex w-full flex-col-reverse items-center justify-around gap-8 px-4 md:mb-28 md:max-w-[72rem] md:px-8 lg:mt-44 lg:flex-row lg:gap-0">
       <aside className="">
-        <span className="absolute hidden h-[20rem] w-[20rem] rounded-full bg-primary shadow-2xl shadow-primary md:block dark:shadow-black"></span>
+        <span className="absolute hidden h-[20rem] w-[20rem] rounded-full bg-primary shadow-2xl shadow-primary dark:shadow-black md:block"></span>
         <Image
           src="/dashboard_two_views.webp"
           alt="Dashboard views"
@@ -30,18 +30,15 @@ const Explore = () => {
           fácil y sencilla
         </h2>
         <p className="mt-4  max-w-[26rem] text-center lg:text-start">
-          Lorem ipsum, dolor sit amet consectetur adipisicing elit. Fugiat quam
-          perspiciatis cum recusandae repellat quidem.
+          {/* Lorem ipsum, dolor sit amet consectetur adipisicing elit. Fugiat quam
+          perspiciatis cum recusandae repellat quidem. */}
         </p>
-        <Link href="/register" aria-label="Inicia aqui">
+        <Link href="/register" aria-label="Inicia aquí">
           <Button className="mt-8 w-full lg:w-fit">
-            <span className="whitespace-nowrap">Inicar ahora</span>
-            {/* <Image src="/logo.svg" alt="Logo de Biru" width={100} height={60} /> */}
+            <span className="whitespace-nowrap">Iniciar ahora</span>
           </Button>
         </Link>
       </section>
     </section>
   );
 };
-
-export default Explore;

@@ -1,7 +1,7 @@
 "use client";
 
 import clsx from "clsx";
-import type { PropsInput } from "~/types/component/input.types";
+import type { InputProps } from "../Inputs/input.types";
 import { Icon } from "@iconify/react/dist/iconify.js";
 
 interface RadioOption {
@@ -10,7 +10,7 @@ interface RadioOption {
   className?: string;
 }
 
-interface Props extends PropsInput {
+interface Props extends InputProps {
   options: RadioOption[];
   children?: undefined;
 }
@@ -20,7 +20,7 @@ const RadioGroup = ({
   error,
   className,
   iconPath,
-  eventIcon,
+  onIconClick,
   onContentClick,
   buttonIconClassName,
   containerClassName,
@@ -48,6 +48,21 @@ const RadioGroup = ({
         )}
         // onClick={onContentClick}
       >
+        {iconPath && (
+          <button
+            type="button"
+            className={clsx(
+              "m-0  border-r border-zinc-600 pr-4 outline-none",
+              buttonIconClassName,
+              {
+                "cursor-default": !onIconClick,
+              },
+            )}
+            onClick={onIconClick}
+          >
+            <Icon icon={iconPath} width={18} />
+          </button>
+        )}
         <div
           className={clsx(
             "flex flex-grow flex-col text-xs",
@@ -76,10 +91,10 @@ const RadioGroup = ({
                   "m-0  border-zinc-600 pr-4 outline-none",
                   buttonIconClassName,
                   {
-                    "cursor-default": !eventIcon,
+                    "cursor-default": !onIconClick,
                   },
                 )}
-                onClick={eventIcon}
+                onClick={onIconClick}
               >
                 <Icon icon={iconPath} width={18} />
               </button>
@@ -117,10 +132,10 @@ const RadioGroup = ({
               "m-0  border-r border-zinc-600 pr-4 outline-none",
               buttonIconClassName,
               {
-                "cursor-default": !eventIcon,
+                "cursor-default": !onIconClick,
               },
             )}
-            onClick={eventIcon}
+            onClick={onIconClick}
           >
             <Icon icon={iconPath} width={18} />
           </button>

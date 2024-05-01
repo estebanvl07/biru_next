@@ -1,7 +1,7 @@
 import { type Session } from "next-auth";
 import { SessionProvider } from "next-auth/react";
 import { type AppType } from "next/app";
-import { Open_Sans, Montserrat } from "next/font/google";
+import { Montserrat } from "next/font/google";
 
 import { api } from "~/utils/api";
 
@@ -21,9 +21,9 @@ const MyApp: AppType<{ session: Session | null }> = ({
   return (
     <SessionProvider session={session}>
       <NextUIProvider>
-        <main className={`font-sans ${montserrat.variable}`}>
+        <div className={`font-sans ${montserrat.variable}`}>
           <Component {...pageProps} />
-        </main>
+        </div>
       </NextUIProvider>
     </SessionProvider>
   );

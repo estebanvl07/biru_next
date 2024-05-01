@@ -1,5 +1,5 @@
-import { FC } from "react";
-import { Header } from ".";
+import type { FC } from "react";
+import { Header } from "~/modules/components/Header";
 import Head from "next/head";
 
 interface LayoutProps {
@@ -8,7 +8,7 @@ interface LayoutProps {
   description?: string;
 }
 
-const BasicLayout: FC<LayoutProps> = ({
+export const BasicLayout: FC<LayoutProps> = ({
   children,
   title = "Biru - Finanzas personales",
   description = "Descubre la manera mas sencilla de manejar tu finanzas",
@@ -24,5 +24,3 @@ const BasicLayout: FC<LayoutProps> = ({
     </>
   );
 };
-
-export default BasicLayout;

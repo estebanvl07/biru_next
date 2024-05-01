@@ -5,7 +5,7 @@ import { motion } from "framer-motion";
 import { signOut } from "next-auth/react";
 
 import type { ListMenu } from "~/types/root.types";
-import { CALLBACK_SIGNOUT_URL } from "~/lib/constants/config";
+import { CALLBACK_SIGN_OUT_URL } from "~/lib/constants/config";
 import AccountsOptions from "./AccountsOptions";
 
 import { Listbox, ListboxItem } from "@nextui-org/react";
@@ -34,7 +34,7 @@ const OPTIONS: ListMenu[] = [
     href: "",
     onClick: () => {
       signOut({
-        callbackUrl: CALLBACK_SIGNOUT_URL,
+        callbackUrl: CALLBACK_SIGN_OUT_URL,
       });
     },
   },

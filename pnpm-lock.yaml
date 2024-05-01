@@ -38,6 +38,9 @@ dependencies:
   '@nextui-org/select':
     specifier: ^2.1.27
     version: 2.1.27(@nextui-org/system@2.1.2)(@nextui-org/theme@2.2.2)(@types/react@18.2.75)(framer-motion@11.0.28)(react-dom@18.2.0)(react@18.2.0)(tailwind-variants@0.2.1)
+  '@nextui-org/spinner':
+    specifier: ^2.0.28
+    version: 2.0.28(@nextui-org/theme@2.2.2)(react-dom@18.2.0)(react@18.2.0)(tailwind-variants@0.2.1)
   '@nextui-org/system':
     specifier: ^2.1.2
     version: 2.1.2(@nextui-org/theme@2.2.2)(react-dom@18.2.0)(react@18.2.0)(tailwind-variants@0.2.1)
@@ -89,6 +92,9 @@ dependencies:
   nodemailer:
     specifier: ^6.9.13
     version: 6.9.13
+  nodemailer-brevo-transport:
+    specifier: ^2.1.0
+    version: 2.1.0
   react:
     specifier: 18.2.0
     version: 18.2.0
@@ -121,6 +127,9 @@ devDependencies:
   '@types/node':
     specifier: ^20.11.20
     version: 20.12.7
+  '@types/nodemailer':
+    specifier: ^6.4.14
+    version: 6.4.14
   '@types/react':
     specifier: ^18.2.57
     version: 18.2.75
@@ -3369,6 +3378,12 @@ packages:
       undici-types: 5.26.5
     dev: true
 
+  /@types/nodemailer@6.4.14:
+    resolution: {integrity: sha512-fUWthHO9k9DSdPCSPRqcu6TWhYyxTBg382vlNIttSe9M7XfsT06y0f24KHXtbnijPGGRIcVvdKHTNikOI6qiHA==}
+    dependencies:
+      '@types/node': 20.12.7
+    dev: true
+
   /@types/prop-types@15.7.12:
     resolution: {integrity: sha512-5zvhXYtRNRluoE/jAp4GVsSduVUzNWKkOZrCDBWYtE7biZywwdC2AcEzg+cSMLFRfVgeAFqpfNabiPjxFddV1Q==}
 
@@ -5459,6 +5474,10 @@ packages:
         optional: true
     dependencies:
       whatwg-url: 5.0.0
+    dev: false
+
+  /nodemailer-brevo-transport@2.1.0:
+    resolution: {integrity: sha512-knXJec27LieUdoUFEjUDXDlTnBxfLqjh478hHR45j3zVdMg5LTKx5eNPEI+0Ofz4CqKB5Qi1XaG9z2i/HXiGBQ==}
     dev: false
 
   /nodemailer@6.9.13:

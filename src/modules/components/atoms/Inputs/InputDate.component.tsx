@@ -10,12 +10,12 @@ import { useOnActive, useOutsideClick } from "~/lib/hooks";
 // import Input from "./Input.component";
 import { Input } from "@nextui-org/react";
 
-import type { PropsInput } from "~/types/component/input.types";
+import type { InputProps } from "./input.types";
 import { Calendar, type DateValue } from "@nextui-org/react";
 import { DATE_FORMAT_TRANS } from "~/lib/constants/config";
 import { Icon } from "@iconify/react/dist/iconify.js";
 
-interface InputDateProps extends Omit<PropsInput, "value"> {
+interface InputDateProps extends Omit<InputProps, "value"> {
   value?: Date;
   dateFormat?: string;
   interval?: boolean;

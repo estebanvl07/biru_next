@@ -1,6 +1,6 @@
-import { LandingCardInfo } from ".";
+import { CardInfo } from "./CardInfo";
 
-const Advatages = () => {
+export const Advantages = () => {
   return (
     <section className="mt-8 flex w-full flex-col items-center px-4 sm:mt-14 lg:mt-16">
       <aside className="flex-grow">
@@ -17,25 +17,23 @@ const Advatages = () => {
         </p>
       </aside>
       <section className="mt-8 flex flex-col gap-6 md:flex-row lg:mt-16">
-        <LandingCardInfo
+        <CardInfo
           icon="iconamoon:category"
           title="Crea categorías"
-          description="Manten un orden de tus transacciónes y crea categorías donde indicas en que gastas tu dinero"
+          description="Mantén un orden de tus transacciones y crea categorías donde indicas en que gastas tu dinero"
         />
-        <LandingCardInfo
+        <CardInfo
           icon="ph:wallet-bold"
           title="Multiples cuentas"
-          description="Lleva en orden no solo tus finanzas personales si no tambien tus negocios e inversiones"
+          description="Lleva en orden no solo tus finanzas personales si no también tus negocios e inversiones"
           color="primary"
         />
-        <LandingCardInfo
+        <CardInfo
           icon="iconamoon:category"
           title="Balances"
-          description="Lleva un balance de tus cuentas y mira las estadisticas de ingresos y egresos"
+          description="Lleva un balance de tus cuentas y mira las estadísticas de ingresos y egresos"
         />
       </section>
     </section>
   );
 };
-
-export default Advatages;

@@ -1,7 +1,9 @@
 import Image from "next/image";
 import Link from "next/link";
+import type { FC } from "react";
+import type { LinkListProps } from "./Footer.types";
 
-const Footer = () => {
+export const Footer = () => {
   return (
     <footer className="flex min-h-80 w-full justify-center bg-slate-100 dark:bg-slate-900">
       <div className="flex w-full flex-col px-8 md:max-w-[72rem]">
@@ -14,7 +16,7 @@ const Footer = () => {
             </p>
           </aside>
           <section className="grid w-full flex-grow gap-10 py-4 sm:grid-cols-2 sm:place-content-around sm:py-8 md:grid-cols-3 md:py-0">
-            <ListOfLink
+            <LinkList
               title="Conoce Biru"
               links={[
                 {
@@ -35,7 +37,7 @@ const Footer = () => {
                 },
               ]}
             />
-            <ListOfLink
+            <LinkList
               title="Ayuda"
               links={[
                 {
@@ -47,12 +49,12 @@ const Footer = () => {
                   to: "/recover",
                 },
                 {
-                  text: "Sopórte",
+                  text: "Soporte",
                   to: "#",
                 },
               ]}
             />
-            <ListOfLink
+            <LinkList
               title="Como inicio"
               links={[
                 {
@@ -81,13 +83,7 @@ const Footer = () => {
   );
 };
 
-const ListOfLink = ({
-  title,
-  links,
-}: {
-  title: string;
-  links: { text: string; to: string }[];
-}) => {
+const LinkList: FC<LinkListProps> = ({ title, links }) => {
   return (
     <ul className="flex w-full flex-col">
       <li className="mb-4 font-bold text-primary dark:text-indigo-400">
@@ -103,5 +99,3 @@ const ListOfLink = ({
     </ul>
   );
 };
-
-export default Footer;

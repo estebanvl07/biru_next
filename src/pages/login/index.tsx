@@ -1,8 +1,7 @@
 import Link from "next/link";
-import React from "react";
 import { SignInOptions } from "~/modules/components";
-import { BasicLayout } from "~/modules/layouts/templates/Landing";
-import LoginForm from "~/modules/signin/LoginForm";
+import { BasicLayout } from "~/modules/layouts";
+import { LoginForm } from "~/modules/Login";
 
 const LoginPage = () => {
   return (

@@ -3,7 +3,7 @@ import Link from "next/link";
 import React from "react";
 import { Button } from "~/modules/components";
 
-const Header = () => {
+export const Header = () => {
   return (
     <header className="w-full px-2 sm:px-0">
       <div className="mx-auto flex max-w-[72rem] items-center justify-between gap-x-8 py-4 md:px-8">
@@ -22,5 +22,3 @@ const Header = () => {
     </header>
   );
 };
-
-export default Header;

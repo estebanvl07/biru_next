@@ -1,51 +1,41 @@
-import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
-
-import { Input, Button, SignInOptions } from "~/modules/components";
-
-import { createUser } from "~/modules/signin/createUser.schema";
-import SuccesCreated from "~/modules/signin/SuccessAccountCreated";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { api } from "~/utils/api";
+import clsx from "clsx";
+import { Spinner } from "@nextui-org/react";
 import Link from "next/link";
-import { BasicLayout } from "~/modules/layouts/templates/Landing";
-import { signIn } from "next-auth/react";
-import { CALLBACK_SIGNIN_URL } from "~/lib/constants/config";
+
+import {
+  Input,
+  Button,
+  SignInOptions,
+  InputPassword,
+} from "~/modules/components";
+import { SuccessfullyCreated } from "~/modules/register/components";
+import { BasicLayout } from "~/modules/layouts";
+import { api } from "~/utils/api";
+import {
+  registerUserInput,
+  type RegisterUserInputType,
+} from "~/modules/register/resolver";
 
 const Register = () => {
-  const [showPassword, setShowPassword] = useState(false);
-  const [successCreate, setSuccessCreate] = useState(false);
-
-  const user = api.users.create.useMutation();
+  const { mutateAsync: createUser, isSuccess } =
+    api.users.register.useMutation();
 
   const {
     handleSubmit,
     register,
-    reset,
-    formState: { errors },
-  } = useForm({
-    resolver: zodResolver(createUser),
+    formState: { errors, isSubmitting },
+  } = useForm<RegisterUserInputType>({
+    resolver: zodResolver(registerUserInput),
   });
 
-  const onSubmit = async (payload: any) => {
-    const response = await signIn("credentials", {
-      name: payload.name,
-      email: payload.email,
-      password: payload.password,
-      callbackUrl: CALLBACK_SIGNIN_URL,
-      redirect: false,
-    });
-
-    if (response?.status === 200) {
-      setSuccessCreate(true);
-    }
-  };
+  const onSubmit = (payload: RegisterUserInputType) => createUser(payload);
 
   return (
     <BasicLayout>
-      {successCreate ? (
-        <SuccesCreated />
+      {isSuccess ? (
+        <SuccessfullyCreated />
       ) : (
         <div className="flex h-full w-full justify-center py-6">
           <section className="relative flex h-full w-full max-w-[25rem] flex-col items-center justify-center gap-2">
@@ -57,7 +47,7 @@ const Register = () => {
             </span>
             <section className="mt-2 flex w-full flex-col items-center justify-center gap-2">
               <div className="flex w-full gap-2">
-                <SignInOptions title="" />
+                <SignInOptions />
               </div>
             </section>
             <form
@@ -66,43 +56,38 @@ const Register = () => {
             >
               <Input
                 iconPath="basil:user-outline"
-                label="Usuario"
-                {...register("name")}
-                placeholder="Jhon Doe"
+                label="Nombre"
+                register={register("name")}
+                placeholder="John Doe"
                 containerClassName="w-full"
-                required
-                error={errors.name?.message as string}
+                error={errors.name?.message}
               />
               <Input
-                iconPath="ic:outline-email"
                 label="Correo"
-                {...register("email")}
                 type="email"
-                placeholder="JhonDoe@mail.com"
+                placeholder="john@doe.com"
+                iconPath="ic:outline-email"
                 containerClassName="w-full"
-                required
-                error={errors.email?.message as string}
+                register={register("email")}
+                error={errors.email?.message}
               />
-              <Input
-                iconPath={
-                  showPassword ? "majesticons:eye-line" : "mdi:eye-off-outline"
-                }
-                type={showPassword ? "text" : "password"}
+              <InputPassword
                 label="Contraseña"
-                {...register("password")}
-                placeholder="••••••••"
-                eventIcon={() => setShowPassword(!showPassword)}
-                required
-                error={errors.password?.message as string}
+                containerClassName="w-full"
+                error={errors.password?.message}
+                register={register("password")}
               />
 
-              <Button
-                variantStyle="fill"
-                className="mt-2"
-                // disabled={}
-                type="submit"
-              >
+              <Button variantStyle="fill" className="mt-2" type="submit">
                 Registrarme
+                <Spinner
+                  color="current"
+                  className={clsx("-mr-4 stroke-[3] opacity-0", {
+                    "animate-spin opacity-100 transition-opacity delay-100":
+                      isSubmitting,
+                  })}
+                  size="sm"
+                />
               </Button>
             </form>
             <span className="mt-6 flex w-full items-center justify-center gap-2 text-sm">

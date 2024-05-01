@@ -4,9 +4,9 @@ import { Icon } from "@iconify/react/dist/iconify.js";
 import { signIn } from "next-auth/react";
 import React from "react";
 import { Button } from "~/modules/components";
-import { CALLBACK_SIGNIN_URL } from "~/lib/constants/config";
+import { CALLBACK_SIGN_IN_URL } from "~/lib/constants/config";
 
-const SigninOptions = ({ title }: { title?: string }) => {
+const SignInOptions = ({ title }: { title?: string }) => {
   return (
     <div className="flex w-full flex-col items-center gap-3">
       <span className="text-sm">{title ?? "Iniciar con"}</span>
@@ -16,7 +16,7 @@ const SigninOptions = ({ title }: { title?: string }) => {
           variantStyle="empty"
           onClick={() =>
             signIn("facebook", {
-              callbackUrl: CALLBACK_SIGNIN_URL,
+              callbackUrl: CALLBACK_SIGN_IN_URL,
               redirect: false,
             })
           }
@@ -29,7 +29,7 @@ const SigninOptions = ({ title }: { title?: string }) => {
           variantStyle="empty"
           onClick={() =>
             signIn("google", {
-              callbackUrl: CALLBACK_SIGNIN_URL,
+              callbackUrl: CALLBACK_SIGN_IN_URL,
               redirect: false,
             })
           }
@@ -41,4 +41,4 @@ const SigninOptions = ({ title }: { title?: string }) => {
   );
 };
 
-export default SigninOptions;
+export default SignInOptions;

@@ -4,7 +4,7 @@ import { Icon } from "@iconify/react/dist/iconify.js";
 import { signOut } from "next-auth/react";
 
 import React from "react";
-import { CALLBACK_SIGNOUT_URL } from "~/lib/constants/config";
+import { CALLBACK_SIGN_OUT_URL } from "~/lib/constants/config";
 import { Button } from "~/modules/components";
 
 const ButtonSignOut = () => {
@@ -14,7 +14,7 @@ const ButtonSignOut = () => {
       className="mx-4 mb-2 items-center !justify-start !px-6 !py-3 text-sm hover:bg-slate-100 hover:dark:bg-indigo-900/40"
       onClick={() => {
         signOut({
-          callbackUrl: CALLBACK_SIGNOUT_URL,
+          callbackUrl: CALLBACK_SIGN_OUT_URL,
         });
       }}
     >

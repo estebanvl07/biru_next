@@ -68,7 +68,10 @@ const Input: React.ForwardRefRenderFunction<HTMLInputElement, InputProps> = (
         >
           {label && (
             <label
-              className={clsx("font-medium", labelClassName)}
+              className={clsx(
+                "font-medium dark:text-slate-300",
+                labelClassName,
+              )}
               htmlFor={name}
               accessKey={name}
             >
@@ -80,7 +83,7 @@ const Input: React.ForwardRefRenderFunction<HTMLInputElement, InputProps> = (
             <input
               ref={ref}
               className={clsx(
-                "focus:--tw-ring-color:transparent w-full border-none bg-transparent !px-0 !py-0 text-sm text-zinc-600 placeholder-slate-400 !outline-none focus:border-transparent dark:text-zinc-300 dark:placeholder-zinc-600",
+                "focus:--tw-ring-color:transparent w-full border-none bg-transparent !px-0 !py-0 text-sm text-zinc-600 placeholder-slate-400 !outline-none focus:border-transparent dark:text-slate-200 dark:placeholder-zinc-600",
                 className,
                 {
                   "checked:border-transparent checked:!bg-indigo-600 checked:!shadow-2xl checked:!shadow-indigo-600":

@@ -47,7 +47,7 @@ const Menu = ({ onHide }: { onHide: () => void }) => {
     <motion.div className="absolute right-0 top-16 flex w-52 flex-col rounded-md border bg-white/80 pb-1 pt-2 shadow-xl backdrop-blur-xl dark:border-white/10 dark:bg-slate-900/70">
       <AccountsOptions />
       <ul className="flex w-full flex-col">
-        <Listbox variant="flat">
+        <Listbox variant="flat" aria-label="options the app">
           {OPTIONS.map((option) => {
             return (
               <ListboxItem

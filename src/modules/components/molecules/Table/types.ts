@@ -7,12 +7,12 @@ export interface TopContentProps {
   hasExport?: boolean;
   hasNew?: boolean;
   lenght?: number;
+  redirectTo?: string;
   filterValue?: string;
   setFilterValue?: Dispatch<SetStateAction<string>>;
   setPage?: Dispatch<SetStateAction<number>>;
   setRowsPerPage?: Dispatch<SetStateAction<number>>;
   newButtonText?: string;
-  handleCreate?: () => void;
 }
 
 type ColumnsProps = {
@@ -25,5 +25,10 @@ type ColumnsProps = {
 export interface TableProps<T> {
   headerConfig: TopContentProps;
   columns: ColumnsProps[];
+  buttonNewText?: string;
+  buttonNewLink?: string;
+  hasNew?: boolean;
+  renderCell?: (item: any, columnKey: any) => void;
+  inputPlaceholder?: string;
   data: T[];
 }

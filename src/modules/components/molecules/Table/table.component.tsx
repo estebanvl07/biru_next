@@ -18,7 +18,15 @@ import BottomContent from "./BottomContent";
 import { useCallback, useMemo, useState } from "react";
 import { statusOptions } from "~/pages/account/[acc]/transactions/data";
 
-const DataTable = <T,>({ headerConfig, columns, data }: TableProps<T>) => {
+const DataTable = <T,>({
+  headerConfig,
+  columns,
+  hasNew,
+  data,
+  renderCell,
+  buttonNewLink,
+  buttonNewText,
+}: TableProps<T>) => {
   const [filterValue, setFilterValue] = useState("");
   const [statusFilter, setStatusFilter] = useState<Selection>("all");
   const [rowsPerPage, setRowsPerPage] = useState(5);
@@ -93,8 +101,11 @@ const DataTable = <T,>({ headerConfig, columns, data }: TableProps<T>) => {
       topContent={
         <TopContent
           {...headerConfig}
+          newButtonText={buttonNewText}
+          redirectTo={buttonNewLink}
           lenght={data.length}
           filterValue={filterValue}
+          hasNew={hasNew}
           setFilterValue={setFilterValue}
           setPage={setPage}
           setRowsPerPage={setRowsPerPage}
@@ -126,7 +137,13 @@ const DataTable = <T,>({ headerConfig, columns, data }: TableProps<T>) => {
         {(item: any) => (
           <TableRow key={item.name}>
             {(columnKey) => {
-              return <TableCell>{getKeyValue(item, columnKey)}</TableCell>;
+              return (
+                <TableCell>
+                  {renderCell
+                    ? renderCell(item, columnKey)
+                    : getKeyValue(item, columnKey)}
+                </TableCell>
+              );
             }}
           </TableRow>
         )}

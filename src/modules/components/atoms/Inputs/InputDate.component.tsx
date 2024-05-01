@@ -1,78 +1,91 @@
-// "use client";
-// import { useEffect, useState, type FC } from "react";
-// import { clsx } from "clsx";
+"use client";
+import { useEffect, useState, type FC } from "react";
+import { clsx } from "clsx";
 
-// import { format } from "date-fns";
-// import { es } from "date-fns/locale";
-// import { useOnActive, useOutsideClick } from "~/lib/hooks";
+import { format } from "date-fns";
+import { es } from "date-fns/locale";
+
+import { useOnActive, useOutsideClick } from "~/lib/hooks";
 
 // import Input from "./Input.component";
+import { Input } from "@nextui-org/react";
 
-// import type { PropsInput } from "~/types/component/input.types";
-// import { Calendar } from "primereact/calendar";
+import type { PropsInput } from "~/types/component/input.types";
+import { Calendar, type DateValue } from "@nextui-org/react";
+import { DATE_FORMAT_TRANS } from "~/lib/constants/config";
+import { Icon } from "@iconify/react/dist/iconify.js";
 
-// interface InputDateProps extends Omit<PropsInput, "value"> {
-//   value?: Date;
-//   dateFormat?: string;
-//   interval?: boolean;
-//   contentInputClassName?: string;
-//   showAbsoluteCalendar?: boolean;
-//   contentClassName?: string;
-//   icon: string;
-// }
+interface InputDateProps extends Omit<PropsInput, "value"> {
+  value?: Date;
+  dateFormat?: string;
+  interval?: boolean;
+  contentInputClassName?: string;
+  changeValue?: (val: Date) => void;
+  showAbsoluteCalendar?: boolean;
+  contentClassName?: string;
+}
 
-// const InputDate: FC<InputDateProps> = ({
-//   className = "",
-//   contentClassName = "",
-//   onChange,
-//   value,
-//   label,
-//   icon,
-//   dateFormat = "LLLL",
-//   interval = false,
-//   contentInputClassName,
-//   showAbsoluteCalendar = true,
-//   ...props
-// }) => {
-//   const { isActive, onActive, onDisabled } = useOnActive();
+const InputDate: FC<InputDateProps> = ({
+  className = "",
+  contentClassName = "",
+  onChange,
+  changeValue,
+  value,
+  label,
+  dateFormat = DATE_FORMAT_TRANS,
+  interval = false,
+  contentInputClassName,
+  showAbsoluteCalendar = true,
+  ...props
+}) => {
+  const { isActive, onActive, onDisabled } = useOnActive();
 
-//   const datePikerRef = useOutsideClick<HTMLDivElement>(onDisabled);
-//   const [inputValue, setInputValue] = useState<string>();
+  const datePikerRef = useOutsideClick<HTMLDivElement>(onDisabled);
+  const [inputValue, setInputValue] = useState<string>();
 
-//   const handleNewDate = (date: Date) => {
-//     const newDate = date ? `${format(date, dateFormat, { locale: es })}` : "";
-//     setInputValue(newDate);
-//     return newDate;
-//   };
+  const handleNewDate = (date: Date) => {
+    const setDate = new Date(date).toISOString();
+    const newDate = setDate
+      ? `${format(setDate, dateFormat, { locale: es })}`
+      : "";
 
-//   useEffect(() => {
-//     if (!value) return;
-//     handleNewDate(value);
-//   }, [value]);
+    setInputValue(newDate);
+    changeValue && changeValue(date);
+  };
 
-//   return (
-//     <div
-//       className={clsx("relative", className)}
-//       ref={datePikerRef}
-//       onKeyDown={(e) => e.key === "Escape" && onDisabled()}
-//     >
-//       <Input
-//         {...props}
-//         autoComplete="off"
-//         readOnly
-//         label={label}
-//         // icon={icon }
-//         className={className}
-//         // contentInputClassName={contentInputClassName}
-//         // contentClassName={clsx(contentClassName, "select-none")}
-//         value={inputValue}
-//         onContentClick={onActive}
-//         showInputField={false}
-//       >
-//         <Calendar />
-//       </Input>
-//     </div>
-//   );
-// };
+  useEffect(() => {
+    handleNewDate(new Date());
+  }, []);
 
-// export default InputDate;
+  return (
+    <div
+      className={clsx("relative w-full", className)}
+      ref={datePikerRef}
+      onKeyDown={(e) => e.key === "Escape" && onDisabled()}
+    >
+      <Input
+        // {...props}
+        autoComplete="off"
+        readOnly
+        isRequired={props.required}
+        label={label}
+        startContent={<Icon icon="flowbite:calendar-month-solid" />}
+        // iconPath="flowbite:calendar-month-solid"
+        className={className}
+        value={inputValue}
+        onClick={onActive}
+        // onContentClick={onActive}
+      ></Input>
+      {isActive && (
+        <Calendar
+          color="primary"
+          className="absolute top-20 z-20"
+          onChange={(val) => handleNewDate(new Date(String(val)))}
+          aria-label="Date (No Selection)"
+        />
+      )}
+    </div>
+  );
+};
+
+export default InputDate;

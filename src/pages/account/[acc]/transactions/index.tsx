@@ -24,8 +24,6 @@ const TransactionPage = () => {
     accountId: params?.acc,
   });
 
-  console.log(transactions);
-
   const renderCell = useCallback(
     (transaction: Transaction, columnKey: React.Key) => {
       const cellValue = transaction[columnKey as keyof Transaction];
@@ -102,6 +100,7 @@ const TransactionPage = () => {
           buttonNewLink={`/account/${Number(params?.acc)}/transactions/new`}
           buttonNewText="Crear transacción"
           columns={columns}
+          filterKeys={["description", "amount"]}
           data={transactions ?? []}
           renderCell={renderCell}
           hasNew

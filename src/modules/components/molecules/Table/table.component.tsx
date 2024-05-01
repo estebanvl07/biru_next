@@ -16,7 +16,8 @@ import {
 import { type TableProps } from "./types";
 import BottomContent from "./BottomContent";
 import { useCallback, useMemo, useState } from "react";
-import { statusOptions } from "~/pages/account/[acc]/transactions/data";
+
+import { useSearch } from "~/lib/hooks";
 
 const DataTable = <T,>({
   headerConfig,
@@ -25,6 +26,7 @@ const DataTable = <T,>({
   data,
   renderCell,
   buttonNewLink,
+  filterKeys,
   buttonNewText,
 }: TableProps<T>) => {
   const [filterValue, setFilterValue] = useState("");
@@ -35,35 +37,21 @@ const DataTable = <T,>({
     column: "age",
     direction: "ascending",
   });
+  const { onSearch, newList } = useSearch({
+    data,
+    keys: filterKeys ?? "",
+  });
 
-  const hasSearchFilter = Boolean(filterValue);
-
-  const filteredItems = useMemo(() => {
-    let filteredUsers = [...data];
-
-    if (hasSearchFilter) {
-      filteredUsers = filteredUsers.filter((user: any) =>
-        user.name.toLowerCase().includes(filterValue.toLowerCase()),
-      );
-    }
-    if (
-      statusFilter !== "all" &&
-      Array.from(statusFilter).length !== statusOptions.length
-    ) {
-      filteredUsers = filteredUsers.filter((user: any) =>
-        Array.from(statusFilter).includes(user.status),
-      );
-    }
-
-    return filteredUsers;
+  useMemo(() => {
+    onSearch(filterValue);
   }, [data, filterValue, statusFilter]);
 
   const items = useMemo(() => {
     const start = (page - 1) * rowsPerPage;
     const end = start + rowsPerPage;
 
-    return filteredItems.slice(start, end);
-  }, [page, filteredItems, rowsPerPage]);
+    return newList.slice(start, end);
+  }, [page, newList, rowsPerPage]);
 
   const sortedItems = useMemo(() => {
     return [...items].sort((a: T, b: T) => {
@@ -75,7 +63,7 @@ const DataTable = <T,>({
     });
   }, [sortDescriptor, items]);
 
-  const pages = Math.ceil(filteredItems.length / rowsPerPage);
+  const pages = Math.ceil(newList.length / rowsPerPage);
 
   const onNextPage = useCallback(() => {
     if (page < pages) {
@@ -122,7 +110,10 @@ const DataTable = <T,>({
       }
       bottomContentPlacement="outside"
     >
-      <TableHeader columns={columns}>
+      <TableHeader
+        className="dark:!bg-default-200 dark:shadow-none"
+        columns={columns}
+      >
         {({ uid, align, sorting, name }) => (
           <TableColumn
             key={uid}

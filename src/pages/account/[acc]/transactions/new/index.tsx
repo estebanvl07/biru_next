@@ -131,7 +131,7 @@ const NewTransactionPage = () => {
         <Select
           required
           iconPath="iconamoon:category"
-          // eventIcon={() => navigation("/category/new")}
+          // onIconClick={() => navigation("/category/new")}
           // setOption={detail?.categoryId}
           options={[]}
           changeOption={(option) =>

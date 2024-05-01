@@ -20,7 +20,7 @@ const RadioGroup = ({
   error,
   className,
   iconPath,
-  eventIcon,
+  onIconClick,
   onContentClick,
   buttonIconClassName,
   containerClassName,
@@ -55,10 +55,10 @@ const RadioGroup = ({
               "m-0  border-r border-zinc-600 pr-4 outline-none",
               buttonIconClassName,
               {
-                "cursor-default": !eventIcon,
+                "cursor-default": !onIconClick,
               },
             )}
-            onClick={eventIcon}
+            onClick={onIconClick}
           >
             <Icon icon={iconPath} width={18} />
           </button>
@@ -117,10 +117,10 @@ const RadioGroup = ({
               "m-0  border-r border-zinc-600 pr-4 outline-none",
               buttonIconClassName,
               {
-                "cursor-default": !eventIcon,
+                "cursor-default": !onIconClick,
               },
             )}
-            onClick={eventIcon}
+            onClick={onIconClick}
           >
             <Icon icon={iconPath} width={18} />
           </button>

@@ -1,3 +1,4 @@
+import {nextui} from '@nextui-org/theme';
 import { nextui } from "@nextui-org/theme";
 import { type Config } from "tailwindcss";
 import { fontFamily } from "tailwindcss/defaultTheme";
@@ -5,7 +6,7 @@ import { fontFamily } from "tailwindcss/defaultTheme";
 export default {
   content: [
     "./src/**/*.tsx",
-    "./node_modules/@nextui-org/theme/dist/components/(button|input|listbox|pagination|table|ripple|spinner|divider|checkbox|spacer).js"
+    "./node_modules/@nextui-org/theme/dist/components/(badge|button|calendar|input|listbox|pagination|select|table|ripple|spinner|divider|popover|scroll-shadow|checkbox|spacer).js"
   ],
   darkMode: "class",
   theme: {
@@ -30,5 +31,5 @@ export default {
       },
     },
   },
-  plugins: [nextui({})],
+  plugins: [nextui({}),nextui()],
 } satisfies Config;

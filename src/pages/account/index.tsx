@@ -18,6 +18,8 @@ const AccountPage = () => {
   const { data: accounts } = api.userAccount.getAll.useQuery();
   const { data: session } = useSession();
 
+  console.log(accounts);
+
   // const accounts = [
   //   {
   //     balance: 321439,

@@ -1,30 +1,65 @@
 "use client";
-import React from "react";
+import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import {
   Card,
-  Input,
+  // Input,
   ButtonGroup,
   InputDate,
-  Select,
   Button,
 } from "~/modules/components";
 
-import { Input as InputNumber } from "@nextui-org/react";
+import { Input, Select, SelectItem } from "@nextui-org/react";
 
 import DashboardLayout from "~/modules/layouts/Dashboard";
+import { useRouter } from "next/router";
+import { api } from "~/utils/api";
+import { Icon } from "@iconify/react/dist/iconify.js";
+import { zodResolver } from "@hookform/resolvers/zod";
+
+import { createTransaction } from "~/modules/transactions/schema";
+import { DateToSystemTimezoneSetter } from "node_modules/date-fns/parse/_lib/Setter";
+import { useParams } from "next/navigation";
 
 const NewTransactionPage = () => {
+  const params = useParams<{ acc: string }>();
+  const { data: categories } = api.category.getAll.useQuery();
+  const TransactionService = api.transaction.create.useMutation();
+  const router = useRouter();
+  const query = router.query;
+
   const {
     handleSubmit,
     register,
     formState: { errors },
     setValue,
-  } = useForm();
+  } = useForm<createTransaction>({
+    resolver: zodResolver(createTransaction),
+  });
 
   const onSubmit = (data: any) => {
-    console.log(data);
+    TransactionService.mutateAsync(data, {
+      onSuccess(data, variables, context) {
+        console.log(data);
+        router.back();
+      },
+      onError(error, variables, context) {
+        console.log(error, variables, context);
+      },
+    });
   };
+
+  useEffect(() => {
+    if (!params) return;
+    setValue("accountId", Number(params.acc));
+    if (query?.type) {
+      setValue("type", query.type as any);
+    } else {
+      setValue("type", 1);
+    }
+  }, []);
+
+  console.log(errors);
 
   return (
     <DashboardLayout title="Crear Transacción">
@@ -32,16 +67,21 @@ const NewTransactionPage = () => {
         className="flex w-full max-w-[32rem] flex-col items-center justify-center gap-2 pt-6 md:pt-0"
         onSubmit={handleSubmit(onSubmit)}
       >
-        {/* <h2 className="mb-4 hidden w-full md:block">Nueva transación</h2> */}
-
-        <p className="w-full text-start">Valor de transacción</p>
-        <InputNumber
+        <p className="w-full text-start dark:text-slate-300">
+          Valor de transacción
+        </p>
+        <Input
           type="number"
           variant="underlined"
+          isRequired
+          // label="Monto"
           placeholder="0.00"
           size="lg"
           labelPlacement="outside"
           className="!appearance-none"
+          onLoad={() => {}}
+          // onChange={(val) => console.log(val)}
+          onValueChange={(val) => setValue("amount", Number(val))}
           inputMode="decimal"
           startContent={
             <div className="pointer-events-none flex items-center">
@@ -52,7 +92,7 @@ const NewTransactionPage = () => {
         <ButtonGroup
           containerClassName="w-full"
           buttonClass="text-xs !py-1"
-          defaultSelected={1}
+          // defaultSelected={query?.type ? Number(query?.type) : 1}
           options={[
             {
               id: 1,
@@ -73,81 +113,60 @@ const NewTransactionPage = () => {
           ]}
         />
 
-        {/* <div className="flex w-full flex-col rounded-md border bg-white dark:border-white/50 dark:bg-transparent">
-          <Input
-            required
-            // readOnly={hasEdit}
-            iconPath="fluent:money-hand-24-regular"
-            containerClassName="dark:!text-white !bg-none !border-none !py-0 !pt-2"
-            placeholder="$ 0.00"
-            label="Valor"
-            type="number"
-            className="w-full"
-            {...register("amount")}
-            error={errors.amount?.message as any}
-          />
-          <section className="p-1">
-            <ButtonGroup
-              containerClassName="w-full"
-              buttonClass="text-xs !py-1"
-              defaultSelected={1}
-              options={[
-                {
-                  id: 1,
-                  label: "Ingreso",
-                  onClick: () => {
-                    setValue("type", 1);
-                  },
-                  colorSelected:
-                    "!bg-green-500 border border-green-500 text-white",
-                },
-                {
-                  id: 2,
-                  label: "Egreso",
-                  onClick: () => {
-                    setValue("type", 2);
-                  },
-                  colorSelected: "!bg-red-500 border border-red-500 text-white",
-                },
-              ]}
-            />
-          </section>
-        </div> */}
-
-        {/* <InputDate
+        <InputDate
           label="Fecha de transacción"
-          changeValue={(newDate: Date) => console.log(newDate)}
-          required
-        /> */}
-        <Input
           containerClassName="mt-4"
-          iconPath="fluent:text-description-24-filled"
+          changeValue={(newDate) => setValue("date", newDate)}
+          required
+        />
+        <Input
+          startContent={
+            <Icon icon="fluent:text-description-24-filled" width={18} />
+          }
+          // iconPath="fluent:text-description-24-filled"
           label="Descripción"
           placeholder="Mercado del mes"
           {...register("description")}
-          error={errors.description?.message as any}
+          errorMessage={errors?.description?.message ?? ""}
           required
         />
         <Select
-          required
-          iconPath="iconamoon:category"
-          // eventIcon={() => navigation("/category/new")}
-          // setOption={detail?.categoryId}
-          options={[]}
-          changeOption={(option) =>
-            setValue("categoryId", Number(option.value))
-          }
-          name="category"
+          placeholder="Seleccione una categoría"
           label="Categoría"
-          placeholder="Mercado, Servicios, Arriendo"
-          error={errors.categoryId?.message as any}
-        />
+          startContent={<Icon icon="iconamoon:category" />}
+          isRequired
+          required
+          errorMessage={errors?.categoryId?.message ?? ""}
+          items={categories}
+        >
+          {categories ? (
+            categories.map((category) => {
+              return (
+                <SelectItem
+                  color="primary"
+                  onClick={() => setValue("categoryId", category.id)}
+                  key={category.id}
+                  className="font-montserrat"
+                  value={category.id}
+                >
+                  {category.name}
+                </SelectItem>
+              );
+            })
+          ) : (
+            <SelectItem key={0} value={0}>
+              Sin datos
+            </SelectItem>
+          )}
+        </Select>
         <Input
-          iconPath="streamline:travel-map-triangle-flag-navigation-map-maps-flag-gps-location-destination-goal"
+          startContent={
+            <Icon icon="streamline:travel-map-triangle-flag-navigation-map-maps-flag-gps-location-destination-goal" />
+          }
           label="Destinatario"
           placeholder="Andres, Juan, Omar"
-          {...register("destinatary")}
-          error={errors.destinatary?.message as any}
+          {...register("recipient")}
+          // error={errors.destinatary?.message as any}
         />
 
         <div className="flex w-full flex-col gap-2 pt-3 md:flex-row">

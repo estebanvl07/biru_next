@@ -55,7 +55,7 @@ const CreationMenu = () => {
       </button>
       {showMenu && (
         <div className="border-small rounded-small border-default-200 dark:border-default-100 absolute right-0 top-12 w-[165px] bg-white/80  backdrop-blur-md dark:border-white/5 dark:bg-slate-900/80">
-          <Listbox variant="flat">
+          <Listbox variant="flat" aria-label="Creation menu">
             {OPTIONS.map(({ href, label, showLine = false, icon }, index) => {
               return (
                 <ListboxItem

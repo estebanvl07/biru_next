@@ -1,7 +1,7 @@
 import { type Session } from "next-auth";
 import { SessionProvider } from "next-auth/react";
 import { type AppType } from "next/app";
-import { Open_Sans } from "next/font/google";
+import { Open_Sans, Montserrat } from "next/font/google";
 
 import { api } from "~/utils/api";
 
@@ -9,7 +9,7 @@ import { NextUIProvider } from "@nextui-org/react";
 
 import "~/styles/globals.css";
 
-const montserrat = Open_Sans({
+const montserrat = Montserrat({
   subsets: ["latin"],
   variable: "--font-sans",
 });

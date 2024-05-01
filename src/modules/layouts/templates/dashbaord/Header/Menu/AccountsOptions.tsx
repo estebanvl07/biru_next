@@ -40,7 +40,7 @@ const AccountsOptions = () => {
   return (
     <ul className="mx-2 flex flex-col rounded-md border pb-2 pt-1 text-sm dark:border-white/10 [&>li]:cursor-pointer [&>li]:px-4 [&>li]:py-2 hover:[&>li]:bg-gray-100 dark:hover:[&>li]:bg-slate-950">
       {lastAccouts && (
-        <Listbox variant="flat">
+        <Listbox variant="flat" aria-label="Account list">
           {lastAccouts.map((options) => (
             <ListboxItem
               description={`$ ${options.amount?.toLocaleString()}`}

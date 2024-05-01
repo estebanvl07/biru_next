@@ -40,7 +40,7 @@ const RadioGroup = ({
     <div className={clsx("h-full w-full", mainClassName)}>
       <div
         className={clsx(
-          "relative flex w-full items-center rounded-md border bg-white px-4 py-2 dark:border-white/50 dark:bg-transparent",
+          "relative flex w-full items-center rounded-lg bg-default-100 px-4 py-2 duration-150 hover:bg-default-200",
           containerClassName,
           {
             "!border-red-600": error,
@@ -48,21 +48,6 @@ const RadioGroup = ({
         )}
         // onClick={onContentClick}
       >
-        {iconPath && (
-          <button
-            type="button"
-            className={clsx(
-              "m-0  border-r border-zinc-600 pr-4 outline-none",
-              buttonIconClassName,
-              {
-                "cursor-default": !eventIcon,
-              },
-            )}
-            onClick={eventIcon}
-          >
-            <Icon icon={iconPath} width={18} />
-          </button>
-        )}
         <div
           className={clsx(
             "flex flex-grow flex-col text-xs",
@@ -75,7 +60,7 @@ const RadioGroup = ({
         >
           {label && (
             <span
-              className={clsx("font-medium", labelClassName)}
+              className={clsx("font-medium dark:text-white", labelClassName)}
               accessKey={name}
             >
               {label}
@@ -84,11 +69,26 @@ const RadioGroup = ({
           )}
 
           <div className="mt-1 flex w-full gap-0 overflow-hidden rounded-md">
+            {iconPath && (
+              <button
+                type="button"
+                className={clsx(
+                  "m-0  border-zinc-600 pr-4 outline-none",
+                  buttonIconClassName,
+                  {
+                    "cursor-default": !eventIcon,
+                  },
+                )}
+                onClick={eventIcon}
+              >
+                <Icon icon={iconPath} width={18} />
+              </button>
+            )}
             {options.map((option) => (
               <label
                 key={option.value}
                 className={clsx(
-                  "flex-1 cursor-pointer bg-slate-100 px-1 py-0.5 dark:bg-slate-800",
+                  "flex-1 cursor-pointer bg-slate-100 px-1 py-0.5 dark:bg-slate-800 dark:text-white",
                   labelClassName,
                   option.className,
                 )}

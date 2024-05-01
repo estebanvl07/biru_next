@@ -6,6 +6,8 @@ import DashboardLayout from "~/modules/layouts/Dashboard";
 import { api } from "~/utils/api";
 import { motion } from "framer-motion";
 import CategoryCard from "~/modules/category/CategoryCard";
+import { Input } from "@nextui-org/react";
+import { Icon } from "@iconify/react/dist/iconify.js";
 
 const container = {
   hidden: { opacity: 1, scale: 0 },
@@ -26,42 +28,46 @@ const CategoryPage = () => {
 
   return (
     <DashboardLayout title="Categorías">
-      <div className="mx-auto max-w-[900px] py-2">
-        <nav className="mb-4 flex items-center justify-between">
-          <h2>Categorías</h2>
-          <Link
-            href={{
-              pathname: "/account/[acc]/category/new",
-              query: { acc: params?.acc },
-            }}
-          >
-            <Button>Crear categoría</Button>
-          </Link>
-        </nav>
-        {categories?.length === 0 ? (
-          <span>No tienes categorías creadas</span>
-        ) : (
-          <motion.div
-            className="grid grid-cols-1 gap-2 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
-            variants={container}
-            initial="hidden"
-            animate="visible"
-          >
-            {categories?.map((category) => {
-              return (
-                <CategoryCard
-                  key={category.id}
-                  category={category}
-                  onClick={() => {
-                    console.log(category);
-                    //  setInfoCategory(category);
-                  }}
-                />
-              );
-            })}
-          </motion.div>
-        )}
-      </div>
+      <nav className="mb-4 flex items-center justify-between">
+        <Input
+          placeholder="Buscar"
+          startContent={
+            <Icon icon="iconoir:search" className="dark:text-slate-200" />
+          }
+          className="max-w-[40%]"
+        />
+        <Link
+          href={{
+            pathname: "/account/[acc]/category/new",
+            query: { acc: params?.acc },
+          }}
+        >
+          <Button>Crear categoría</Button>
+        </Link>
+      </nav>
+      {categories?.length === 0 ? (
+        <span>No tienes categorías creadas</span>
+      ) : (
+        <motion.div
+          className="grid grid-cols-1 gap-2 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
+          variants={container}
+          initial="hidden"
+          animate="visible"
+        >
+          {categories?.map((category) => {
+            return (
+              <CategoryCard
+                key={category.id}
+                category={category}
+                onClick={() => {
+                  console.log(category);
+                  //  setInfoCategory(category);
+                }}
+              />
+            );
+          })}
+        </motion.div>
+      )}
     </DashboardLayout>
   );
 };

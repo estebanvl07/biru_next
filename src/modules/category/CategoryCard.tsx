@@ -52,7 +52,7 @@ const CategotyCard = ({
         />
         <p
           className={clsx(
-            "max-w-32 overflow-hidden text-ellipsis whitespace-nowrap font-medium",
+            "max-w-32 overflow-hidden text-ellipsis whitespace-nowrap font-medium dark:text-white",
             {
               "text-gray-400": state === 2,
             },

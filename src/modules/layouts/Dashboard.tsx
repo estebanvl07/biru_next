@@ -11,7 +11,7 @@ const DashboardLayout = ({
     <div className="flex dark:bg-slate-950">
       <SideBar />
       <section className="z-0 h-full min-h-screen w-full flex-grow py-3 md:pl-60">
-        <div className="px-8">
+        <div className="flex flex-col gap-4 px-8">
           <HeaderApp title={title} />
           {children}
         </div>

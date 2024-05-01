@@ -10,7 +10,7 @@ import { Input } from "~/modules/components";
 import type { ISelectProps } from "~/types/component/input.types";
 
 import { useOutsideClick } from "~/lib/hooks";
-import useInputSearch from "~/lib/hooks/useInputSearch";
+import useInputSearch from "~/lib/hooks/useSearch";
 
 import { ISelectOptions } from "~/types/root.types";
 import { Dropdown } from "primereact/dropdown";

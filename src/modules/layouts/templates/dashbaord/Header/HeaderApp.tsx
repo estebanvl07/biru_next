@@ -23,7 +23,7 @@ const HeaderApp = ({ title }: { title?: string }) => {
           >
             <h1
               className={clsx(
-                "text-start text-2xl font-semibold text-primary dark:text-white",
+                "text-start text-2xl font-semibold text-primary dark:text-slate-200",
               )}
             >
               {title ?? "Dashboard"}

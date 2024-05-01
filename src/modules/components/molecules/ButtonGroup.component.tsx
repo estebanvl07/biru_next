@@ -42,7 +42,7 @@ const ButtonGroup = ({
           key={option.id}
           type="button"
           className={clsx(
-            "flex flex-1 items-center justify-center gap-2 whitespace-nowrap bg-slate-50 px-6 py-2 text-sm font-medium text-gray-900 hover:bg-gray-100 dark:border-white/10 dark:bg-slate-900 dark:text-white dark:hover:bg-slate-900/50 dark:hover:text-white",
+            "flex w-fit flex-1 items-center justify-center gap-2 whitespace-nowrap bg-default-100 px-6 py-8 text-sm font-medium dark:border-white/10 dark:text-white dark:hover:bg-default-200",
             buttonClass,
             {
               "border border-primary !bg-primary !text-white dark:border-indigo-600 dark:!bg-indigo-600":
@@ -60,7 +60,7 @@ const ButtonGroup = ({
           {option.icon && (
             <Icon
               icon={option.icon ?? ""}
-              width={22}
+              width={18}
               className={option.iconClass}
             />
           )}

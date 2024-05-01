@@ -15,7 +15,11 @@ const NavigationBack = ({ width = 24 }: { width?: number }) => {
 
   return (
     <button onClick={onGoBack}>
-      <Icon icon="la:angle-left" width={width} />
+      <Icon
+        icon="la:angle-left"
+        className="dark:text-slate-300"
+        width={width}
+      />
     </button>
   );
 };

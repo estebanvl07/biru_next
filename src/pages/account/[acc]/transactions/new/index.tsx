@@ -23,16 +23,18 @@ import { useParams } from "next/navigation";
 
 const NewTransactionPage = () => {
   const params = useParams<{ acc: string }>();
-  const { data: categories } = api.category.getAll.useQuery();
-  const TransactionService = api.transaction.create.useMutation();
   const router = useRouter();
   const query = router.query;
+
+  const { data: categories } = api.category.getAll.useQuery();
+  const TransactionService = api.transaction.create.useMutation();
 
   const {
     handleSubmit,
     register,
     formState: { errors },
     setValue,
+    getValues,
   } = useForm<createTransaction>({
     resolver: zodResolver(createTransaction),
   });
@@ -67,50 +69,52 @@ const NewTransactionPage = () => {
         className="flex w-full max-w-[32rem] flex-col items-center justify-center gap-2 pt-6 md:pt-0"
         onSubmit={handleSubmit(onSubmit)}
       >
-        <p className="w-full text-start dark:text-slate-300">
-          Valor de transacción
-        </p>
         <Input
           type="number"
-          variant="underlined"
           isRequired
-          // label="Monto"
+          label="Valor de transacción"
           placeholder="0.00"
-          size="lg"
-          labelPlacement="outside"
+          // labelPlacement="outside"
           className="!appearance-none"
           onLoad={() => {}}
-          // onChange={(val) => console.log(val)}
           onValueChange={(val) => setValue("amount", Number(val))}
-          inputMode="decimal"
+          inputMode="numeric"
           startContent={
             <div className="pointer-events-none flex items-center">
               <span className="text-small text-default-400">$</span>
             </div>
           }
-        />
-        <ButtonGroup
-          containerClassName="w-full"
-          buttonClass="text-xs !py-1"
-          // defaultSelected={query?.type ? Number(query?.type) : 1}
-          options={[
-            {
-              id: 1,
-              label: "Ingreso",
-              onClick: () => {
-                setValue("type", 1);
-              },
-              colorSelected: "!bg-green-500 border border-green-500 text-white",
-            },
-            {
-              id: 2,
-              label: "Egreso",
-              onClick: () => {
-                setValue("type", 2);
-              },
-              colorSelected: "!bg-red-500 border border-red-500 text-white",
-            },
-          ]}
+          endContent={
+            <div>
+              <ButtonGroup
+                containerClassName="w-fit"
+                buttonClass="text-xs !py-1"
+                defaultSelected={query?.type ? Number(query?.type) : 1}
+                options={[
+                  {
+                    id: 1,
+                    label: "",
+                    icon: "ph:trend-up",
+                    onClick: () => {
+                      setValue("type", 1);
+                    },
+                    colorSelected:
+                      "!bg-green-500 border border-green-500 text-white",
+                  },
+                  {
+                    id: 2,
+                    icon: "ph:trend-down",
+                    label: "",
+                    onClick: () => {
+                      setValue("type", 2);
+                    },
+                    colorSelected:
+                      "!bg-red-500 border border-red-500 text-white",
+                  },
+                ]}
+              />
+            </div>
+          }
         />
 
         <InputDate
@@ -121,7 +125,11 @@ const NewTransactionPage = () => {
         />
         <Input
           startContent={
-            <Icon icon="fluent:text-description-24-filled" width={18} />
+            <Icon
+              icon="fluent:text-description-24-filled"
+              className="dark:text-slate-200"
+              width={18}
+            />
           }
           // iconPath="fluent:text-description-24-filled"
           label="Descripción"
@@ -133,7 +141,9 @@ const NewTransactionPage = () => {
         <Select
           placeholder="Seleccione una categoría"
           label="Categoría"
-          startContent={<Icon icon="iconamoon:category" />}
+          startContent={
+            <Icon icon="iconamoon:category" className="dark:text-slate-200" />
+          }
           isRequired
           required
           errorMessage={errors?.categoryId?.message ?? ""}
@@ -146,7 +156,7 @@ const NewTransactionPage = () => {
                   color="primary"
                   onClick={() => setValue("categoryId", category.id)}
                   key={category.id}
-                  className="font-montserrat"
+                  className="font-montserrat dark:text-white"
                   value={category.id}
                 >
                   {category.name}
@@ -161,7 +171,10 @@ const NewTransactionPage = () => {
         </Select>
         <Input
           startContent={
-            <Icon icon="streamline:travel-map-triangle-flag-navigation-map-maps-flag-gps-location-destination-goal" />
+            <Icon
+              icon="streamline:travel-map-triangle-flag-navigation-map-maps-flag-gps-location-destination-goal"
+              className="dark:text-slate-200"
+            />
           }
           label="Destinatario"
           placeholder="Andres, Juan, Omar"

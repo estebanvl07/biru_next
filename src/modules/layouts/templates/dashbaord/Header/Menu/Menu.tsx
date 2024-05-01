@@ -57,7 +57,7 @@ const Menu = ({ onHide }: { onHide: () => void }) => {
                   onHide();
                 }}
                 color="primary"
-                className="px-3 hover:rounded-md dark:hover:!text-white"
+                className="px-3 hover:rounded-md dark:!text-white"
                 showDivider={option.showLine}
                 startContent={<Icon icon={option.icon ?? ""} />}
                 key={option.label}

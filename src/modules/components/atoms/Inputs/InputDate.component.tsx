@@ -69,7 +69,13 @@ const InputDate: FC<InputDateProps> = ({
         readOnly
         isRequired={props.required}
         label={label}
-        startContent={<Icon icon="flowbite:calendar-month-solid" />}
+        startContent={
+          <Icon
+            icon="flowbite:calendar-month-solid"
+            width={18}
+            className="dark:text-slate-200"
+          />
+        }
         // iconPath="flowbite:calendar-month-solid"
         className={className}
         value={inputValue}

@@ -14,7 +14,7 @@ export const HeroSection = () => {
         <h1 className="text-center font-encode text-4xl font-bold !leading-none tracking-tight md:text-[2.6rem] lg:text-start">
           Domina
           <br />
-          tu
+          tu{" "}
           <span className="highlight font-encode text-primary dark:text-primary-light">
             futuro financiero
           </span>

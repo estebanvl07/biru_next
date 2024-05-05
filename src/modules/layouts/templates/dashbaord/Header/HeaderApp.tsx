@@ -1,18 +1,17 @@
 import clsx from "clsx";
 
 import Nav from "./Nav";
-import { useParams, usePathname } from "next/navigation";
-import { api } from "~/utils/api";
+import { usePathname } from "next/navigation";
 import NavigationBack from "./NavigationBack";
+import { useCurrentAccount } from "~/modules/Account/hooks";
 
 const HeaderApp = ({ title }: { title?: string }) => {
-  const params = useParams();
   const pathname = usePathname();
-  const { data: account, isLoading } = api.userAccount.getOne.useQuery({
-    id: Number(params?.acc),
-  });
+
+  const { account } = useCurrentAccount();
+
   return (
-    <header className="z-10 mb-2 flex w-full items-center justify-between bg-white md:h-16 dark:border-white/10 dark:bg-slate-950">
+    <header className="z-10 mb-2 flex w-full items-center justify-between bg-white dark:border-white/10 dark:bg-slate-950 md:h-16">
       <section className="flex w-full flex-grow items-center justify-between">
         <section className="flex items-center gap-3">
           {!pathname?.includes("main") && <NavigationBack />}

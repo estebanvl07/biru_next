@@ -1,17 +1,4 @@
-import { Prisma, PrismaClient } from "@prisma/client";
-
-// {
-//     id        Int      @id @default(autoincrement())
-//     name      String
-//     type      Int
-//     balance   Int?     @default(0)
-//     reference String?
-//     state     Int?     @default(1) // 1: activo, 0: inactivo
-//     createdAt DateTime @default(now())
-//     updatedAt DateTime @updatedAt
-//     user      User     @relation(fields: [userId], references: [id])
-//     userId    String
-//   }
+import type { Prisma, PrismaClient } from "@prisma/client";
 
 export function setSeed(db: PrismaClient, userId: string) {
   const data: Prisma.UserAccountUncheckedCreateInput = {
@@ -40,12 +27,43 @@ export function createAccount(
   });
 }
 
-export function getAllAccounts(db: PrismaClient, userId: string) {
+async function createDefaultAccounts(db: PrismaClient, userId: string) {
+  await db.userAccount.createMany({
+    data: [
+      {
+        name: "Efectivo",
+        type: 2,
+        userId,
+      },
+      {
+        name: "Ahorro",
+        type: 1,
+        userId,
+      },
+    ],
+  });
+
   return db.userAccount.findMany({
     where: {
       userId,
+      state: 1,
     },
   });
+}
+
+export async function getAllAccounts(db: PrismaClient, userId: string) {
+  const activeAccounts = await db.userAccount.findMany({
+    where: {
+      userId,
+      state: 1,
+    },
+  });
+
+  if (activeAccounts.length === 0) {
+    return createDefaultAccounts(db, userId);
+  }
+
+  return activeAccounts;
 }
 
 export function getAccountById(

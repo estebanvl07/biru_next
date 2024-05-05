@@ -10,27 +10,34 @@ import {
   SignInOptions,
   InputPassword,
 } from "~/modules/components";
-import { SuccessfullyCreated } from "~/modules/register/components";
+import { SuccessfullyCreated } from "~/modules/Register/components";
 import { BasicLayout } from "~/modules/layouts";
 import { api } from "~/utils/api";
 import {
   registerUserInput,
   type RegisterUserInputType,
-} from "~/modules/register/resolver";
+} from "~/modules/Register/resolver";
 
 const Register = () => {
-  const { mutateAsync: createUser, isSuccess } =
-    api.users.register.useMutation();
+  const {
+    mutate: registerUser,
+    isSuccess,
+    isPending: isSubmitting,
+    error,
+  } = api.users.register.useMutation();
 
   const {
     handleSubmit,
     register,
-    formState: { errors, isSubmitting },
+    formState: { errors },
   } = useForm<RegisterUserInputType>({
     resolver: zodResolver(registerUserInput),
   });
 
-  const onSubmit = (payload: RegisterUserInputType) => createUser(payload);
+  const onSubmit = (payload: RegisterUserInputType) => registerUser(payload);
+
+  const errorMessage =
+    error?.data?.code === "BAD_REQUEST" ? error?.message : "";
 
   return (
     <BasicLayout>
@@ -89,6 +96,11 @@ const Register = () => {
                   size="sm"
                 />
               </Button>
+              {errorMessage && (
+                <span className="text-xs text-red-500 dark:text-red-400">
+                  {errorMessage}
+                </span>
+              )}
             </form>
             <span className="mt-6 flex w-full items-center justify-center gap-2 text-sm">
               ¿Ya tienes cuenta?,

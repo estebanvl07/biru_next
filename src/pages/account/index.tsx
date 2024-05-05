@@ -1,5 +1,5 @@
+import React from "react";
 import { useSession } from "next-auth/react";
-import React, { useEffect } from "react";
 
 import Image from "next/image";
 import Link from "next/link";
@@ -9,22 +9,43 @@ import AccountCard from "~/modules/account/AccountCard";
 import { Button } from "~/modules/components";
 import { HeaderApp } from "~/modules/layouts/templates/dashbaord";
 
-import { api } from "~/utils/api";
+import type { GetServerSideProps } from "next";
+import { useAccounts } from "~/modules/Account/hooks";
+import { createServerSideCaller } from "~/utils/serverSideCaller/serverSideCaller";
+
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
+  const helpers = await createServerSideCaller(ctx);
+
+  const accounts = await helpers.userAccount.getAll.fetch();
+
+  if (accounts.length === 0) {
+    return {
+      redirect: {
+        destination: "/account/new",
+        permanent: false,
+      },
+    };
+  }
+
+  const trpcState = helpers.dehydrate();
+
+  return {
+    props: {
+      trpcState,
+    },
+  };
+};
 
 const AccountPage = () => {
   const router = useRouter();
+  const { accounts } = useAccounts();
   const { data: session } = useSession();
-  const { data: accounts } = api.userAccount.getAll.useQuery();
 
-  const setAccount = (id: number) => router.push(`/account/${id}/main`);
-
-  useEffect(() => {
-    if (accounts?.length === 0) router.push(`/account/new`);
-  }, [accounts]);
+  const navigateAccount = (id: number) => router.push(`/account/${id}/main`);
 
   return (
     <div className="relative grid h-screen w-full grid-cols-6 flex-row">
-      <aside className="relative col-span-2 hidden w-full flex-col justify-center bg-primary px-8 text-white lg:flex dark:bg-slate-900">
+      <aside className="relative col-span-2 hidden w-full flex-col justify-center bg-primary px-8 text-white dark:bg-slate-900 lg:flex">
         <Image
           src="/logo-white.svg"
           className="absolute left-4 top-6"
@@ -49,12 +70,12 @@ const AccountPage = () => {
           <h2>Mis cuentas</h2>
           <p>Seleccione alguna de sus cuentas para continuar.</p>
           <div className="flex flex-wrap gap-2 py-2">
-            {accounts?.map((account) => {
+            {accounts.map((account) => {
               return (
                 <AccountCard
                   key={account.id}
-                  account={account as any}
-                  onclick={() => setAccount(account.id)}
+                  account={account}
+                  onClick={() => navigateAccount(account.id)}
                 />
               );
             })}

@@ -1,7 +1,7 @@
-"use client";
 import { useForm } from "react-hook-form";
-import { Button, Card, Input, Select } from "~/modules/components";
-import { useRouter } from "next/navigation";
+// import { Button, Card, Input, Select } from "~/modules/components";
+import { Input, Select, SelectItem } from "@nextui-org/react";
+import { useParams, useRouter } from "next/navigation";
 
 import { Icon } from "@iconify/react/dist/iconify.js";
 import { api } from "~/utils/api";
@@ -12,6 +12,8 @@ import {
   createUserAccount,
 } from "~/modules/account/schema";
 import { UserAccount } from "@prisma/client";
+import { Button } from "~/modules/components";
+import { useEffect } from "react";
 // import * as yup from "yup";
 
 const optionsTypeAccount = [
@@ -30,7 +32,8 @@ const optionsTypeAccount = [
 ];
 
 const CreateAccount = ({ hasEdit = false }: { hasEdit?: boolean }) => {
-  const router = useRouter();
+  const router = useRouter(); 
+  const params = useParams<{ first: string }>();
 
   const userAccount = api.userAccount.create.useMutation();
 
@@ -43,7 +46,7 @@ const CreateAccount = ({ hasEdit = false }: { hasEdit?: boolean }) => {
 
   const onsubmit = (data: any) => {
     return userAccount?.mutateAsync(
-      { ...data, balance: Number(data.balance) },
+      { ...data, balance: Number(data.balance), type: Number(data.type) },
       {
         onError(error, variables, context) {
           console.log({ error, variables, context });
@@ -55,79 +58,110 @@ const CreateAccount = ({ hasEdit = false }: { hasEdit?: boolean }) => {
     );
   };
 
-  return (
-    <WhitoutSideBar>
-      <div className="flex w-full items-center justify-center">
-        <Card className="m-auto flex w-full max-w-[40rem] flex-col items-center justify-center border-none !bg-transparent !p-0 md:border md:!bg-white md:!p-6 dark:!bg-transparent md:dark:!bg-slate-900">
-          <form
-            className="flex w-full flex-col gap-2 pt-6 md:pt-0"
-            onSubmit={handleSubmit(onsubmit)}
-          >
-            <header className="mb-2 flex w-full items-center justify-between">
-              <h2>Nueva cuenta</h2>
-              <Button
-                className="flex items-center gap-2 !px-0 !py-0"
-                variantStyle="empty"
-                onClick={() => router.back()}
-              >
-                <Icon icon="ph:arrow-left-light" width={16} />
-                Volver
-              </Button>
-            </header>
-            <Input
-              required
-              iconPath="fluent:text-description-24-filled"
-              placeholder='"Efectivo", "Ventas", "Inversiones"'
-              label="Nombre"
-              className="w-full"
-              {...register("name")}
-              error={errors.name?.message as string}
-            />
-            <Input
-              required
-              iconPath="quill:creditcard"
-              placeholder="Número de cuenta"
-              label="Referencia"
-              className="w-full"
-              {...register("reference")}
-              error={errors.reference?.message as string}
-            />
-            <Select
-              required
-              iconPath="game-icons:cash"
-              options={optionsTypeAccount}
-              changeOption={(option) => setValue("type", Number(option.value))}
-              label="Tipo de cuenta"
-              placeholder="Seleccione el tipo de cuenta"
-              {...register("type")}
-              error={errors.type?.message as any}
-            />
+  console.log(params);
 
-            <Input
-              title="Si no agregas un balance el por defeco será 0"
-              iconPath="clarity:balance-line"
-              label="Balance Inicial"
-              type="number"
-              placeholder="Agrega un balance por defecto"
-              className="w-full"
-              onChange={(e) => setValue("balance", Number(e.target.value))}
-              // {...register("balance")}
-              error={errors.balance?.message as any}
-            />
-            <div className="flex w-full flex-col gap-2 pt-3 md:flex-row">
-              <Button className="w-full py-1 text-sm" type="submit">
-                {hasEdit ? "Actualizar cuenta" : "Crear cuenta"}
-              </Button>
-              {/* <Button
-            className="w-full py-1 text-sm"
-            variantStyle="outline"
-            // onClick={() => navigate(-1)}
+  return (
+    <WhitoutSideBar title="Crear Cuenta">
+      <div className="flex w-full items-center justify-center">
+        <form
+          className="flex w-full  max-w-[32rem] flex-col items-center justify-center gap-2 pt-6 md:pt-0"
+          onSubmit={handleSubmit(onsubmit)}
+        >
+          <h2>Inscribir cuenta</h2>
+          <p className="mb-2 text-center md:max-w-[80%]">
+            Inscribe las cuentas que tengas disponibles, y llevar más ordenado
+            tus ingresos
+          </p>
+          <Input
+            required
+            isRequired
+            startContent={
+              <Icon
+                icon="fluent:text-description-24-filled"
+                width={18}
+                className="dark:text-slate-200"
+              />
+            }
+            placeholder='"Efectivo", "Ventas", "Inversiones"'
+            label="Nombre"
+            className="w-full"
+            {...register("name")}
+            errorMessage={errors.name?.message as string}
+          />
+          <Input
+            startContent={
+              <Icon
+                icon="quill:creditcard"
+                width={18}
+                className="dark:text-slate-200"
+              />
+            }
+            placeholder="Número de cuenta"
+            label="Referencia"
+            className="w-full"
+            {...register("reference")}
+            errorMessage={errors.reference?.message as string}
+          />
+          <Select
+            required
+            isRequired
+            startContent={
+              <Icon
+                icon="game-icons:cash"
+                width={18}
+                className="dark:text-slate-200"
+              />
+            }
+            items={optionsTypeAccount}
+            // changeOption={(option) => setValue("type", Number(option.value))}
+            label="Tipo de cuenta"
+            variant="flat"
+            placeholder="Seleccione el tipo de cuenta"
+            {...register("type")}
+            errorMessage={errors.type?.message as any}
           >
-            Cancelar
-          </Button> */}
-            </div>
-          </form>
-        </Card>
+            {optionsTypeAccount.map((opt) => (
+              <SelectItem
+                key={opt.value}
+                color="primary"
+                className="font-montserrat"
+                value={opt.value}
+              >
+                {opt.name}
+              </SelectItem>
+            ))}
+          </Select>
+
+          <Input
+            title="Si no agregas un balance el por defeco será 0"
+            startContent={
+              <Icon
+                icon="clarity:balance-line"
+                width={18}
+                className="dark:text-slate-200"
+              />
+            }
+            label="Balance Inicial"
+            type="number"
+            placeholder="Agrega un balance por defecto"
+            className="w-full"
+            onChange={(e) => setValue("balance", Number(e.target.value))}
+            // {...register("balance")}
+            errorMessage={errors.balance?.message as any}
+          />
+          <div className="flex w-full  flex-col gap-2 pt-3 md:flex-row">
+            <Button className="w-full" type="submit">
+              {hasEdit ? "Actualizar cuenta" : "Crear cuenta"}
+            </Button>
+            <Button
+              className="w-full"
+              variantStyle="outline"
+              onClick={() => router.push("/account")}
+            >
+              Cancelar
+            </Button>
+          </div>
+        </form>
       </div>
     </WhitoutSideBar>
   );

@@ -40,7 +40,7 @@ const RadioGroup = ({
     <div className={clsx("h-full w-full", mainClassName)}>
       <div
         className={clsx(
-          "relative flex w-full items-center rounded-lg bg-default-100 px-4 py-2 duration-150 hover:bg-default-200",
+          "relative flex w-full items-center rounded-lg bg-default-100 py-2 duration-150 hover:bg-default-200",
           containerClassName,
           {
             "!border-red-600": error,
@@ -48,21 +48,6 @@ const RadioGroup = ({
         )}
         // onClick={onContentClick}
       >
-        {iconPath && (
-          <button
-            type="button"
-            className={clsx(
-              "m-0  border-r border-zinc-600 pr-4 outline-none",
-              buttonIconClassName,
-              {
-                "cursor-default": !onIconClick,
-              },
-            )}
-            onClick={onIconClick}
-          >
-            <Icon icon={iconPath} width={18} />
-          </button>
-        )}
         <div
           className={clsx(
             "flex flex-grow flex-col text-xs",

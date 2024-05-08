@@ -3,13 +3,14 @@ import { HeaderApp } from "~/modules/layouts/templates/dashbaord";
 
 interface DashboardProps {
   children: React.ReactNode;
+  title?: string;
 }
 
-const WhitoutSideBar: FC<DashboardProps> = ({ children }) => {
+const WhitoutSideBar: FC<DashboardProps> = ({ children, title }) => {
   return (
     <div className="flex h-full min-h-screen flex-col bg-white dark:bg-slate-950">
-      <main className="w-full flex-grow">
-        <HeaderApp />
+      <main className="w-full flex-grow px-8 py-4">
+        <HeaderApp title={title} />
         {children}
       </main>
     </div>

@@ -5,13 +5,11 @@
 
 body {
   box-sizing: border-box;
-  @apply text-sm text-slate-900 dark:text-slate-300;
+  @apply text-sm text-slate-900 dark:text-slate-200;
 }
 
-h1,
-h2,
-h3 {
-  @apply text-black dark:text-white;
+main {
+  @apply text-sm text-slate-900 dark:text-slate-200;
 }
 
 h2 {

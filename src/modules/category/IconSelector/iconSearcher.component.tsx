@@ -1,12 +1,14 @@
 // import { Dialog } from "primereact/dialog";
+import Modal from "~/modules/components/atoms/Modal.component";
 import IconSelector from "./iconSelector.component";
 
 type IconSearcherProps = {
   selected: (icon: string) => void;
-  onHideModal: () => void;
+  isOpen: boolean;
+  onClose: () => void;
 };
 
-const IconSearcher = ({ selected, onHideModal }: IconSearcherProps) => {
+const IconSearcher = ({ selected, isOpen, onClose }: IconSearcherProps) => {
   return (
     // <Dialog
     //   header="Icono de categoría"
@@ -14,10 +16,9 @@ const IconSearcher = ({ selected, onHideModal }: IconSearcherProps) => {
     //   style={{ width: "50vw" }}
     //   onHide={onHideModal}
     // >
-      <div>
-
-      <IconSelector selected={selected} onHideModal={onHideModal} />
-      </div>
+    <Modal isOpen={isOpen} onClose={onClose} title="Iconos">
+      <IconSelector selected={selected} onHideModal={onClose} />
+    </Modal>
     // </Dialog>
   );
 };

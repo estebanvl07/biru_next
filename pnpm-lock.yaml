@@ -29,6 +29,9 @@ dependencies:
   '@nextui-org/listbox':
     specifier: ^2.1.19
     version: 2.1.19(@nextui-org/system@2.1.2)(@nextui-org/theme@2.2.2)(react-dom@18.2.0)(react@18.2.0)(tailwind-variants@0.2.1)
+  '@nextui-org/modal':
+    specifier: ^2.0.33
+    version: 2.0.33(@nextui-org/system@2.1.2)(@nextui-org/theme@2.2.2)(framer-motion@11.0.28)(react-dom@18.2.0)(react@18.2.0)(tailwind-variants@0.2.1)
   '@nextui-org/pagination':
     specifier: ^2.0.30
     version: 2.0.30(@nextui-org/system@2.1.2)(@nextui-org/theme@2.2.2)(react-dom@18.2.0)(react@18.2.0)

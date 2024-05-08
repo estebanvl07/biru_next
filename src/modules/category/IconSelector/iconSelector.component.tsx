@@ -21,7 +21,7 @@ const IconSelector: React.FC<IconSearchResult> = ({
   };
 
   return (
-    <div className="w-full overflow-auto rounded-lg bg-white px-6 py-4 dark:border dark:border-white/10 dark:bg-slate-900 dark:backdrop-blur-lg">
+    <div className="w-full overflow-auto rounded-lg bg-white p-4 dark:border dark:border-white/10 dark:bg-slate-900 dark:backdrop-blur-lg">
       <h2 className="mb-0 text-2xl font-semibold">Escoge el icono adecuado</h2>
       <p className="mb-4 text-sm">
         Por favor, utilize el idioma ingles en su busqueda

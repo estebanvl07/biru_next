@@ -14,40 +14,43 @@ export const LoginForm = () => {
     register,
     handleSubmit,
     formState: { errors },
-    watch,
-    setValue,
   } = useForm<LoginInputType>({
     resolver: zodResolver(loginInput),
   });
+  const router = useRouter();
 
-  const onSubmit = async (form: LoginInputType) => {
-    //   event.preventDefault();
-    //   const response = await signIn("credentials", {
-    //     email,
-    //     password,
-    //     callbackUrl: CALLBACK_SIGN_IN_URL,
-    //     redirect: false,
-    //   });
-    //   if (response?.ok) {
-    //     void router.replace("/account");
-    //   }
-    //   console.log(response);
+  const onSubmit = async ({ email, password }: LoginInputType) => {
+    try {
+      const response = await signIn("credentials", {
+        email,
+        password,
+        callbackUrl: CALLBACK_SIGN_IN_URL,
+        redirect: false,
+      });
+      console.log("sing-in", response);
+
+      if (response?.ok) {
+        await router.replace("/account");
+      }
+    } catch (error) {
+      console.error("sign-in", error);
+    }
   };
 
   return (
     <form
       className="mt-4 flex w-full flex-col gap-2"
-      // action={signin}
       onSubmit={handleSubmit(onSubmit)}
     >
       <Input
         name="email"
         label="Correo"
-        placeholder="JhonDoe@mail.com"
+        placeholder="john@doe.com"
         autoComplete="email"
         iconPath="ic:outline-email"
         required
         register={register("email")}
+        error={errors.email?.message}
       />
       <InputPassword
         name="password"
@@ -55,6 +58,7 @@ export const LoginForm = () => {
         placeholder="••••••••"
         autoComplete="current-password"
         register={register("password")}
+        error={errors.password?.message}
         required
       />
 

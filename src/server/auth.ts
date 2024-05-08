@@ -4,7 +4,6 @@ import {
   getServerSession,
   type DefaultSession,
   type NextAuthOptions,
-  type User,
 } from "next-auth";
 import { type Adapter } from "next-auth/adapters";
 import GoogleProvider from "next-auth/providers/google";
@@ -13,10 +12,9 @@ import CredentialsProvider from "next-auth/providers/credentials";
 
 import { env } from "~/env";
 import { db } from "~/server/db";
-import { PrismaClient } from "@prisma/client";
 import { RequestError } from "~/lib/utility/errorClass";
 
-import bcrypt from "bcrypt";
+import { authPasswordUser } from "./api/services/users.services";
 
 /**
  * Module augmentation for `next-auth` types. Allows us to add custom properties to the `session`
@@ -45,8 +43,6 @@ declare module "next-auth" {
  * @see https://next-auth.js.org/configuration/options
  */
 
-const prisma = new PrismaClient();
-
 export const authOptions: NextAuthOptions = {
   adapter: PrismaAdapter(db) as Adapter,
   providers: [
@@ -67,14 +63,14 @@ export const authOptions: NextAuthOptions = {
       // You can pass any HTML attribute to the <input> tag through the object.
       credentials: {
         name: { type: "text" },
-        email: { label: "Correo", type: "text", placeholder: "Jhon@Doe.com" },
+        email: { label: "Correo", type: "text", placeholder: "john@doe.com" },
         password: {
           label: "Contraseña",
           type: "text",
           placeholder: "••••••••",
         },
       },
-      async authorize(credentials, req) {
+      async authorize(credentials) {
         // You need to provide your own logic here that takes the credentials
         // submitted and returns either a object representing a user or value
         // that is false/null if the credentials are invalid.
@@ -86,84 +82,20 @@ export const authOptions: NextAuthOptions = {
 
         if (!credentials) return null;
 
-        const referer = req?.headers?.referer || "";
-
-        if (referer.includes("/register")) {
-          const existingUser = await prisma.user.findUnique({
-            where: { email: credentials?.email ?? "" },
-          });
-
-          if (existingUser) {
-            throw new RequestError({
-              status: 400,
-              code: "USER_EXISTING",
-              message: "El email ya está en uso",
-            });
-          }
-
-          const newUser = await prisma.user.create({
-            data: {
-              email: credentials?.email,
-              name: credentials?.name || null,
-              image: null,
-            },
-          });
-
-          await prisma.userAccount.create({
-            data: {
-              userId: newUser.id,
-              name: "Ahorros",
-              reference: "",
-              balance: 0,
-              state: 1,
-              type: 1,
-            },
-          });
-
-          // create user password
-          const passwordHash = bcrypt.hashSync(
-            credentials.password,
-            bcrypt.genSaltSync(10),
-          );
-
-          await prisma.userPassword.create({
-            data: {
-              email: credentials?.email,
-              password: passwordHash,
-              userId: newUser.id,
-              state: 1,
-            },
-          });
-
-          return newUser;
-        }
-
-        const userFound = await prisma.user.findUnique({
-          where: { email: credentials?.email ?? "" },
-          include: {
-            userPassword: true,
-          },
-        });
-
-        const validate_user_error = {
-          code: "INVALID_EMAIL_OR_PASSWORD",
-          status: 400,
-          message: "Correo o contraseña incorrecta",
-        };
-
-        if (!userFound) {
-          throw new RequestError(validate_user_error);
-        }
-
-        const isPasswordMatching = await bcrypt.compare(
+        const userFound = await authPasswordUser(
+          db,
+          credentials.email,
           credentials.password,
-          userFound?.userPassword?.password ?? "",
         );
 
-        if (!isPasswordMatching) {
-          throw new RequestError(validate_user_error);
+        if (!userFound) {
+          throw new RequestError({
+            code: "INVALID_EMAIL_OR_PASSWORD",
+            status: 400,
+            message: "Correo o contraseña incorrecta",
+          });
         }
-        // Return null if user data could not be retrieved
+
         return userFound;
       },
     }),

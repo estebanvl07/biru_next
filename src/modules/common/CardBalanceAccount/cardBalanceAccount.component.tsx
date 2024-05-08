@@ -4,20 +4,16 @@ import { Card } from "~/modules/components";
 import { LineChart } from "~/modules/charts";
 
 import type { Series } from "~/types/root.types";
-import { IAccount } from "~/types/account";
-import { ITransaction } from "~/types/transactions";
-import { useParams } from "next/navigation";
-import { api } from "~/utils/api";
+import type { IAccount } from "~/types/account";
+import type { ITransaction } from "~/types/transactions";
+import { useCurrentAccount } from "~/modules/Account/hooks";
 
 // TODO: filter by options
 const CardBalanceAccount = () => {
-  const params = useParams();
   const [serie, setSerie] = useState<Series[]>();
   const [keys, setKeys] = useState<string[]>([]);
   const [date, setDate] = useState<{ from: string; to: string }>();
-  const { data: account } = api.userAccount.getOne.useQuery({
-    id: Number(params?.acc),
-  });
+  const { account } = useCurrentAccount();
 
   const desktopMediQuery = true;
 

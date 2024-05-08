@@ -28,6 +28,8 @@ interface CreateContextOptions {
   session: Session | null;
 }
 
+type GetAuthSessionParams = Parameters<typeof getServerAuthSession>[0];
+
 /**
  * This helper generates the "internals" for a tRPC context. If you need to use it, you can export
  * it from here.
@@ -51,7 +53,9 @@ const createInnerTRPCContext = (opts: CreateContextOptions) => {
  *
  * @see https://trpc.io/docs/context
  */
-export const createTRPCContext = async (opts: CreateNextContextOptions) => {
+export const createTRPCContext = async (
+  opts: CreateNextContextOptions | GetAuthSessionParams,
+) => {
   const { req, res } = opts;
 
   // Get the session from the server using the getServerSession wrapper function
@@ -83,8 +87,6 @@ const t = initTRPC.context<typeof createTRPCContext>().create({
     };
   },
 });
-
-console.log("Argumentos recibidos por initTRPC.context:", t);
 
 /**
  * Create a server-side caller.

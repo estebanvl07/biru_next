@@ -1,23 +1,29 @@
-import Link from "next/link";
-import { useParams } from "next/navigation";
 import React from "react";
+import type { GetServerSideProps } from "next";
 import {
   CardBalanceAccount,
   DetailAmounts,
   LastTransactions,
 } from "~/modules/common";
-import { Button } from "~/modules/components";
 import DashboardLayout from "~/modules/layouts/Dashboard";
-import { api } from "~/utils/api";
+import { createServerSideCaller } from "~/utils/serverSideCaller/serverSideCaller";
 
-import style from "~/styles/main.module.css";
-import clsx from "clsx";
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
+  const accountId = Number(ctx.params!.acc);
+
+  const helpers = await createServerSideCaller(ctx);
+  await helpers.userAccount.getOne.prefetch({ id: accountId });
+
+  const trpcState = helpers.dehydrate();
+
+  return {
+    props: {
+      trpcState,
+    },
+  };
+};
 
 const HomePage = () => {
-  const params = useParams();
-  const { data: account } = api.userAccount.getOne.useQuery({
-    id: Number(params?.acc),
-  });
   const loading = false;
   return (
     <DashboardLayout>

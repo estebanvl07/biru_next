@@ -33,8 +33,9 @@ export default function HeaderMenu({ type = "dashboard" }: Props) {
       className="relative z-10 flex items-center justify-end gap-3"
       // ref={navRef}
     >
-      {params?.acc && <CreationMenu />}
       <HandlerTheme />
+      {params?.acc && <CreationMenu />}
+
       <div
         className="flex cursor-pointer items-center gap-2 rounded-full border p-1.5 shadow-md dark:border-white/10"
         onClick={() => setShowMenu(!showMenu)}

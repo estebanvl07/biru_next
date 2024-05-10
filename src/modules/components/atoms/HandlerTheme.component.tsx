@@ -1,8 +1,8 @@
 "use client";
 import { useState, useEffect } from "react";
-import { Button } from "~/modules/components";
 import { Icon } from "@iconify/react";
 import clsx from "clsx";
+import { Button } from "@nextui-org/button";
 
 const getDarkMode = (): boolean => {
   try {
@@ -28,7 +28,11 @@ const DarkMode = ({ className }: { className?: string }) => {
   }, [darkMode]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
-    <button className={clsx("!m-0 !p-0", className)} onClick={handleDarkMode}>
+    <button
+      className={clsx("!m-0 !p-0", className)}
+      color="primary"
+      onClick={handleDarkMode}
+    >
       {darkMode ? (
         <Icon
           icon="akar-icons:sun-fill"

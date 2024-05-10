@@ -26,7 +26,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
 const HomePage = () => {
   const loading = false;
   return (
-    <DashboardLayout>
+    <DashboardLayout title="Dashboard">
       <div className="">
         {/* {!desktopMediaQuery ? (
         <HomeMobile />

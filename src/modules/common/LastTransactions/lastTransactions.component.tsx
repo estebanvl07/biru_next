@@ -8,6 +8,8 @@ import { ListTransactions } from "~/modules/common";
 import type { ITransaction } from "~/types/transactions";
 import Link from "next/link";
 import { useParams } from "next/navigation";
+import { api } from "~/utils/api";
+import { useTransactions } from "~/modules/transactions/hook/useTransactions.hook";
 
 interface LastTransactionsProps {
   transactions?: ITransaction[];
@@ -19,16 +21,15 @@ interface LastTransactionsProps {
 
 const LastTransactions: FC<LastTransactionsProps> = ({
   showHeader = true,
-  transactions,
-  transactionsMaxLength,
   cardClassName,
-  loading,
 }) => {
   const params = useParams<{ acc: string }>();
-  const { transactions: LastTransactions, loading: isLoading } = {
-    transactions: [] as ITransaction[],
-    loading: false,
-  };
+
+  const { transactions } = useTransactions();
+  // const { data: transactions, isLoading } =
+  //   api.transaction.getTransactions.useQuery({
+  //     accountId: params?.acc,
+  //   });
 
   return (
     <Card className={clsx("flex !h-full flex-col rounded-xl", cardClassName)}>
@@ -37,7 +38,7 @@ const LastTransactions: FC<LastTransactionsProps> = ({
           <h2 className="text-xl font-semibold">Transacciones</h2>
           <Link
             href={{
-              pathname: "account/[acc]/transactions",
+              pathname: "/account/[acc]/transactions",
               query: { acc: params?.acc },
             }}
             className="text-sm text-gray-600 dark:text-gray-300"
@@ -46,13 +47,13 @@ const LastTransactions: FC<LastTransactionsProps> = ({
           </Link>
         </div>
       )}
-      {isLoading ? (
+      {false ? (
         <p>Cargando...</p>
       ) : (
         // <LoaderSkeleton skeletonType="ListItem" />
         <ListTransactions
-          maxLength={transactionsMaxLength}
-          data={transactions ? transactions : LastTransactions}
+          maxLength={transactions?.length}
+          data={transactions}
           emptyText="No se encontraron transacciones"
         />
       )}

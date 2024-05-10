@@ -16,20 +16,19 @@ import { Avatar, Badge, User } from "@nextui-org/react";
 import { Transaction } from "@prisma/client";
 import { format } from "date-fns";
 import { es } from "date-fns/locale";
+import {
+  subtractTransactionsMonth,
+  useTransactions,
+} from "~/modules/transactions/hook/useTransactions.hook";
 
 const TransactionPage = () => {
   const params = useParams<{ acc: string }>();
 
-  const { data: transactions } = api.transaction.getTransactions.useQuery({
-    accountId: params?.acc,
-  });
+  const { transactions } = useTransactions();
 
   const renderCell = useCallback(
     (transaction: Transaction, columnKey: React.Key) => {
       const cellValue = transaction[columnKey as keyof Transaction];
-
-      console.log("renderers");
-
       switch (columnKey) {
         case "description":
           return (

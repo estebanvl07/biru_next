@@ -5,7 +5,7 @@ import { useParams } from "next/navigation";
 import { useOutsideClick } from "~/lib/hooks";
 
 import { Icon } from "@iconify/react/dist/iconify.js";
-import { Listbox, ListboxItem } from "@nextui-org/react";
+import { Button, Listbox, ListboxItem } from "@nextui-org/react";
 
 import type { ListMenu } from "~/types/root.types";
 
@@ -45,23 +45,32 @@ const CreationMenu = () => {
   ];
 
   return (
-    <div ref={ref} className="relative flex items-center">
-      <button title="Crear" onClick={() => setShowMenu(!showMenu)}>
+    <div
+      ref={ref}
+      onClick={() => setShowMenu(!showMenu)}
+      className="relative flex items-center"
+    >
+      <Button
+        color="primary"
+        radius="full"
+        title="Crear"
+        onClick={() => setShowMenu(!showMenu)}
+      >
         <Icon
           icon="uil:plus-circle"
-          className="text-primary dark:text-primary-lighter"
+          className="text-primary-lighter"
           width={24}
         />
-      </button>
+      </Button>
       {showMenu && (
-        <div className="border-small rounded-small border-default-200 dark:border-default-100 absolute right-0 top-12 w-[165px] bg-white/80  backdrop-blur-md dark:border-white/5 dark:bg-slate-900/80">
+        <div className="absolute right-0 top-12 w-[165px] rounded-small border-small border-default-200 bg-white/80 backdrop-blur-md  dark:border-default-100 dark:border-white/5 dark:bg-slate-900/80">
           <Listbox variant="flat" aria-label="Creation menu">
             {OPTIONS.map(({ href, label, showLine = false, icon }, index) => {
               return (
                 <ListboxItem
                   key={index}
                   color="primary"
-                  className="hover:!rounded-small px-3 dark:!text-slate-100"
+                  className="px-3 hover:!rounded-small dark:!text-slate-100"
                   onClick={() => router.push(href)}
                   showDivider={showLine}
                   startContent={<Icon icon={icon ?? ""} />}

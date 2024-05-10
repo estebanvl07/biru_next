@@ -64,7 +64,7 @@ const NewTransactionPage = () => {
     if (!params) return;
     setValue("accountId", Number(params?.acc));
     if (query?.type) {
-      setValue("type", query.type as any);
+      setValue("type", Number(query.type) as any);
     } else {
       setValue("type", 1);
     }

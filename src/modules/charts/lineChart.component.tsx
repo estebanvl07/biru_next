@@ -80,11 +80,11 @@ const LineChart = ({
           enabled: false,
         },
         tooltip: {
-          enabled: showToolTip,
+          enabled: series?.length !== 0 && showToolTip,
           shared: false,
           custom: function ({ series, seriesIndex, dataPointIndex, w }: any) {
             return `
-                <div class="arrow_box bg-white px-6 py-2 flex flex-col justify-center items-center dark:bg-zinc-950 dark:border-white/10">
+                <div class="arrow_box bg-white px-6 py-2 flex flex-col justify-center items-center dark:bg-slate-950/90 backdrop-blur-lg">
                   <span class="text-xs">${
                     w.globals.initialSeries[seriesIndex].name
                   }</span>
@@ -101,20 +101,24 @@ const LineChart = ({
         },
         grid: {
           show: showGrid,
-          padding: {
-            top: 0,
-          },
+          borderColor: isDark ? "#1e293b" : "#e5e7eb",
+          strokeDashArray: 4,
+          // padding: {
+          //   top: 0,
+          // },
         },
         yaxis: {
           show: showYAxis,
-
+          axisBorder: {
+            show: true,
+          },
           labels: {
             show: true,
             formatter: (val) => {
               return parseAmount(val) ?? val;
             },
             style: {
-              colors: isDark ? "#f3f4f6" : "#000",
+              colors: isDark ? "#64748b" : "#000",
               fontFamily: FONT_FAMILY,
               fontWeight: 600,
               fontSize: "13",

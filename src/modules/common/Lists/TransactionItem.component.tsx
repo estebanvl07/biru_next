@@ -7,7 +7,7 @@ import type { ITransaction } from "~/types/transactions";
 import Link from "next/link";
 
 interface TransactionItemProps {
-  item: ITransaction;
+  item: any;
   index: number;
   length: number;
 }
@@ -16,9 +16,9 @@ const TransactionItem: FC<TransactionItemProps> = ({ item, index, length }) => {
   const icon = {
     1: "eva:diagonal-arrow-right-up-fill",
     2: "eva:diagonal-arrow-right-down-fill",
-  }[item?.type === 1 ? 1 : 2];
+  }[item.type === 1 ? 1 : 2];
 
-  const getIcon = () => "eva:diagonal-arrow-right-up-fill";
+  const getIcon = () => icon;
 
   return (
     <li

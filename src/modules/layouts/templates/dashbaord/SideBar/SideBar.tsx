@@ -26,7 +26,6 @@ const SideBar = ({ serviceOptions = true }: SideBarProps) => {
           return <OptionsList key={list.id} list={list} />;
         })}
       </nav>
-      <hr className="mx-4 mb-6 dark:bg-white/10" />
       <ButtonSignOut />
     </div>
   );

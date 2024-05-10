@@ -29,36 +29,36 @@ export const menuOptions = [
         href: "/analytics",
       },
 
-      {
-        id: 5,
-        name: "Facturas",
-        icon: "mingcute:bill-line",
-        href: "/bills",
-      },
-      {
-        id: 6,
-        name: "Nóminas",
-        icon: "solar:calculator-linear",
-        href: "/bills",
-      },
-      {
-        id: 7,
-        name: "Inversiones",
-        icon: "streamline:investment-selection",
-        href: "/bills",
-      },
-      {
-        id: 8,
-        name: "Ahorros",
-        icon: "ic:outline-savings",
-        href: "/bills",
-      },
-      {
-        id: 9,
-        name: "Presupuesto",
-        icon: "heroicons:currency-dollar",
-        href: "/bills",
-      },
+      // {
+      //   id: 5,
+      //   name: "Facturas",
+      //   icon: "mingcute:bill-line",
+      //   href: "/bills",
+      // },
+      // {
+      //   id: 6,
+      //   name: "Nóminas",
+      //   icon: "solar:calculator-linear",
+      //   href: "/bills",
+      // },
+      // {
+      //   id: 7,
+      //   name: "Inversiones",
+      //   icon: "streamline:investment-selection",
+      //   href: "/bills",
+      // },
+      // {
+      //   id: 8,
+      //   name: "Ahorros",
+      //   icon: "ic:outline-savings",
+      //   href: "/bills",
+      // },
+      // {
+      //   id: 9,
+      //   name: "Presupuesto",
+      //   icon: "heroicons:currency-dollar",
+      //   href: "/bills",
+      // },
       // {
       //   id: 5,
       //   name: "Reportes",

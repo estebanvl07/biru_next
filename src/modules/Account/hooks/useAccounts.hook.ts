@@ -31,6 +31,7 @@ export const useCurrentAccount = () => {
       { id: accountId! },
       "query",
     );
+
     const accountCache = queryClient.getQueryData(accountKey);
     return Boolean(accountCache);
   }, [accountId]); // eslint-disable-line react-hooks/exhaustive-deps

@@ -6,7 +6,7 @@ import { LineChart } from "~/modules/charts";
 import type { Series } from "~/types/root.types";
 import type { IAccount } from "~/types/account";
 import type { ITransaction } from "~/types/transactions";
-import { useCurrentAccount } from "~/modules/Account/hooks";
+import { useCurrentAccount } from "~/modules/account/hooks";
 
 // TODO: filter by options
 const CardBalanceAccount = () => {

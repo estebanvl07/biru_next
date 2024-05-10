@@ -33,20 +33,16 @@ const HomePage = () => {
       ) : (
       )} */}
         <div className="mt-4 flex w-full flex-col gap-4">
-          <section className="flex flex-row gap-4">
+          <section className="flex flex-col-reverse gap-4 xl:flex-row">
             <article className="flex-grow">
               <CardBalanceAccount />
             </article>
             <article className="flex-grow-0">
-              <DetailAmounts cardClassName="h-full min-w-[24rem] w-full" />
+              <DetailAmounts cardClassName="h-full xl:min-w-[24rem] w-full" />
             </article>
           </section>
           <div className="">
-            <LastTransactions
-              loading={loading}
-              cardClassName="px-4 py-4"
-              transactions={[]}
-            />
+            <LastTransactions cardClassName="px-4 py-4" />
           </div>
         </div>
       </div>

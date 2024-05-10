@@ -3,7 +3,7 @@ import clsx from "clsx";
 import Nav from "./Nav";
 import { usePathname } from "next/navigation";
 import NavigationBack from "./NavigationBack";
-import { useCurrentAccount } from "~/modules/Account/hooks";
+import { useCurrentAccount } from "~/modules/account/hooks";
 
 const HeaderApp = ({ title }: { title?: string }) => {
   const pathname = usePathname();
@@ -20,6 +20,9 @@ const HeaderApp = ({ title }: { title?: string }) => {
               // "!pl-7": location.pathname === "/home",
             })}
           >
+            <span className="text-gray-600 dark:text-slate-200">
+              {account?.name}
+            </span>
             <h1
               className={clsx(
                 "text-start text-2xl font-semibold text-primary dark:text-slate-200",
@@ -27,9 +30,6 @@ const HeaderApp = ({ title }: { title?: string }) => {
             >
               {title ?? "Dashboard"}
             </h1>
-            <span className="text-gray-600 dark:text-slate-200">
-              {account?.name}
-            </span>
           </div>
         </section>
         <Nav />

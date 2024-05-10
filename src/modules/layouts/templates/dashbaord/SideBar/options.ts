@@ -21,24 +21,14 @@ export const menuOptions = [
         icon: "mingcute:transfer-fill",
         href: "/transactions",
       },
-      {
-        id: 2,
-        name: "Categorías",
-        icon: "iconamoon:category",
-        href: "/category",
-      },
+
       {
         id: 3,
         name: "Análisis",
         icon: "material-symbols:analytics-outline",
         href: "/analytics",
       },
-      {
-        id: 4,
-        name: "Usuarios",
-        icon: "lets-icons:user",
-        href: "/users",
-      },
+
       {
         id: 5,
         name: "Facturas",
@@ -75,6 +65,24 @@ export const menuOptions = [
       //   icon: "mdi:report-box-outline",
       //   href: "/reports",
       // },
+    ],
+  },
+  {
+    id: 3,
+    title: "Configuración",
+    menus: [
+      {
+        id: 2,
+        name: "Categorías",
+        icon: "iconamoon:category",
+        href: "/category",
+      },
+      {
+        id: 3,
+        name: "Contactos",
+        icon: "lets-icons:user",
+        href: "/users",
+      },
     ],
   },
 ];

@@ -28,6 +28,8 @@ export interface TableProps<T> {
   buttonNewText?: string;
   buttonNewLink?: string;
   hasNew?: boolean;
+  hasTopContent?: boolean;
+  hasBottomContent?: boolean;
   filterKeys?: string | string[];
   renderCell?: (item: any, columnKey: any) => void;
   inputPlaceholder?: string;

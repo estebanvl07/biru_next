@@ -3,11 +3,12 @@ const Chart = dynamic(() => import("react-apexcharts"), {
 });
 import React, { useEffect, useState } from "react";
 import { Card } from "~/modules/components";
-import { useTransactions } from "~/lib/hooks/useTransactions";
+// import { useTransactions } from "~/lib/hooks/useTransactions";
 import { parseAmount } from "~/lib/helpers";
 
 import { FONT_FAMILY } from "~/lib/constants/config";
 import dynamic from "next/dynamic";
+import { useHandlerTransaction } from "~/modules/transactions/hook/useHandlerTransactions.hook";
 
 const initialValues = {
   color: "",
@@ -28,7 +29,7 @@ const AnnualBalance = () => {
   }>(initialValues);
   const [labels, setLabels] = useState<string[]>([]);
 
-  const { seriesTransaction, filterByMonth, months } = useTransactions();
+  const { seriesTransaction, filterByMonth, months } = useHandlerTransaction();
 
   useEffect(() => {
     filterByMonth();

@@ -25,6 +25,8 @@ const DataTable = <T,>({
   hasNew,
   data,
   renderCell,
+  hasTopContent = true,
+  hasBottomContent = true,
   buttonNewLink,
   filterKeys,
   buttonNewText,
@@ -87,26 +89,30 @@ const DataTable = <T,>({
       selectionMode="none"
       topContentPlacement="outside"
       topContent={
-        <TopContent
-          {...headerConfig}
-          newButtonText={buttonNewText}
-          redirectTo={buttonNewLink}
-          lenght={data.length}
-          filterValue={filterValue}
-          hasNew={hasNew}
-          setFilterValue={setFilterValue}
-          setPage={setPage}
-          setRowsPerPage={setRowsPerPage}
-        />
+        hasTopContent && (
+          <TopContent
+            {...headerConfig}
+            newButtonText={buttonNewText}
+            redirectTo={buttonNewLink}
+            lenght={data.length}
+            filterValue={filterValue}
+            hasNew={hasNew}
+            setFilterValue={setFilterValue}
+            setPage={setPage}
+            setRowsPerPage={setRowsPerPage}
+          />
+        )
       }
       bottomContent={
-        <BottomContent
-          page={page}
-          setPage={setPage}
-          onNextPage={onNextPage}
-          onPreviousPage={onPreviousPage}
-          pages={pages}
-        />
+        hasBottomContent && (
+          <BottomContent
+            page={page}
+            setPage={setPage}
+            onNextPage={onNextPage}
+            onPreviousPage={onPreviousPage}
+            pages={pages}
+          />
+        )
       }
       bottomContentPlacement="outside"
     >

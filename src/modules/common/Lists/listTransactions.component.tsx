@@ -12,9 +12,9 @@ type Props = {
 
 const ListTransactions = React.memo(({ data, emptyText, maxLength }: Props) => {
   return (
-    <ul className="scrollbar-customize flex h-fit w-full flex-col overflow-auto rounded-md border-black/20 bg-white text-sm dark:border-white/10 dark:bg-slate-900">
+    <ul className="scrollbar-customize flex h-fit w-full flex-col overflow-auto rounded-md border-black/20 bg-transparent text-sm dark:border-white/10 dark:bg-slate-900">
       {data?.map((item, index) => {
-        // if (maxLength && index + 1 === maxLength) return null;
+        if (index + 1 > 4) return null;
         return (
           <TransactionItem
             key={item.id}

@@ -10,23 +10,28 @@ import {
   getMonths,
   useTransactions,
 } from "~/modules/transactions/hook/useTransactions.hook";
+import { Icon } from "@iconify/react/dist/iconify.js";
+import { Button } from "@nextui-org/button";
+import Link from "next/link";
+import { Empty } from "~/modules/components/molecules";
+import { useParams } from "next/navigation";
+import ChartsFilterList from "~/modules/charts/chartsFilterList.component";
 
 // TODO: filter by options
 const CardBalanceAccount = () => {
+  const params = useParams();
   const [serie, setSerie] = useState<Series[]>();
   const [date, setDate] = useState<{ from: string; to: string }>();
   const { account } = useCurrentAccount();
   const desktopMediQuery = true;
 
   const { transactions } = useTransactions();
-  const months = getMonths(transactions);
+  // const months = getMonths(transactions);
 
   const accountSelected = [] as IAccount[];
 
   const setChartSeries = () => {
     if (!transactions) return setSerie([]);
-
-    // setKeys(months ?? []);
     setSerie([
       {
         name: "Balance",
@@ -34,27 +39,6 @@ const CardBalanceAccount = () => {
         data: transactions.map((tr) => tr.amount),
       },
     ]);
-
-    // const lastIndex = transactions.length - 1;
-
-    // setDate({
-    //   from: transactions[lastIndex]?.createdAt,
-    //   to: transactions[0]?.createdAt,
-    // });
-
-    // const transactionAmounts = transactions.map(
-    //   (transaction) => transaction.amount,
-    // );
-
-    // transactionAmounts.reverse();
-
-    // setSerie([
-    //   {
-    //     name: "Balance",
-    //     data: transactionAmounts,
-    //     color: "#3E1FE9",
-    //   },
-    // ]);
   };
 
   useEffect(() => {
@@ -63,41 +47,52 @@ const CardBalanceAccount = () => {
   }, [account, transactions]);
 
   return (
-    <Card className="flex h-full !w-full flex-col md:px-2 md:pr-4">
-      <header className="mb-2 flex flex-col items-center justify-between px-2 md:flex-row md:px-4">
+    <Card className="flex h-full !w-full flex-col">
+      <header className="flex flex-col items-center justify-between md:flex-row">
         <div className="flex w-full flex-col items-start justify-center">
-          <h3 className="font-normal">Balance</h3>
-          <h2 className="text-3xl">
-            $ {account?.balance?.toLocaleString() ?? "0.00"}
-          </h2>
+          <h3>Balance</h3>
+          {transactions && transactions.length > 0 && (
+            <>
+              <h2 className="text-3xl">
+                $ {account?.balance?.toLocaleString() ?? "0.00"}
+              </h2>
 
-          {date?.from ? (
-            <span className="text text-sm">
-              {date?.from} - {date?.to}
-            </span>
-          ) : (
-            <span className="text-sm"> </span>
+              {date?.from ? (
+                <span className="text text-sm">
+                  {date?.from} - {date?.to}
+                </span>
+              ) : (
+                <span className="text-sm"> </span>
+              )}
+            </>
           )}
         </div>
         {/* <ChartsFilterList filterbyType={() => {}} /> */}
       </header>
-      {serie && (
-        <LineChart
-          series={serie}
-          // keys={months}
-          heightChart="210"
-          showToolTip={transactions?.length === 0 ? false : true}
-          offsetX={-10}
-          showLegend={false}
-          showGrid={true}
-          showYAxis={
-            transactions?.length === 0 ? false : true && desktopMediQuery
-          }
-          showToolBar={false}
-          showXAxis={false}
-          hasformatNumber={false}
-        />
-      )}
+      <section className="block">
+        {transactions && transactions.length > 0 ? (
+          <LineChart
+            series={serie}
+            // keys={months}
+            heightChart="210"
+            showToolTip={transactions?.length === 0 ? false : true}
+            offsetX={-10}
+            showLegend={false}
+            showGrid={true}
+            showYAxis={
+              transactions?.length === 0 ? false : true && desktopMediQuery
+            }
+            showToolBar={false}
+            showXAxis={false}
+            hasformatNumber={false}
+          />
+        ) : (
+          <Empty
+            href={`/account/${params?.acc}/transactions/new`}
+            buttonText="Crear Transacción"
+          />
+        )}
+      </section>
     </Card>
   );
 };

@@ -9,7 +9,10 @@ import type { ITransaction } from "~/types/transactions";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import { api } from "~/utils/api";
-import { useTransactions } from "~/modules/transactions/hook/useTransactions.hook";
+import {
+  useTransactions,
+  formatterTransactions,
+} from "~/modules/transactions/hook/useTransactions.hook";
 
 interface LastTransactionsProps {
   transactions?: ITransaction[];
@@ -26,13 +29,16 @@ const LastTransactions: FC<LastTransactionsProps> = ({
   const params = useParams<{ acc: string }>();
 
   const { transactions } = useTransactions();
+  const formatted = formatterTransactions(transactions);
   // const { data: transactions, isLoading } =
   //   api.transaction.getTransactions.useQuery({
   //     accountId: params?.acc,
   //   });
 
   return (
-    <Card className={clsx("flex !h-full flex-col rounded-xl", cardClassName)}>
+    <Card
+      className={clsx("flex !h-full flex-col rounded-xl !px-4", cardClassName)}
+    >
       {showHeader && (
         <div className="mb-4 flex items-center justify-between md:px-2">
           <h2 className="text-xl font-semibold">Transacciones</h2>
@@ -52,8 +58,8 @@ const LastTransactions: FC<LastTransactionsProps> = ({
       ) : (
         // <LoaderSkeleton skeletonType="ListItem" />
         <ListTransactions
-          maxLength={transactions?.length}
-          data={transactions}
+          maxLength={formatted?.length}
+          data={formatted}
           emptyText="No se encontraron transacciones"
         />
       )}

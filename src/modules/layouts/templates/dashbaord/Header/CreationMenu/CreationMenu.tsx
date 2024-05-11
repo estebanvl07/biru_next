@@ -59,8 +59,9 @@ const CreationMenu = () => {
         <Icon
           icon="uil:plus-circle"
           className="text-primary-lighter"
-          width={24}
+          width={22}
         />
+        Crear
       </Button>
       {showMenu && (
         <div className="absolute right-0 top-12 w-[165px] rounded-small border-small border-default-200 bg-white/80 backdrop-blur-md  dark:border-default-100 dark:border-white/5 dark:bg-slate-900/80">

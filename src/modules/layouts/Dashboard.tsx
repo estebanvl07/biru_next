@@ -22,7 +22,7 @@ const DashboardLayout = ({
       <section className="z-0 h-full min-h-screen w-full flex-grow py-3 md:pl-60">
         <div className="flex flex-col gap-4 px-8">
           <HeaderApp title={title} />
-          {children}
+          <main className="z-0">{children}</main>
         </div>
       </section>
     </div>

@@ -15,6 +15,7 @@ interface ModalProps {
   isOpen: boolean;
   footerContent?: React.ReactNode;
   title?: string;
+  size?: string;
   onClose: () => void;
 }
 
@@ -24,10 +25,16 @@ const Modal = ({
   footerContent,
   title,
   onClose,
+  size,
   isOpen,
 }: ModalProps) => {
   return (
-    <ModalLayout backdrop={backdrop} isOpen={isOpen} onClose={onClose}>
+    <ModalLayout
+      size={size}
+      backdrop={backdrop}
+      isOpen={isOpen}
+      onClose={onClose}
+    >
       <ModalContent>
         {(onClose) => (
           <>

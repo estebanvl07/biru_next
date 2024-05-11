@@ -28,11 +28,13 @@ import { DateToSystemTimezoneSetter } from "node_modules/date-fns/parse/_lib/Set
 import { useParams } from "next/navigation";
 import Modal from "~/modules/components/atoms/Modal.component";
 import CreateCategoryForm from "~/modules/category/CreateCategoryForm";
+import { useCurrentAccount } from "~/modules/account/hooks";
 
 const NewTransactionPage = () => {
   const [accountForm, setAccountForm] = useState(false);
   const params = useParams<{ acc: string }>();
   const router = useRouter();
+  const { account } = useCurrentAccount();
   const query = router.query;
 
   const { data: categories } = api.category.getAll.useQuery();
@@ -61,14 +63,14 @@ const NewTransactionPage = () => {
   };
 
   useEffect(() => {
-    if (!params) return;
-    setValue("accountId", Number(params?.acc));
+    if (!account) return;
+    setValue("accountId", account.id);
     if (query?.type) {
       setValue("type", Number(query.type) as any);
     } else {
       setValue("type", 1);
     }
-  }, []);
+  }, [account, query]);
 
   console.log(errors);
 

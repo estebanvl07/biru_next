@@ -14,7 +14,7 @@ const AvatarMenu = () => {
           alt={`${session?.user.name}, Profile Image`}
           width={45}
           height={45}
-          className="cursor-pointer rounded-full"
+          className="cursor-pointer rounded-full dark:shadow-md"
         />
       ) : (
         <div className="grid h-10 w-10 cursor-pointer place-items-center rounded-full bg-primary dark:bg-slate-900">

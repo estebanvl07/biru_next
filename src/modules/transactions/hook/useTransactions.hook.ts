@@ -11,11 +11,12 @@ import { Transaction } from "@prisma/client";
 import { format } from "date-fns";
 import { DATE_FORMAT_TRANS } from "~/lib/constants/config";
 import { es } from "date-fns/locale";
+import { useParams } from "next/navigation";
 
 export const formatterTransactions = (
   transactions: Transaction[],
 ): Transaction[] => {
-  const formatted = transactions.map((tr: Transaction) => {
+  const formatted = transactions?.map((tr: Transaction) => {
     return {
       ...tr,
       createdAt: format(String(tr.createdAt), DATE_FORMAT_TRANS, {
@@ -30,12 +31,15 @@ export const formatterTransactions = (
 };
 
 export const useTransactions = () => {
+  const params = useParams();
   const queryClient = useQueryClient();
-  const { account } = useCurrentAccount();
+
+  const accountId = params?.acc ? String(params?.acc) : undefined;
+
   const hasTransactionsCached = useMemo(() => {
     const transactionsKey = getQueryKey(
       api.transaction.getTransactions,
-      { accountId: String(account?.id) },
+      { accountId },
       "query",
     );
     const transactionCache = queryClient.getQueryData(transactionsKey);
@@ -43,9 +47,9 @@ export const useTransactions = () => {
   }, []);
 
   const { data } = api.transaction.getTransactions.useQuery(
-    { accountId: String(account.id) },
+    { accountId: accountId as any },
     {
-      enabled: !!account.id && !hasTransactionsCached,
+      enabled: !!accountId && !hasTransactionsCached,
     },
   );
 

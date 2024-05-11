@@ -5,7 +5,7 @@ export function createTransaction(
   data: Prisma.TransactionUncheckedCreateInput,
 ) {
   return db.transaction.create({
-    data: { ...data, state: 1 },
+    data: { ...data, createdAt: data.date, state: 1 },
   });
 }
 

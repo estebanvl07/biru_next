@@ -4,6 +4,7 @@ import Nav from "./Nav";
 import { usePathname } from "next/navigation";
 import NavigationBack from "./NavigationBack";
 import { useCurrentAccount } from "~/modules/account/hooks";
+import FilterTemplates from "./FilterTemplates";
 
 const HeaderApp = ({ title }: { title?: string }) => {
   const pathname = usePathname();
@@ -11,7 +12,7 @@ const HeaderApp = ({ title }: { title?: string }) => {
   const { account } = useCurrentAccount();
 
   return (
-    <header className="z-10 mb-2 flex w-full items-center justify-between bg-white dark:border-white/10 dark:bg-slate-950 md:h-16">
+    <header className="z-10 mb-2 flex w-full items-center justify-between bg-white md:h-16 dark:border-white/10 dark:bg-slate-950">
       <section className="flex w-full flex-grow items-center justify-between">
         <section className="flex items-center gap-3">
           {!pathname?.includes("main") && <NavigationBack />}

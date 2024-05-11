@@ -84,7 +84,7 @@ const LineChart = ({
           shared: false,
           custom: function ({ series, seriesIndex, dataPointIndex, w }: any) {
             return `
-                <div class="arrow_box bg-white px-6 py-2 flex flex-col justify-center items-center dark:bg-slate-950/90 backdrop-blur-lg">
+                <div class="bg-white px-6 py-2 flex flex-col justify-center border-[1px] dark:border-white/10 items-center dark:bg-slate-900">
                   <span class="text-xs">${
                     w.globals.initialSeries[seriesIndex].name
                   }</span>

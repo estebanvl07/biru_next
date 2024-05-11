@@ -14,7 +14,7 @@ const SideBar = ({ serviceOptions = true }: SideBarProps) => {
   return (
     <div
       className={clsx(
-        "fixed left-0 z-20 hidden h-screen w-60 flex-col justify-between border-r  bg-white pb-4 pt-2 text-white dark:border-white/10 dark:bg-slate-950 md:flex ",
+        "fixed left-0 z-20 hidden h-screen w-60 flex-col justify-between border-r border-slate-200 bg-default-100 pb-4 pt-2 text-white/80 dark:border-white/10 dark:bg-slate-950 md:flex ",
       )}
     >
       <aside className="mt-2 w-60 pl-8 pt-2">

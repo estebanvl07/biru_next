@@ -36,20 +36,21 @@ const TransactionItem: FC<TransactionItemProps> = ({ item, index, length }) => {
         className={clsx(
           "flex cursor-pointer items-center justify-between border-gray-400/60 px-2 py-3 transition-all duration-300 dark:border-white/10",
         )}
+        title={item.description}
       >
         <div className="flex items-center gap-3">
           <span
             className={clsx(
-              "flex h-10 w-10 items-center justify-center rounded-lg bg-primary text-white",
+              "flex h-10 w-10 items-center justify-center rounded-full bg-primary text-white shadow-lg",
             )}
           >
             <Icon icon={getIcon() ?? icon} width={22} />
           </span>
           <div className="flex flex-col">
-            <p className="mb-1 overflow-hidden text-ellipsis font-semibold dark:font-normal">
+            <p className="mb-1 overflow-hidden text-ellipsis text-nowrap font-semibold dark:font-normal xl:w-32">
               {item.description}
             </p>
-            <span className="text-xs text-slate-500 dark:text-slate-400">
+            <span className="overflow-hidden text-ellipsis text-nowrap text-xs text-slate-500 dark:text-slate-400 xl:w-32">
               {`${item.createdAt}`}
             </span>
           </div>

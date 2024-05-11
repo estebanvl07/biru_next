@@ -1,6 +1,3 @@
-import { useCallback } from "react";
-import { Transaction } from "@prisma/client";
-
 const columns = [
   {
     name: "ID",
@@ -32,4 +29,20 @@ const columns = [
   },
 ];
 
-export { columns };
+const dashboardColumns = [
+  {
+    name: "DESCRIPTION",
+    uid: "description",
+    sortable: true,
+  },
+  {
+    name: "CUENTA",
+    uid: "accountId",
+  },
+  {
+    name: "FECHA",
+    uid: "createdAt",
+  },
+];
+
+export { columns, dashboardColumns };

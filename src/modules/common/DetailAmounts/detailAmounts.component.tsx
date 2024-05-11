@@ -5,8 +5,14 @@ import clsx from "clsx";
 import CardDetailAmount from "./CardDetailAmount";
 
 import { getPercent } from "~/lib/helpers";
-import { useTransactions } from "~/lib/hooks/useTransactions";
+// import { useTransactions } from "~/lib/hooks/useTransactions";
 import { Series } from "~/types/root.types";
+import { Card } from "~/modules/components";
+import { useTransactions } from "~/modules/transactions/hook/useTransactions.hook";
+import { Icon } from "@iconify/react/dist/iconify.js";
+import { useCurrentAccount } from "~/modules/account/hooks";
+import { getTransactionsByMonths } from "~/modules/transactions/hook/useHandlerTransactions.hook";
+import { useParams } from "next/navigation";
 
 type DetailAmountProps = {
   className?: string;
@@ -20,105 +26,107 @@ const initialValues = {
 };
 
 const DetailAmounts = ({ className, cardClassName }: DetailAmountProps) => {
+  const params = useParams();
+  const [income, setIncome] = useState(0);
+  const [egress, setEgress] = useState(0);
   const [flowsMoney, setFlowsMoney] = useState<{
     incomePercentParsed: string;
     egressPercentParsed: string;
   }>();
-
   const [incomeTransactions, setIncomeTransactions] =
     useState<Series>(initialValues);
   const [egressTransactions, setEgressTransactions] =
     useState<Series>(initialValues);
 
-  const { dashboardInfo: balance, loading } = {
-    dashboardInfo: {} as any,
-    loading: false,
-  };
-  const { seriesTransaction, filterByMonth } = useTransactions();
+  const { account } = useCurrentAccount();
+  const { transactionsByMonth } = getTransactionsByMonths();
+  // const { seriesTransaction, filterByMonth } = useTransactions();
 
   useEffect(() => {
-    filterByMonth();
-  }, []);
+    if (!transactionsByMonth) return;
 
-  // useEffect(() => {
-  //   return;
-  //   if (!seriesTransaction) return;
+    // get transaction last index because is last month
+    const transactionsLastMonth =
+      transactionsByMonth[transactionsByMonth.length - 1]?.transactions;
 
-  //   // get transaction last index because is last month
-  //   const transactionsLastMonth =
-  //     seriesTransaction[seriesTransaction.length - 1].transactions;
+    // console.log(transactionsLastMonth);
 
-  //   if (!transactionsLastMonth) return;
+    if (!transactionsLastMonth) return;
 
-  //   // separate incomes and egress
-  //   const incomeTr = transactionsLastMonth.filter((tr) => tr.type === 1);
-  //   const egressTr = transactionsLastMonth.filter((tr) => tr.type === 2);
+    // separate incomes and egress
+    const incomeTr = transactionsLastMonth.filter((tr) => tr.type === 1);
+    const egressTr = transactionsLastMonth.filter((tr) => tr.type === 2);
 
-  //   // get alone amounts
-  //   const incomes = incomeTr.map((tr) => tr.amount);
-  //   const egress = egressTr.map((tr) => tr.amount);
+    // get alone amounts
+    const incomes = incomeTr.map((tr) => tr.amount);
+    const egress = egressTr.map((tr) => tr.amount);
 
-  //   // set series for chart
-  //   setIncomeTransactions({
-  //     color: "#22c55e",
-  //     name: "Ingresos",
-  //     data: [0, ...incomes.reverse()],
-  //   });
+    const amountIncome = incomes.reduce((acc, val) => acc + val, 0);
+    const amountEgress = egress.reduce((acc, val) => acc + val, 0);
 
-  //   setEgressTransactions({
-  //     color: "#ef4444",
-  //     name: "Egresos",
-  //     data: [0, ...egress.reverse()],
-  //   });
-  // }, [seriesTransaction]);
+    setIncome(amountIncome);
+    setEgress(amountEgress);
 
-  // useEffect(() => {
-  //   if (balance) {
-  //     // parse of values of the card
-  //     const incomePercentParsed = getPercent(
-  //       balance?.totalIncome ?? 0,
-  //       balance?.totalIncome + balance?.totalExpenses,
-  //     );
-  //     const egressPercentParsed = getPercent(
-  //       balance?.totalExpenses ?? 0,
-  //       balance?.totalIncome + balance?.totalExpenses,
-  //     );
-  //     setFlowsMoney({ incomePercentParsed, egressPercentParsed });
-  //   }
-  // }, [balance]);
+    // set series for chart
+    setIncomeTransactions({
+      color: "#22c55e",
+      name: "Ingresos",
+      data: [...incomes.reverse()],
+    });
+
+    setEgressTransactions({
+      color: "#ef4444",
+      name: "Egresos",
+      data: [...egress.reverse()],
+    });
+  }, [transactionsByMonth]);
 
   return (
-    <div
-      className={clsx(
-        "flex gap-3 md:h-full md:bg-transparent lg:flex-col",
-        className,
-      )}
-    >
-      {loading ? (
+    <div className={clsx("flex w-full flex-col gap-4 lg:flex-row", className)}>
+      {false ? (
         <>
           {/* <LoaderSkeleton skeletonType="Amount" />
           <LoaderSkeleton skeletonType="Amount" /> */}
         </>
       ) : (
         <>
-          <CardDetailAmount
-            title="Ingresos"
-            amount={balance?.totalIncome ?? 0}
-            percent={flowsMoney?.incomePercentParsed ?? "0%"}
-            icon="iconamoon:trend-up-light"
-            color="text-green-500"
-            series={[incomeTransactions]}
-            cardClassName={cardClassName}
-          />
-          <CardDetailAmount
-            title="Egresos"
-            amount={balance?.totalExpenses ?? 0}
-            percent={flowsMoney?.egressPercentParsed ?? "0%"}
-            icon="iconamoon:trend-down-light"
-            color="text-red-500"
-            series={[egressTransactions]}
-            cardClassName={cardClassName}
-          />
+          <Card className="flex h-full flex-col justify-between lg:flex-auto">
+            <div className="mb-2 grid h-10 w-10 place-content-center rounded-full bg-slate-100 dark:border-none dark:bg-slate-800">
+              <Icon
+                icon="material-symbols:account-balance-outline"
+                className="text-primary dark:text-white"
+                width={20}
+              />
+            </div>
+            <article>
+              <h4 className="font-medium">Balance total</h4>
+              <h2 className="font-semibold">
+                $ {account.balance?.toLocaleString()}
+              </h2>
+            </article>
+          </Card>
+          <div className="flex flex-grow flex-row gap-4">
+            <CardDetailAmount
+              title="Ingreso"
+              amount={income}
+              color="text-green-500"
+              series={[incomeTransactions]}
+              cardClassName={cardClassName}
+              icon="iconamoon:trend-up-light"
+              percent={flowsMoney?.incomePercentParsed ?? "0%"}
+              redirectHref={`/account/${params?.acc}/transactions/new?type=1`}
+            />
+            <CardDetailAmount
+              title="Egreso"
+              amount={egress}
+              color="text-red-500"
+              series={[egressTransactions]}
+              cardClassName={cardClassName}
+              icon="iconamoon:trend-down-light"
+              percent={flowsMoney?.egressPercentParsed ?? "0%"}
+              redirectHref={`/account/${params?.acc}/transactions/new?type=2`}
+            />
+          </div>
         </>
       )}
     </div>

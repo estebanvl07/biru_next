@@ -9,6 +9,8 @@ import { useState } from "react";
 import { useOutsideClick } from "~/lib/hooks";
 import Menu from "./Menu/Menu";
 import { Icon } from "@iconify/react/dist/iconify.js";
+import FilterTemplates from "./FilterTemplates";
+import { motion } from "framer-motion";
 
 type Props = {
   type?: "empty" | "dashboard";
@@ -29,15 +31,17 @@ export default function HeaderMenu({ type = "dashboard" }: Props) {
   }
 
   return (
-    <nav
+    <motion.nav
+      layout
       className="relative z-10 flex items-center justify-end gap-3"
       // ref={navRef}
     >
       <HandlerTheme />
+      <FilterTemplates />
       {params?.acc && <CreationMenu />}
 
       <div
-        className="flex cursor-pointer items-center gap-2 rounded-full border p-1.5 shadow-md dark:border-white/10"
+        className="flex cursor-pointer items-center gap-2 rounded-full border p-1.5 shadow-md dark:border-none dark:border-white/10 dark:bg-default-50"
         onClick={() => setShowMenu(!showMenu)}
         ref={handlerRef}
       >
@@ -64,6 +68,6 @@ export default function HeaderMenu({ type = "dashboard" }: Props) {
         />
       </div>
       {showMenu && <Menu onHide={onHide} />}
-    </nav>
+    </motion.nav>
   );
 }

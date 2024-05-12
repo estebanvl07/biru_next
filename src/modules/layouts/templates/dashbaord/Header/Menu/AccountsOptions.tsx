@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { Button } from "~/modules/components";
 import { Listbox, ListboxItem } from "@nextui-org/react";
-import { useAccounts } from "~/modules/account/hooks";
+import { useAccounts } from "~/modules/Account/hooks";
 
 const AccountsOptions = () => {
   const router = useRouter();

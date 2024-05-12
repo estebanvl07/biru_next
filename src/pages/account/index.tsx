@@ -11,7 +11,7 @@ import { Button } from "~/modules/components";
 import { HeaderApp } from "~/modules/layouts/templates/dashbaord";
 
 import type { GetServerSideProps } from "next";
-import { useAccounts } from "~/modules/account/hooks";
+import { useAccounts } from "~/modules/Account/hooks";
 import { createServerSideCaller } from "~/utils/serverSideCaller/serverSideCaller";
 import DashboardLayout from "~/modules/layouts/Dashboard";
 import { Icon } from "@iconify/react/dist/iconify.js";
@@ -70,7 +70,7 @@ const AccountPage = () => {
         />
       </Head>
       <div className="relative grid h-screen w-full grid-cols-6 flex-row dark:bg-slate-950">
-        <aside className="relative col-span-2 hidden w-full flex-col justify-center bg-primary px-8 text-white dark:bg-slate-900 lg:flex">
+        <aside className="relative col-span-2 hidden w-full flex-col justify-center bg-primary px-8 text-white lg:flex dark:bg-slate-900">
           <Image
             src="/logo-white.svg"
             className="absolute left-4 top-6"

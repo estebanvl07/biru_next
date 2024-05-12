@@ -10,7 +10,7 @@ import { Series } from "~/types/root.types";
 import { Card } from "~/modules/components";
 import { useTransactions } from "~/modules/transactions/hook/useTransactions.hook";
 import { Icon } from "@iconify/react/dist/iconify.js";
-import { useCurrentAccount } from "~/modules/account/hooks";
+import { useCurrentAccount } from "~/modules/Account/hooks";
 import { getTransactionsByMonths } from "~/modules/transactions/hook/useHandlerTransactions.hook";
 import { useParams } from "next/navigation";
 

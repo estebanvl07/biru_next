@@ -2,7 +2,7 @@ import React, { useMemo } from "react";
 
 import { getQueryKey } from "@trpc/react-query";
 import { useQueryClient } from "@tanstack/react-query";
-import { useCurrentAccount } from "~/modules/account/hooks";
+import { useCurrentAccount } from "~/modules/Account/hooks";
 
 import { months } from "~/lib/resource/months";
 

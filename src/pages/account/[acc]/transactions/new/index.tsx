@@ -28,7 +28,7 @@ import { DateToSystemTimezoneSetter } from "node_modules/date-fns/parse/_lib/Set
 import { useParams } from "next/navigation";
 import Modal from "~/modules/components/atoms/Modal.component";
 import CreateCategoryForm from "~/modules/category/CreateCategoryForm";
-import { useCurrentAccount } from "~/modules/account/hooks";
+import { useCurrentAccount } from "~/modules/Account/hooks";
 
 const NewTransactionPage = () => {
   const [accountForm, setAccountForm] = useState(false);
@@ -38,7 +38,8 @@ const NewTransactionPage = () => {
   const query = router.query;
 
   const { data: categories } = api.category.getAll.useQuery();
-  const TransactionService = api.transaction.create.useMutation();
+  const { mutate: createTransactionMutation } =
+    api.transaction.create.useMutation();
 
   const {
     handleSubmit,
@@ -50,8 +51,8 @@ const NewTransactionPage = () => {
     resolver: zodResolver(createTransaction),
   });
 
-  const onSubmit = (data: any) => {
-    TransactionService.mutateAsync(data, {
+  const onSubmit = (data: createTransaction) => {
+    createTransactionMutation(data, {
       onSuccess(data, variables, context) {
         console.log(data);
         router.back();

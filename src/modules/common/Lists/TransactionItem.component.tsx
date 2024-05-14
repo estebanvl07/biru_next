@@ -5,6 +5,9 @@ import clsx from "clsx";
 
 import type { ITransaction } from "~/types/transactions";
 import Link from "next/link";
+import { format } from "date-fns";
+import { DATE_FORMAT_TRANS } from "~/lib/constants/config";
+import { es } from "date-fns/locale";
 
 interface TransactionItemProps {
   item: any;
@@ -18,7 +21,7 @@ const TransactionItem: FC<TransactionItemProps> = ({ item, index, length }) => {
     2: "eva:diagonal-arrow-right-down-fill",
   }[item.type === 1 ? 1 : 2];
 
-  const getIcon = () => icon;
+  const getIcon = () => item.category.icon;
 
   return (
     <li
@@ -41,17 +44,17 @@ const TransactionItem: FC<TransactionItemProps> = ({ item, index, length }) => {
         <div className="flex items-center gap-3">
           <span
             className={clsx(
-              "flex h-10 w-10 items-center justify-center rounded-full bg-primary text-white shadow-lg",
+              "flex h-11 w-11 items-center justify-center rounded-full bg-primary text-white shadow-lg",
             )}
           >
             <Icon icon={getIcon() ?? icon} width={22} />
           </span>
           <div className="flex flex-col">
-            <p className="mb-1 overflow-hidden text-ellipsis text-nowrap font-semibold dark:font-normal xl:w-32">
-              {item.description}
+            <p className="mb-1 overflow-hidden text-ellipsis text-nowrap font-semibold xl:w-32 dark:font-normal">
+              {item.description !== "" ? item.description : item.category.name}
             </p>
-            <span className="overflow-hidden text-ellipsis text-nowrap text-xs text-slate-500 dark:text-slate-400 xl:w-32">
-              {`${item.createdAt}`}
+            <span className="overflow-hidden text-ellipsis text-nowrap text-xs text-slate-500 xl:w-32 dark:text-slate-400">
+              {`${format(item.date, DATE_FORMAT_TRANS)}`}
             </span>
           </div>
         </div>

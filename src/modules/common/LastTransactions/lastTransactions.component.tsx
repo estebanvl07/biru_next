@@ -30,11 +30,6 @@ const LastTransactions: FC<LastTransactionsProps> = ({
 
   const { transactions } = useTransactions();
   const formatted = formatterTransactions(transactions);
-  // const { data: transactions, isLoading } =
-  //   api.transaction.getTransactions.useQuery({
-  //     accountId: params?.acc,
-  //   });
-
   return (
     <Card
       className={clsx("flex !h-full flex-col rounded-xl !px-4", cardClassName)}
@@ -59,7 +54,7 @@ const LastTransactions: FC<LastTransactionsProps> = ({
         // <LoaderSkeleton skeletonType="ListItem" />
         <ListTransactions
           maxLength={formatted?.length}
-          data={formatted}
+          data={formatted?.reverse()}
           emptyText="No se encontraron transacciones"
         />
       )}

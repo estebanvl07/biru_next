@@ -12,20 +12,27 @@ import { api } from "~/utils/api";
 import { useCallback, useEffect, useState } from "react";
 
 import { columns } from "~/modules/transactions/table";
-import { Avatar, Badge, User } from "@nextui-org/react";
-import { Transaction } from "@prisma/client";
+import { Avatar, Badge, Chip, User } from "@nextui-org/react";
+import { Transaction, Category, UserAccount } from "@prisma/client";
 import { format } from "date-fns";
 import { es } from "date-fns/locale";
 import { useTransactions } from "~/modules/transactions/hook/useTransactions.hook";
+import { capitalize } from "~/modules/components/molecules/Table/utils";
+
+type TransactionsIncludes = Transaction & {
+  category: Category;
+  userAccount: UserAccount;
+};
 
 const TransactionPage = () => {
   const params = useParams<{ acc: string }>();
-
   const { transactions } = useTransactions();
 
   const renderCell = useCallback(
-    (transaction: Transaction, columnKey: React.Key) => {
-      const cellValue = transaction[columnKey as keyof Transaction];
+    (transaction: TransactionsIncludes, columnKey: React.Key) => {
+      const cellValue = transaction[columnKey as keyof TransactionsIncludes];
+      console.log(cellValue);
+
       switch (columnKey) {
         case "description":
           return (
@@ -34,7 +41,7 @@ const TransactionPage = () => {
                 {transaction.recipient ? (
                   transaction.recipient.split("")[0]
                 ) : (
-                  <Icon icon="mingcute:user-3-fill" />
+                  <Icon icon={transaction.category.icon} />
                 )}
               </div>
               <aside>
@@ -42,21 +49,36 @@ const TransactionPage = () => {
                   <span className="text-sm">$</span>{" "}
                   {transaction.amount.toLocaleString()}
                 </h4>
-                <p className="!text-xs">{transaction.description}</p>
+                <p className="!text-xs">
+                  {transaction.description !== ""
+                    ? transaction.description
+                    : transaction.category.name}
+                </p>
               </aside>
             </div>
           );
+        case "category":
+          return transaction.category.name;
         case "type":
           return (
-            <Badge color={transaction.state === 1 ? "success" : "danger"}>
-              {transaction.state}
-            </Badge>
+            <Chip
+              size="lg"
+              variant="flat"
+              color={transaction.type === 1 ? "success" : "danger"}
+            >
+              <Icon
+                icon={transaction.type === 1 ? "ph:trend-up" : "ph:trend-down"}
+              />
+            </Chip>
           );
-
         case "createdAt":
           return (
-            <span>{format(transaction.createdAt, "PPPP", { locale: es })}</span>
+            <span>
+              {capitalize(format(transaction.date, "PPPP", { locale: es }))}
+            </span>
           );
+        case "userAccount":
+          null;
         case "actions":
           return (
             <div className="relative flex items-center gap-2">

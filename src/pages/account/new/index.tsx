@@ -10,7 +10,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import {
   type CreateUserAccount,
   createUserAccount,
-} from "~/modules/account/schema";
+} from "~/modules/Account/schema";
 import { UserAccount } from "@prisma/client";
 import { Button } from "~/modules/components";
 import { useEffect } from "react";
@@ -32,7 +32,7 @@ const optionsTypeAccount = [
 ];
 
 const CreateAccount = ({ hasEdit = false }: { hasEdit?: boolean }) => {
-  const router = useRouter(); 
+  const router = useRouter();
   const params = useParams<{ first: string }>();
 
   const userAccount = api.userAccount.create.useMutation();

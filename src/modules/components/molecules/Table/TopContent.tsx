@@ -9,11 +9,6 @@ import {
 
 import { Input, Button } from "~/modules/components/atoms";
 
-import {
-  columns,
-  statusOptions,
-  users,
-} from "../../../../pages/account/[acc]/transactions/data";
 import { capitalize } from "./utils";
 import { Icon } from "@iconify/react/dist/iconify.js";
 

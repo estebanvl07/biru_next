@@ -1,5 +1,5 @@
 import { createTRPCRouter, protectedProcedure } from "~/server/api/trpc";
-import { createUserAccount } from "~/modules/account/schema";
+import { createUserAccount } from "~/modules/Account/schema";
 import * as userAccount from "~/server/api/services/userAccount.services";
 import { z } from "zod";
 

@@ -19,7 +19,7 @@ export const getTransactionsByMonths = () => {
   const onFilterByMonth = () => {
     const groupedData = myTransactions.reduce((acc, transaction) => {
       // Extraemos el mes de la fecha
-      const month = transaction.createdAt.getMonth() + 1;
+      const month = transaction.date.getMonth() + 1;
 
       // Si ya existe una entrada para ese mes, sumamos la cantidad y agregamos el nombre
       if (acc[month]) {

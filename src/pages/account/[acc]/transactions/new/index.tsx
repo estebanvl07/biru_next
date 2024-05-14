@@ -73,8 +73,6 @@ const NewTransactionPage = () => {
     }
   }, [account, query]);
 
-  console.log(errors);
-
   return (
     <DashboardLayout title="Crear Transacción">
       <div className="flex w-full items-start gap-8">
@@ -127,6 +125,8 @@ const NewTransactionPage = () => {
                 />
               </div>
             }
+            isInvalid={Boolean(errors?.amount)}
+            errorMessage={errors?.amount?.message}
           />
 
           <InputDate
@@ -147,8 +147,8 @@ const NewTransactionPage = () => {
             label="Descripción"
             placeholder="Mercado del mes"
             {...register("description")}
+            isInvalid={Boolean(errors?.description)}
             errorMessage={errors?.description?.message ?? ""}
-            required
           />
           <Select
             placeholder="Seleccione una categoría"
@@ -159,6 +159,7 @@ const NewTransactionPage = () => {
             }
             isRequired
             required
+            isInvalid={Boolean(errors?.categoryId)}
             errorMessage={errors?.categoryId?.message ?? ""}
             items={categories}
           >
@@ -190,9 +191,10 @@ const NewTransactionPage = () => {
               />
             }
             label="Destinatario"
-            placeholder="Andres, Juan, Omar"
             {...register("recipient")}
-            // error={errors.destinatary?.message as any}
+            placeholder="Andres, Juan, Omar"
+            isInvalid={Boolean(errors?.recipient)}
+            errorMessage={errors.recipient?.message as any}
           />
 
           <div className="flex w-full flex-col gap-2 pt-3 md:flex-row">

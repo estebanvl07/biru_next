@@ -44,17 +44,20 @@ const InputDate: FC<InputDateProps> = ({
   const [inputValue, setInputValue] = useState<string>();
 
   const handleNewDate = (date: Date) => {
-    const setDate = new Date(date).toISOString();
-    const newDate = setDate
-      ? `${format(setDate, dateFormat, { locale: es })}`
+    let myDate = new Date(date);
+    myDate.setDate(myDate.getDate() + 1);
+    const newDate = myDate
+      ? `${format(myDate, dateFormat, { locale: es })}`
       : "";
 
     setInputValue(newDate);
-    changeValue && changeValue(date);
+    changeValue && changeValue(myDate);
   };
 
   useEffect(() => {
-    handleNewDate(new Date());
+    const date = new Date();
+    date.setDate(date.getDate() - 1);
+    handleNewDate(date);
   }, []);
 
   return (

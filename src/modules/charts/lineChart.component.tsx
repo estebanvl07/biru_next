@@ -43,6 +43,8 @@ const LineChart = ({
   // TODO: darkmdoe pending
   const isDark = false;
 
+  if (!series) return
+
   return (
     <Chart
       options={{
@@ -80,7 +82,7 @@ const LineChart = ({
           enabled: false,
         },
         tooltip: {
-          enabled: series?.length !== 0 && showToolTip,
+          enabled: Array.isArray(series) && series?.length !== 0 && showToolTip,
           shared: false,
           custom: function ({ series, seriesIndex, dataPointIndex, w }: any) {
             return `

@@ -8,7 +8,7 @@ import { parseAmount } from "~/lib/helpers";
 
 import { FONT_FAMILY } from "~/lib/constants/config";
 import dynamic from "next/dynamic";
-import { useHandlerTransaction } from "~/modules/transactions/hook/useHandlerTransactions.hook";
+import { getTransactionsByMonths } from "~/modules/transactions/hook/useHandlerTransactions.hook";
 
 const initialValues = {
   color: "",
@@ -29,17 +29,13 @@ const AnnualBalance = () => {
   }>(initialValues);
   const [labels, setLabels] = useState<string[]>([]);
 
-  const { seriesTransaction, filterByMonth, months } = useHandlerTransaction();
+  const { transactionsByMonth, months } = getTransactionsByMonths();
 
   useEffect(() => {
-    filterByMonth();
-  }, []);
+    if (!transactionsByMonth) return;
 
-  useEffect(() => {
-    if (!seriesTransaction) return;
-
-    const incomeValues = seriesTransaction.map((serie) => serie.income);
-    const egressValues = seriesTransaction.map((serie) => serie.egress);
+    const incomeValues = transactionsByMonth.map((serie) => serie.income);
+    const egressValues = transactionsByMonth.map((serie) => serie.egress);
 
     setIncomeTransactions({
       color: "#3E1FE9",
@@ -54,9 +50,9 @@ const AnnualBalance = () => {
     });
 
     // month labels
-    const labels = seriesTransaction.map((serie) => serie.month);
+    const labels = transactionsByMonth.map((serie) => serie.month);
     setLabels(labels);
-  }, [seriesTransaction]);
+  }, [transactionsByMonth]);
 
   return (
     <div className="h-full">

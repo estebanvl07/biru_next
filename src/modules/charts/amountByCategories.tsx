@@ -10,31 +10,33 @@ import { FONT_FAMILY } from "~/lib/constants/config";
 import type { ITransaction } from "~/types/transactions";
 import { ICategory } from "~/types/category";
 import dynamic from "next/dynamic";
+import { useTransactions } from "../transactions/hook/useTransactions.hook";
+import { api } from "~/utils/api";
+import { Transaction } from "@prisma/client";
 
 // TODO: refatorize component
 const PieChartAmountByCategoires = () => {
   const [chartLabels, setChartLabels] = useState<(string | undefined)[]>([""]);
   const [chartSeries, setChartSeries] = useState<number[]>([0]);
 
-  const transactions = [] as ITransaction[];
-  const categories = [] as ICategory[];
+  const { data: categories } = api.category.getAll.useQuery();
+  const { transactions } = useTransactions();
 
   useEffect(() => {
-    return;
     if (!transactions) return;
 
     // grouping transactions by category
-    const groupedTransactions: Record<number, ITransaction[]> =
+    const groupedTransactions: Record<number, Transaction[]> =
       transactions.reduce(
         (acc, transaction) => {
           const { categoryId } = transaction;
           if (!acc[categoryId]) {
             acc[categoryId] = [];
           }
-          acc[categoryId].push(transaction);
+          acc[categoryId]!.push(transaction);
           return acc;
         },
-        {} as Record<number, ITransaction[]>,
+        {} as Record<number, Transaction[]>,
       );
 
     // names of categories

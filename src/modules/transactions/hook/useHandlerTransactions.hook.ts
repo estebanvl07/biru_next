@@ -55,6 +55,6 @@ export const getTransactionsByMonths = () => {
 
   return {
     transactionsByMonth,
-    myTransactions,
+    months,
   };
 };

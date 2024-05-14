@@ -26,7 +26,9 @@ const CardDetailAmount = ({
   cardClassName,
 }: Props) => {
   return (
-    <Card className={clsx("flex flex-grow overflow-hidden", cardClassName)}>
+    <Card
+      className={clsx("flex !h-full flex-grow overflow-hidden", cardClassName)}
+    >
       <aside className="flex flex-col justify-between">
         <h4 className="mb-4 font-medium">{title}</h4>
         <div>

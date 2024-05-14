@@ -8,37 +8,39 @@ import { Card } from "~/modules/components";
 import SpendingParams from "./spendingParams";
 import { getPercent } from "~/lib/helpers";
 
-import type { ITransaction } from "~/types/transactions";
-import type { ICategory } from "~/types/category";
+import type { Category, Transaction } from "@prisma/client";
 
 import "swiper/css";
 import "swiper/css/pagination";
+import { api } from "~/utils/api";
+import { useTransactions } from "~/modules/transactions/hook/useTransactions.hook";
+
+type ChartInfoType = {
+  category: Category;
+  amount: number;
+};
 
 const CategoriesPercent = () => {
-  const [chartPieInfo, setChartPieInfo] = useState<
-    { category?: ICategory; amount: number }[]
-  >([]);
+  const [chartPieInfo, setChartPieInfo] = useState<ChartInfoType[]>([]);
   const [totalBalance, setTotalBalance] = useState<number>();
 
-  const categories = [] as ICategory[];
-  const transaction = [] as ITransaction[];
-
+  const { data: categories } = api.category.getAll.useQuery();
+  const { transactions } = useTransactions();
   // TODO: convert to hook
   useEffect(() => {
-    return;
-    if (!categories || !transaction) return;
+    if (!categories || !transactions) return;
     setChartPieInfo([]);
-    const groupedTransactions: Record<number, ITransaction[]> =
-      transaction.reduce(
+    const groupedTransactions: Record<number, Transaction[]> =
+      transactions.reduce(
         (acc, transaction) => {
           const { categoryId } = transaction;
           if (!acc[categoryId]) {
             acc[categoryId] = [];
           }
-          acc[categoryId].push(transaction);
+          acc[categoryId]!.push(transaction);
           return acc;
         },
-        {} as Record<number, ITransaction[]>,
+        {} as Record<number, Transaction[]>,
       );
 
     const groupeCategoryKeys = Object.keys(groupedTransactions);
@@ -71,27 +73,27 @@ const CategoriesPercent = () => {
       const chartInfo = {
         category: categoryOptions[index],
         amount,
-      };
+      } as ChartInfoType;
 
       if (!chartPieInfo) return setChartPieInfo([chartInfo]);
       setChartPieInfo((prev) => [...prev, chartInfo]);
     });
-  }, [transaction]);
+  }, [transactions]);
 
-  // useEffect(() => {
-  //   if (chartPieInfo.length === 0) return;
-  //   const amountByCateegory = chartPieInfo.reduce(
-  //     (amount, currentCategory) => amount + currentCategory.amount,
-  //     0,
-  //   );
+  useEffect(() => {
+    if (chartPieInfo.length === 0) return;
+    const amountByCateegory = chartPieInfo.reduce(
+      (amount, currentCategory) => amount + currentCategory.amount,
+      0,
+    );
 
-  //   setTotalBalance(amountByCateegory);
-  // }, [chartPieInfo]);
+    setTotalBalance(amountByCateegory);
+  }, [chartPieInfo]);
 
   return (
     <Card className="h-full flex-col">
       <h3 className="mb-2">Porcentajes de categorías</h3>
-      <section className="flex max-w-full justify-center py-2">
+      <section className="flex h-full max-w-full flex-wrap items-center justify-center py-2">
         {chartPieInfo && (
           <>
             <Swiper

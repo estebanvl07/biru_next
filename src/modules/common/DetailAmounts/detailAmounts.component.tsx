@@ -82,54 +82,41 @@ const DetailAmounts = ({ className, cardClassName }: DetailAmountProps) => {
   }, [transactionsByMonth]);
 
   return (
-    <div className={clsx("flex w-full flex-col gap-4 lg:flex-row", className)}>
-      {false ? (
-        <>
-          {/* <LoaderSkeleton skeletonType="Amount" />
-          <LoaderSkeleton skeletonType="Amount" /> */}
-        </>
-      ) : (
-        <>
-          <Card className="flex h-full flex-col justify-between lg:flex-auto">
-            <div className="mb-2 grid h-10 w-10 place-content-center rounded-full bg-slate-100 dark:border-none dark:bg-slate-800">
-              <Icon
-                icon="material-symbols:account-balance-outline"
-                className="text-primary dark:text-white"
-                width={20}
-              />
-            </div>
-            <article>
-              <h4 className="font-medium">Balance total</h4>
-              <h2 className="font-semibold">
-                $ {account.balance?.toLocaleString()}
-              </h2>
-            </article>
-          </Card>
-          <div className="flex flex-grow flex-row gap-4">
-            <CardDetailAmount
-              title="Ingreso"
-              amount={income}
-              color="text-green-500"
-              series={[incomeTransactions]}
-              cardClassName={cardClassName}
-              icon="iconamoon:trend-up-light"
-              percent={flowsMoney?.incomePercentParsed ?? "0%"}
-              redirectHref={`/account/${params?.acc}/transactions/new?type=1`}
-            />
-            <CardDetailAmount
-              title="Egreso"
-              amount={egress}
-              color="text-red-500"
-              series={[egressTransactions]}
-              cardClassName={cardClassName}
-              icon="iconamoon:trend-down-light"
-              percent={flowsMoney?.egressPercentParsed ?? "0%"}
-              redirectHref={`/account/${params?.acc}/transactions/new?type=2`}
-            />
-          </div>
-        </>
-      )}
-    </div>
+    <section className={clsx("flex h-full w-full flex-col gap-2", className)}>
+      {/* <Card className="flex flex-col justify-between lg:flex-auto">
+        <div className="mb-2 grid h-10 w-10 place-content-center rounded-full bg-slate-100 dark:border-none dark:bg-slate-800">
+          <Icon
+            icon="material-symbols:account-balance-outline"
+            className="text-primary dark:text-white"
+            width={20}
+          />
+        </div>
+        <article>
+          <h4 className="font-medium">Balance total</h4>
+          <h2 className="font-semibold">
+            $ {account.balance?.toLocaleString()}
+          </h2>
+        </article>
+      </Card> */}
+      <CardDetailAmount
+        title="Ingreso"
+        amount={income}
+        color="text-green-500"
+        series={[incomeTransactions]}
+        icon="iconamoon:trend-up-light"
+        percent={flowsMoney?.incomePercentParsed ?? "0%"}
+        redirectHref={`/account/${params?.acc}/transactions/new?type=1`}
+      />
+      <CardDetailAmount
+        title="Egreso"
+        amount={egress}
+        color="text-red-500"
+        series={[egressTransactions]}
+        icon="iconamoon:trend-down-light"
+        percent={flowsMoney?.egressPercentParsed ?? "0%"}
+        redirectHref={`/account/${params?.acc}/transactions/new?type=2`}
+      />
+    </section>
   );
 };
 

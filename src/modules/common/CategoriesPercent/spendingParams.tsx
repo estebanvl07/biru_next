@@ -4,10 +4,10 @@ const Chart = dynamic(() => import("react-apexcharts"), {
 import { Icon } from "@iconify/react/dist/iconify.js";
 import dynamic from "next/dynamic";
 
-import type { ICategory } from "~/types/category";
+import { Category } from "@prisma/client";
 
 interface SpendingParamsProps {
-  category?: ICategory;
+  category?: Category;
   percent?: string;
   percentBalance?: number;
 }

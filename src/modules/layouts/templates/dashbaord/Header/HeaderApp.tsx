@@ -3,7 +3,7 @@ import clsx from "clsx";
 import Nav from "./Nav";
 import { usePathname } from "next/navigation";
 import NavigationBack from "./NavigationBack";
-import { useCurrentAccount } from "~/modules/account/hooks";
+import { useCurrentAccount } from "~/modules/Account/hooks";
 import FilterTemplates from "./FilterTemplates";
 
 const HeaderApp = ({ title }: { title?: string }) => {

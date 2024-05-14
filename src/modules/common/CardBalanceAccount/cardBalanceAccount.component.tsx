@@ -5,7 +5,7 @@ import { LineChart } from "~/modules/charts";
 
 import type { Series } from "~/types/root.types";
 import type { IAccount } from "~/types/account";
-import { useCurrentAccount } from "~/modules/account/hooks";
+import { useCurrentAccount } from "~/modules/Account/hooks";
 import {
   getMonths,
   useTransactions,

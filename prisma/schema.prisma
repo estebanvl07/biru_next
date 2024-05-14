@@ -15,17 +15,17 @@ datasource db {
 }
 
 model UserAccount {
-  id        Int      @id @default(autoincrement())
-  name      String
-  type      Int
-  balance   Int?     @default(0)
-  reference String?
-  state     Int?     @default(1) // 1: activo, 0: inactivo
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  userId    String
-  transactions      Transaction[]
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id           Int           @id @default(autoincrement())
+  name         String
+  type         Int
+  balance      Int?          @default(0)
+  reference    String?
+  state        Int?          @default(1) // 1: activo, 0: inactivo
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  userId       String
+  transactions Transaction[]
+  user         User          @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model Category {
@@ -34,7 +34,7 @@ model Category {
   type        Int
   icon        String
   description String?
-  state       Int
+  state       Int      @default(1) // 1: activo, 0: inactivo
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
   user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
@@ -42,22 +42,21 @@ model Category {
 }
 
 model Transaction {
-  id              Int           @id @default(autoincrement())
-  accountId       Int           
-  userId          String
-  amount          Int
-  type            Int
-  date            DateTime
-  recipient       String?
-  description     String?
-  categoryId      Int
-  state           Int?
-  createdAt       DateTime      @default(now())
-  updatedAt       DateTime      @updatedAt
-  user            User          @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userAccount     UserAccount   @relation(fields:  [accountId], references: [id], onDelete: Cascade)
+  id          Int         @id @default(autoincrement())
+  accountId   Int
+  userId      String
+  amount      Int
+  type        Int
+  date        DateTime
+  recipient   String?
+  description String?
+  categoryId  Int
+  state       Int?        @default(1) // 1: activo, 0: inactivo
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+  user        User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userAccount UserAccount @relation(fields: [accountId], references: [id], onDelete: Cascade)
 }
-
 
 model UserPassword {
   id        String   @id @default(cuid())

@@ -1,7 +1,7 @@
-import { Icon } from "@iconify/react/dist/iconify.js";
 import clsx from "clsx";
-import { type Category } from "@prisma/client";
 import { motion } from "framer-motion";
+import { Icon } from "@iconify/react/dist/iconify.js";
+import { type Category } from "@prisma/client";
 
 type CategoryCardProps = {
   category: Category;
@@ -25,43 +25,41 @@ const CategotyCard = ({
   iconClassName,
 }: CategoryCardProps) => {
   const { icon, name, description, state } = category;
-
   return (
-    <motion.div variants={item} className="h-full">
-      <div
+    <motion.article
+      variants={item}
+      className={clsx(
+        "relative flex w-full cursor-pointer flex-col items-center justify-start gap-4 rounded-lg border bg-white px-6 py-8 shadow-md transition-all hover:scale-105 hover:border-indigo-300 md:w-32 dark:border-white/10 dark:bg-slate-900 dark:shadow-2xl hover:dark:border-indigo-400",
+        className,
+        {
+          "bg-black/5 dark:bg-white/5": state === 2,
+        },
+      )}
+      onClick={onClick}
+      title={description ?? "Sin descripción"}
+    >
+      <Icon
+        icon={icon}
         className={clsx(
-          "relative flex w-full cursor-pointer items-center justify-start gap-4 rounded-lg border bg-white px-4 py-3 transition-all hover:scale-105 hover:border-indigo-300 dark:border-white/10 dark:bg-slate-900 hover:dark:border-indigo-400",
-          className,
+          "right-4 text-indigo-600 dark:text-indigo-400",
+          iconClassName,
           {
-            "bg-black/5 dark:bg-white/5": state === 2,
+            "!text-indigo-400/25": state === 2,
           },
         )}
-        onClick={onClick}
-        title={description ?? "Sin descripción"}
+        width={32}
+      />
+      <p
+        className={clsx(
+          "max-w-32 overflow-hidden text-ellipsis whitespace-nowrap font-medium dark:text-white",
+          {
+            "text-gray-400": state === 2,
+          },
+        )}
       >
-        <Icon
-          icon={icon}
-          className={clsx(
-            "right-4 text-indigo-600 dark:text-indigo-400",
-            iconClassName,
-            {
-              "!text-indigo-400/25": state === 2,
-            },
-          )}
-          width={32}
-        />
-        <p
-          className={clsx(
-            "max-w-32 overflow-hidden text-ellipsis whitespace-nowrap font-medium dark:text-white",
-            {
-              "text-gray-400": state === 2,
-            },
-          )}
-        >
-          {name}
-        </p>
-      </div>
-    </motion.div>
+        {name}
+      </p>
+    </motion.article>
   );
 };
 

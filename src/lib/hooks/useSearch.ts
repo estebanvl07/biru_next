@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import { ISelectOptions } from "~/types/root.types";
 
 interface Props<T> {
   data: T[];

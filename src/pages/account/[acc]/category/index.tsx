@@ -2,11 +2,10 @@ import Link from "next/link";
 import { useParams, usePathname } from "next/navigation";
 import React from "react";
 
-import { Input } from "@nextui-org/react";
+import { Button, Input } from "@nextui-org/react";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import { motion } from "framer-motion";
 
-import { Button } from "~/modules/components";
 import DashboardLayout from "~/modules/layouts/Dashboard";
 import CategoryCard from "~/modules/category/CategoryCard";
 
@@ -40,7 +39,7 @@ const CategoryPage = () => {
 
   return (
     <DashboardLayout title="Categorías">
-      <nav className="mb-4 flex items-center justify-between">
+      <nav className="mb-4 flex items-center gap-2">
         <Input
           placeholder="Buscar"
           startContent={
@@ -55,7 +54,9 @@ const CategoryPage = () => {
             query: { acc: params?.acc },
           }}
         >
-          <Button>Crear categoría</Button>
+          <Button radius="lg" color="primary">
+            <Icon icon="ph:plus" width={18} /> Crear
+          </Button>
         </Link>
       </nav>
       {categories?.length === 0 ? (

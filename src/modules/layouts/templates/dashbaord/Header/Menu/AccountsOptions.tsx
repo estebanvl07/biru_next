@@ -10,11 +10,15 @@ const AccountsOptions = () => {
   const router = useRouter();
   const { accounts } = useAccounts();
 
-  const accountsMenu = accounts.map((account) => ({
-    id: account.id,
-    name: account.name,
-    amount: account.balance ?? 0,
-  }));
+  const accountsMenu = accounts
+    .map((account, index) => {
+      return {
+        id: account.id,
+        name: account.name,
+        amount: account.balance ?? 0,
+      };
+    })
+    .slice(0, 3);
 
   return (
     <ul className="mx-2 flex flex-col rounded-md border pb-2 pt-1 text-sm dark:border-white/10 [&>li]:cursor-pointer [&>li]:px-4 [&>li]:py-2 hover:[&>li]:bg-gray-100 dark:hover:[&>li]:bg-slate-950">

@@ -5,11 +5,11 @@ import {
   Dropdown,
   DropdownMenu,
   DropdownItem,
+  Input,
 } from "@nextui-org/react";
 
-import { Input, Button } from "~/modules/components/atoms";
+import { Button } from "~/modules/components/atoms";
 
-import { capitalize } from "./utils";
 import { Icon } from "@iconify/react/dist/iconify.js";
 
 import { type TopContentProps } from "./types";
@@ -28,8 +28,6 @@ const TopContent = React.memo(
     redirectTo,
     setRowsPerPage,
   }: TopContentProps) => {
-    console.log(hasNew, redirectTo);
-
     const onSearchChange = React.useCallback((e: any) => {
       const value = e.target.value;
       if (value) {
@@ -54,8 +52,8 @@ const TopContent = React.memo(
           {hasSearch && (
             <Input
               placeholder="Buscar transacción"
-              iconPath="iconoir:search"
-              mainClassName="!w-[40%]"
+              startContent={<Icon icon="iconoir:search" width={18} />}
+              className="!w-[40%]"
               value={filterValue}
               onChange={onSearchChange}
             />
@@ -68,23 +66,26 @@ const TopContent = React.memo(
               </Button>
             )}
             {hasNew && (
-              <Link href={redirectTo ?? "new"}>
-                <Button>
+              <Button>
+                <Link
+                  href={redirectTo ?? "new"}
+                  className="flex items-center gap-2"
+                >
                   <Icon icon="ic:round-plus" width={18} />
                   Crear Transacción
-                </Button>
-              </Link>
+                </Link>
+              </Button>
             )}
           </div>
         </div>
         <div className="flex items-center justify-between">
-          <span className="text-small text-default-400">
+          <span className="text-small text-default-500">
             Total de registros: {lenght}
           </span>
-          <label className="flex items-center text-small text-default-400">
+          <label className="flex items-center gap-2 text-small text-default-500">
             Filas por páginas:
             <select
-              className="bg-transparent text-small text-default-400 outline-none"
+              className="rounded-md bg-default-100 px-1 text-small text-default-500 outline-none"
               onChange={onRowsPerPageChange}
             >
               <option value="5">5</option>

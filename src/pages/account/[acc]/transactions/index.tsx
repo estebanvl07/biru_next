@@ -1,23 +1,19 @@
+import { useCallback } from "react";
+import { useParams } from "next/navigation";
+
 import { Icon } from "@iconify/react/dist/iconify.js";
-import Image from "next/image";
-import Link from "next/link";
-// import { useRouter } from "next/router";
-import { Button, Card } from "~/modules/components";
 import DashboardLayout from "~/modules/layouts/Dashboard";
 import { Table } from "~/modules/components";
 
-// import { users, columns } from "./data";
-import { useParams } from "next/navigation";
-import { api } from "~/utils/api";
-import { useCallback, useEffect, useState } from "react";
-
 import { columns } from "~/modules/transactions/table";
-import { Avatar, Badge, Chip, User } from "@nextui-org/react";
-import { Transaction, Category, UserAccount } from "@prisma/client";
+import { Chip } from "@nextui-org/react";
+
 import { format } from "date-fns";
 import { es } from "date-fns/locale";
 import { useTransactions } from "~/modules/transactions/hook/useTransactions.hook";
 import { capitalize } from "~/modules/components/molecules/Table/utils";
+
+import type { Transaction, Category, UserAccount } from "@prisma/client";
 
 type TransactionsIncludes = Transaction & {
   category: Category;
@@ -109,21 +105,19 @@ const TransactionPage = () => {
 
   return (
     <DashboardLayout title="Transacciones">
-      <div className="mt-4">
-        <Table
-          headerConfig={{
-            title: "",
-            keySearch: ["title"],
-          }}
-          buttonNewLink={`/account/${Number(params?.acc)}/transactions/new`}
-          buttonNewText="Crear transacción"
-          columns={columns}
-          filterKeys={["description", "amount"]}
-          data={transactions ?? []}
-          renderCell={renderCell}
-          hasNew
-        />
-      </div>
+      <Table
+        headerConfig={{
+          title: "",
+          keySearch: ["title"],
+        }}
+        buttonNewLink={`/account/${Number(params?.acc)}/transactions/new`}
+        buttonNewText="Crear transacción"
+        columns={columns}
+        filterKeys={["description", "amount"]}
+        data={transactions ?? []}
+        renderCell={renderCell}
+        hasNew
+      />
     </DashboardLayout>
   );
 };

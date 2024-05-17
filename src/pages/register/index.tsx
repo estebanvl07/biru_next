@@ -1,24 +1,25 @@
 import { useForm } from "react-hook-form";
+import { useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import clsx from "clsx";
-import { Spinner } from "@nextui-org/react";
+import { Input, Spinner } from "@nextui-org/react";
 import Link from "next/link";
 
-import {
-  Input,
-  Button,
-  SignInOptions,
-  InputPassword,
-} from "~/modules/components";
+import { Button, SignInOptions } from "~/modules/components";
 import { SuccessfullyCreated } from "~/modules/Register/components";
 import { BasicLayout } from "~/modules/layouts";
+import { Icon } from "@iconify/react/dist/iconify.js";
+
 import { api } from "~/utils/api";
+
 import {
   registerUserInput,
   type RegisterUserInputType,
 } from "~/modules/Register/resolver";
 
 const Register = () => {
+  const [showPassword, setShowPassword] = useState(false);
+
   const {
     mutate: registerUser,
     isSuccess,
@@ -52,37 +53,61 @@ const Register = () => {
             <span className="text-pretty text-center text-sm text-slate-400">
               Estas a un paso de ser parte del equipo de Biru
             </span>
-            <section className="mt-2 flex w-full flex-col items-center justify-center gap-2">
-              <div className="flex w-full gap-2">
-                <SignInOptions />
-              </div>
-            </section>
+            <SignInOptions />
             <form
               className="mt-4 flex w-full flex-col gap-2"
               onSubmit={handleSubmit(onSubmit)}
             >
               <Input
-                iconPath="basil:user-outline"
+                required
+                isRequired
                 label="Nombre"
-                register={register("name")}
                 placeholder="John Doe"
-                containerClassName="w-full"
-                error={errors.name?.message}
+                {...register("name")}
+                isInvalid={Boolean(errors.name)}
+                errorMessage={errors.name?.message}
+                startContent={<Icon icon="basil:user-outline" width={18} />}
               />
               <Input
+                required
+                isRequired
                 label="Correo"
                 type="email"
                 placeholder="john@doe.com"
-                iconPath="ic:outline-email"
-                containerClassName="w-full"
-                register={register("email")}
-                error={errors.email?.message}
+                {...register("email")}
+                isInvalid={Boolean(errors.email)}
+                errorMessage={errors.email?.message}
+                startContent={<Icon icon="ic:outline-email" width={18} />}
               />
-              <InputPassword
+              <Input
                 label="Contraseña"
-                containerClassName="w-full"
-                error={errors.password?.message}
-                register={register("password")}
+                type={showPassword ? "text" : "password"}
+                placeholder="••••••••"
+                autoComplete="current-password"
+                startContent={
+                  <button
+                    type="button"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      setShowPassword(!showPassword);
+                    }}
+                  >
+                    <Icon
+                      icon={
+                        showPassword
+                          ? "majesticons:eye-line"
+                          : "mdi:eye-off-outline"
+                      }
+                      width={18}
+                    />
+                  </button>
+                }
+                {...register("password")}
+                isInvalid={Boolean(errors.password)}
+                errorMessage={errors.password?.message}
+                required
+                isRequired
               />
 
               <Button variantStyle="fill" className="mt-2" type="submit">
@@ -102,7 +127,7 @@ const Register = () => {
                 </span>
               )}
             </form>
-            <span className="mt-6 flex w-full items-center justify-center gap-2 text-sm">
+            <p className="mt-6 flex w-full items-center justify-center gap-2 text-sm">
               ¿Ya tienes cuenta?,
               <Link
                 href="/login"
@@ -110,7 +135,7 @@ const Register = () => {
               >
                 Iniciar sesión
               </Link>
-            </span>
+            </p>
           </section>
         </div>
       )}

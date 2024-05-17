@@ -2,14 +2,20 @@
 import { signIn } from "next-auth/react";
 import React, { useState } from "react";
 
-import { Button, Input, InputPassword } from "~/modules/components";
+import { Button } from "~/modules/components";
+import { Icon } from "@iconify/react/dist/iconify.js";
+
 import { CALLBACK_SIGN_IN_URL } from "~/lib/constants/config";
+
 import { useRouter } from "next/router";
 import { useForm } from "react-hook-form";
-import { loginInput, type LoginInputType } from "~/modules/Login/resolver";
+import { Input } from "@nextui-org/react";
 import { zodResolver } from "@hookform/resolvers/zod";
 
+import { loginInput, type LoginInputType } from "~/modules/Login/resolver";
+
 export const LoginForm = () => {
+  const [showPassword, setShowPassword] = useState(false);
   const {
     register,
     handleSubmit,
@@ -43,23 +49,43 @@ export const LoginForm = () => {
       onSubmit={handleSubmit(onSubmit)}
     >
       <Input
-        name="email"
         label="Correo"
         placeholder="john@doe.com"
         autoComplete="email"
-        iconPath="ic:outline-email"
+        startContent={<Icon icon="ic:outline-email" width={18} />}
+        {...register("email")}
+        isInvalid={Boolean(errors.email)}
+        errorMessage={errors.email?.message}
+        isRequired
         required
-        register={register("email")}
-        error={errors.email?.message}
       />
-      <InputPassword
-        name="password"
+      <Input
         label="Contraseña"
+        type={showPassword ? "text" : "password"}
         placeholder="••••••••"
         autoComplete="current-password"
-        register={register("password")}
-        error={errors.password?.message}
+        startContent={
+          <button
+            type="button"
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              setShowPassword(!showPassword);
+            }}
+          >
+            <Icon
+              icon={
+                showPassword ? "majesticons:eye-line" : "mdi:eye-off-outline"
+              }
+              width={18}
+            />
+          </button>
+        }
+        {...register("password")}
+        isInvalid={Boolean(errors.password)}
+        errorMessage={errors.password?.message}
         required
+        isRequired
       />
 
       {/* <Link

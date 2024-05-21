@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { months } from "~/lib/resource/months";
 import { useTransactions } from "./useTransactions.hook";
 
-type SeriesTransactionType = {
+type BalanceByMonthType = {
   month: string;
   amount: number;
   income: number;
@@ -11,12 +11,16 @@ type SeriesTransactionType = {
   transactions?: Transaction[];
 };
 
-export const getTransactionsByMonths = () => {
+export const getTransactionsByMonths = (transactions?: Transaction[]) => {
   const [transactionsByMonth, setTransactionsByMonth] =
-    useState<SeriesTransactionType[]>();
-  const { transactions: myTransactions } = useTransactions();
+    useState<BalanceByMonthType[]>();
+  const [myTransactions, setMyTransactions] = useState<Transaction[]>();
+  const [balanceByMonth, setBalanceByMonth] = useState<number[]>();
+  const [filteredMonths, setFilteredMonths] = useState<string[]>();
+  const { transactions: hookTransaction } = useTransactions();
 
   const onFilterByMonth = () => {
+    if (!myTransactions) return;
     const groupedData = myTransactions.reduce((acc, transaction) => {
       // Extraemos el mes de la fecha
       const month = transaction.date.getMonth() + 1;
@@ -41,13 +45,30 @@ export const getTransactionsByMonths = () => {
       return acc;
     }, {} as any);
 
-    const transactionsGrouped =
-      Object.values<SeriesTransactionType>(groupedData);
-
-    console.log(transactionsGrouped);
+    const transactionsGrouped = Object.values<BalanceByMonthType>(groupedData);
 
     setTransactionsByMonth(transactionsGrouped);
   };
+
+  useEffect(() => {
+    if (!transactionsByMonth) return;
+    const balances = transactionsByMonth.map(
+      (group: BalanceByMonthType) => group.income + -group.egress,
+    );
+    const balanceMonths = transactionsByMonth.map(
+      (group: BalanceByMonthType) => group.month,
+    );
+    setFilteredMonths(balanceMonths);
+    setBalanceByMonth(balances);
+  }, [transactionsByMonth]);
+
+  useEffect(() => {
+    if (transactions) {
+      setMyTransactions(transactions);
+    } else {
+      setMyTransactions(hookTransaction);
+    }
+  }, [transactions, hookTransaction]);
 
   useEffect(() => {
     myTransactions && onFilterByMonth();
@@ -55,6 +76,7 @@ export const getTransactionsByMonths = () => {
 
   return {
     transactionsByMonth,
-    months,
+    months: filteredMonths,
+    balanceByMonth,
   };
 };

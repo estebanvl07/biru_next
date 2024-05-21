@@ -10,10 +10,13 @@ import {
 } from "~/modules/components";
 
 import {
+  Avatar,
   Button as ButtonSec,
   Input,
   Select,
   SelectItem,
+  SelectedItems,
+  User,
   useDisclosure,
 } from "@nextui-org/react";
 
@@ -29,6 +32,9 @@ import { useParams } from "next/navigation";
 import Modal from "~/modules/components/atoms/Modal.component";
 import CreateCategoryForm from "~/modules/category/CreateCategoryForm";
 import { useCurrentAccount } from "~/modules/Account/hooks";
+import { useEntity } from "~/modules/Entities/hook/entities.hook";
+import { Entities } from "@prisma/client";
+import clsx from "clsx";
 
 const NewTransactionPage = () => {
   const [accountForm, setAccountForm] = useState(false);
@@ -37,6 +43,7 @@ const NewTransactionPage = () => {
   const { account } = useCurrentAccount();
   const query = router.query;
 
+  const { entities } = useEntity();
   const { data: categories } = api.category.getAll.useQuery();
   const { mutate: createTransactionMutation } =
     api.transaction.create.useMutation();
@@ -80,6 +87,7 @@ const NewTransactionPage = () => {
           className="flex w-full max-w-[32rem] flex-col items-center justify-center gap-2 pt-6 md:pt-0"
           onSubmit={handleSubmit(onSubmit)}
         >
+          <h3 className="w-full">Datos de transacción</h3>
           <Input
             type="number"
             isRequired
@@ -128,12 +136,131 @@ const NewTransactionPage = () => {
             isInvalid={Boolean(errors?.amount)}
             errorMessage={errors?.amount?.message}
           />
-
           <InputDate
             label="Fecha de transacción"
             containerClassName="mt-4"
             changeValue={(newDate) => setValue("date", newDate)}
             required
+          />
+          <h3 className="mt-4 w-full">Otros datos</h3>
+          <section className="flex w-full gap-2">
+            <Select
+              items={categories ?? []}
+              placeholder="Seleccione una categoría"
+              label="Categoría"
+              onClick={() => categories?.length === 0 && setAccountForm(true)}
+              classNames={{
+                label: "group-data-[filled=true]:-translate-y-5",
+                trigger: "min-h-[70px]",
+                listboxWrapper: "max-h-[200px]",
+              }}
+              renderValue={(items) => {
+                return items.map(({ data }) => (
+                  <div className="flex items-center gap-2">
+                    <div className="grid h-8 w-8 place-items-center rounded-full bg-primary">
+                      {data?.icon ? (
+                        <Icon icon={data?.icon} className="text-white" />
+                      ) : (
+                        <Avatar name={data?.name} />
+                      )}
+                    </div>
+                    {data?.name}
+                  </div>
+                ));
+              }}
+              isRequired
+              required
+              isInvalid={Boolean(errors?.categoryId)}
+              errorMessage={errors?.categoryId?.message ?? ""}
+            >
+              {(category) => (
+                <SelectItem
+                  color="primary"
+                  onClick={() => setValue("categoryId", category.id)}
+                  key={category.id}
+                  className="font-montserrat dark:text-white"
+                  textValue={category.name}
+                  value={category.id}
+                >
+                  {category.name}
+                </SelectItem>
+              )}
+            </Select>
+            <Select
+              items={entities ?? []}
+              placeholder="Seleccionar entidad"
+              label="Entidad"
+              classNames={{
+                label: "group-data-[filled=true]:-translate-y-5",
+                trigger: "min-h-[70px]",
+                listboxWrapper: "max-h-[200px]",
+              }}
+              renderValue={(items) => {
+                return items.map(({ data: entity }) => (
+                  <div
+                    key={String(entity?.id)}
+                    className="py-1 font-montserrat dark:text-white"
+                  >
+                    <User
+                      name={entity?.name}
+                      description={
+                        entity?.description !== "" ? entity?.description : "N/A"
+                      }
+                      avatarProps={{
+                        src: entity?.avatar ?? undefined,
+                        size: "sm",
+                        name: entity?.name,
+                        color: "primary",
+                      }}
+                    />
+                  </div>
+                ));
+              }}
+              isInvalid={Boolean(errors?.entityId)}
+              errorMessage={errors?.entityId?.message ?? ""}
+            >
+              {(entity) => {
+                return (
+                  <SelectItem
+                    color="primary"
+                    variant="solid"
+                    onClick={() => {
+                      setValue("entityId", entity.id);
+                      setValue("recipient", String(entity.reference));
+                    }}
+                    key={entity.id}
+                    className="py-1 font-montserrat dark:text-white"
+                    textValue={entity.name}
+                  >
+                    <p>{entity.name}</p>
+                    <span className="!text-xs opacity-60">
+                      {entity.description !== "" ? entity.description : "N/A"}
+                    </span>
+                  </SelectItem>
+                );
+              }}
+            </Select>
+          </section>
+          <Input
+            startContent={
+              <Icon
+                icon="streamline:travel-map-triangle-flag-navigation-map-maps-flag-gps-location-destination-goal"
+                className="dark:text-slate-200"
+              />
+            }
+            endContent={
+              <button onClick={() => alert("click")}>
+                <Icon
+                  icon="streamline:travel-map-triangle-flag-navigation-map-maps-flag-gps-location-destination-goal"
+                  className="dark:text-slate-200"
+                />
+              </button>
+            }
+            label="Destinatario"
+            placeholder="Andres, Juan, Omar"
+            {...register("recipient")}
+            isInvalid={Boolean(errors?.recipient)}
+            errorMessage={errors.recipient?.message as any}
           />
           <Input
             startContent={
@@ -150,53 +277,6 @@ const NewTransactionPage = () => {
             isInvalid={Boolean(errors?.description)}
             errorMessage={errors?.description?.message ?? ""}
           />
-          <Select
-            placeholder="Seleccione una categoría"
-            label="Categoría"
-            onClick={() => categories?.length === 0 && setAccountForm(true)}
-            startContent={
-              <Icon icon="iconamoon:category" className="dark:text-slate-200" />
-            }
-            isRequired
-            required
-            isInvalid={Boolean(errors?.categoryId)}
-            errorMessage={errors?.categoryId?.message ?? ""}
-            items={categories}
-          >
-            {categories ? (
-              categories.map((category) => {
-                return (
-                  <SelectItem
-                    color="primary"
-                    onClick={() => setValue("categoryId", category.id)}
-                    key={category.id}
-                    className="font-montserrat dark:text-white"
-                    value={category.id}
-                  >
-                    {category.name}
-                  </SelectItem>
-                );
-              })
-            ) : (
-              <SelectItem key={0} value={0}>
-                Sin datos
-              </SelectItem>
-            )}
-          </Select>
-          <Input
-            startContent={
-              <Icon
-                icon="streamline:travel-map-triangle-flag-navigation-map-maps-flag-gps-location-destination-goal"
-                className="dark:text-slate-200"
-              />
-            }
-            label="Destinatario"
-            {...register("recipient")}
-            placeholder="Andres, Juan, Omar"
-            isInvalid={Boolean(errors?.recipient)}
-            errorMessage={errors.recipient?.message as any}
-          />
-
           <div className="flex w-full flex-col gap-2 pt-3 md:flex-row">
             <Button
               className="w-fit py-1 text-sm"

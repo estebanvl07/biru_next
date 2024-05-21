@@ -9,6 +9,7 @@ import { parseAmount } from "~/lib/helpers";
 import { FONT_FAMILY } from "~/lib/constants/config";
 import dynamic from "next/dynamic";
 import { getTransactionsByMonths } from "~/modules/transactions/hook/useHandlerTransactions.hook";
+import { useTheme } from "~/lib/hooks";
 
 const initialValues = {
   color: "",
@@ -28,6 +29,8 @@ const AnnualBalance = () => {
     data: number[];
   }>(initialValues);
   const [labels, setLabels] = useState<string[]>([]);
+
+  const { isDark } = useTheme();
 
   const { transactionsByMonth, months } = getTransactionsByMonths();
 
@@ -88,6 +91,7 @@ const AnnualBalance = () => {
               },
               offsetX: -28,
               fontSize: "14",
+
               fontFamily: FONT_FAMILY,
               onItemHover: {
                 highlightDataSeries: true,
@@ -106,6 +110,7 @@ const AnnualBalance = () => {
                 formatter: (val, opt) => parseAmount(val) ?? val,
                 style: {
                   fontFamily: FONT_FAMILY,
+                  colors: isDark ? "#64748b" : "#000",
                   fontWeight: 600,
                   fontSize: "13",
                 },
@@ -115,20 +120,18 @@ const AnnualBalance = () => {
               axisBorder: {
                 show: false,
               },
-              categories:
-                labels.length > 0 ? labels : Object.values(months).reverse(),
+              categories: months ? months : [],
               labels: {
-                formatter: (val) => {
-                  return val.toUpperCase();
-                },
                 style: {
                   fontFamily: FONT_FAMILY,
+                  colors: isDark ? "#f3f4f6" : "#000",
                   fontWeight: 600,
                 },
               },
             },
             grid: {
               xaxis: {},
+              borderColor: isDark ? "#1e293b" : "#e5e7eb",
               padding: {
                 top: 0,
                 left: 0,

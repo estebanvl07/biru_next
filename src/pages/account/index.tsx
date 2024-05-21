@@ -98,11 +98,20 @@ const AccountPage = () => {
         </aside>
         <section className="col-span-6 flex flex-col justify-start px-12 py-4 lg:col-span-4">
           <HeaderApp title="Cuentas" />
-          <div className="flex h-full flex-col justify-center">
-            <h2>Mis cuentas</h2>
-            <p>Seleccione alguna de sus cuentas para continuar.</p>
+          <div className="flex h-full flex-col">
+            <header className="flex items-center justify-between">
+              <aside>
+                <h2>Mis cuentas</h2>
+                <p>Seleccione alguna de sus cuentas para continuar.</p>
+              </aside>
+              <Button type="button" className="mt-4">
+                <Link href="/account/new" className="w-fit">
+                  Crear cuenta
+                </Link>
+              </Button>
+            </header>
             <motion.div
-              className="flex flex-wrap gap-2 py-2"
+              className="mt-4 flex flex-wrap gap-2 py-2"
               variants={container}
               initial="hidden"
               animate="visible"
@@ -112,14 +121,12 @@ const AccountPage = () => {
                   <AccountCard
                     key={account.id}
                     account={account}
+                    hoverStyles
                     onClick={() => navigateAccount(account.id)}
                   />
                 );
               })}
             </motion.div>
-            <Link href="/account/new" className="w-fit">
-              <Button className="mt-4">Crear cuenta</Button>
-            </Link>
           </div>
         </section>
       </div>

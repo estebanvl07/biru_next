@@ -31,13 +31,6 @@ const FilterTemplates = () => {
     setHasCalendar(false);
   };
 
-  useEffect(() => {
-    console.log({
-      start: rangeDate?.start,
-      end: rangeDate?.end,
-    });
-  }, [rangeDate]);
-
   return (
     <>
       {hasCalendar && (

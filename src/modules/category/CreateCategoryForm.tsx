@@ -9,8 +9,8 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import clsx from "clsx";
 
-import { ButtonGroup, Input } from "@nextui-org/react";
-import { Button, Card, RadioGroup } from "~/modules/components";
+import { ButtonGroup, Input, Radio, RadioGroup } from "@nextui-org/react";
+import { Button, Card } from "~/modules/components";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import { IconSearcher } from "~/modules/category/IconSelector";
 import DashboardLayout from "~/modules/layouts/Dashboard";
@@ -57,6 +57,22 @@ const CreateCategoryForm = ({ hasEdit = false }: { hasEdit?: boolean }) => {
       className="flex w-full max-w-[32rem] flex-col gap-2 pt-6 md:pt-0"
       onSubmit={handleSubmit(onSubmit)}
     >
+      <RadioGroup size="sm" orientation="horizontal" label="Tipo">
+        <Radio
+          value="1"
+          onClick={() => setValue("type", 1 as any)}
+          color="success"
+        >
+          Ingreso
+        </Radio>
+        <Radio
+          value="2"
+          onClick={() => setValue("type", 1 as any)}
+          color="danger"
+        >
+          Egreso
+        </Radio>
+      </RadioGroup>
       <Input
         label="Nombre"
         startContent={
@@ -70,36 +86,6 @@ const CreateCategoryForm = ({ hasEdit = false }: { hasEdit?: boolean }) => {
         required
         isRequired
         {...register("name")}
-      />
-      <RadioGroup
-        iconPath="fluent:money-hand-24-regular"
-        inputContentClassName="dark:text-slate-200"
-        label="Tipo"
-        name="type"
-        defaultValue={type ?? 1}
-        register={register("type")}
-        options={[
-          {
-            label: "Ingreso",
-            value: 1,
-            className: clsx(
-              "has-[input:checked]:bg-green-500 has-[input:checked]:text-white",
-              {
-                "bg-green-500 text-white": type && Number(type) === 1,
-              },
-            ),
-          },
-          {
-            label: "Gasto",
-            value: 2,
-            className: clsx(
-              "has-[input:checked]:bg-red-500 has-[input:checked]:text-white",
-              {
-                "bg-red-500 text-white": type && Number(type) === 2,
-              },
-            ),
-          },
-        ]}
       />
       <Input
         label="Descripción"
@@ -125,6 +111,7 @@ const CreateCategoryForm = ({ hasEdit = false }: { hasEdit?: boolean }) => {
         {...register("icon")}
         errorMessage={errors.icon?.message}
       />
+
       <div className="mb-2 flex w-full flex-col gap-2 pt-3 md:flex-row">
         <Button type="submit" className="w-fit py-1 text-sm">
           <Icon

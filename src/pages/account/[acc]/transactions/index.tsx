@@ -6,38 +6,58 @@ import DashboardLayout from "~/modules/layouts/Dashboard";
 import { Table } from "~/modules/components";
 
 import { columns } from "~/modules/transactions/table";
-import { Chip } from "@nextui-org/react";
+import { Avatar, Chip, User } from "@nextui-org/react";
 
 import { format } from "date-fns";
 import { es } from "date-fns/locale";
 import { useTransactions } from "~/modules/transactions/hook/useTransactions.hook";
 import { capitalize } from "~/modules/components/molecules/Table/utils";
 
-import type { Transaction, Category, UserAccount } from "@prisma/client";
+import type {
+  Transaction,
+  Category,
+  UserAccount,
+  Entities,
+} from "@prisma/client";
 
 type TransactionsIncludes = Transaction & {
   category: Category;
   userAccount: UserAccount;
+  entity: Entities;
 };
 
 const TransactionPage = () => {
   const params = useParams<{ acc: string }>();
   const { transactions } = useTransactions();
 
+  console.log(transactions);
+
   const renderCell = useCallback(
     (transaction: TransactionsIncludes, columnKey: React.Key) => {
       const cellValue = transaction[columnKey as keyof TransactionsIncludes];
-      console.log(cellValue);
-
       switch (columnKey) {
         case "description":
           return (
             <div className="flex items-center gap-2">
               <div className="grid h-10 w-10 place-items-center rounded-full bg-primary text-xl text-white">
-                {transaction.recipient ? (
-                  transaction.recipient.split("")[0]
+                {transaction.entityId ? (
+                  <Avatar
+                    src={
+                      Boolean(transaction.entity?.avatar)
+                        ? (transaction.entity.avatar as string)
+                        : undefined
+                    }
+                    color="primary"
+                    name={transaction.entity?.name}
+                  />
                 ) : (
-                  <Icon icon={transaction.category.icon} />
+                  <>
+                    {transaction.recipient ? (
+                      transaction.recipient.split("")[0]
+                    ) : (
+                      <Icon icon={transaction.category.icon} />
+                    )}
+                  </>
                 )}
               </div>
               <aside>

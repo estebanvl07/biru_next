@@ -13,6 +13,7 @@ export const input = {
   }),
   date: Z_DATE,
   recipient: z.optional(z.string()),
+  entityId: z.optional(z.number()),
   description: z.optional(z.string()),
   categoryId: Z_NUMBER,
   accountId: Z_NUMBER,

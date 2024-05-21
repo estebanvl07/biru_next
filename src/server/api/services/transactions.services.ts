@@ -80,6 +80,6 @@ export async function deleteTransaction(db: PrismaClient, id: number) {
 export function getTransactionsByAccount(db: PrismaClient, accountId: number) {
   return db.transaction.findMany({
     where: { accountId },
-    include: { userAccount: true, category: true },
+    include: { userAccount: true, category: true, entity: true },
   });
 }

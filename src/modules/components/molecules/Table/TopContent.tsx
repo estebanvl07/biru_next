@@ -72,7 +72,7 @@ const TopContent = React.memo(
                   className="flex items-center gap-2"
                 >
                   <Icon icon="ic:round-plus" width={18} />
-                  Crear Transacción
+                  Crear
                 </Link>
               </Button>
             )}

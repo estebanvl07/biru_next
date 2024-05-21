@@ -53,10 +53,6 @@ const CardBalanceAccount = () => {
           <h3>Balance</h3>
           {transactions && transactions.length > 0 && (
             <>
-              <h2 className="text-3xl">
-                $ {account?.balance?.toLocaleString() ?? "0.00"}
-              </h2>
-
               {date?.from ? (
                 <span className="text text-sm">
                   {date?.from} - {date?.to}

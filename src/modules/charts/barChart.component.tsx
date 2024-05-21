@@ -26,7 +26,7 @@ interface LineChartProps {
 }
 
 // TODO: refactorize component
-const LineChart = ({
+const BarChart = ({
   series,
   titleChart,
   keys,
@@ -50,7 +50,7 @@ const LineChart = ({
     <Chart
       options={{
         chart: {
-          type: "area",
+          type: "bar",
           stacked: true,
           toolbar: {
             show: showToolBar,
@@ -61,23 +61,38 @@ const LineChart = ({
           offsetX,
           offsetY,
         },
+        plotOptions: {
+          bar: {
+            horizontal: false,
+            columnWidth: "50%",
+            borderRadiusApplication: "end",
+            borderRadius: 6,
+          },
+        },
         legend: {
-          show: showLegend,
-          position: "bottom",
-          horizontalAlign: "right",
-          offsetX: 0,
-          offsetY: 0,
+          position: "top",
+          horizontalAlign: "left",
+          markers: {
+            radius: 100,
+            width: 12,
+            height: 12,
+            offsetX: -3,
+          },
+          offsetX: -28,
+          fontSize: "14",
+
+          fontFamily: FONT_FAMILY,
+          onItemHover: {
+            highlightDataSeries: true,
+          },
         },
         stroke: {
-          curve: "smooth",
-          width: 2.6,
+          show: true,
+          width: 4,
+          colors: ["transparent"],
         },
         fill: {
-          type: "gradient",
-          gradient: {
-            opacityFrom: 0.5,
-            opacityTo: 0.2,
-          },
+          opacity: 1,
         },
         dataLabels: {
           enabled: false,
@@ -87,69 +102,63 @@ const LineChart = ({
           shared: false,
           custom: function ({ series, seriesIndex, dataPointIndex, w }: any) {
             return `
-                <div class="bg-white px-6 py-2 flex flex-col justify-center border-[1px] dark:border-white/10 items-center dark:bg-slate-900">
-                  <span class="text-xs">${
-                    w.globals.initialSeries[seriesIndex].name
-                  }</span>
-                  <span class="font-semibold text-base">$ ${series[seriesIndex][
-                    dataPointIndex
-                  ]?.toLocaleString()}</span>
-                  
-                </div>
-              `;
+                  <div class="bg-white px-6 py-2 flex flex-col justify-center border-[1px] dark:border-white/10 items-center dark:bg-slate-900">
+                    <span class="text-xs">${
+                      w.globals.initialSeries[seriesIndex].name
+                    }</span>
+                    <span class="font-semibold text-base">$ ${series[
+                      seriesIndex
+                    ][dataPointIndex]?.toLocaleString()}</span>
+                    
+                  </div>
+                `;
           },
         },
         noData: {
           text: "Sin datos para mostrar",
         },
         grid: {
-          show: showGrid,
+          xaxis: {},
           borderColor: isDark ? "#1e293b" : "#e5e7eb",
-          strokeDashArray: 4,
-          // padding: {
-          //   top: 0,
-          // },
+          padding: {
+            top: 0,
+            left: 0,
+          },
         },
         yaxis: {
-          show: showYAxis,
-          axisBorder: {
-            show: false,
-          },
+          show: true,
           labels: {
-            // align: "right",
-            // align: "left",
+            align: "left",
             padding: 15,
-            show: true,
-            formatter: (val) => {
-              return parseAmount(val) ?? val;
-            },
+            formatter: (val, opt) => parseAmount(val) ?? val,
             style: {
-              colors: isDark ? "#64748b" : "#000",
-
               fontFamily: FONT_FAMILY,
+              colors: isDark ? "#64748b" : "#000",
               fontWeight: 600,
               fontSize: "13",
             },
           },
         },
         xaxis: {
-          categories: keys ?? [],
+          axisBorder: {
+            show: false,
+          },
+          categories: keys ? keys : [],
           labels: {
-            show: showXAxis,
             style: {
-              colors: isDark ? "#f3f4f6" : "#000",
               fontFamily: FONT_FAMILY,
+              colors: isDark ? "#f3f4f6" : "#000",
               fontWeight: 600,
             },
           },
         },
       }}
       series={series}
-      type="area"
+      type="bar"
       width="100%"
       height={heightChart}
     />
   );
 };
 
-export default LineChart;
+export default BarChart;

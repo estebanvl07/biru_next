@@ -15,17 +15,60 @@ datasource db {
 }
 
 model UserAccount {
-  id           Int           @id @default(autoincrement())
-  name         String
-  type         Int
-  balance      Int?          @default(0)
-  reference    String?
-  state        Int?          @default(1) // 1: activo, 0: inactivo
-  createdAt    DateTime      @default(now())
-  updatedAt    DateTime      @updatedAt
-  userId       String
-  transactions Transaction[]
-  user         User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id              Int           @id @default(autoincrement())
+  name            String
+  type            Int
+  balance         Int?          @default(0)
+  reference       String?
+  state           Int?          @default(1) // 1: activo, 0: inactivo
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+  userId          String
+  user            User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  transactions    Transaction[]
+  savingMovies    SavingMoves[]
+}
+
+model SavingMoves {
+  id            Int           @id @default(autoincrement())
+  amount        Int
+  type          Int // 1: Ahorro, 2: Quitar de ahorro
+  accountId     Int
+  savingId      Int
+  userId        String
+  saving        Savings       @relation(fields: [savingId], references: [id], onDelete: Cascade)
+  user          User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userAccount   UserAccount   @relation(fields: [accountId], references: [id], onDelete: Cascade)
+}
+
+model Savings {
+  id            Int       @id @default(autoincrement())
+  name          String
+  description   String?
+  icon          String?
+  target        Int
+  saved         Int
+  state         Int       @default(1) // 1:En curso, 2: Terminado, 3: Cancelado 
+  userId        String
+  goalDate      DateTime?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  savingMoves   SavingMoves[]
+}
+
+model Entities {
+  id            Int       @id @default(autoincrement())
+  name          String
+  description   String?
+  avatar        String?
+  type          Int?       // 1 : ingreso, 0: egreso
+  state         Int       @default(1) //1: activo, 0: inactivo
+  reference     String?   @unique
+  createdAt     DateTime  @default(now())
+  updateAt      DateTime  @updatedAt
+  userId        String
+  user          User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  transactions  Transaction[]
 }
 
 model Category {
@@ -51,6 +94,7 @@ model Transaction {
   date        DateTime
   recipient   String?
   description String?
+  entityId    Int?         
   categoryId  Int
   state       Int?        @default(1) // 1: activo, 0: inactivo
   createdAt   DateTime    @default(now())
@@ -58,6 +102,7 @@ model Transaction {
   user        User        @relation(fields: [userId], references: [id], onDelete: Cascade)
   userAccount UserAccount @relation(fields: [accountId], references: [id], onDelete: Cascade)
   category    Category    @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  entity      Entities?   @relation(fields: [entityId], references: [id])
 }
 
 model UserPassword {
@@ -123,6 +168,8 @@ model User {
   userAccount          UserAccount[]
   category             Category[]
   transaction          Transaction[]
+  contacts             Entities[]
+  savingMoves          SavingMoves[]
   userPassword         UserPassword?
   userVerificationCode UserVerificationCode[]
 }

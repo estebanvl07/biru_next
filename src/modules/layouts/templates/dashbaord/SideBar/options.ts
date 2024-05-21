@@ -72,16 +72,22 @@ export const menuOptions = [
     title: "Configuración",
     menus: [
       {
-        id: 2,
+        id: 1,
         name: "Categorías",
         icon: "iconamoon:category",
         href: "/category",
       },
       {
+        id: 2,
+        name: "Cuentas",
+        icon: "wpf:bank-cards",
+        href: "/all-accounts",
+      },
+      {
         id: 3,
-        name: "Contactos",
+        name: "Entidades",
         icon: "lets-icons:user",
-        href: "/users",
+        href: "/entities",
       },
     ],
   },

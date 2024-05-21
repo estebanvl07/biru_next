@@ -12,7 +12,7 @@ type Props = {
 
 const ListTransactions = React.memo(({ data, emptyText, maxLength }: Props) => {
   return (
-    <ul className="scrollbar-customize flex h-fit w-full flex-col overflow-auto rounded-md border-black/20 bg-transparent text-sm dark:border-white/10 dark:bg-slate-900">
+    <ul className="scrollbar-customize flex h-fit w-full flex-col overflow-auto rounded-md  bg-transparent text-sm">
       {data?.map((item, index) => {
         if (index + 1 > 4) return null;
         return (

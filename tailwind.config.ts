@@ -5,7 +5,7 @@ import { fontFamily } from "tailwindcss/defaultTheme";
 export default {
   content: [
     "./src/**/*.tsx",
-    "./node_modules/@nextui-org/theme/dist/components/(badge|button|calendar|input|listbox|modal|pagination|select|spinner|table|ripple|divider|popover|scroll-shadow|checkbox|spacer).js",
+    "./node_modules/@nextui-org/theme/dist/components/(badge|button|calendar|input|listbox|modal|pagination|radio|select|spinner|table|user|ripple|divider|popover|scroll-shadow|checkbox|spacer|avatar).js",
   ],
   darkMode: "selector",
   theme: {

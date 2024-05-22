@@ -1,5 +1,6 @@
 import Head from "next/head";
 import { HeaderApp, SideBar } from "./templates/dashbaord";
+import { api } from "~/utils/api";
 
 const DashboardLayout = ({
   children,

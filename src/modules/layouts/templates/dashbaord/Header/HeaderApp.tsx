@@ -5,11 +5,20 @@ import { usePathname } from "next/navigation";
 import NavigationBack from "./NavigationBack";
 import { useCurrentAccount } from "~/modules/Account/hooks";
 import FilterTemplates from "./FilterTemplates";
+import { api } from "~/utils/api";
 
 const HeaderApp = ({ title }: { title?: string }) => {
   const pathname = usePathname();
-
   const { account } = useCurrentAccount();
+
+  api.transaction.onCreate.useSubscription(undefined, {
+    onData(transaction) {
+      console.log(transaction);
+    },
+    onError(err) {
+      console.log(err);
+    },
+  });
 
   return (
     <header className="z-10 mb-2 flex w-full items-center justify-between bg-white md:h-16 dark:border-white/10 dark:bg-slate-950">

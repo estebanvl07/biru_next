@@ -30,8 +30,6 @@ const TransactionPage = () => {
   const params = useParams<{ acc: string }>();
   const { transactions } = useTransactions();
 
-  console.log(transactions);
-
   const renderCell = useCallback(
     (transaction: TransactionsIncludes, columnKey: React.Key) => {
       const cellValue = transaction[columnKey as keyof TransactionsIncludes];

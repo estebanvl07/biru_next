@@ -61,7 +61,6 @@ const NewTransactionPage = () => {
   const onSubmit = (data: createTransaction) => {
     createTransactionMutation(data, {
       onSuccess(data, variables, context) {
-        console.log(data);
         router.back();
       },
       onError(error, variables, context) {

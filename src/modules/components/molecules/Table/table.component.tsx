@@ -18,12 +18,14 @@ import BottomContent from "./BottomContent";
 import { useCallback, useMemo, useState } from "react";
 
 import { useSearch } from "~/lib/hooks";
+import { LoaderSkeleton } from "~/modules/Loaders";
 
 const DataTable = <T,>({
   headerConfig,
   columns,
   hasNew,
   data,
+  isLoading = false,
   renderCell,
   hasTopContent = true,
   hasBottomContent = true,
@@ -80,72 +82,78 @@ const DataTable = <T,>({
   }, [page]);
 
   return (
-    <Table
-      className="dark:text-white"
-      color="primary"
-      isHeaderSticky
-      aria-label="Data table"
-      align="left"
-      selectionMode="none"
-      topContentPlacement="outside"
-      topContent={
-        hasTopContent && (
-          <TopContent
-            {...headerConfig}
-            newButtonText={buttonNewText}
-            redirectTo={buttonNewLink}
-            lenght={data.length}
-            filterValue={filterValue}
-            hasNew={hasNew}
-            setFilterValue={setFilterValue}
-            setPage={setPage}
-            setRowsPerPage={setRowsPerPage}
-          />
-        )
-      }
-      bottomContent={
-        hasBottomContent && (
-          <BottomContent
-            page={page}
-            setPage={setPage}
-            onNextPage={onNextPage}
-            onPreviousPage={onPreviousPage}
-            pages={pages}
-          />
-        )
-      }
-      bottomContentPlacement="outside"
-    >
-      <TableHeader
-        className="dark:!bg-default-200 dark:shadow-none"
-        columns={columns}
-      >
-        {({ uid, align, sorting, name }) => (
-          <TableColumn
-            key={uid}
-            align={align ?? "start"}
-            allowsSorting={sorting}
+    <>
+      {isLoading ? (
+        <LoaderSkeleton skeletonType="Table" />
+      ) : (
+        <Table
+          className="dark:text-white"
+          color="primary"
+          isHeaderSticky
+          aria-label="Data table"
+          align="left"
+          selectionMode="none"
+          topContentPlacement="outside"
+          topContent={
+            hasTopContent && (
+              <TopContent
+                {...headerConfig}
+                newButtonText={buttonNewText}
+                redirectTo={buttonNewLink}
+                lenght={data.length}
+                filterValue={filterValue}
+                hasNew={hasNew}
+                setFilterValue={setFilterValue}
+                setPage={setPage}
+                setRowsPerPage={setRowsPerPage}
+              />
+            )
+          }
+          bottomContent={
+            hasBottomContent && (
+              <BottomContent
+                page={page}
+                setPage={setPage}
+                onNextPage={onNextPage}
+                onPreviousPage={onPreviousPage}
+                pages={pages}
+              />
+            )
+          }
+          bottomContentPlacement="outside"
+        >
+          <TableHeader
+            className="dark:!bg-default-200 dark:shadow-none"
+            columns={columns}
           >
-            {name}
-          </TableColumn>
-        )}
-      </TableHeader>
-      <TableBody items={sortedItems} emptyContent="Data not found">
-        {(item: any) => (
-          <TableRow key={item.name}>
-            {(columnKey) => {
-              return (
-                <TableCell>
-                  {renderCell
-                    ? renderCell(item, columnKey)
-                    : getKeyValue(item, columnKey)}
-                </TableCell>
-              );
-            }}
-          </TableRow>
-        )}
-      </TableBody>
-    </Table>
+            {({ uid, align, sorting, name }) => (
+              <TableColumn
+                key={uid}
+                align={align ?? "start"}
+                allowsSorting={sorting}
+              >
+                {name}
+              </TableColumn>
+            )}
+          </TableHeader>
+          <TableBody items={sortedItems} emptyContent="Data not found">
+            {(item: any) => (
+              <TableRow key={item.name}>
+                {(columnKey) => {
+                  return (
+                    <TableCell>
+                      {renderCell
+                        ? renderCell(item, columnKey)
+                        : getKeyValue(item, columnKey)}
+                    </TableCell>
+                  );
+                }}
+              </TableRow>
+            )}
+          </TableBody>
+        </Table>
+      )}
+    </>
   );
 };
 

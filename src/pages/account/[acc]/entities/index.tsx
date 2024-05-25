@@ -9,10 +9,15 @@ import { Entities } from "@prisma/client";
 import { Chip, User } from "@nextui-org/react";
 import { format } from "date-fns";
 import { es } from "date-fns/locale";
+import { useResize } from "~/lib/hooks/useResize";
+import MobileEntityPage from "~/modules/Entities/MobileEntityContent";
 
 export default function EntitiesPage() {
   const params = useParams();
-  const { entities } = useEntity();
+  const { entities, isLoading } = useEntity();
+  const { size } = useResize();
+
+  const isMobile = Boolean(size && size <= 768);
 
   const renderCell = useCallback((entity: Entities, columnKey: React.Key) => {
     const cellValue = entity[columnKey as keyof Entities];
@@ -56,16 +61,21 @@ export default function EntitiesPage() {
 
   return (
     <DashboardLayout title="Entidades">
-      <Table
-        headerConfig={{
-          title: "",
-          keySearch: ["name"],
-        }}
-        buttonNewLink={`/account/${Number(params?.acc)}/entities/new`}
-        columns={columns}
-        renderCell={renderCell}
-        data={entities ?? []}
-      />
+      {!isMobile ? (
+        <Table
+          headerConfig={{
+            title: "",
+            keySearch: ["name"],
+          }}
+          buttonNewLink={`/account/${Number(params?.acc)}/entities/new`}
+          columns={columns}
+          isLoading={isLoading}
+          renderCell={renderCell}
+          data={entities ?? []}
+        />
+      ) : (
+        <MobileEntityPage entities={entities} />
+      )}
     </DashboardLayout>
   );
 }

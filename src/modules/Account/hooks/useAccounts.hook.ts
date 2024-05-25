@@ -12,11 +12,14 @@ export const useAccounts = () => {
     return Boolean(accountsCache);
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
-  const { data: accounts = [] } = api.userAccount.getAll.useQuery(undefined, {
-    enabled: !hasAccountCached,
-  });
+  const { data: accounts = [], isLoading } = api.userAccount.getAll.useQuery(
+    undefined,
+    {
+      enabled: !hasAccountCached,
+    },
+  );
 
-  return { accounts };
+  return { accounts, isLoading };
 };
 
 export const useCurrentAccount = () => {
@@ -36,7 +39,7 @@ export const useCurrentAccount = () => {
     return Boolean(accountCache);
   }, [accountId]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  const { data } = api.userAccount.getOne.useQuery(
+  const { data, isLoading } = api.userAccount.getOne.useQuery(
     {
       id: accountId!,
     },
@@ -45,5 +48,5 @@ export const useCurrentAccount = () => {
     },
   );
 
-  return { account: data! };
+  return { account: data!, isLoading };
 };

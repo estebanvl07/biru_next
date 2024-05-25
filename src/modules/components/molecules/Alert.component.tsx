@@ -42,31 +42,32 @@ export const Alert = ({
   const propsAlert = {
     success: {
       icon: "mdi:checkbox-marked-circle-outline",
-      color: "green-400",
+      color: "text-green-400",
       title: "¡Éxito!",
       description: "Se ha completado esta acción con éxtio",
     },
     error: {
       icon: "material-symbols:dangerous-outline",
-      color: "red-500",
+      color: "text-red-500",
       title: "¡Error!",
       description: "Hubo un error, vuelve a intentarlo",
     },
     warning: {
       icon: "mi:warning",
-      color: "yellow-400",
+      color: "text-yellow-400",
       title: "¡Cuidado!",
       description: "Ésta acción puede tener consecuencias",
     },
     info: {
       icon: "solar:info-circle-broken",
-      color: "slate-400",
+      color: "text-slate-400",
       title: "¿Ayuda?",
       description: "Dirigete a nuestro centro de ayudas",
     },
     quest: {
       icon: "codicon:question",
-      color: "slate-400",
+      textColor: "text-slate-400",
+      color: "text-slate-400",
       title: "Confirmar Acción",
       description: "Esta seguro de realizar esta acción",
     },
@@ -84,7 +85,7 @@ export const Alert = ({
         <ModalBody className="flex flex-col items-center justify-center gap-1 pb-6 pt-4">
           <Icon
             icon={propsAlert.icon}
-            className={`text-${propsAlert.color}`}
+            className={propsAlert.color}
             width={80}
           />
           {body ? (
@@ -99,6 +100,7 @@ export const Alert = ({
         <ModalFooter className="flex flex-row items-center justify-center pt-0">
           {confirm && (
             <Button
+              type="button"
               onClick={(e) => {
                 onClose();
                 confirmProps?.onClick && confirmProps?.onClick(e);
@@ -115,6 +117,7 @@ export const Alert = ({
           )}
           {cancel && (
             <Button
+              type="button"
               onClick={(e) => {
                 onClose();
                 cancelProps?.onClick && cancelProps?.onClick(e);

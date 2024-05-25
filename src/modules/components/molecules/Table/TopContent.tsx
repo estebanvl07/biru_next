@@ -59,12 +59,12 @@ const TopContent = React.memo(
             />
           )}
           <div className="flex gap-3">
-            {hasExport && (
+            {/* {hasExport && (
               <Button variantStyle="outline" className="!border">
                 <Icon icon="mingcute:file-export-line" width={18} />
                 Exportar
               </Button>
-            )}
+            )} */}
             {hasNew && (
               <Button>
                 <Link

@@ -8,13 +8,16 @@ import { Icon } from "@iconify/react/dist/iconify.js";
 import { Button, Listbox, ListboxItem } from "@nextui-org/react";
 
 import type { ListMenu } from "~/types/root.types";
+import { useResize } from "~/lib/hooks/useResize";
 
 const CreationMenu = () => {
   const router = useRouter();
   const { acc } = useParams();
-  const ref = useOutsideClick<HTMLDivElement>(() => setShowMenu(false));
 
   const [showMenu, setShowMenu] = useState(false);
+
+  const ref = useOutsideClick<HTMLDivElement>(() => setShowMenu(false));
+  const { isDesktop } = useResize();
 
   const BASIC_URL = `/account/${acc}/`;
 
@@ -53,6 +56,7 @@ const CreationMenu = () => {
       <Button
         color="primary"
         radius="full"
+        isIconOnly={!isDesktop}
         title="Crear"
         onClick={() => setShowMenu(!showMenu)}
       >
@@ -61,7 +65,7 @@ const CreationMenu = () => {
           className="text-primary-lighter"
           width={22}
         />
-        Crear
+        {isDesktop && "Crear"}
       </Button>
       {showMenu && (
         <div className="absolute right-0 top-12 w-[165px] rounded-small border-small border-default-200 bg-white/80 backdrop-blur-md  dark:border-default-100 dark:border-white/5 dark:bg-slate-900/80">

@@ -14,7 +14,7 @@ const ListTransactions = React.memo(({ data, emptyText, maxLength }: Props) => {
   return (
     <ul className="scrollbar-customize flex h-fit w-full flex-col overflow-auto rounded-md  bg-transparent text-sm">
       {data?.map((item, index) => {
-        if (index + 1 > 4) return null;
+        if (maxLength && index + 1 > maxLength) return null;
         return (
           <TransactionItem
             key={item.id}

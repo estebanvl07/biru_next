@@ -1,7 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { options } from "./filterOptions";
 import {
-  Button,
   DateValue,
   RangeCalendar,
   Select,
@@ -9,11 +8,9 @@ import {
 } from "@nextui-org/react";
 
 import { Icon } from "@iconify/react/dist/iconify.js";
-import Modal from "~/modules/components/atoms/Modal.component";
 import type { RangeValue } from "@nextui-org/react";
 import { AnimatePresence, motion } from "framer-motion";
 import { useOutsideClick } from "~/lib/hooks";
-import { start } from "repl";
 
 const FilterTemplates = () => {
   const [hasCalendar, setHasCalendar] = useState(false);
@@ -92,7 +89,7 @@ const FilterTemplates = () => {
         </motion.div>
       )}
       <Select
-        className="w-48"
+        className="w-32 lg:w-48"
         defaultSelectedKeys={[1]}
         aria-label="Select filter templates"
         startContent={

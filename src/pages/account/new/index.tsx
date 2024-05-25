@@ -33,7 +33,6 @@ const optionsTypeAccount = [
 
 const CreateAccount = ({ hasEdit = false }: { hasEdit?: boolean }) => {
   const router = useRouter();
-  const params = useParams<{ first: string }>();
 
   const userAccount = api.userAccount.create.useMutation();
 
@@ -58,18 +57,16 @@ const CreateAccount = ({ hasEdit = false }: { hasEdit?: boolean }) => {
     );
   };
 
-  console.log(params);
-
   return (
     <WhitoutSideBar title="Crear Cuenta">
-      <div className="flex w-full items-center justify-center">
+      <div className="mt-4 flex w-full items-center justify-center">
         <form
           className="flex w-full  max-w-[32rem] flex-col items-center justify-center gap-2 pt-6 md:pt-0"
           onSubmit={handleSubmit(onsubmit)}
         >
           <h2>Inscribir cuenta</h2>
           <p className="mb-2 text-center md:max-w-[80%]">
-            Inscribe las cuentas que tengas disponibles, y llevar más ordenado
+            Inscribe las cuentas que tengas disponibles, y lleva más ordenado
             tus ingresos
           </p>
           <Input

@@ -33,5 +33,6 @@ export interface TableProps<T> {
   filterKeys?: string | string[];
   renderCell?: (item: any, columnKey: any) => void;
   inputPlaceholder?: string;
+  isLoading?: boolean;
   data: T[];
 }

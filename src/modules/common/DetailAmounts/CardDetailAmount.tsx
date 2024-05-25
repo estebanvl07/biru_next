@@ -2,6 +2,7 @@ import clsx from "clsx";
 import { Card, Empty } from "~/modules/components";
 import { LineChart } from "~/modules/charts";
 import { Series } from "~/types/root.types";
+import { useResize } from "~/lib/hooks/useResize";
 
 type Props = {
   cardClassName?: string;
@@ -25,6 +26,8 @@ const CardDetailAmount = ({
   series,
   cardClassName,
 }: Props) => {
+  const { size } = useResize();
+
   return (
     <Card
       className={clsx("flex !h-full flex-grow overflow-hidden", cardClassName)}

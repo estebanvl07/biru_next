@@ -1,10 +1,13 @@
+import withAuthRedirect from "~/lib/helpers/withAuthRedirect";
 import { Landing } from "~/modules/Landing";
 import { BasicLayout } from "~/modules/layouts";
 
-export default function Home() {
+const Home = () => {
   return (
     <BasicLayout>
       <Landing />
     </BasicLayout>
   );
-}
+};
+
+export default withAuthRedirect(Home);

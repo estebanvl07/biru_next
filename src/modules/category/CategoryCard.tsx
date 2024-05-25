@@ -1,6 +1,10 @@
 import clsx from "clsx";
 import { motion } from "framer-motion";
+
 import { Icon } from "@iconify/react/dist/iconify.js";
+
+import { groupedAnimation } from "../animations";
+
 import { type Category } from "@prisma/client";
 
 type CategoryCardProps = {
@@ -8,14 +12,6 @@ type CategoryCardProps = {
   onClick: () => void;
   className?: string;
   iconClassName?: string;
-};
-
-const item = {
-  hidden: { y: 20, opacity: 0 },
-  visible: {
-    y: 0,
-    opacity: 1,
-  },
 };
 
 const CategotyCard = ({
@@ -27,14 +23,17 @@ const CategotyCard = ({
   const { icon, name, description, state } = category;
   return (
     <motion.article
-      variants={item}
+      variants={groupedAnimation.item}
       className={clsx(
-        "relative flex w-full cursor-pointer flex-col items-center justify-start gap-4 rounded-lg border bg-white px-6 py-8 shadow-md transition-all hover:scale-105 hover:border-indigo-300 md:w-32 dark:border-white/10 dark:bg-slate-900 dark:shadow-2xl hover:dark:border-indigo-400",
+        "relative flex w-full cursor-pointer flex-col items-center justify-start gap-4 rounded-lg bg-default-50 px-6 py-8 transition-all hover:scale-105 hover:border-indigo-300 md:w-32 dark:bg-slate-900 dark:shadow-2xl hover:dark:border-indigo-400",
         className,
         {
           "bg-black/5 dark:bg-white/5": state === 2,
         },
       )}
+      whileHover={{
+        scale: 1.04,
+      }}
       onClick={onClick}
       title={description ?? "Sin descripción"}
     >

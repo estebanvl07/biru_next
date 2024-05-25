@@ -1,4 +1,8 @@
-import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
+import {
+  createTRPCRouter,
+  protectedProcedure,
+  publicProcedure,
+} from "~/server/api/trpc";
 import * as usersServices from "~/server/api/services/users.services";
 import { registerUserInput } from "~/modules/Register/resolver";
 import { Z_STRING } from "~/lib/resolver/zod";

@@ -11,9 +11,12 @@ export const useEntity = () => {
     return Boolean(entitiesCache);
   }, []);
 
-  const { data: entities = [] } = api.entity.getEntities.useQuery(undefined, {
-    enabled: !hasEntities,
-  });
+  const { data: entities = [], isLoading } = api.entity.getEntities.useQuery(
+    undefined,
+    {
+      enabled: !hasEntities,
+    },
+  );
 
-  return { entities };
+  return { entities, isLoading };
 };

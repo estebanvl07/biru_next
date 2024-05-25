@@ -5,7 +5,7 @@ import { fontFamily } from "tailwindcss/defaultTheme";
 export default {
   content: [
     "./src/**/*.tsx",
-    "./node_modules/@nextui-org/theme/dist/components/(badge|button|calendar|input|listbox|modal|pagination|radio|select|spinner|table|user|ripple|divider|popover|scroll-shadow|checkbox|spacer|avatar).js",
+    "./node_modules/@nextui-org/theme/dist/components/(badge|button|calendar|input|listbox|modal|pagination|progress|radio|select|skeleton|spinner|table|user|ripple|divider|popover|scroll-shadow|checkbox|spacer|avatar).js",
   ],
   darkMode: "selector",
   theme: {
@@ -36,6 +36,7 @@ export default {
         light: {
           colors: {
             default: {
+              DEFAULT: "#e2e8f0",
               50: "#f8fafc",
               100: "#f1f5f9",
               200: "#e2e8f0",
@@ -47,6 +48,7 @@ export default {
           colors: {
             content1: "#0f172a",
             default: {
+              DEFAULT: "#1e293b",
               50: "#1e293b",
               100: "#1e293b",
               200: "#0f172a",

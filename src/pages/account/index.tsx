@@ -7,7 +7,6 @@ import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 
 import AccountCard from "~/modules/Account/AccountCard";
-import { Button } from "~/modules/components";
 import { HeaderApp } from "~/modules/layouts/templates/dashbaord";
 
 import type { GetServerSideProps } from "next";
@@ -17,6 +16,9 @@ import DashboardLayout from "~/modules/layouts/Dashboard";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import WhitoutSideBar from "~/modules/layouts/templates/dashbaord/whitout-sidebar";
 import Head from "next/head";
+import { useResize } from "~/lib/hooks/useResize";
+import HeaderMobile from "~/modules/layouts/templates/dashbaord/Header/HeaderMobile";
+import { Button } from "@nextui-org/button";
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const helpers = await createServerSideCaller(ctx);
@@ -56,6 +58,7 @@ const container = {
 const AccountPage = () => {
   const router = useRouter();
   const { accounts } = useAccounts();
+  const { isMobile, isDesktop } = useResize();
   const { data: session } = useSession();
 
   const navigateAccount = (id: number) => router.push(`/account/${id}/main`);
@@ -96,22 +99,29 @@ const AccountPage = () => {
             </p>
           </div>
         </aside>
-        <section className="col-span-6 flex flex-col justify-start px-12 py-4 lg:col-span-4">
-          <HeaderApp title="Cuentas" />
-          <div className="flex h-full flex-col">
+        <section className="col-span-6 flex flex-col justify-start px-4 py-4 md:px-12 lg:col-span-4">
+          {isDesktop ? (
+            <HeaderApp title="Cuentas" />
+          ) : (
+            <HeaderMobile title="Cuentas" />
+          )}
+
+          <div className="mt-4 flex h-full flex-col">
             <header className="flex items-center justify-between">
-              <aside>
-                <h2>Mis cuentas</h2>
-                <p>Seleccione alguna de sus cuentas para continuar.</p>
-              </aside>
-              <Button type="button" className="mt-4">
-                <Link href="/account/new" className="w-fit">
-                  Crear cuenta
-                </Link>
+              <h3>Mis cuentas</h3>
+              <Button
+                color="primary"
+                variant="flat"
+                type="button"
+                as={Link}
+                href="/account/new"
+                isIconOnly={isMobile}
+              >
+                <Icon icon="ph:plus" width={18} /> {!isMobile && "Crear Cuenta"}
               </Button>
             </header>
             <motion.div
-              className="mt-4 flex flex-wrap gap-2 py-2"
+              className="mt-2 flex flex-wrap gap-2 py-2"
               variants={container}
               initial="hidden"
               animate="visible"

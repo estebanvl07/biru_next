@@ -21,9 +21,20 @@ export const menuOptions = [
         icon: "mingcute:transfer-fill",
         href: "/transactions",
       },
-
+      {
+        id: 2,
+        name: "Entidades",
+        icon: "lets-icons:user",
+        href: "/entities",
+      },
       {
         id: 3,
+        name: "Ahorros",
+        icon: "material-symbols:savings-outline",
+        href: "/saving",
+      },
+      {
+        id: 4,
         name: "Análisis",
         icon: "material-symbols:analytics-outline",
         href: "/analytics",
@@ -45,12 +56,6 @@ export const menuOptions = [
       //   id: 7,
       //   name: "Inversiones",
       //   icon: "streamline:investment-selection",
-      //   href: "/bills",
-      // },
-      // {
-      //   id: 8,
-      //   name: "Ahorros",
-      //   icon: "ic:outline-savings",
       //   href: "/bills",
       // },
       // {
@@ -77,18 +82,46 @@ export const menuOptions = [
         icon: "iconamoon:category",
         href: "/category",
       },
+
       {
-        id: 2,
+        id: 4,
         name: "Cuentas",
         icon: "wpf:bank-cards",
         href: "/all-accounts",
       },
-      {
-        id: 3,
-        name: "Entidades",
-        icon: "lets-icons:user",
-        href: "/entities",
-      },
     ],
+  },
+];
+
+export const mobileOptions = [
+  {
+    id: 1,
+    name: "Ahorros",
+    icon: "material-symbols:savings-outline",
+    href: "/saving",
+  },
+  {
+    id: 2,
+    name: "Transacciones",
+    icon: "mingcute:transfer-fill",
+    href: "/transactions",
+  },
+  {
+    id: 5,
+    name: "Dashboard",
+    icon: "akar-icons:dashboard",
+    href: "/main",
+  },
+  {
+    id: 3,
+    name: "Entidades",
+    icon: "lets-icons:user",
+    href: "/entities",
+  },
+  {
+    id: 4,
+    name: "Categorías",
+    icon: "iconamoon:category",
+    href: "/category",
   },
 ];

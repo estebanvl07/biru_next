@@ -1,12 +1,10 @@
-import { Z_STRING, updateSchema, z } from "~/lib/resolver/zod";
+import { Z_NUMBER, Z_STRING, updateSchema, z } from "~/lib/resolver/zod";
 
 export const input = {
   name: Z_STRING,
-  type: z.union([z.literal("1"), z.literal("2")], {
-    required_error: "Campo Requerido",
-  }),
-  icon: Z_STRING,
-  description: Z_STRING.optional(),
+  type: Z_NUMBER,
+  description: Z_STRING,
+  icon: z.optional(Z_STRING),
 };
 
 export const createCategory = z.object(input);

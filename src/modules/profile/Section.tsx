@@ -1,9 +1,18 @@
-import React from "react";
-import { Button } from "~/modules/components";
+import React, { ReactElement } from "react";
+
+import { Icon } from "@iconify/react/dist/iconify.js";
+import { Listbox, ListboxItem } from "@nextui-org/listbox";
 
 interface SectionsProps {
   title?: string;
-  options: any[];
+  options: {
+    id: number;
+    onclick?: () => void;
+    text: string;
+    startContent?: ReactElement;
+    endContent?: ReactElement;
+    href?: string;
+  }[];
 }
 
 const Section = ({ title, options }: SectionsProps) => {
@@ -14,25 +23,31 @@ const Section = ({ title, options }: SectionsProps) => {
           {title}
         </h4>
       )}
-      <ul className="rounded-lg bg-white dark:bg-slate-900">
+      <Listbox aria-label="setting option">
         {options.map((item, index) => {
           return (
-            <li key={item.id} className="flex justify-between !px-6 !py-3">
-              <Button
-                variantStyle="empty"
-                className="flex w-full justify-between !text-base "
-                onClick={item.onclick}
-              >
-                {item.text}
-              </Button>
-              {item.icon}
-              {index + 1 !== options.length && (
-                <hr className="mx-4 bg-slate-50 dark:opacity-20" />
-              )}
-            </li>
+            <ListboxItem
+              key={item.id}
+              variant="flat"
+              href={item.href ?? undefined}
+              startContent={item.startContent}
+              endContent={
+                item.endContent ? (
+                  item.endContent
+                ) : (
+                  <Icon icon="mingcute:right-line" width={24} />
+                )
+              }
+              onClick={() => {
+                item.onclick && item.onclick();
+              }}
+              className="flex items-center gap-2"
+            >
+              {item.text}
+            </ListboxItem>
           );
         })}
-      </ul>
+      </Listbox>
     </section>
   );
 };

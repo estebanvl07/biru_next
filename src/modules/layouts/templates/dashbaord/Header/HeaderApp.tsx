@@ -1,49 +1,28 @@
-import clsx from "clsx";
+import { usePathname } from "next/navigation";
 
 import Nav from "./Nav";
-import { usePathname } from "next/navigation";
 import NavigationBack from "./NavigationBack";
-import { useCurrentAccount } from "~/modules/Account/hooks";
-import FilterTemplates from "./FilterTemplates";
-import { api } from "~/utils/api";
 
-const HeaderApp = ({ title }: { title?: string }) => {
+import { useCurrentAccount } from "~/modules/Account/hooks";
+
+const HeaderApp = ({ title = "Dashboard" }: { title?: string }) => {
   const pathname = usePathname();
   const { account } = useCurrentAccount();
 
-  api.transaction.onCreate.useSubscription(undefined, {
-    onData(transaction) {
-      console.log(transaction);
-    },
-    onError(err) {
-      console.log(err);
-    },
-  });
-
   return (
-    <header className="z-10 mb-2 flex w-full items-center justify-between bg-white md:h-16 dark:border-white/10 dark:bg-slate-950">
-      <section className="flex w-full flex-grow items-center justify-between">
-        <section className="flex items-center gap-3">
-          {!pathname?.includes("main") && <NavigationBack />}
-          <div
-            className={clsx("flex flex-col items-start justify-center", {
-              // "!pl-7": location.pathname === "/home",
-            })}
-          >
-            <span className="text-gray-600 dark:text-slate-200">
-              {account?.name}
-            </span>
-            <h1
-              className={clsx(
-                "text-start text-2xl font-semibold text-primary dark:text-slate-200",
-              )}
-            >
-              {title ?? "Dashboard"}
-            </h1>
-          </div>
-        </section>
-        <Nav />
-      </section>
+    <header className="z-10 mb-2 flex w-full items-center justify-between md:h-16">
+      <aside className="flex items-center gap-3">
+        {!pathname?.includes("main") && <NavigationBack />}
+        <div className="flex flex-col items-start justify-center">
+          <span className="text-gray-600 dark:text-slate-200">
+            {account?.name}
+          </span>
+          <h1 className="text-start text-xl font-semibold text-primary lg:text-2xl dark:text-slate-200">
+            {title}
+          </h1>
+        </div>
+      </aside>
+      <Nav />
     </header>
   );
 };

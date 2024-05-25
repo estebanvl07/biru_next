@@ -14,7 +14,6 @@ import {
 import { createTRPCNext } from "@trpc/next";
 import { ssrPrepass } from "@trpc/next/ssrPrepass";
 import { type inferRouterInputs, type inferRouterOutputs } from "@trpc/server";
-import { NextPageContext } from "next";
 import getConfig from "next/config";
 import superjson from "superjson";
 
@@ -27,7 +26,7 @@ const getBaseUrl = () => {
 };
 
 const { publicRuntimeConfig } = getConfig();
-const { WS_URL } = publicRuntimeConfig;
+const { WS_URL, APP_URL } = publicRuntimeConfig;
 
 function getEndingLink(): TRPCLink<AppRouter> {
   const client = createWSClient({
@@ -42,6 +41,8 @@ function getEndingLink(): TRPCLink<AppRouter> {
   });
 }
 
+console.log(getBaseUrl());
+
 /** A set of type-safe react-query hooks for your tRPC API. */
 export const api = createTRPCNext<AppRouter>({
   config() {
@@ -51,6 +52,7 @@ export const api = createTRPCNext<AppRouter>({
        *
        * @see https://trpc.io/docs/links
        */
+      ssrPrepass,
       links: [
         loggerLink({
           enabled: (opts) =>
@@ -64,7 +66,7 @@ export const api = createTRPCNext<AppRouter>({
            * @see https://trpc.io/docs/data-transformers
            */
           transformer: superjson,
-          url: `${getBaseUrl()}/api/trpc`,
+          url: `${APP_URL}/api/trpc`,
         }),
         getEndingLink(),
       ],

@@ -1,4 +1,5 @@
 import Link from "next/link";
+import withAuthRedirect from "~/lib/helpers/withAuthRedirect";
 import { SignInOptions } from "~/modules/components";
 import { BasicLayout } from "~/modules/layouts";
 import { LoginForm } from "~/modules/Login";
@@ -31,4 +32,4 @@ const LoginPage = () => {
   );
 };
 
-export default LoginPage;
+export default withAuthRedirect(LoginPage);

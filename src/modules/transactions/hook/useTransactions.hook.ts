@@ -46,14 +46,14 @@ export const useTransactions = () => {
     return Boolean(transactionCache);
   }, []);
 
-  const { data } = api.transaction.getTransactions.useQuery(
+  const { data, isLoading } = api.transaction.getTransactions.useQuery(
     { accountId: accountId as any },
     {
       enabled: !!accountId && !hasTransactionsCached,
     },
   );
 
-  return { transactions: data! };
+  return { transactions: data!, isLoading };
 };
 
 export const getMonths = (transactions: Transaction[]) => {

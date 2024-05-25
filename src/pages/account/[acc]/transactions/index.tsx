@@ -6,7 +6,7 @@ import DashboardLayout from "~/modules/layouts/Dashboard";
 import { Table } from "~/modules/components";
 
 import { columns } from "~/modules/transactions/table";
-import { Avatar, Chip, User } from "@nextui-org/react";
+import { Avatar, Chip, CircularProgress } from "@nextui-org/react";
 
 import { format } from "date-fns";
 import { es } from "date-fns/locale";
@@ -19,6 +19,9 @@ import type {
   UserAccount,
   Entities,
 } from "@prisma/client";
+import { useResize } from "~/lib/hooks/useResize";
+import { ListTransactions } from "~/modules/common";
+import MobileTransactionPage from "~/modules/transactions/MobileTransactionPage";
 
 type TransactionsIncludes = Transaction & {
   category: Category;
@@ -28,7 +31,10 @@ type TransactionsIncludes = Transaction & {
 
 const TransactionPage = () => {
   const params = useParams<{ acc: string }>();
-  const { transactions } = useTransactions();
+  const { transactions, isLoading } = useTransactions();
+  const { size } = useResize();
+
+  const isMobile = Boolean(size && size <= 768);
 
   const renderCell = useCallback(
     (transaction: TransactionsIncludes, columnKey: React.Key) => {
@@ -123,19 +129,24 @@ const TransactionPage = () => {
 
   return (
     <DashboardLayout title="Transacciones">
-      <Table
-        headerConfig={{
-          title: "",
-          keySearch: ["title"],
-        }}
-        buttonNewLink={`/account/${Number(params?.acc)}/transactions/new`}
-        buttonNewText="Crear transacción"
-        columns={columns}
-        filterKeys={["description", "amount"]}
-        data={transactions ?? []}
-        renderCell={renderCell}
-        hasNew
-      />
+      {!isMobile ? (
+        <Table
+          headerConfig={{
+            title: "",
+            keySearch: ["title"],
+          }}
+          buttonNewLink={`/account/${Number(params?.acc)}/transactions/new`}
+          buttonNewText="Crear transacción"
+          columns={columns}
+          filterKeys={["description", "amount"]}
+          isLoading={isLoading}
+          data={transactions ?? []}
+          renderCell={renderCell}
+          hasNew
+        />
+      ) : (
+        <MobileTransactionPage transactions={transactions ?? []} />
+      )}
     </DashboardLayout>
   );
 };

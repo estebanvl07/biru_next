@@ -16,6 +16,7 @@ import {
   registerUserInput,
   type RegisterUserInputType,
 } from "~/modules/Register/resolver";
+import withAuthRedirect from "~/lib/helpers/withAuthRedirect";
 
 const Register = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -143,4 +144,4 @@ const Register = () => {
   );
 };
 
-export default Register;
+export default withAuthRedirect(Register);

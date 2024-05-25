@@ -25,7 +25,7 @@ const AnalyticsPage = () => {
           <PieChartAmountByCategoires />
         </article>
         <article className="col-span-6">
-          <LastTransactions />
+          <LastTransactions transactionsMaxLength={5} />
         </article>
         <article className="col-span-6">
           <CategoriesPercent />

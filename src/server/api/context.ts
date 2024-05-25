@@ -1,7 +1,11 @@
 import type { CreateNextContextOptions } from "@trpc/server/adapters/next";
 import type { CreateWSSContextFnOptions } from "@trpc/server/adapters/ws";
+import EventEmitter from "events";
+
 import { getSession } from "next-auth/react";
 import { db } from "../db";
+
+const ee = new EventEmitter();
 
 /**
  * Creates context for an incoming request
@@ -10,13 +14,17 @@ import { db } from "../db";
 export const createContext = async (
   opts: CreateNextContextOptions | CreateWSSContextFnOptions,
 ) => {
-  const session = await getSession(opts);
+  const req = opts?.req;
+  const res = opts?.res;
 
-  console.log("createContext for", session?.user?.name ?? "unknown user");
+  const session = await getSession({ req });
 
   return {
+    req,
+    res,
     session,
     db,
+    ee,
   };
 };
 

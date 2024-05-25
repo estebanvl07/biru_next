@@ -1,12 +1,10 @@
-import Link from "next/link";
-import React from "react";
-import { Icon } from "@iconify/react/dist/iconify.js";
-import { motion } from "framer-motion";
 import { signOut } from "next-auth/react";
+import { motion } from "framer-motion";
+import { Icon } from "@iconify/react/dist/iconify.js";
 
-import type { ListMenu } from "~/types/root.types";
 import { CALLBACK_SIGN_OUT_URL } from "~/lib/constants/config";
 import AccountsOptions from "./AccountsOptions";
+import type { ListMenu } from "~/types/root.types";
 
 import { Listbox, ListboxItem } from "@nextui-org/react";
 import { useRouter } from "next/router";
@@ -14,12 +12,12 @@ import { useRouter } from "next/router";
 const OPTIONS: ListMenu[] = [
   {
     label: "Perfil",
-    href: "/profile",
+    href: "/setting",
     icon: "mdi:account-outline",
   },
   {
-    label: "Configuración",
-    href: "/settings",
+    label: "Configurar tema",
+    href: "/setting/theme",
     icon: "mingcute:settings-6-line",
   },
   {
@@ -44,7 +42,18 @@ const Menu = ({ onHide }: { onHide: () => void }) => {
   const router = useRouter();
 
   return (
-    <motion.div className="absolute right-0 top-16 flex w-52 flex-col rounded-md border bg-white/80 pb-1 pt-2 shadow-xl backdrop-blur-sm dark:border-white/10 dark:bg-slate-900/70">
+    <motion.div
+      initial={{
+        opacity: 0,
+      }}
+      animate={{
+        opacity: 1,
+      }}
+      transition={{
+        duration: 0.4,
+      }}
+      className="absolute right-2 top-16 flex w-52 flex-col rounded-md border bg-white/80 pb-1 pt-2 shadow-xl backdrop-blur-sm md:right-0 dark:border-white/10 dark:bg-slate-900/70"
+    >
       <AccountsOptions />
       <ul className="flex w-full flex-col">
         <Listbox variant="flat" aria-label="options the app">

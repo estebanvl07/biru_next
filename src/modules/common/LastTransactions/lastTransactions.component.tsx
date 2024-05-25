@@ -13,6 +13,7 @@ import {
   useTransactions,
   formatterTransactions,
 } from "~/modules/transactions/hook/useTransactions.hook";
+import { LoaderSkeleton } from "~/modules/Loaders";
 
 interface LastTransactionsProps {
   transactions?: ITransaction[];
@@ -25,10 +26,11 @@ interface LastTransactionsProps {
 const LastTransactions: FC<LastTransactionsProps> = ({
   showHeader = true,
   cardClassName,
+  transactionsMaxLength,
 }) => {
   const params = useParams<{ acc: string }>();
 
-  const { transactions } = useTransactions();
+  const { transactions, isLoading } = useTransactions();
   const formatted = formatterTransactions(transactions);
   return (
     <Card
@@ -48,12 +50,12 @@ const LastTransactions: FC<LastTransactionsProps> = ({
           </Link>
         </div>
       )}
-      {false ? (
-        <p>Cargando...</p>
+      {isLoading ? (
+        <LoaderSkeleton skeletonType="ListItem" />
       ) : (
         // <LoaderSkeleton skeletonType="ListItem" />
         <ListTransactions
-          maxLength={formatted?.length}
+          maxLength={transactionsMaxLength}
           data={formatted?.reverse()}
           emptyText="No se encontraron transacciones"
         />

@@ -26,7 +26,7 @@ const AccoundCard = ({
   return (
     <motion.div
       className={clsx(
-        "hover:bg-primar/10 group flex min-w-full cursor-pointer flex-col rounded-xl border bg-white px-6 py-4 shadow-sm transition-all  md:min-w-80 dark:border-white/10 dark:bg-slate-900",
+        "hover:bg-primar/10 group flex min-w-full cursor-pointer flex-col rounded-xl border bg-default-50 px-6 py-4 shadow-sm transition-all md:min-w-80  dark:border-white/10 dark:bg-default-100",
         className,
         {
           "hover:border-primary hover:bg-primary/5": hoverStyles,
@@ -35,17 +35,13 @@ const AccoundCard = ({
       variants={item}
       onClick={() => onClick?.(account)}
     >
-      <header>
-        <h4 className="mb-1 text-sm font-medium md:mb-6 md:text-base">
-          {account?.name}
-        </h4>
-      </header>
-      <main>
-        <span className="hidden text-sm md:block">Balance</span>
-        <span className="text-xl font-semibold md:mb-2 md:text-2xl">
-          $ {balance}
-        </span>
-      </main>
+      <div className="flex items-start justify-between">
+        <aside>
+          <p className="font-semibold">{account?.name}</p>
+          <span>{account.reference ?? "Sin referencia"}</span>
+        </aside>
+        <p className="text-base font-semibold md:mb-2">$ {balance}</p>
+      </div>
     </motion.div>
   );
 };

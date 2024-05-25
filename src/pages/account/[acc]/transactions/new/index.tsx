@@ -35,9 +35,10 @@ import { useCurrentAccount } from "~/modules/Account/hooks";
 import { useEntity } from "~/modules/Entities/hook/entities.hook";
 import { Entities } from "@prisma/client";
 import clsx from "clsx";
+import { Alert } from "~/modules/components/molecules/Alert.component";
+import { useAlert } from "~/lib/hooks/useAlert";
 
 const NewTransactionPage = () => {
-  const [accountForm, setAccountForm] = useState(false);
   const params = useParams<{ acc: string }>();
   const router = useRouter();
   const { account } = useCurrentAccount();
@@ -49,22 +50,48 @@ const NewTransactionPage = () => {
     api.transaction.create.useMutation();
 
   const {
-    handleSubmit,
     register,
     formState: { errors },
     setValue,
     getValues,
+    reset,
   } = useForm<createTransaction>({
     resolver: zodResolver(createTransaction),
   });
 
-  const onSubmit = (data: createTransaction) => {
-    createTransactionMutation(data, {
+  const { isOpen, onClose, onOpen, props, setProps } = useAlert({
+    cancel: true,
+    confirmProps: {
+      onClick: () => {
+        onSubmit();
+      },
+    },
+    type: "quest",
+  });
+
+  const onSubmit = () => {
+    const payload = getValues();
+    createTransactionMutation(payload, {
       onSuccess(data, variables, context) {
-        router.back();
+        setProps({
+          ...props,
+          type: "success",
+          cancel: false,
+          confirmProps: {
+            onClick: () => {
+              router.push(`/account/${params?.acc}/transactions`);
+            },
+          },
+        });
+        reset();
+        onOpen();
       },
       onError(error, variables, context) {
-        console.log(error, variables, context);
+        setProps({
+          ...props,
+          type: "error",
+        });
+        onOpen();
       },
     });
   };
@@ -81,10 +108,14 @@ const NewTransactionPage = () => {
 
   return (
     <DashboardLayout title="Crear Transacción">
+      <Alert isOpen={isOpen} onClose={onClose} {...props} />
       <div className="flex w-full items-start gap-8">
         <form
           className="flex w-full max-w-[32rem] flex-col items-center justify-center gap-2 pt-6 md:pt-0"
-          onSubmit={handleSubmit(onSubmit)}
+          onSubmit={(e) => {
+            e.preventDefault();
+            onOpen();
+          }}
         >
           <h3 className="w-full">Datos de transacción</h3>
           <Input
@@ -139,6 +170,7 @@ const NewTransactionPage = () => {
             label="Fecha de transacción"
             containerClassName="mt-4"
             changeValue={(newDate) => setValue("date", newDate)}
+            currentDate
             required
           />
           <h3 className="mt-4 w-full">Otros datos</h3>
@@ -147,7 +179,6 @@ const NewTransactionPage = () => {
               items={categories ?? []}
               placeholder="Seleccione una categoría"
               label="Categoría"
-              onClick={() => categories?.length === 0 && setAccountForm(true)}
               classNames={{
                 label: "group-data-[filled=true]:-translate-y-5",
                 trigger: "min-h-[70px]",

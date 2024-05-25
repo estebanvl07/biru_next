@@ -16,6 +16,7 @@ import Link from "next/link";
 import { Empty } from "~/modules/components/molecules";
 import { useParams } from "next/navigation";
 import ChartsFilterList from "~/modules/charts/chartsFilterList.component";
+import { useResize } from "~/lib/hooks/useResize";
 
 // TODO: filter by options
 const CardBalanceAccount = () => {
@@ -23,7 +24,7 @@ const CardBalanceAccount = () => {
   const [serie, setSerie] = useState<Series[]>();
   const [date, setDate] = useState<{ from: string; to: string }>();
   const { account } = useCurrentAccount();
-  const desktopMediQuery = true;
+  const { isDesktop } = useResize();
 
   const { transactions } = useTransactions();
   // const months = getMonths(transactions);
@@ -50,7 +51,7 @@ const CardBalanceAccount = () => {
     <Card className="flex h-full !w-full flex-col">
       <header className="flex flex-col items-center justify-between md:flex-row">
         <div className="flex w-full flex-col items-start justify-center">
-          <h3>Balance</h3>
+          <h3>Transacciones</h3>
           {transactions && transactions.length > 0 && (
             <>
               {date?.from ? (
@@ -73,11 +74,9 @@ const CardBalanceAccount = () => {
             heightChart="210"
             showToolTip={transactions?.length === 0 ? false : true}
             offsetX={-10}
-            showLegend={false}
+            showLegend={true}
             showGrid={true}
-            showYAxis={
-              transactions?.length === 0 ? false : true && desktopMediQuery
-            }
+            showYAxis={transactions?.length === 0 ? false : true}
             showToolBar={false}
             showXAxis={false}
             hasformatNumber={false}

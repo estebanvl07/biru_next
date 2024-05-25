@@ -1,36 +1,39 @@
 import clsx from "clsx";
 import React from "react";
-// import { motion } from "framer-motion";
-// import { useIsDesktop } from "~/hooks";
+import { motion } from "framer-motion";
 
 interface Props {
   children: React.ReactNode;
   className?: string;
+  label?: string;
   id?: string;
   ref?: React.Ref<HTMLDivElement>;
   onClick?: (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
 }
 
-const Card = ({ children, className, id, ref, onClick }: Props) => {
-  // const config = {
-  //   initial: { opacity: 0, bottom: -10 },
-  //   animate: { opacity: 1, bottom: 0 },
-  //   transition: { delay: 0.2, duration: 0.6 },
-  // };
+const Card = ({ children, className, id, ref, onClick, label }: Props) => {
+  const config = {
+    initial: { opacity: 0 },
+    animate: { opacity: 1 },
+    transition: {
+      duration: 0.4,
+    },
+  };
 
   return (
-    <div
+    <motion.div
       className={clsx(
         "z-20 flex rounded-lg border border-gray-400/20 bg-default-50 px-6 py-3 backdrop-blur-md md:rounded-xl dark:border-white/5  dark:bg-default-200 dark:shadow-md",
         className,
       )}
       ref={ref}
       id={id}
+      aria-label={label}
       onClick={onClick}
-      // {...config}
+      {...config}
     >
       {children}
-    </div>
+    </motion.div>
   );
 };
 

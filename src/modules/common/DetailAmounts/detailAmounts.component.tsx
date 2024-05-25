@@ -82,22 +82,12 @@ const DetailAmounts = ({ className, cardClassName }: DetailAmountProps) => {
   }, [transactionsByMonth]);
 
   return (
-    <section className={clsx("flex h-full w-full flex-col gap-2", className)}>
-      {/* <Card className="flex flex-col justify-between lg:flex-auto">
-        <div className="mb-2 grid h-10 w-10 place-content-center rounded-full bg-slate-100 dark:border-none dark:bg-slate-800">
-          <Icon
-            icon="material-symbols:account-balance-outline"
-            className="text-primary dark:text-white"
-            width={20}
-          />
-        </div>
-        <article>
-          <h4 className="font-medium">Balance total</h4>
-          <h2 className="font-semibold">
-            $ {account.balance?.toLocaleString()}
-          </h2>
-        </article>
-      </Card> */}
+    <section
+      className={clsx(
+        "flex h-full w-full min-w-[40rem] flex-col gap-2 overflow-auto md:min-w-fit",
+        className,
+      )}
+    >
       <CardDetailAmount
         title="Ingreso"
         amount={income}

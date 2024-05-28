@@ -8,6 +8,7 @@ import Link from "next/link";
 import { format } from "date-fns";
 import { DATE_FORMAT_TRANS } from "~/lib/constants/config";
 import { TransaccionIncludes } from "~/modules/transactions/hook";
+import { Avatar } from "@nextui-org/react";
 
 interface TransactionItemProps {
   item: TransaccionIncludes;
@@ -21,11 +22,27 @@ const TransactionItem: FC<TransactionItemProps> = ({ item, index, length }) => {
     2: "eva:diagonal-arrow-right-down-fill",
   }[item.type === 1 ? 1 : 2];
 
-  const getIcon = () => {
-    if (item.transferType === 1) {
-      return item.category?.icon ?? icon;
+  const getName = (): string => {
+    const defaultName = item.type === 1 ? "Ingresos Varios" : "Gastos Varios";
+
+    if (item.transferType === 2 && item.goal) {
+      return item.goal.name;
     }
-    return "ph:target";
+
+    return item.category?.name || item.description || defaultName;
+  };
+
+  const getIcon = (): string => {
+    const typeIcon = item.type === 1 ? "ph:trend-up" : "ph:trend-down";
+
+    if (item.transferType === 2) {
+      return (item.goal?.icon as string) || typeIcon;
+    }
+    if (item.category) {
+      return item.category?.icon ?? typeIcon;
+    }
+
+    return typeIcon;
   };
 
   return (
@@ -47,16 +64,20 @@ const TransactionItem: FC<TransactionItemProps> = ({ item, index, length }) => {
         title={item.description ?? item.category?.name ?? item.goal?.name ?? ""}
       >
         <div className="flex items-center gap-3">
-          <span
-            className={clsx(
-              "flex h-11 w-11 items-center justify-center rounded-full bg-primary text-white shadow-lg",
-            )}
-          >
-            <Icon icon={getIcon() ?? icon} width={22} />
-          </span>
+          {item.entityId ? (
+            <Avatar color="primary" name={item.entity?.name} />
+          ) : (
+            <span
+              className={clsx(
+                "flex h-11 w-11 items-center justify-center rounded-full bg-primary text-white shadow-lg",
+              )}
+            >
+              <Icon icon={getIcon() ?? icon} width={22} />
+            </span>
+          )}
           <div className="flex flex-col">
             <p className="mb-1 overflow-hidden text-ellipsis text-nowrap font-semibold xl:w-32 dark:font-normal">
-              {item.description || item.category?.name || item.goal?.name || ""}
+              {getName()}
             </p>
             <span className="overflow-hidden text-ellipsis text-nowrap text-xs text-slate-500 xl:w-32 dark:text-slate-400">
               {`${format(item.date ?? item.createdAt, DATE_FORMAT_TRANS)}`}

@@ -30,19 +30,24 @@ const Modal = ({
 }: ModalProps) => {
   return (
     <ModalLayout
-      size={size}
+      size={(size as any) ?? "md"}
       backdrop={backdrop}
+      placement="center"
       isOpen={isOpen}
       onClose={onClose}
     >
       <ModalContent>
         {(onClose) => (
           <>
-            <ModalHeader className="flex flex-col gap-1 font-montserrat">
-              {title ?? "Crear"}
+            <ModalHeader className="mb-0 flex flex-col gap-1 pb-0 font-montserrat">
+              <h2>{title ?? "Crear"}</h2>
             </ModalHeader>
             <ModalBody className="font-montserrat">{children}</ModalBody>
-            {footerContent && <ModalFooter>{footerContent}</ModalFooter>}
+            {footerContent && (
+              <ModalFooter className="font-monserrat">
+                {footerContent}
+              </ModalFooter>
+            )}
           </>
         )}
       </ModalContent>

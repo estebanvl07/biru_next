@@ -38,7 +38,7 @@ const DashboardLayout = ({
       {<SideBar serviceOptions={serviceOptions} />}
       {size && size <= 768 && <BottomMobileNav />}
       <section className="z-0 h-full min-h-screen w-full flex-grow py-3 md:pl-60">
-        <div className="flex flex-col gap-4 px-4 md:px-8">
+        <div className="flex flex-col px-4 md:px-8">
           {size && size >= 768 ? (
             <HeaderApp title={title} />
           ) : (

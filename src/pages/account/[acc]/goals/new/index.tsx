@@ -6,19 +6,23 @@ import { Button, Input, Textarea } from "@nextui-org/react";
 import { IconSearcher } from "~/modules/category/IconSelector";
 import { InputDate } from "~/modules/components";
 import DashboardLayout from "~/modules/layouts/Dashboard";
-import { createSaving } from "~/modules/Saving/schema";
+import { createGoal } from "~/modules/Goals/schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Alert } from "~/modules/components/molecules/Alert.component";
 import { useAlert } from "~/lib/hooks/useAlert";
 import { api } from "~/utils/api";
 import { useRouter } from "next/router";
 import { useParams } from "next/navigation";
+import { amountFormatter } from "~/utils/formatters";
+import { useState } from "react";
 
-export default function NewSavingGoalPage() {
+export default function NewGoalPage() {
+  const [goalAmount, setGoalAmount] = useState("");
+  const [initialAmount, setInitialAmount] = useState("");
   const router = useRouter();
   const params = useParams();
   const { isActive, onActive, onDisabled } = useOnActive();
-  const { mutate: createSavingMutation } = api.saving.create.useMutation();
+  const { mutate: createGoalgMutation } = api.goals.create.useMutation();
   const {
     setValue,
     register,
@@ -27,8 +31,8 @@ export default function NewSavingGoalPage() {
     watch,
     reset,
     handleSubmit,
-  } = useForm<createSaving>({
-    resolver: zodResolver(createSaving),
+  } = useForm<createGoal>({
+    resolver: zodResolver(createGoal),
   });
 
   const alertConfig: any = {
@@ -47,11 +51,11 @@ export default function NewSavingGoalPage() {
   const onSubmit = () => {
     onClose();
     const payload = getValues();
-    createSavingMutation(
+    createGoalgMutation(
       {
         ...payload,
         saved: Number(payload.saved),
-        target: Number(payload.target),
+        goal: Number(payload.goal),
       },
       {
         onSuccess() {
@@ -61,7 +65,7 @@ export default function NewSavingGoalPage() {
             cancel: false,
             confirmProps: {
               onClick: () => {
-                router.push(`/account/${params?.acc}/saving`);
+                router.push(`/account/${params?.acc}/goals`);
               },
             },
           });
@@ -95,34 +99,43 @@ export default function NewSavingGoalPage() {
           required
           isRequired
           label="Nombre"
-          placeholder="Vacaciones, Compras, Casa"
+          placeholder="Vacaciones, Prestamo, Compras"
           isInvalid={Boolean(errors.name)}
           errorMessage={errors.name?.message}
           {...register("name")}
         />
         <div className="flex gap-2 ">
           <Input
-            type="number"
             isRequired
-            label="Meta de ahorro"
+            label="Monto de meta"
             placeholder="0.00"
             // labelPlacement="outside"
             className="!appearance-none"
             // onValueChange={(val) => setValue("amount", Number(val))}
+            value={goalAmount}
+            onValueChange={(val) => {
+              const { formatted, raw } = amountFormatter(val);
+              setValue("goal", Number(raw));
+              setGoalAmount(formatted);
+            }}
             inputMode="numeric"
             startContent={
               <div className="pointer-events-none flex items-center">
                 <span className="text-small text-default-400">$</span>
               </div>
             }
-            {...register("target")}
-            isInvalid={Boolean(errors?.target)}
-            errorMessage={errors?.target?.message}
+            isInvalid={Boolean(errors?.goal)}
+            errorMessage={errors?.goal?.message}
           />
           <Input
-            type="number"
             isRequired
             label="Monto inicial"
+            value={initialAmount}
+            onValueChange={(val) => {
+              const { formatted, raw } = amountFormatter(val);
+              setValue("saved", Number(raw));
+              setInitialAmount(formatted);
+            }}
             placeholder="0.00"
             className="!appearance-none"
             onLoad={() => setValue("saved", 0)}
@@ -132,13 +145,12 @@ export default function NewSavingGoalPage() {
                 <span className="text-small text-default-400">$</span>
               </div>
             }
-            {...register("saved")}
             isInvalid={Boolean(errors?.saved)}
             errorMessage={errors?.saved?.message}
           />
         </div>
         <InputDate
-          label="Fecha de ahorro"
+          label="Fecha limite"
           placeholder="Seleccionar fecha de meta"
           minValueToday
           changeValue={(date) => setValue("goalDate", date)}
@@ -158,7 +170,7 @@ export default function NewSavingGoalPage() {
         />
         <Textarea
           label="Descripción"
-          placeholder="-  ¿Porque estoy ahorrando?"
+          placeholder="-  ¿Para que es esta meta?"
           rows={1}
           {...register("description")}
           isInvalid={Boolean(errors?.description)}

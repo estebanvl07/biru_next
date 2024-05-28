@@ -3,7 +3,7 @@ import { Z_NUMBER, Z_STRING, updateSchema, z } from "~/lib/resolver/zod";
 export const input = {
   name: Z_STRING,
   type: Z_NUMBER,
-  description: Z_STRING,
+  description: z.optional(Z_STRING),
   icon: z.optional(Z_STRING),
 };
 

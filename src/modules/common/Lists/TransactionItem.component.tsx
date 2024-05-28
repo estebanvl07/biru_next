@@ -7,10 +7,10 @@ import type { ITransaction } from "~/types/transactions";
 import Link from "next/link";
 import { format } from "date-fns";
 import { DATE_FORMAT_TRANS } from "~/lib/constants/config";
-import { es } from "date-fns/locale";
+import { TransaccionIncludes } from "~/modules/transactions/hook";
 
 interface TransactionItemProps {
-  item: any;
+  item: TransaccionIncludes;
   index: number;
   length: number;
 }
@@ -21,7 +21,12 @@ const TransactionItem: FC<TransactionItemProps> = ({ item, index, length }) => {
     2: "eva:diagonal-arrow-right-down-fill",
   }[item.type === 1 ? 1 : 2];
 
-  const getIcon = () => item.category.icon;
+  const getIcon = () => {
+    if (item.transferType === 1) {
+      return item.category?.icon ?? icon;
+    }
+    return "ph:target";
+  };
 
   return (
     <li
@@ -39,7 +44,7 @@ const TransactionItem: FC<TransactionItemProps> = ({ item, index, length }) => {
         className={clsx(
           "flex cursor-pointer items-center justify-between border-gray-400/60 px-2 py-3 transition-all duration-300 dark:border-white/10",
         )}
-        title={item.description}
+        title={item.description ?? item.category?.name ?? item.goal?.name ?? ""}
       >
         <div className="flex items-center gap-3">
           <span
@@ -51,10 +56,10 @@ const TransactionItem: FC<TransactionItemProps> = ({ item, index, length }) => {
           </span>
           <div className="flex flex-col">
             <p className="mb-1 overflow-hidden text-ellipsis text-nowrap font-semibold xl:w-32 dark:font-normal">
-              {item.description !== "" ? item.description : item.category.name}
+              {item.description || item.category?.name || item.goal?.name || ""}
             </p>
             <span className="overflow-hidden text-ellipsis text-nowrap text-xs text-slate-500 xl:w-32 dark:text-slate-400">
-              {`${format(item.date, DATE_FORMAT_TRANS)}`}
+              {`${format(item.date ?? item.createdAt, DATE_FORMAT_TRANS)}`}
             </span>
           </div>
         </div>

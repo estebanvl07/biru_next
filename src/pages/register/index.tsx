@@ -17,9 +17,11 @@ import {
   type RegisterUserInputType,
 } from "~/modules/Register/resolver";
 import withAuthRedirect from "~/lib/helpers/withAuthRedirect";
+import { useThemeContext } from "~/lib/context/themeContext";
 
 const Register = () => {
   const [showPassword, setShowPassword] = useState(false);
+  const { theme } = useThemeContext();
 
   const {
     mutate: registerUser,
@@ -46,7 +48,10 @@ const Register = () => {
       {isSuccess ? (
         <SuccessfullyCreated />
       ) : (
-        <div className="flex h-full w-full justify-center py-6">
+        <div className="my-auto flex h-full w-full justify-center px-4 py-6">
+          {theme === "dark" && (
+            <span className="absolute top-0 h-screen w-full bg-[url(/point.svg)] bg-repeat"></span>
+          )}
           <section className="relative flex h-full w-full max-w-[25rem] flex-col items-center justify-center gap-2">
             <h1 className="mb-1 text-pretty text-center text-2xl font-bold tracking-tight  text-primary dark:text-indigo-300">
               ¡Crear nueva cuenta!

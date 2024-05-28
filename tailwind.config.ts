@@ -1,13 +1,15 @@
 import { nextui } from "@nextui-org/theme";
-import { type Config } from "tailwindcss";
+
+import type { Config } from "tailwindcss";
 import { fontFamily } from "tailwindcss/defaultTheme";
 
-export default {
+const config = {
+  darkMode: "selector",
   content: [
     "./src/**/*.tsx",
-    "./node_modules/@nextui-org/theme/dist/components/(badge|button|calendar|input|listbox|modal|pagination|progress|radio|select|skeleton|spinner|table|user|ripple|divider|popover|scroll-shadow|checkbox|spacer|avatar).js",
+    "./node_modules/@nextui-org/theme/dist/components/(accordion|badge|button|calendar|input|listbox|modal|pagination|progress|radio|select|skeleton|spinner|table|tabs|user|divider|ripple|popover|scroll-shadow|checkbox|spacer|avatar).js"
   ],
-  darkMode: "selector",
+  prefix: "",
   theme: {
     extend: {
       height: {
@@ -60,3 +62,5 @@ export default {
     }),
   ],
 } satisfies Config;
+
+export default config;

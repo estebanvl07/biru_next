@@ -8,10 +8,10 @@ import { motion } from "framer-motion";
 import { groupedAnimation } from "../animations";
 import { capitalize } from "../components/molecules/Table/utils";
 
-import type { Savings } from "@prisma/client";
+import type { Goals } from "@prisma/client";
 
-const SavingCard = ({ saving }: { saving: Savings }) => {
-  const { id, name, saved, target, icon } = saving;
+const GoalCard = ({ goalInfo }: { goalInfo: Goals }) => {
+  const { id, name, saved, goal, icon } = goalInfo;
   const router = useRouter();
   const params = useParams();
 
@@ -23,7 +23,7 @@ const SavingCard = ({ saving }: { saving: Savings }) => {
       variants={{
         ...groupedAnimation.item,
       }}
-      onClick={() => router.push(`/account/${params?.acc}/saving/${id}`)}
+      onClick={() => router.push(`/account/${params?.acc}/goals/${id}`)}
       className="col-span-2 rounded-xl border bg-default-50 transition-all duration-300 sm:col-span-1 md:w-80 dark:border-white/10 dark:bg-default-200 dark:shadow-md"
     >
       <div className=" flex flex-col px-6 py-4">
@@ -43,7 +43,7 @@ const SavingCard = ({ saving }: { saving: Savings }) => {
           <aside>
             <p>Meta</p>
             <h4 className="font-semibold text-primary">
-              $ {target.toLocaleString()}
+              $ {goal.toLocaleString()}
             </h4>
           </aside>
         </main>
@@ -52,7 +52,7 @@ const SavingCard = ({ saving }: { saving: Savings }) => {
           color="primary"
           aria-label={`saving card - ${name}`}
           value={saved}
-          maxValue={target}
+          maxValue={goal}
           className="mb-2 mt-3 w-full rounded-full border bg-gray-200 dark:border-none dark:bg-slate-700"
         />
       </div>
@@ -60,4 +60,4 @@ const SavingCard = ({ saving }: { saving: Savings }) => {
   );
 };
 
-export default SavingCard;
+export default GoalCard;

@@ -8,15 +8,18 @@ import {
 
 export const input = {
   amount: Z_NUMBER,
+  accountId: Z_NUMBER,
   type: z.union([z.literal(1), z.literal(2)], {
     required_error: "Campo Requerido",
   }),
-  date: Z_DATE,
+  date: z.optional(Z_DATE),
+  reference: z.optional(z.string()),
   recipient: z.optional(z.string()),
-  entityId: z.optional(z.number()),
   description: z.optional(z.string()),
-  categoryId: Z_NUMBER,
-  accountId: Z_NUMBER,
+  transferType: z.optional(z.number()),
+  goalId: z.optional(z.number()),
+  entityId: z.optional(z.number()),
+  categoryId: z.optional(z.number()),
 };
 
 export const createTransaction = z.object(input);

@@ -8,6 +8,7 @@ import { FONT_FAMILY } from "~/lib/constants/config";
 import type { Series } from "~/types/root.types";
 import dynamic from "next/dynamic";
 import { useTheme } from "~/lib/hooks";
+import { useThemeContext } from "~/lib/context/themeContext";
 
 interface LineChartProps {
   series: Series[] | undefined;
@@ -42,7 +43,9 @@ const LineChart = ({
   hasformatNumber = true,
 }: LineChartProps) => {
   // TODO: darkmdoe pending
-  const { isDark } = useTheme();
+  const { theme } = useThemeContext();
+
+  const isDark = theme === "dark";
 
   if (!series) return;
 

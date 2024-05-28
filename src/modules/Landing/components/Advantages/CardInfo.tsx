@@ -14,15 +14,15 @@ export const CardInfo: FC<CardInfoProps> = ({
   return (
     <div
       className={clsx(
-        "w-full rounded-md border bg-white px-8 py-6 shadow-lg shadow-gray-400/50 dark:border-white/10 dark:bg-slate-900 dark:shadow-black md:max-w-80",
+        "mb-12 w-full rounded-2xl border bg-white px-8 py-6 shadow-lg shadow-gray-400/50 md:w-[28rem] dark:border-white/5 dark:bg-default-200 dark:shadow-slate-950",
         className,
         { "!bg-primary text-white": color === "primary" },
       )}
     >
       <div
         className={clsx(
-          "flex h-10 w-10 items-center justify-center rounded-full border",
-          { "border-white bg-white": color === "primary" },
+          "flex h-10 w-10 items-center justify-center rounded-full border dark:border-none dark:bg-slate-800",
+          { "border-white bg-white dark:bg-white": color === "primary" },
         )}
       >
         <Icon

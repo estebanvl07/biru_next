@@ -17,6 +17,9 @@ import { useResize } from "~/lib/hooks/useResize";
 
 import MobileDashboard from "~/modules/Dashboard/MobileDashboard";
 import EntitiesGroup from "~/modules/components/molecules/EntitiesGroup";
+import CategoiresSuggestion from "~/modules/components/molecules/CategoiresSuggestion";
+import { useCategory } from "~/modules/category/hook/category.hook";
+import { categoriesRouter } from "~/server/api/routers/category";
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const accountId = Number(ctx.params!.acc);
@@ -36,6 +39,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
 const HomePage = () => {
   const params = useParams();
   const { account } = useCurrentAccount();
+  const { categories, isLoading } = useCategory();
   const { isDesktop, size } = useResize();
 
   return (
@@ -92,6 +96,7 @@ const HomePage = () => {
           </div>
         </>
       )}
+      {!isLoading && categories?.length === 0 && <CategoiresSuggestion />}
     </DashboardLayout>
   );
 };

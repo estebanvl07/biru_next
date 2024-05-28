@@ -1,43 +1,53 @@
 import { useEffect, useState } from "react";
 
-const getDarkMode = (): boolean => {
-  try {
-    const darkMode = localStorage.getItem("darkMode");
-    return darkMode ? JSON.parse(darkMode) : false;
-  } catch {
-    return false;
-  }
-};
-
 export const useTheme = () => {
-  const [isDarkMode, setIsDarkMode] = useState<boolean>();
-  const [mode, setMode] = useState("");
+  const [theme, setTheme] = useState<"light" | "dark">(() => {
+    if (typeof window !== "undefined" && window.localStorage) {
+      const storedPrefs = window.localStorage.getItem("theme");
+      if (typeof storedPrefs === "string") {
+        return storedPrefs as "light" | "dark";
+      }
 
-  const validateDarkMode = (isDark: boolean) => {
-    setIsDarkMode(isDark);
-    setMode(isDark ? "dark" : "light");
-    localStorage.setItem("darkMode", JSON.stringify(isDark));
-  };
-
-  const onChangeMode = () => {
-    validateDarkMode(!isDarkMode);
-  };
-
-  useEffect(() => {
-    if (isDarkMode) {
-      document.body.classList.add("dark");
-    } else {
-      document.body.classList.remove("dark");
+      const userMedia = window.matchMedia("(prefers-color-scheme: dark)");
+      if (userMedia.matches) {
+        return "dark";
+      }
     }
-  }, [isDarkMode]);
+
+    return "light";
+  });
+  const [isDarkMode, setIsDarkMode] = useState<boolean>();
 
   useEffect(() => {
-    validateDarkMode(getDarkMode());
+    const root = window.document.documentElement;
+
+    if (theme === "dark") {
+      setIsDarkMode(true);
+      root.classList.add("dark");
+    } else {
+      setIsDarkMode(false);
+      root.classList.remove("dark");
+    }
+
+    if (typeof window !== "undefined") {
+      window.localStorage.setItem("theme", theme);
+    }
+  }, [theme]);
+
+  useEffect(() => {
+    const handleThemeChange = (e: MediaQueryListEvent) => {
+      setTheme(e.matches ? "dark" : "light");
+    };
+
+    const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
+    mediaQuery.addEventListener("change", handleThemeChange);
+
+    return () => mediaQuery.removeEventListener("change", handleThemeChange);
   }, []);
 
   return {
     isDark: isDarkMode,
-    onChangeMode,
-    mode,
+    setTheme,
+    mode: theme,
   };
 };

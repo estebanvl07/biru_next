@@ -1,4 +1,3 @@
-"use client";
 import { useEffect, useState } from "react";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import clsx from "clsx";
@@ -10,6 +9,7 @@ type ButtonGroupProps = {
     id?: number;
     label: string;
     icon?: string;
+    title?: string;
     iconClass?: string;
     onClick: () => void;
     colorSelected?: string;
@@ -56,6 +56,7 @@ const ButtonGroup = ({
             setButtonSelected(option.id);
             option.onClick();
           }}
+          title={option.title}
         >
           {option.icon && (
             <Icon

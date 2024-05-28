@@ -1,15 +1,7 @@
-import React, { FC, useState } from "react";
+import React from "react";
 
-import {
-  DropdownTrigger,
-  Dropdown,
-  DropdownMenu,
-  DropdownItem,
-  Input,
-} from "@nextui-org/react";
-
+import { Input } from "@nextui-org/react";
 import { Button } from "~/modules/components/atoms";
-
 import { Icon } from "@iconify/react/dist/iconify.js";
 
 import { type TopContentProps } from "./types";
@@ -22,6 +14,7 @@ const TopContent = React.memo(
     hasExport = true,
     hasNew = true,
     hasSearch = true,
+    newButtonText,
     filterValue,
     setFilterValue,
     setPage,
@@ -72,7 +65,7 @@ const TopContent = React.memo(
                   className="flex items-center gap-2"
                 >
                   <Icon icon="ic:round-plus" width={18} />
-                  Crear
+                  {newButtonText ?? "Crear Nuevo"}
                 </Link>
               </Button>
             )}

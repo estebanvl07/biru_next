@@ -8,14 +8,14 @@ import {
 
 export const input = {
   name: Z_STRING,
-  target: Z_NUMBER,
+  goal: Z_NUMBER,
   saved: Z_NUMBER,
   description: z.optional(z.string()),
   icon: z.optional(z.string()),
   goalDate: z.optional(Z_DATE),
 };
 
-export const createSaving = z.object(input);
-export type createSaving = z.infer<typeof createSaving>;
-export const updateSaving = updateSchema(input);
-export type updateSaving = z.infer<typeof updateSaving>;
+export const createGoal = z.object(input);
+export type createGoal = z.infer<typeof createGoal>;
+export const updateGoal = updateSchema(input);
+export type updateGoal = z.infer<typeof updateGoal>;

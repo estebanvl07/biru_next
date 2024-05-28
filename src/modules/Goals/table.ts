@@ -5,13 +5,18 @@ const columns = [
     sortable: false,
   },
   {
-    name: "NOMBRE",
-    uid: "name",
+    name: "MONTO DE AHORRO",
+    uid: "amount",
     sortable: true,
   },
   {
-    name: "MONTO DE AHORRO",
-    uid: "reference",
+    name: "TIPO",
+    uid: "type",
+    sortable: true,
+  },
+  {
+    name: "FECHA DE CREACIÓN",
+    uid: "createdAt",
     sortable: true,
   },
   {

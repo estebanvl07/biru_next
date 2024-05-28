@@ -4,6 +4,7 @@
  *
  * We also create a few inference helpers for input and output types.
  */
+import { useMutation } from "@tanstack/react-query";
 import {
   TRPCLink,
   createWSClient,
@@ -80,6 +81,21 @@ export const api = createTRPCNext<AppRouter>({
    */
   ssr: false,
   transformer: superjson,
+  overrides: {
+    useMutation: {
+      async onSuccess(opts) {
+        /**
+         * @note that order here matters:
+         * The order here allows route changes in `onSuccess` without
+         * having a flash of content change whilst redirecting.
+         **/
+        // Calls the `onSuccess` defined in the `useQuery()`-options:
+        await opts.originalFn();
+        // Invalidate all queries in the react-query cache:
+        await opts.queryClient.invalidateQueries();
+      },
+    },
+  },
 });
 
 /**

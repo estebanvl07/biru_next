@@ -5,7 +5,6 @@ import OptionsList from "./OptionsList";
 
 import { menuOptions } from "./options";
 import NavigationLogo from "../Header/NavigationLogo";
-import { useResize } from "~/lib/hooks/useResize";
 
 interface SideBarProps {
   serviceOptions?: boolean;

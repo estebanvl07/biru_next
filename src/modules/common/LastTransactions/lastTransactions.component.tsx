@@ -56,7 +56,7 @@ const LastTransactions: FC<LastTransactionsProps> = ({
         // <LoaderSkeleton skeletonType="ListItem" />
         <ListTransactions
           maxLength={transactionsMaxLength}
-          data={formatted?.reverse()}
+          data={formatted}
           emptyText="No se encontraron transacciones"
         />
       )}

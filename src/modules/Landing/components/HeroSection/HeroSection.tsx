@@ -1,92 +1,109 @@
-import clsx from "clsx";
-
-import { Icon, InlineIcon } from "@iconify/react/dist/iconify.js";
-import { Button, Badge } from "~/modules/components";
+import { Icon } from "@iconify/react/dist/iconify.js";
 import Image from "next/image";
 import Link from "next/link";
+import { motion } from "framer-motion";
 
-import type { InfoCardProps } from "./HeroSection.types";
+import { Button } from "@nextui-org/button";
+import { Header } from "~/modules/components/Header";
+import { Chip } from "@nextui-org/react";
+import { useResize } from "~/lib/hooks/useResize";
+import { useThemeContext } from "~/lib/context/themeContext";
 
 export const HeroSection = () => {
+  const { theme } = useThemeContext();
+  const { isMobile } = useResize();
+
+  const isDark = theme === "dark";
+
   return (
-    <section className="mx-auto flex h-full w-full flex-col items-center justify-around gap-8 px-4 md:max-w-[72rem] md:px-0 lg:flex-row lg:gap-0">
-      <aside className="order-2 flex flex-col justify-center lg:order-1">
-        <h1 className="text-center font-encode text-4xl font-bold !leading-none tracking-tight md:text-[2.6rem] lg:text-start">
-          Domina
-          <br />
-          tu{" "}
-          <span className="highlight font-encode text-primary dark:text-primary-light">
-            futuro financiero
-          </span>
-          <br /> con facilidad
-        </h1>
-        <p className="mt-3 text-pretty text-center text-sm opacity-80 md:max-w-md md:text-base lg:text-start lg:text-base">
-          Crea hábitos financieros con Biru, conoce como se mueve tu dinero de
-          la forma más fácil.
-        </p>
-        <div className="mt-8 flex flex-col justify-center gap-2 sm:flex-row md:gap-4 lg:max-w-md lg:justify-start">
-          <Link href="/register" aria-label="registrate ahora">
-            <Button className="w-full !py-3 lg:w-auto">
-              <span className="whitespace-nowrap">Descubre más</span>
-            </Button>
-          </Link>
-          <Link href="#" aria-label="Conoce como funciona aqui">
-            <Button variantStyle="outline" className="w-full lg:w-auto">
-              <span className="whitespace-nowrap">Como funciona</span>
-              <Icon icon="solar:play-circle-bold" height="1.5rem" />
-            </Button>
-          </Link>
-        </div>
-      </aside>
-      <aside className="relative z-20 order-1 mt-16 flex w-full items-center justify-center sm:max-w-[35rem] md:mt-0 lg:order-2 lg:justify-end">
-        <InfoCard
-          title="Ingresos"
-          className="left-6 top-[25%] gap-2 shadow-2xl shadow-black/70 lg:left-28"
+    <div className="fade-bottom relative z-10 mx-auto flex h-screen max-h-[56rem] w-full flex-col items-center md:overflow-hidden md:px-2">
+      <Header />
+      <span className="absolute -top-20 h-[40%] w-[98%] rounded-b-[20rem] bg-none blur-3xl dark:bg-indigo-950/40"></span>
+      <div className="absolute -top-12 h-[40rem] w-4/5 bg-opacity-10 bg-[url('/grid.svg')] bg-cover bg-center bg-no-repeat opacity-15 dark:opacity-30"></div>
+      <div className="flex h-full w-full flex-col-reverse items-center justify-center gap-8 px-4 md:flex-col md:gap-4">
+        <motion.article
+          initial={{
+            scale: 0.6,
+          }}
+          animate={{
+            scale: 1,
+          }}
+          transition={{
+            duration: 0.4,
+          }}
+          className="relative z-10 flex w-full flex-col items-center justify-center py-8"
         >
-          <span className="font-semibold">$832,560</span>
-          <Badge className="col-start-2 row-start-2 flex items-center gap-2 place-self-end self-center">
-            <InlineIcon icon="ph:trend-up" className="inline" />
-            <span>+12.5%</span>
-          </Badge>
-        </InfoCard>
-        <InfoCard
-          title="Ahorros"
-          className=" bottom-6 right-16 grid-rows-2 shadow-2xl shadow-black/70 md:bottom-24 lg:-right-10"
+          <Chip
+            className="mb-2 bg-primary/10 py-1 text-center text-primary dark:bg-indigo-500/20 dark:text-slate-300"
+            variant="flat"
+          >
+            <span className="flex gap-2">
+              Toma control de tus finanzas
+              <Icon icon="material-symbols:finance-mode-rounded" width={20} />
+            </span>
+          </Chip>
+          <h1 className="z-10 my-2 text-center font-encode text-5xl font-bold !leading-none tracking-tight md:text-6xl">
+            Domina tu{" "}
+            <span className="highlight font-encode text-primary dark:text-primary-light">
+              futuro financiero
+            </span>
+            <br /> con facilidad
+          </h1>
+
+          <p className=" text-pretty text-center text-sm opacity-80 md:max-w-md md:text-base lg:text-base">
+            Crea hábitos financieros con Biru, conoce como se mueve tu dinero de
+            la forma más fácil.
+          </p>
+
+          <nav className="order-2 mt-6 flex w-full flex-col justify-center gap-4 sm:max-w-md sm:flex-row md:order-1 lg:justify-start">
+            <Link href="/register" aria-label="registrate ahora">
+              <Button
+                radius="full"
+                color="primary"
+                size={isMobile ? "md" : "lg"}
+                className="w-full !py-4 lg:w-auto"
+              >
+                <span className="whitespace-nowrap">Iniciar ahora</span>
+                <Icon icon="material-symbols:login" width={24} />
+              </Button>
+            </Link>
+            <Link href="#" aria-label="Conoce como funciona aqui">
+              <Button
+                radius="full"
+                color="primary"
+                size={isMobile ? "md" : "lg"}
+                variant="bordered"
+                className="w-full border-1 py-4 lg:w-auto dark:bg-indigo-800/20 dark:text-primary-light dark:backdrop-blur-lg"
+              >
+                <span className="whitespace-nowrap">Como funciona</span>
+                <Icon icon="solar:play-circle-bold" width={24} />
+              </Button>
+            </Link>
+          </nav>
+        </motion.article>
+        <motion.div
+          initial={{
+            y: 40,
+          }}
+          animate={{
+            y: 0,
+          }}
+          transition={{
+            duration: 0.5,
+          }}
+          className="fade-bottom relative h-44 w-full items-center justify-center overflow-hidden md:flex md:h-[20rem]"
         >
-          <span className="font-semibold">Vacaciones</span>
-          <Badge className="col-start-2 row-start-2 place-self-end self-center">
-            $352,123
-          </Badge>
-          <div className="col-span-2 row-start-3 mt-2.5 h-1 self-center rounded-full bg-slate-200 dark:bg-slate-700">
-            <div className="h-full w-3/5 rounded-full bg-primary dark:bg-primary-light" />
-          </div>
-        </InfoCard>
-        <span className="relative flex h-[16rem] w-[16rem] items-center justify-center rounded-full bg-primary shadow-2xl shadow-primary dark:shadow-black md:h-[20rem] md:w-[20rem] lg:h-[24rem] lg:w-[24rem] 2xl:h-[28rem] 2xl:w-[28rem]">
           <Image
-            src="/dashboard_representation_mobile.webp"
-            width={224}
+            src={isDark ? "/dashboard-dark.png" : "/dashboard-light.png"}
+            width={1160}
             height={500}
-            className="w-[12rem] drop-shadow-2xl md:absolute lg:w-[14rem]"
+            className="w-[50rem] drop-shadow-2xl md:absolute md:top-0"
             alt="Dashboard in mobile representation"
             data-todo="set size"
             loading="lazy"
           />
-        </span>
-      </aside>
-    </section>
-  );
-};
-
-const InfoCard: React.FC<InfoCardProps> = ({ className, title, children }) => {
-  return (
-    <div
-      className={clsx(
-        "absolute z-10 grid min-w-[30%] scale-75 grid-flow-col grid-cols-2 rounded-md border bg-white/80 px-4 py-2.5 shadow-lg shadow-indigo-800/10 backdrop-blur-md dark:text-slate-950 lg:scale-100",
-        className,
-      )}
-    >
-      <span className="text-xs font-medium opacity-90">{title}</span>
-      {children}
+        </motion.div>
+      </div>
     </div>
   );
 };

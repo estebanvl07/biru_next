@@ -66,8 +66,8 @@ export default function EntitiesPage() {
           headerConfig={{
             title: "",
             keySearch: ["name"],
+            redirectTo: `/account/${Number(params?.acc)}/entities/new`,
           }}
-          buttonNewLink={`/account/${Number(params?.acc)}/entities/new`}
           columns={columns}
           isLoading={isLoading}
           renderCell={renderCell}

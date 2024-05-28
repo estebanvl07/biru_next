@@ -49,25 +49,23 @@ export const transactionsRouter = createTRPCRouter({
     .input(createTransaction)
     .mutation(async ({ ctx, input }) => {
       const userId = ctx.session.user.id;
-      // simulate a slow db call
       const response = await TransactionServices.createTransaction(ctx.db, {
         ...input,
         userId,
       });
-      ee.emit("new", response);
       return response;
     }),
-  onCreate: protectedProcedure.subscription(() => {
-    return observable<Transaction>((emit) => {
-      const onNew = (data: Transaction) => {
-        emit.next(data);
-      };
-      ee.on("new", onNew);
-      return () => {
-        ee.off("new", onNew);
-      };
-    });
-  }),
+  // onCreate: protectedProcedure.subscription(() => {
+  //   return observable<Transaction>((emit) => {
+  //     const onNew = (data: Transaction) => {
+  //       emit.next(data);
+  //     };
+  //     ee.on("new", onNew);
+  //     return () => {
+  //       ee.off("new", onNew);
+  //     };
+  //   });
+  // }),
   //   getLatest: protectedProcedure.query(({ ctx }) => {
   //     return ctx.db.post.findFirst({
   //       orderBy: { createdAt: "desc" },

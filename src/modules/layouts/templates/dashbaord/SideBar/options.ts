@@ -29,9 +29,9 @@ export const menuOptions = [
       },
       {
         id: 3,
-        name: "Ahorros",
-        icon: "material-symbols:savings-outline",
-        href: "/saving",
+        name: "Metas",
+        icon: "ph:target",
+        href: "/goals",
       },
       {
         id: 4,
@@ -96,9 +96,9 @@ export const menuOptions = [
 export const mobileOptions = [
   {
     id: 1,
-    name: "Ahorros",
-    icon: "material-symbols:savings-outline",
-    href: "/saving",
+    name: "Metas",
+    icon: "ph:target",
+    href: "/goals",
   },
   {
     id: 2,

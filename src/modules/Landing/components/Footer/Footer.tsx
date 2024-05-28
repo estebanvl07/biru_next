@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+
 import type { FC } from "react";
 import type { LinkListProps } from "./Footer.types";
 
@@ -90,7 +91,10 @@ const LinkList: FC<LinkListProps> = ({ title, links }) => {
         {title}
       </li>
       {links.map(({ text, to = "#" }, index) => (
-        <li className="transition-transform hover:translate-x-1" key={index}>
+        <li
+          className="mb-1 transition-transform hover:translate-x-1"
+          key={index}
+        >
           <Link href={to} className="text-sm" aria-label={text}>
             {text}
           </Link>

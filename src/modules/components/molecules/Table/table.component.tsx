@@ -23,15 +23,12 @@ import { LoaderSkeleton } from "~/modules/Loaders";
 const DataTable = <T,>({
   headerConfig,
   columns,
-  hasNew,
   data,
   isLoading = false,
   renderCell,
   hasTopContent = true,
   hasBottomContent = true,
-  buttonNewLink,
   filterKeys,
-  buttonNewText,
 }: TableProps<T>) => {
   const [filterValue, setFilterValue] = useState("");
   const [statusFilter, setStatusFilter] = useState<Selection>("all");
@@ -57,6 +54,7 @@ const DataTable = <T,>({
     return newList.slice(start, end);
   }, [page, newList, rowsPerPage]);
 
+  // TODO: sorted columns
   const sortedItems = useMemo(() => {
     return [...items].sort((a: T, b: T) => {
       const first = a[sortDescriptor.column as keyof T] as number;
@@ -97,15 +95,12 @@ const DataTable = <T,>({
           topContent={
             hasTopContent && (
               <TopContent
-                {...headerConfig}
-                newButtonText={buttonNewText}
-                redirectTo={buttonNewLink}
                 lenght={data.length}
                 filterValue={filterValue}
-                hasNew={hasNew}
                 setFilterValue={setFilterValue}
                 setPage={setPage}
                 setRowsPerPage={setRowsPerPage}
+                {...headerConfig}
               />
             )
           }

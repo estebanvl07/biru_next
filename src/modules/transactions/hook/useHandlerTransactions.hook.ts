@@ -1,4 +1,11 @@
-import { Transaction } from "@prisma/client";
+import {
+  Category,
+  Entities,
+  Goals,
+  Transaction,
+  User,
+  UserAccount,
+} from "@prisma/client";
 import { useEffect, useState } from "react";
 import { months } from "~/lib/resource/months";
 import { useTransactions } from "./useTransactions.hook";
@@ -10,6 +17,14 @@ type BalanceByMonthType = {
   egress: number;
   transactions?: Transaction[];
 };
+
+export interface TransaccionIncludes extends Transaction {
+  category?: Category;
+  goal?: Goals;
+  user?: User;
+  useAccount?: UserAccount;
+  entities?: Entities;
+}
 
 export const getTransactionsByMonths = (transactions?: Transaction[]) => {
   const [transactionsByMonth, setTransactionsByMonth] =
@@ -23,7 +38,9 @@ export const getTransactionsByMonths = (transactions?: Transaction[]) => {
     if (!myTransactions) return;
     const groupedData = myTransactions.reduce((acc, transaction) => {
       // Extraemos el mes de la fecha
-      const month = transaction.date.getMonth() + 1;
+      const month = transaction.date
+        ? transaction.date.getMonth() + 1
+        : transaction.createdAt.getMonth() + 1;
 
       // Si ya existe una entrada para ese mes, sumamos la cantidad y agregamos el nombre
       if (acc[month]) {

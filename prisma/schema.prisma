@@ -26,34 +26,22 @@ model UserAccount {
   userId          String
   user            User          @relation(fields: [userId], references: [id], onDelete: Cascade)
   transactions    Transaction[]
-  savingMovies    SavingMoves[]
 }
 
-model SavingMoves {
-  id            Int           @id @default(autoincrement())
-  amount        Int
-  type          Int // 1: Ahorro, 2: Quitar de ahorro
-  accountId     Int
-  savingId      Int
-  userId        String
-  saving        Savings       @relation(fields: [savingId], references: [id], onDelete: Cascade)
-  user          User          @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userAccount   UserAccount   @relation(fields: [accountId], references: [id], onDelete: Cascade)
-}
 
-model Savings {
+model Goals {
   id            Int       @id @default(autoincrement())
   name          String
   description   String?
   icon          String?
-  target        Int
+  goal          Int
   saved         Int
   state         Int       @default(1) // 1:En curso, 2: Terminado, 3: Cancelado 
   userId        String
   goalDate      DateTime?
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
-  savingMoves   SavingMoves[]
+  transactions  Transaction[]
 }
 
 model Entities {
@@ -72,37 +60,41 @@ model Entities {
 }
 
 model Category {
-  id          Int      @id @default(autoincrement())
-  name        String
-  type        Int
-  icon        String
-  description String?
-  state       Int      @default(1) // 1: activo, 0: inactivo
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  transactions Transaction[]
-  userId      String
+  id              Int      @id @default(autoincrement())
+  name            String
+  type            Int
+  icon            String
+  description     String?
+  state           Int      @default(1) // 1: activo, 0: inactivo
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  transactions    Transaction[]
+  userId          String
 }
 
 model Transaction {
-  id          Int         @id @default(autoincrement())
-  accountId   Int
-  userId      String
-  amount      Int
-  type        Int
-  date        DateTime
-  recipient   String?
-  description String?
-  entityId    Int?         
-  categoryId  Int
-  state       Int?        @default(1) // 1: activo, 0: inactivo
-  createdAt   DateTime    @default(now())
-  updatedAt   DateTime    @updatedAt
-  user        User        @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userAccount UserAccount @relation(fields: [accountId], references: [id], onDelete: Cascade)
-  category    Category    @relation(fields: [categoryId], references: [id], onDelete: Cascade)
-  entity      Entities?   @relation(fields: [entityId], references: [id])
+  id              Int             @id @default(autoincrement())
+  accountId       Int
+  userId          String
+  amount          Int
+  type            Int
+  transferType    Int?            @default(1) // 1: normal, 2: ahorro
+  date            DateTime?
+  recipient       String?
+  description     String?
+  entityId        Int?         
+  goalId          Int?
+  reference       String?
+  categoryId      Int?
+  state           Int?            @default(1) // 1: activo, 0: inactivo
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
+  user            User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userAccount     UserAccount     @relation(fields: [accountId], references: [id], onDelete: Cascade)
+  category        Category?       @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  entity          Entities?       @relation(fields: [entityId], references: [id], onDelete: Cascade)
+  goal            Goals?          @relation(fields: [goalId], references: [id], onDelete: Cascade)
 }
 
 model UserPassword {
@@ -169,7 +161,6 @@ model User {
   category             Category[]
   transaction          Transaction[]
   contacts             Entities[]
-  savingMoves          SavingMoves[]
   userPassword         UserPassword?
   userVerificationCode UserVerificationCode[]
 }

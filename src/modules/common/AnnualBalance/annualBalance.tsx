@@ -9,7 +9,7 @@ import { parseAmount } from "~/lib/helpers";
 import { FONT_FAMILY } from "~/lib/constants/config";
 import dynamic from "next/dynamic";
 import { getTransactionsByMonths } from "~/modules/transactions/hook/useHandlerTransactions.hook";
-import { useTheme } from "~/lib/hooks";
+import { useThemeContext } from "~/lib/context/themeContext";
 
 const initialValues = {
   color: "",
@@ -18,6 +18,7 @@ const initialValues = {
 };
 
 const AnnualBalance = () => {
+  const [labels, setLabels] = useState<string[]>([]);
   const [incomeTransactions, setIncomeTransactions] = useState<{
     color?: string;
     name: string;
@@ -28,9 +29,9 @@ const AnnualBalance = () => {
     name: string;
     data: number[];
   }>(initialValues);
-  const [labels, setLabels] = useState<string[]>([]);
 
-  const { isDark } = useTheme();
+  const { theme } = useThemeContext();
+  const isDark = theme === "dark";
 
   const { transactionsByMonth, months } = getTransactionsByMonths();
 

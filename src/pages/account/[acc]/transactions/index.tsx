@@ -6,7 +6,7 @@ import DashboardLayout from "~/modules/layouts/Dashboard";
 import { Table } from "~/modules/components";
 
 import { columns } from "~/modules/transactions/table";
-import { Avatar, Chip, CircularProgress } from "@nextui-org/react";
+import { Avatar, Chip } from "@nextui-org/react";
 
 import { format } from "date-fns";
 import { es } from "date-fns/locale";
@@ -18,15 +18,16 @@ import type {
   Category,
   UserAccount,
   Entities,
+  Goals,
 } from "@prisma/client";
 import { useResize } from "~/lib/hooks/useResize";
-import { ListTransactions } from "~/modules/common";
 import MobileTransactionPage from "~/modules/transactions/MobileTransactionPage";
 
 type TransactionsIncludes = Transaction & {
   category: Category;
   userAccount: UserAccount;
   entity: Entities;
+  goal: Goals;
 };
 
 const TransactionPage = () => {
@@ -39,11 +40,39 @@ const TransactionPage = () => {
   const renderCell = useCallback(
     (transaction: TransactionsIncludes, columnKey: React.Key) => {
       const cellValue = transaction[columnKey as keyof TransactionsIncludes];
+
+      const getName = (): string => {
+        const defaultName =
+          transaction.type === 1 ? "Ingresos Varios" : "Gastos Varios";
+
+        if (transaction.transferType === 2) {
+          return transaction.goal.name;
+        }
+
+        return (
+          transaction.category?.name || transaction.description || defaultName
+        );
+      };
+
+      const getIcon = (): string => {
+        const typeIcon =
+          transaction.type === 1 ? "ph:trend-up" : "ph:trend-down";
+
+        if (transaction.transferType === 2) {
+          return (transaction.goal.icon as string) || typeIcon;
+        }
+        if (transaction.category) {
+          return transaction.category?.icon ?? typeIcon;
+        }
+
+        return typeIcon;
+      };
+
       switch (columnKey) {
         case "description":
           return (
             <div className="flex items-center gap-2">
-              <div className="grid h-10 w-10 place-items-center rounded-full bg-primary text-xl text-white">
+              <div className="flex !h-10 !min-w-10 items-center justify-center whitespace-nowrap rounded-full bg-primary text-xl text-white">
                 {transaction.entityId ? (
                   <Avatar
                     src={
@@ -59,7 +88,7 @@ const TransactionPage = () => {
                     {transaction.recipient ? (
                       transaction.recipient.split("")[0]
                     ) : (
-                      <Icon icon={transaction.category.icon} />
+                      <Icon icon={getIcon()} />
                     )}
                   </>
                 )}
@@ -69,16 +98,18 @@ const TransactionPage = () => {
                   <span className="text-sm">$</span>{" "}
                   {transaction.amount.toLocaleString()}
                 </h4>
-                <p className="!text-xs">
-                  {transaction.description !== ""
-                    ? transaction.description
-                    : transaction.category.name}
-                </p>
+                <p className="!text-xs">{getName()}</p>
               </aside>
             </div>
           );
         case "category":
-          return transaction.category.name;
+          return (
+            transaction.category?.name ?? (
+              <Chip size="sm" variant="flat">
+                Sin categoría
+              </Chip>
+            )
+          );
         case "type":
           return (
             <Chip
@@ -94,7 +125,13 @@ const TransactionPage = () => {
         case "createdAt":
           return (
             <span>
-              {capitalize(format(transaction.date, "PPPP", { locale: es }))}
+              {transaction.date ? (
+                <>
+                  {capitalize(format(transaction.date, "PPPP", { locale: es }))}
+                </>
+              ) : (
+                "N/A"
+              )}
             </span>
           );
         case "userAccount":
@@ -134,15 +171,14 @@ const TransactionPage = () => {
           headerConfig={{
             title: "",
             keySearch: ["title"],
+            redirectTo: `/account/${Number(params?.acc)}/transactions/new`,
+            newButtonText: "Crear Transacción",
           }}
-          buttonNewLink={`/account/${Number(params?.acc)}/transactions/new`}
-          buttonNewText="Crear transacción"
           columns={columns}
           filterKeys={["description", "amount"]}
           isLoading={isLoading}
           data={transactions ?? []}
           renderCell={renderCell}
-          hasNew
         />
       ) : (
         <MobileTransactionPage transactions={transactions ?? []} />

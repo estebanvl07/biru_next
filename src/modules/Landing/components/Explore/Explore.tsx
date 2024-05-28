@@ -1,26 +1,52 @@
 import Image from "next/image";
 import Link from "next/link";
+
 import { Button } from "~/modules/components";
+import { motion } from "framer-motion";
+import { useThemeContext } from "~/lib/context/themeContext";
 
 export const Explore = () => {
+  const { theme } = useThemeContext();
+
   return (
-    <section className="mx-auto mt-16 flex w-full flex-col-reverse items-center justify-around gap-8 px-4 md:mb-28 md:max-w-[72rem] md:px-8 lg:mt-44 lg:flex-row lg:gap-0">
-      <aside className="">
-        <span className="absolute hidden h-[20rem] w-[20rem] rounded-full bg-primary shadow-2xl shadow-primary dark:shadow-black md:block"></span>
+    <section className="mx-auto my-10 flex w-full flex-col-reverse items-center justify-around gap-8 px-4 md:mb-28 md:max-w-[72rem] md:px-8 lg:flex-row lg:gap-0">
+      <motion.aside
+        initial={{
+          opacity: 0,
+          x: -40,
+        }}
+        whileInView={{
+          opacity: 1,
+          x: 0,
+        }}
+        transition={{
+          duration: 1,
+        }}
+      >
         <Image
-          src="/dashboard_two_views.webp"
+          src={theme === "dark" ? "/mobile.png" : "/mobile-light.png"}
           alt="Dashboard views"
-          className="w-full drop-shadow-2xl md:max-w-[35rem]"
+          className="w-60 drop-shadow-xl"
           loading="lazy"
-          width={550}
-          height={550}
+          width={520}
+          height={380}
         />
-      </aside>
-      <section className="">
-        <p className="mb-4 text-center font-encode font-bold text-primary lg:text-start">
+      </motion.aside>
+      <motion.aside
+        initial={{
+          opacity: 0,
+        }}
+        whileInView={{
+          opacity: 1,
+        }}
+        transition={{
+          duration: 0.8,
+        }}
+      >
+        <p className="mb-4 font-encode font-bold text-primary">
           Explora la facilidad de su uso
         </p>
-        <h2 className="text-center font-encode text-3xl font-bold !leading-none tracking-tight md:text-4xl lg:text-start">
+        <h2 className="font-encode text-3xl font-bold !leading-none tracking-tight md:text-4xl">
           Maneja con {""}
           <span className="font-encode text-primary dark:text-indigo-400">
             Biru
@@ -29,16 +55,22 @@ export const Explore = () => {
           tu negocio de forma <br />
           fácil y sencilla
         </h2>
-        <p className="mt-4  max-w-[26rem] text-center lg:text-start">
-          {/* Lorem ipsum, dolor sit amet consectetur adipisicing elit. Fugiat quam
-          perspiciatis cum recusandae repellat quidem. */}
+        <p className="mt-4  max-w-[26rem]">
+          Lorem ipsum, dolor sit amet consectetur adipisicing elit. Fugiat quam
+          perspiciatis cum recusandae repellat quidem.
+        </p>
+        <p className="mt-4  max-w-[26rem]">
+          Lorem ipsum dolor sit amet consectetur, adipisicing elit. Amet fuga
+          consequatur quo nam id cumque nobis laboriosam vitae quod fugit
+          blanditiis tenetur consequuntur delectus, dolores autem ducimus
+          voluptas! Non, molestiae!
         </p>
         <Link href="/register" aria-label="Inicia aquí">
           <Button className="mt-8 w-full lg:w-fit">
             <span className="whitespace-nowrap">Iniciar ahora</span>
           </Button>
         </Link>
-      </section>
+      </motion.aside>
     </section>
   );
 };

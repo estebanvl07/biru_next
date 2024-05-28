@@ -23,7 +23,7 @@ export interface TransaccionIncludes extends Transaction {
   goal?: Goals;
   user?: User;
   useAccount?: UserAccount;
-  entities?: Entities;
+  entity?: Entities;
 }
 
 export const getTransactionsByMonths = (transactions?: Transaction[]) => {

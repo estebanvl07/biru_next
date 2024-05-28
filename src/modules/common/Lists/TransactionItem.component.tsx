@@ -1,17 +1,17 @@
-"use client";
 import { FC } from "react";
-import { Icon } from "@iconify/react/dist/iconify.js";
-import clsx from "clsx";
-
-import type { ITransaction } from "~/types/transactions";
 import Link from "next/link";
+
+import clsx from "clsx";
 import { format } from "date-fns";
-import { DATE_FORMAT_TRANS } from "~/lib/constants/config";
-import { TransaccionIncludes } from "~/modules/transactions/hook";
+
+import { Icon } from "@iconify/react/dist/iconify.js";
 import { Avatar } from "@nextui-org/react";
 
+import { DATE_FORMAT_TRANS } from "~/lib/constants/config";
+import type { TransactionIncludes } from "~/types/transactions";
+
 interface TransactionItemProps {
-  item: TransaccionIncludes;
+  item: TransactionIncludes;
   index: number;
   length: number;
 }

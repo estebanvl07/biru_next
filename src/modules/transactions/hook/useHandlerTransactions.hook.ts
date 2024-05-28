@@ -1,11 +1,4 @@
-import {
-  Category,
-  Entities,
-  Goals,
-  Transaction,
-  User,
-  UserAccount,
-} from "@prisma/client";
+import { Transaction } from "@prisma/client";
 import { useEffect, useState } from "react";
 import { months } from "~/lib/resource/months";
 import { useTransactions } from "./useTransactions.hook";
@@ -17,14 +10,6 @@ type BalanceByMonthType = {
   egress: number;
   transactions?: Transaction[];
 };
-
-export interface TransaccionIncludes extends Transaction {
-  category?: Category;
-  goal?: Goals;
-  user?: User;
-  useAccount?: UserAccount;
-  entity?: Entities;
-}
 
 export const getTransactionsByMonths = (transactions?: Transaction[]) => {
   const [transactionsByMonth, setTransactionsByMonth] =

@@ -13,22 +13,10 @@ import { es } from "date-fns/locale";
 import { useTransactions } from "~/modules/transactions/hook/useTransactions.hook";
 import { capitalize } from "~/modules/components/molecules/Table/utils";
 
-import type {
-  Transaction,
-  Category,
-  UserAccount,
-  Entities,
-  Goals,
-} from "@prisma/client";
+import { TransactionIncludes } from "~/types/transactions";
+
 import { useResize } from "~/lib/hooks/useResize";
 import MobileTransactionPage from "~/modules/transactions/MobileTransactionPage";
-
-type TransactionsIncludes = Transaction & {
-  category: Category;
-  userAccount: UserAccount;
-  entity: Entities;
-  goal: Goals;
-};
 
 const TransactionPage = () => {
   const params = useParams<{ acc: string }>();
@@ -38,14 +26,14 @@ const TransactionPage = () => {
   const isMobile = Boolean(size && size <= 768);
 
   const renderCell = useCallback(
-    (transaction: TransactionsIncludes, columnKey: React.Key) => {
-      const cellValue = transaction[columnKey as keyof TransactionsIncludes];
+    (transaction: TransactionIncludes, columnKey: React.Key) => {
+      const cellValue = transaction[columnKey as keyof TransactionIncludes];
 
       const getName = (): string => {
         const defaultName =
           transaction.type === 1 ? "Ingresos Varios" : "Gastos Varios";
 
-        if (transaction.transferType === 2) {
+        if (transaction.transferType === 2 && transaction.goal) {
           return transaction.goal.name;
         }
 
@@ -58,7 +46,7 @@ const TransactionPage = () => {
         const typeIcon =
           transaction.type === 1 ? "ph:trend-up" : "ph:trend-down";
 
-        if (transaction.transferType === 2) {
+        if (transaction.transferType === 2 && transaction.goal) {
           return (transaction.goal.icon as string) || typeIcon;
         }
         if (transaction.category) {
@@ -76,7 +64,7 @@ const TransactionPage = () => {
                 {transaction.entityId ? (
                   <Avatar
                     src={
-                      Boolean(transaction.entity?.avatar)
+                      transaction.entity?.avatar
                         ? (transaction.entity.avatar as string)
                         : undefined
                     }

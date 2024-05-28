@@ -1,17 +1,14 @@
 import { useEffect, useState } from "react";
-const Chart = dynamic(() => import("react-apexcharts"), {
-  ssr: false, // Evita que se ejecute en el servidor
-});
 
 import { Card, Empty } from "~/modules/components";
 
 import { FONT_FAMILY } from "~/lib/constants/config";
 
 import dynamic from "next/dynamic";
-import { useTransactions } from "../transactions/hook/useTransactions.hook";
+import { useTransactions } from "../../transactions/hook/useTransactions.hook";
 import { Transaction } from "@prisma/client";
 import { useThemeContext } from "~/lib/context/themeContext";
-import { useCategory } from "../category/hook/category.hook";
+import { useCategory } from "../../category/hook/category.hook";
 import { Spinner } from "@nextui-org/spinner";
 
 // TODO: refatorize component

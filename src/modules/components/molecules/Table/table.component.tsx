@@ -8,12 +8,11 @@ import {
   TableRow,
   TableCell,
   getKeyValue,
-  Spinner,
   type SortDescriptor,
   type Selection,
 } from "@nextui-org/react";
 
-import { type TableProps } from "./types";
+import { type TableProps } from "~/types/component/table.types";
 import BottomContent from "./BottomContent";
 import { useCallback, useMemo, useState } from "react";
 

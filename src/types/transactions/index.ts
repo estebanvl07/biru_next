@@ -1,27 +1,16 @@
-import { ISelectOptions } from "../root.types";
+import {
+  Category,
+  Entities,
+  Goals,
+  Transaction,
+  User,
+  UserAccount,
+} from "@prisma/client";
 
-export interface ITransactionRequest {
-  accountId: number;
-  userId: number;
-  amount: number;
-  type: number;
-  date: string;
-  recipient: string;
-  description: string;
-  categoryId: number;
-}
-
-export interface ITransaction {
-  id: number;
-  accountId: number;
-  userId: number;
-  amount: number;
-  type: number;
-  date: string;
-  recipient: string;
-  description: string;
-  categoryId: number;
-  state: number;
-  createdAt: string;
-  updatedAt: string;
+export interface TransactionIncludes extends Transaction {
+  category?: Category;
+  goal?: Goals;
+  entity?: Entities;
+  user: User;
+  useAccount: UserAccount;
 }

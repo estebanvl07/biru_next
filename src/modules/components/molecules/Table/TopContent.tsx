@@ -1,11 +1,11 @@
 import React from "react";
+import Link from "next/link";
 
 import { Input } from "@nextui-org/react";
 import { Button } from "~/modules/components/atoms";
 import { Icon } from "@iconify/react/dist/iconify.js";
 
-import { type TopContentProps } from "./types";
-import Link from "next/link";
+import { type TopContentProps } from "~/types/component/table.types";
 
 const TopContent = React.memo(
   ({

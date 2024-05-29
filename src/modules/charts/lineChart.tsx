@@ -7,7 +7,6 @@ import { parseAmount } from "~/lib/helpers";
 import { FONT_FAMILY } from "~/lib/constants/config";
 import type { ChartProps } from "~/types/chart.types";
 import dynamic from "next/dynamic";
-import { useTheme } from "~/lib/hooks";
 import { useThemeContext } from "~/lib/context/themeContext";
 
 // TODO: refactorize component

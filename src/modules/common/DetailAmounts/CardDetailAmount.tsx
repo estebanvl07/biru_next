@@ -1,8 +1,8 @@
 import clsx from "clsx";
 import { Card, Empty } from "~/modules/components";
 import { LineChart } from "~/modules/charts";
-import { Series } from "~/types/root.types";
 import { useResize } from "~/lib/hooks/useResize";
+import { Series } from "~/types/chart.types";
 
 type Props = {
   cardClassName?: string;

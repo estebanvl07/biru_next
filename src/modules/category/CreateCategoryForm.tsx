@@ -142,8 +142,6 @@ const CreateCategoryForm = ({ hasEdit = false }: { hasEdit?: boolean }) => {
           errorMessage={errors?.name?.message}
         />
         <Input
-          required
-          isRequired
           label="Descripción"
           startContent={
             <Icon

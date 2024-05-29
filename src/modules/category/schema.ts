@@ -3,8 +3,8 @@ import { Z_NUMBER, Z_STRING, updateSchema, z } from "~/lib/resolver/zod";
 export const input = {
   name: Z_STRING,
   type: Z_NUMBER,
-  description: z.optional(Z_STRING),
-  icon: z.optional(Z_STRING),
+  description: z.optional(z.string()),
+  icon: z.optional(z.string()),
 };
 
 export const createCategory = z.object(input);

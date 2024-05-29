@@ -4,16 +4,15 @@ import * as categoryServices from "~/server/api/services/category.services";
 import { z } from "zod";
 
 export const categoriesRouter = createTRPCRouter({
-  // create: protectedProcedure
-  //   .input(createCategory)
-  //   .mutation(async ({ ctx, input }) => {
-  //     const userId = ctx.session.user.id;
-  //     return categoryServices.createCategory(ctx.db, {
-  //       ...input,
-  //       type: parseInt(input.type),
-  //       userId,
-  //     });
-  //   }),
+  create: protectedProcedure
+    .input(createCategory)
+    .mutation(async ({ ctx, input }) => {
+      const userId = ctx.session.user.id;
+      return categoryServices.createCategory(ctx.db, {
+        ...input,
+        userId,
+      });
+    }),
   createDefaults: protectedProcedure
     .input(z.array(createCategory))
     .mutation(async ({ ctx, input }) => {

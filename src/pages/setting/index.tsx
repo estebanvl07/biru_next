@@ -56,13 +56,13 @@ const ProfilePage = () => {
                   id: 1,
                   text: "Editar Perfil",
                   startContent: <Icon icon="mage:user" width={20} />,
-                  href: "/setting/profile",
+                  // href: "/setting/profile",
                 },
                 {
                   id: 2,
                   text: "Notificaciones",
                   startContent: <Icon icon="lucide:bell" width={20} />,
-                  href: "/setting/notifications",
+                  // href: "/setting/notifications",
                 },
                 {
                   id: 3,
@@ -81,7 +81,7 @@ const ProfilePage = () => {
                   startContent: (
                     <Icon icon="material-symbols:help-outline" width={20} />
                   ),
-                  href: "/help",
+                  // href: "/help",
                 },
                 {
                   id: 2,

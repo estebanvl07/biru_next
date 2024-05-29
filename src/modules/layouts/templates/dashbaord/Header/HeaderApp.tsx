@@ -5,7 +5,13 @@ import NavigationBack from "./NavigationBack";
 
 import { useCurrentAccount } from "~/modules/Account/hooks";
 
-const HeaderApp = ({ title = "Dashboard" }: { title?: string }) => {
+const HeaderApp = ({
+  title = "Dashboard",
+  hasFilter,
+}: {
+  hasFilter?: boolean;
+  title?: string;
+}) => {
   const pathname = usePathname();
   const { account } = useCurrentAccount();
 
@@ -22,7 +28,7 @@ const HeaderApp = ({ title = "Dashboard" }: { title?: string }) => {
           </h1>
         </div>
       </aside>
-      <Nav />
+      <Nav hasFilter={hasFilter} />
     </header>
   );
 };

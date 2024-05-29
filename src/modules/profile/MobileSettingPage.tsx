@@ -1,12 +1,19 @@
+import React from "react";
+
+import Section from "~/modules/profile/Section";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import { Avatar } from "@nextui-org/react";
-import { signOut, useSession } from "next-auth/react";
-import React from "react";
+
 import { CALLBACK_SIGN_OUT_URL } from "~/lib/constants/config";
-import Section from "~/modules/profile/Section";
+
+import { signOut, useSession } from "next-auth/react";
+import { useThemeContext } from "~/lib/context/themeContext";
 
 const MobileSettingPage = () => {
   const { data } = useSession();
+
+  const { theme, setTheme } = useThemeContext();
+  const isDark = theme === "dark";
 
   const avatarSrc = data?.user.image ?? "";
 
@@ -48,7 +55,7 @@ const MobileSettingPage = () => {
             id: 3,
             text: "Tema",
             startContent: <Icon icon="iconoir:sun-light" width={20} />,
-            href: "setting/theme",
+            onclick: () => setTheme(isDark ? "light" : "dark"),
           },
         ]}
       />

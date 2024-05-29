@@ -23,8 +23,6 @@ const TransactionPage = () => {
   const params = useParams<{ acc: string }>();
   const { transactions, isLoading } = useTransactions({});
 
-  console.log(transactions);
-
   const { size } = useResize();
 
   const isMobile = Boolean(size && size <= 768);

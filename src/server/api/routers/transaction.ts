@@ -1,7 +1,4 @@
-import { Category, Entities, Transaction, UserAccount } from "@prisma/client";
-import { observable } from "@trpc/server/observable";
-import EventEmitter from "events";
-import { z } from "zod";
+import { Transaction } from "@prisma/client";
 import { createTransaction } from "~/modules/transactions/schema";
 import { filter, filterInput } from "~/modules/common/schema";
 import * as TransactionServices from "~/server/api/services/transactions.services";
@@ -9,33 +6,27 @@ import * as TransactionServices from "~/server/api/services/transactions.service
 import {
   createTRPCRouter,
   protectedProcedure,
-  publicProcedure,
 } from "~/server/api/trpc";
 
-interface TransactionsIncludes extends Transaction {
-  userAccount: UserAccount;
-  category: Category;
-  entity: Entities | null;
-}
 
-interface MyEvents {
-  new: (data: Transaction) => void;
-  // update: (data: Transaction) => void;
-}
+// interface MyEvents {
+//   new: (data: Transaction) => void;
+//   // update: (data: Transaction) => void;
+// }
 
-declare interface MyEventEmitter {
-  on<TEv extends keyof MyEvents>(event: TEv, listener: MyEvents[TEv]): this;
-  off<TEv extends keyof MyEvents>(event: TEv, listener: MyEvents[TEv]): this;
-  once<TEv extends keyof MyEvents>(event: TEv, listener: MyEvents[TEv]): this;
-  emit<TEv extends keyof MyEvents>(
-    event: TEv,
-    ...args: Parameters<MyEvents[TEv]>
-  ): boolean;
-}
+// declare interface MyEventEmitter {
+//   on<TEv extends keyof MyEvents>(event: TEv, listener: MyEvents[TEv]): this;
+//   off<TEv extends keyof MyEvents>(event: TEv, listener: MyEvents[TEv]): this;
+//   once<TEv extends keyof MyEvents>(event: TEv, listener: MyEvents[TEv]): this;
+//   emit<TEv extends keyof MyEvents>(
+//     event: TEv,
+//     ...args: Parameters<MyEvents[TEv]>
+//   ): boolean;
+// }
 
-class MyEventEmitter extends EventEmitter {}
+// class MyEventEmitter extends EventEmitter {}
 
-const ee = new MyEventEmitter();
+// const ee = new MyEventEmitter();
 
 export const transactionsRouter = createTRPCRouter({
   getTransactions: protectedProcedure

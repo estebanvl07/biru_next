@@ -29,6 +29,7 @@ const getBaseUrl = () => {
 const { publicRuntimeConfig } = getConfig();
 const { WS_URL, APP_URL } = publicRuntimeConfig;
 
+// TODO: ending links to websockets
 function getEndingLink(): TRPCLink<AppRouter> {
   const client = createWSClient({
     url: WS_URL,
@@ -41,8 +42,6 @@ function getEndingLink(): TRPCLink<AppRouter> {
     transformer: superjson,
   });
 }
-
-console.log(getBaseUrl());
 
 /** A set of type-safe react-query hooks for your tRPC API. */
 export const api = createTRPCNext<AppRouter>({
@@ -69,7 +68,7 @@ export const api = createTRPCNext<AppRouter>({
           transformer: superjson,
           url: `${APP_URL}/api/trpc`,
         }),
-        getEndingLink(),
+        // getEndingLink(),
       ],
     };
   },

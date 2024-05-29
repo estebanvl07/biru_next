@@ -24,26 +24,35 @@ const CreationMenu = () => {
   const OPTIONS: ListMenu[] = [
     {
       label: "Ingreso",
-      icon: "mdi:cash-plus",
+      icon: "iconamoon:arrow-top-right-1-light",
       href: `${BASIC_URL}transactions/new`,
     },
     {
       label: "Egreso",
-      showLine: true,
-      icon: "mdi:cash-minus",
+      icon: "iconamoon:arrow-bottom-left-1-light",
       href: `${BASIC_URL}transactions/new?type=2`,
     },
-
+    {
+      label: "Meta",
+      icon: "mdi:cash-minus",
+      showLine: true,
+      href: `${BASIC_URL}transactions/new?type=2`,
+    },
+    {
+      label: "Nueva Meta",
+      showLine: true,
+      icon: "ph:target",
+      href: `${BASIC_URL}transactions/new?type=2`,
+    },
     {
       label: "Categoria",
-      showLine: true,
       icon: "iconamoon:category",
       href: `${BASIC_URL}category/new`,
     },
     {
-      label: "Usuario",
-      icon: "mdi:user-outline",
-      href: `${BASIC_URL}category`,
+      label: "Entidad",
+      icon: "iconamoon:category",
+      href: `${BASIC_URL}category/new`,
     },
   ];
 

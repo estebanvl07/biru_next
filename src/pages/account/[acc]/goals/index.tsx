@@ -61,9 +61,13 @@ export default function GoalPage() {
           initial="hidden"
           animate="visible"
         >
-          {newList?.map((props) => (
-            <GoalCard key={props.id} goalInfo={props} />
-          ))}
+          {newList.length === 0 ? (
+            <p>No tienes metas creadas</p>
+          ) : (
+            newList?.map((props) => (
+              <GoalCard key={props.id} goalInfo={props} />
+            ))
+          )}
         </motion.section>
       )}
     </DashboardLayout>

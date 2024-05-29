@@ -10,7 +10,7 @@ import DashboardLayout from "~/modules/layouts/Dashboard";
 
 const AnalyticsPage = () => {
   return (
-    <DashboardLayout title="Análisis y estadisticas">
+    <DashboardLayout title="Análisis y estadisticas" hasFilter>
       <div className="grid grid-cols-12 gap-2">
         <article className="col-span-12 lg:col-span-7">
           <CardBalanceAccount />

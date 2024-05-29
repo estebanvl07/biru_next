@@ -19,12 +19,14 @@ const DashboardLayout = ({
   children,
   title,
   headDescription,
+  hasFilter = false,
   serviceOptions = true,
 }: {
   children: React.ReactNode;
   title?: string;
   headDescription?: string;
   serviceOptions?: boolean;
+  hasFilter?: boolean;
 }) => {
   const router = useRouter();
   const { size } = useResize();
@@ -40,7 +42,7 @@ const DashboardLayout = ({
       <section className="z-0 h-full min-h-screen w-full flex-grow py-3 md:pl-60">
         <div className="flex flex-col px-4 md:px-8">
           {size && size >= 768 ? (
-            <HeaderApp title={title} />
+            <HeaderApp title={title} hasFilter={hasFilter} />
           ) : (
             <HeaderMobile title={title} />
           )}

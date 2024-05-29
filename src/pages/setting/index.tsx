@@ -6,6 +6,7 @@ import Image from "next/image";
 import React from "react";
 import { undefined } from "zod";
 import { CALLBACK_SIGN_OUT_URL } from "~/lib/constants/config";
+import { useThemeContext } from "~/lib/context/themeContext";
 import { useTheme } from "~/lib/hooks";
 import { useResize } from "~/lib/hooks/useResize";
 import { HandlerTheme } from "~/modules/components";
@@ -18,7 +19,9 @@ import { api } from "~/utils/api";
 const ProfilePage = () => {
   const { data } = useSession();
   const { isMobile } = useResize();
-  const { isDark, mode, onChangeMode } = useTheme();
+
+  const { theme, setTheme } = useThemeContext();
+  const isDark = theme === "dark";
 
   const avatarSrc = data?.user.image ?? "";
 
@@ -65,7 +68,7 @@ const ProfilePage = () => {
                   id: 3,
                   text: isDark ? "Modo claro" : "Modo Oscuro",
                   startContent: <Icon icon="iconoir:sun-light" width={20} />,
-                  onclick: () => onChangeMode(),
+                  onclick: () => setTheme(isDark ? "light" : "dark"),
                 },
               ]}
             />

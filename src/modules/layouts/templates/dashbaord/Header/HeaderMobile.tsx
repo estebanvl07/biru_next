@@ -6,6 +6,7 @@ import { useCurrentAccount } from "~/modules/Account/hooks";
 import { Avatar } from "@nextui-org/react";
 import { useSession } from "next-auth/react";
 import ButtonMenu from "./ButtonMenu";
+import Link from "next/link";
 
 const HeaderMobile = ({ title = "Dashboard" }: { title?: string }) => {
   const pathname = usePathname();
@@ -23,6 +24,8 @@ const HeaderMobile = ({ title = "Dashboard" }: { title?: string }) => {
               color={Boolean(data?.user.image) ? "default" : "primary"}
               src={data?.user.image ?? undefined}
               name={data?.user.name ?? ""}
+              as={Link}
+              href="/setting"
             />
             <p>
               Bienvenido, <br />

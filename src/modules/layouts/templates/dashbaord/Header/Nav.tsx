@@ -15,8 +15,11 @@ import { useOutsideClick } from "~/lib/hooks";
 import { useResize } from "~/lib/hooks/useResize";
 import { Skeleton } from "@nextui-org/skeleton";
 
-// TODO: add loader
-export default function HeaderMenu() {
+export default function HeaderMenu({
+  hasFilter = true,
+}: {
+  hasFilter?: boolean;
+}) {
   const params = useParams();
 
   const [showMenu, setShowMenu] = useState(false);
@@ -35,9 +38,8 @@ export default function HeaderMenu() {
       className="relative z-10 flex items-center justify-end gap-1"
     >
       <HandlerTheme />
-      <FilterTemplates />
+      {hasFilter && <FilterTemplates />}
       {params?.acc && <CreationMenu />}
-
       {status === "loading" ? (
         <div className="flex w-40 items-center gap-2 rounded-full border p-2">
           <Skeleton className="h-8 w-8 rounded-full" />{" "}

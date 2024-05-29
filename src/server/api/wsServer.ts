@@ -1,30 +1,32 @@
-import ws from "ws";
+// TODO: configuration web sockets
 
-import { applyWSSHandler } from "@trpc/server/adapters/ws";
-import { appRouter } from "./root";
-import { createContext } from "./context";
+// import ws from "ws";
 
-const wss = new ws.Server({
-  port: 3001,
-});
+// import { applyWSSHandler } from "@trpc/server/adapters/ws";
+// import { appRouter } from "./root";
+// import { createContext } from "./context";
 
-const handler = applyWSSHandler({
-  wss,
-  router: appRouter,
-  createContext,
-});
+// const wss = new ws.Server({
+//   port: 3001,
+// });
 
-wss.on("connection", (ws) => {
-  console.log(`➕➕ Connection (${wss.clients.size})`);
-  ws.once("close", () => {
-    console.log(`➖➖ Connection (${wss.clients.size})`);
-  });
-});
+// const handler = applyWSSHandler({
+//   wss,
+//   router: appRouter,
+//   createContext,
+// });
 
-process.on("SIGTERM", () => {
-  console.log("SIGTERM");
-  handler.broadcastReconnectNotification();
-  wss.close();
-});
+// wss.on("connection", (ws) => {
+//   console.log(`➕➕ Connection (${wss.clients.size})`);
+//   ws.once("close", () => {
+//     console.log(`➖➖ Connection (${wss.clients.size})`);
+//   });
+// });
 
-console.log("✅ WebSocket Server listening on ws://localhost:3001");
+// process.on("SIGTERM", () => {
+//   console.log("SIGTERM");
+//   handler.broadcastReconnectNotification();
+//   wss.close();
+// });
+
+// console.log("✅ WebSocket Server listening on ws://localhost:3001");

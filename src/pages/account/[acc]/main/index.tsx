@@ -43,7 +43,7 @@ const HomePage = () => {
   const { isDesktop, size } = useResize();
 
   return (
-    <DashboardLayout title="Dashboard">
+    <DashboardLayout title="Dashboard" hasFilter>
       {size && size <= 768 ? (
         <MobileDashboard />
       ) : (

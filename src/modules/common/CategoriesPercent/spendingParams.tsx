@@ -63,7 +63,7 @@ const SpendingParams = ({
         />
         <div className="itmes-center absolute flex flex-col justify-center">
           <div className="flex justify-center">
-            {category && (
+            {category && category.icon && (
               <Icon
                 icon={category.icon}
                 width={22}

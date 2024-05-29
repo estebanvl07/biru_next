@@ -2,8 +2,6 @@ import React from "react";
 
 import TransactionItem from "./TransactionItem.component";
 
-import type { ITransaction } from "~/types/transactions";
-
 type Props = {
   data?: any[] | undefined;
   emptyText?: string;

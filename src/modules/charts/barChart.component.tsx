@@ -5,25 +5,9 @@ const Chart = dynamic(() => import("react-apexcharts"), {
 import { parseAmount } from "~/lib/helpers";
 
 import { FONT_FAMILY } from "~/lib/constants/config";
-import type { Series } from "~/types/root.types";
 import dynamic from "next/dynamic";
 import { useTheme } from "~/lib/hooks";
-
-interface LineChartProps {
-  series: Series[] | undefined;
-  keys?: string[];
-  titleChart?: string;
-  heightChart?: string;
-  showToolBar?: boolean;
-  showLegend?: boolean;
-  showToolTip?: boolean;
-  showXAxis?: boolean;
-  showYAxis?: boolean;
-  offsetX?: number;
-  offsetY?: number;
-  showGrid?: boolean;
-  hasformatNumber?: boolean;
-}
+import { ChartProps } from "~/types/chart.types";
 
 // TODO: refactorize component
 const BarChart = ({
@@ -40,7 +24,7 @@ const BarChart = ({
   offsetX = 0,
   offsetY,
   hasformatNumber = true,
-}: LineChartProps) => {
+}: ChartProps) => {
   // TODO: darkmdoe pending
   const { isDark } = useTheme();
 

@@ -1,27 +1,26 @@
 import { useEffect, useState } from "react";
 
 import { Card, Empty } from "~/modules/components";
-
-import { FONT_FAMILY } from "~/lib/constants/config";
-
-import dynamic from "next/dynamic";
-import { useTransactions } from "../../transactions/hook/useTransactions.hook";
-import { Transaction } from "@prisma/client";
-import { useThemeContext } from "~/lib/context/themeContext";
-import { useCategory } from "../../category/hook/category.hook";
 import { Spinner } from "@nextui-org/spinner";
+import PieChart from "~/modules/charts/pieChart";
 
-// TODO: refatorize component
+import { useCategory } from "../../category/hook/category.hook";
+import { useTransactions } from "../../transactions/hook/useTransactions.hook";
+import { useFilterContext } from "~/lib/context/filterContext";
+
+import type { Transaction } from "@prisma/client";
+
 const PieChartAmountByCategoires = () => {
-  const [chartLabels, setChartLabels] = useState<(string | undefined)[]>([""]);
-  const [chartSeries, setChartSeries] = useState<number[]>([0]);
+  const [chartLabels, setChartLabels] = useState<string[]>([]);
+  const [chartSeries, setChartSeries] = useState<number[]>([]);
 
-  const { theme } = useThemeContext();
-  const isDark = theme === "dark";
+  const { categories } = useCategory();
+  const { filter, rangeDate } = useFilterContext();
 
-  const { categories, isLoading } = useCategory();
-
-  const { transactions } = useTransactions();
+  const { transactions, isLoading } = useTransactions({
+    filter,
+    ...rangeDate,
+  });
 
   useEffect(() => {
     if (!transactions) return;
@@ -66,13 +65,14 @@ const PieChartAmountByCategoires = () => {
         const hasCategory = categories.find(
           (category) => category.id === Number(key),
         );
+        if (key === "null") {
+          return "Sin categoría";
+        }
         return hasCategory?.name;
       });
 
-      const names = Object.values(nameOfCategories);
-
       setChartSeries(transactionsSeries);
-      setChartLabels(names);
+      setChartLabels(nameOfCategories as string[]);
     }
   }, [transactions]);
 
@@ -90,77 +90,14 @@ const PieChartAmountByCategoires = () => {
           </div>
         ) : (
           <>
-            {!isLoading && chartSeries.length === 0 ? (
+            {chartSeries?.length === 0 ? (
               <Empty description="No encontramos datos" />
             ) : (
-              <Chart
-                options={{
-                  chart: {
-                    toolbar: {
-                      show: false,
-                    },
-                    offsetX: 0,
-                    offsetY: 0,
-                  },
-                  plotOptions: {
-                    pie: {
-                      expandOnClick: false,
-                      donut: {
-                        labels: {
-                          name: {
-                            fontFamily: "Montserrat",
-                            color: isDark ? "#fff" : "#000",
-                          },
-                          value: {
-                            fontFamily: "Montserrat",
-                            formatter(val: string) {
-                              const valInt = parseInt(val);
-                              return `$ ${valInt.toLocaleString()}`;
-                            },
-                            color: isDark ? "#fff" : "#000",
-                          },
-                          show: true,
-                        },
-                      },
-                    },
-                  },
-                  tooltip: {
-                    custom: (props) => {
-                      const currentValue = `${props.series[props.seriesIndex]}`;
-                      return `
-                <div  class="arrow_box bg-white px-6 py-2 flex flex-col justify-center items-center dark:bg-slate-950 border dark:border-white/10">
-                <span class="text-black dark:text-white/60">${
-                  chartLabels[props.seriesIndex]
-                }</span>
-                <span class="text-black font-semibold text-base dark:text-white">
-                  $ ${Number(currentValue).toLocaleString()}
-                </span>
-                
-                </div>
-                `;
-                    },
-                  },
-
-                  stroke: {
-                    width: 4,
-                    colors: [isDark ? "#0f172a" : "#f8fafc"],
-                    curve: "straight",
-                    lineCap: "square",
-                  },
-                  dataLabels: {
-                    formatter: (val, options) => {
-                      return "";
-                    },
-                  },
-                  legend: {
-                    fontFamily: FONT_FAMILY,
-                  },
-                  labels: chartLabels as string[],
-                }}
+              <PieChart
                 series={chartSeries}
-                type="donut"
-                width="100%"
-                height={220}
+                keys={chartLabels}
+                heightChart="230"
+                showToolBar={false}
               />
             )}
           </>

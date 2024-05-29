@@ -3,8 +3,6 @@ import { useEffect, useState } from "react";
 import { Card } from "~/modules/components";
 import { LineChart } from "~/modules/charts";
 
-import type { Series } from "~/types/root.types";
-import type { IAccount } from "~/types/account";
 import { useCurrentAccount } from "~/modules/Account/hooks";
 import {
   getMonths,
@@ -15,8 +13,11 @@ import { Button } from "@nextui-org/button";
 import Link from "next/link";
 import { Empty } from "~/modules/components/molecules";
 import { useParams } from "next/navigation";
-import ChartsFilterList from "~/modules/charts/chartsFilterList.component";
+// import ChartsFilterList from "~/modules/charts/chartsFilterList.component";
 import { useResize } from "~/lib/hooks/useResize";
+import { useFilterContext } from "~/lib/context/filterContext";
+import { Series } from "~/types/chart.types";
+import { api } from "~/utils/api";
 
 // TODO: filter by options
 const CardBalanceAccount = () => {
@@ -25,11 +26,12 @@ const CardBalanceAccount = () => {
   const [date, setDate] = useState<{ from: string; to: string }>();
   const { account } = useCurrentAccount();
   const { isDesktop } = useResize();
+  const { filter, rangeDate } = useFilterContext();
 
-  const { transactions } = useTransactions();
-  // const months = getMonths(transactions);
-
-  const accountSelected = [] as IAccount[];
+  const { transactions, isLoading } = useTransactions({
+    filter,
+    ...rangeDate,
+  });
 
   const setChartSeries = () => {
     if (!transactions) return setSerie([]);
@@ -43,7 +45,7 @@ const CardBalanceAccount = () => {
   };
 
   useEffect(() => {
-    if (!account) return;
+    if (!account && !isLoading) return;
     setChartSeries();
   }, [account, transactions]);
 
@@ -66,8 +68,8 @@ const CardBalanceAccount = () => {
         </div>
         {/* <ChartsFilterList filterbyType={() => {}} /> */}
       </header>
-      <section className="block">
-        {transactions && transactions.length > 0 ? (
+      <section className="block h-full w-full">
+        {serie && serie[0]!?.data.length > 0 ? (
           <LineChart
             series={serie}
             // keys={months}

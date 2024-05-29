@@ -17,10 +17,14 @@ import { TransactionIncludes } from "~/types/transactions";
 
 import { useResize } from "~/lib/hooks/useResize";
 import MobileTransactionPage from "~/modules/transactions/MobileTransactionPage";
+import { api } from "~/utils/api";
 
 const TransactionPage = () => {
   const params = useParams<{ acc: string }>();
-  const { transactions, isLoading } = useTransactions();
+  const { transactions, isLoading } = useTransactions({});
+
+  console.log(transactions);
+
   const { size } = useResize();
 
   const isMobile = Boolean(size && size <= 768);

@@ -83,12 +83,12 @@ export const menuOptions = [
         href: "/category",
       },
 
-      {
-        id: 4,
-        name: "Cuentas",
-        icon: "wpf:bank-cards",
-        href: "/all-accounts",
-      },
+      // {
+      //   id: 4,
+      //   name: "Cuentas",
+      //   icon: "wpf:bank-cards",
+      //   href: "/all-accounts",
+      // },
     ],
   },
 ];

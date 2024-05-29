@@ -3,13 +3,15 @@ const Chart = dynamic(() => import("react-apexcharts"), {
 });
 import React, { useEffect, useState } from "react";
 import { Card } from "~/modules/components";
-// import { useTransactions } from "~/lib/hooks/useTransactions";
 import { parseAmount } from "~/lib/helpers";
 
 import { FONT_FAMILY } from "~/lib/constants/config";
 import dynamic from "next/dynamic";
 import { getTransactionsByMonths } from "~/modules/transactions/hook/useHandlerTransactions.hook";
+
 import { useThemeContext } from "~/lib/context/themeContext";
+import { useFilterContext } from "~/lib/context/filterContext";
+import { useTransactions } from "~/modules/transactions/hook";
 
 const initialValues = {
   color: "",
@@ -30,10 +32,15 @@ const AnnualBalance = () => {
     data: number[];
   }>(initialValues);
 
+  const { filter, rangeDate } = useFilterContext();
   const { theme } = useThemeContext();
   const isDark = theme === "dark";
 
-  const { transactionsByMonth, months } = getTransactionsByMonths();
+  const { transactions } = useTransactions({
+    filter,
+    ...rangeDate,
+  });
+  const { transactionsByMonth, months } = getTransactionsByMonths(transactions);
 
   useEffect(() => {
     if (!transactionsByMonth) return;

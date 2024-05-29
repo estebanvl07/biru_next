@@ -4,20 +4,34 @@ const Chart = dynamic(() => import("react-apexcharts"), {
 });
 
 import { useThemeContext } from "~/lib/context/themeContext";
+import { ChartProps } from "~/types/chart.types";
 
-const PieChart = (props) => {
+import { FONT_FAMILY } from "~/lib/constants/config";
+import { useResize } from "~/lib/hooks/useResize";
+
+const PieChart = ({
+  series,
+  keys,
+  heightChart = "600",
+  offsetX,
+  offsetY,
+  showToolBar = true,
+}: ChartProps) => {
   const { theme } = useThemeContext();
   const isDark = theme === "dark";
+  const { isMobile } = useResize();
+
+  if (Array.isArray(series) && series?.length === 0) return;
 
   return (
     <Chart
       options={{
         chart: {
           toolbar: {
-            show: false,
+            show: showToolBar,
           },
-          offsetX: 0,
-          offsetY: 0,
+          offsetX,
+          offsetY,
         },
         plotOptions: {
           pie: {
@@ -47,17 +61,16 @@ const PieChart = (props) => {
             return `
                 <div  class="arrow_box bg-white px-6 py-2 flex flex-col justify-center items-center dark:bg-slate-950 border dark:border-white/10">
                 <span class="text-black dark:text-white/60">${
-                  chartLabels[props.seriesIndex]
+                  keys ? keys[props.seriesIndex] : ""
                 }</span>
                 <span class="text-black font-semibold text-base dark:text-white">
                   $ ${Number(currentValue).toLocaleString()}
                 </span>
-                
+
                 </div>
                 `;
           },
         },
-
         stroke: {
           width: 4,
           colors: [isDark ? "#0f172a" : "#f8fafc"],
@@ -71,13 +84,14 @@ const PieChart = (props) => {
         },
         legend: {
           fontFamily: FONT_FAMILY,
+          position: isMobile ? "bottom" : "right",
         },
-        labels: chartLabels as string[],
+        labels: keys as string[],
       }}
-      series={chartSeries}
+      series={series}
       type="donut"
       width="100%"
-      height={220}
+      height={isMobile ? "350" : heightChart}
     />
   );
 };

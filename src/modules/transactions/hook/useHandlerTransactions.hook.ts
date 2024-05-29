@@ -1,7 +1,7 @@
 import { Transaction } from "@prisma/client";
 import { useEffect, useState } from "react";
 import { months } from "~/lib/resource/months";
-import { useTransactions } from "./useTransactions.hook";
+import { useFilterContext } from "~/lib/context/filterContext";
 
 type BalanceByMonthType = {
   month: string;
@@ -17,7 +17,6 @@ export const getTransactionsByMonths = (transactions?: Transaction[]) => {
   const [myTransactions, setMyTransactions] = useState<Transaction[]>();
   const [balanceByMonth, setBalanceByMonth] = useState<number[]>();
   const [filteredMonths, setFilteredMonths] = useState<string[]>();
-  const { transactions: hookTransaction } = useTransactions();
 
   const onFilterByMonth = () => {
     if (!myTransactions) return;
@@ -67,10 +66,8 @@ export const getTransactionsByMonths = (transactions?: Transaction[]) => {
   useEffect(() => {
     if (transactions) {
       setMyTransactions(transactions);
-    } else {
-      setMyTransactions(hookTransaction);
     }
-  }, [transactions, hookTransaction]);
+  }, [transactions]);
 
   useEffect(() => {
     myTransactions && onFilterByMonth();

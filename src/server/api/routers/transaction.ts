@@ -3,6 +3,7 @@ import { observable } from "@trpc/server/observable";
 import EventEmitter from "events";
 import { z } from "zod";
 import { createTransaction } from "~/modules/transactions/schema";
+import { filter, filterInput } from "~/modules/common/schema";
 import * as TransactionServices from "~/server/api/services/transactions.services";
 
 import {
@@ -38,12 +39,9 @@ const ee = new MyEventEmitter();
 
 export const transactionsRouter = createTRPCRouter({
   getTransactions: protectedProcedure
-    .input(z.object({ accountId: z.string() }))
+    .input(filterInput)
     .query(({ input, ctx }) => {
-      return TransactionServices.getTransactionsByAccount(
-        ctx.db,
-        Number(input.accountId),
-      );
+      return TransactionServices.getTransactionsByFilter(ctx.db, input);
     }),
   create: protectedProcedure
     .input(createTransaction)
@@ -55,24 +53,4 @@ export const transactionsRouter = createTRPCRouter({
       });
       return response;
     }),
-  // onCreate: protectedProcedure.subscription(() => {
-  //   return observable<Transaction>((emit) => {
-  //     const onNew = (data: Transaction) => {
-  //       emit.next(data);
-  //     };
-  //     ee.on("new", onNew);
-  //     return () => {
-  //       ee.off("new", onNew);
-  //     };
-  //   });
-  // }),
-  //   getLatest: protectedProcedure.query(({ ctx }) => {
-  //     return ctx.db.post.findFirst({
-  //       orderBy: { createdAt: "desc" },
-  //       where: { createdBy: { id: ctx.session.user.id } },
-  //     });
-  //   }),
-  //   getSecretMessage: protectedProcedure.query(() => {
-  //     return "you can now see this secret message!";
-  //   }),
 });

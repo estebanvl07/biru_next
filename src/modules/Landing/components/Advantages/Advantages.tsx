@@ -87,7 +87,7 @@ export const Advantages = () => {
         transition={{
           duration: 1,
         }}
-        className="mt-8 flex w-full items-center justify-center overflow-auto"
+        className="mt-8 flex h-full w-full items-center justify-center overflow-auto"
       >
         <Swiper
           pagination={{

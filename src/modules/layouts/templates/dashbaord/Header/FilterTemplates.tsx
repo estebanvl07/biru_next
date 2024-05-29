@@ -11,21 +11,34 @@ import { Icon } from "@iconify/react/dist/iconify.js";
 import type { RangeValue } from "@nextui-org/react";
 import { AnimatePresence, motion } from "framer-motion";
 import { useOutsideClick } from "~/lib/hooks";
+import { api } from "~/utils/api";
+import { useParams } from "next/navigation";
+import { createTRPCQueryUtils, createTRPCReact } from "@trpc/react-query";
+import { QueryClient } from "@tanstack/react-query";
+import { AppRouter } from "~/server/api/root";
+import { FILTERS } from "~/types/transactions";
+import { useFilterContext } from "~/lib/context/filterContext";
 
 const FilterTemplates = () => {
+  const params = useParams();
+
   const [hasCalendar, setHasCalendar] = useState(false);
   const [showCalendar, setShowCalendar] = useState(false);
-  const [rangeDate, setRangeDate] = useState<RangeValue<DateValue>>();
   const divRef = useOutsideClick<HTMLDivElement>(() => setShowCalendar(false));
+  const { setFilter, setRangeDate } = useFilterContext();
 
   const handleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    const value = Number(event.target.value);
-    if (value === 6) {
-      setHasCalendar(true);
-      //   setShowCalendar(true);
-      return;
-    }
-    setHasCalendar(false);
+    const value: FILTERS = Number(event.target.value);
+    value !== 5 && setFilter(value);
+    value === 5 ? setHasCalendar(true) : setHasCalendar(false);
+  };
+
+  const onSearchByDates = (e: any) => {
+    console.log(e);
+    const startDate = new Date(e.start);
+    const endDate = new Date(e.end);
+    setFilter(5);
+    setRangeDate({ startDate, endDate });
   };
 
   return (
@@ -59,27 +72,22 @@ const FilterTemplates = () => {
             <AnimatePresence>
               <motion.div
                 initial={{
-                  top: 0,
-                  left: 0,
-                  y: 0,
-                  scale: 0.6,
+                  opacity: 0.6,
                 }}
                 animate={{
-                  y: 56,
-                  scale: 1,
+                  opacity: 1,
                 }}
                 exit={{
                   scale: 0,
                   opacity: 0,
                 }}
-                className="absolute top-14 z-30"
+                className="absolute top-16 z-30 w-[34rem]"
                 aria-label="Select date"
               >
                 <RangeCalendar
                   color="primary"
                   className="bg-default-50"
-                  // value={rangeDate}
-                  onFocusChange={(date) => console.log(date)}
+                  onChange={onSearchByDates}
                   aria-label="Date (Visible Month)"
                   visibleMonths={2}
                 />
@@ -90,8 +98,9 @@ const FilterTemplates = () => {
       )}
       <Select
         className="w-32 lg:w-48"
-        defaultSelectedKeys={[1]}
+        defaultSelectedKeys={[0]}
         aria-label="Select filter templates"
+        placeholder="Filtrar"
         startContent={
           <Icon
             icon="majesticons:filter-line"

@@ -61,17 +61,13 @@ const TransactionItem: FC<TransactionItemProps> = ({ item, index, length }) => {
         className={clsx(
           "flex cursor-pointer items-center justify-between border-gray-400/60 px-2 py-3 transition-all duration-300 dark:border-white/10",
         )}
-        title={item.description ?? item.category?.name ?? item.goal?.name ?? ""}
+        title={getName()}
       >
         <div className="flex items-center gap-3">
           {item.entityId ? (
             <Avatar color="primary" name={item.entity?.name} />
           ) : (
-            <span
-              className={clsx(
-                "flex h-11 w-11 items-center justify-center rounded-full bg-primary text-white shadow-lg",
-              )}
-            >
+            <span className="flex h-10 w-10 items-center justify-center rounded-full bg-primary text-white shadow-lg">
               <Icon icon={getIcon() ?? icon} width={22} />
             </span>
           )}

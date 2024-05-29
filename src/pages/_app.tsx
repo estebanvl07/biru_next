@@ -9,6 +9,7 @@ import { type AppType } from "next/app";
 
 import "~/styles/globals.css";
 import { ThemeProvider } from "~/lib/context/themeContext";
+import { FilterProvider } from "~/lib/context/filterContext";
 
 const montserrat = Montserrat({
   subsets: ["latin"],
@@ -23,9 +24,11 @@ const MyApp: AppType<{ session: Session | null }> = ({
     <SessionProvider session={session}>
       <NextUIProvider>
         <ThemeProvider>
-          <div className={`font-sans ${montserrat.variable}`}>
-            <Component {...pageProps} />
-          </div>
+          <FilterProvider>
+            <div className={`font-sans ${montserrat.variable}`}>
+              <Component {...pageProps} />
+            </div>
+          </FilterProvider>
         </ThemeProvider>
       </NextUIProvider>
     </SessionProvider>

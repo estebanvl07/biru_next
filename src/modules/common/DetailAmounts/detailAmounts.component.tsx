@@ -6,13 +6,14 @@ import CardDetailAmount from "./CardDetailAmount";
 
 import { getPercent } from "~/lib/helpers";
 // import { useTransactions } from "~/lib/hooks/useTransactions";
-import { Series } from "~/types/root.types";
 import { Card } from "~/modules/components";
 import { useTransactions } from "~/modules/transactions/hook/useTransactions.hook";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import { useCurrentAccount } from "~/modules/Account/hooks";
 import { getTransactionsByMonths } from "~/modules/transactions/hook/useHandlerTransactions.hook";
 import { useParams } from "next/navigation";
+import { useFilterContext } from "~/lib/context/filterContext";
+import { Series } from "~/types/chart.types";
 
 type DetailAmountProps = {
   className?: string;
@@ -38,24 +39,38 @@ const DetailAmounts = ({ className, cardClassName }: DetailAmountProps) => {
   const [egressTransactions, setEgressTransactions] =
     useState<Series>(initialValues);
 
+  const { filter, rangeDate } = useFilterContext();
+
   const { account } = useCurrentAccount();
-  const { transactionsByMonth } = getTransactionsByMonths();
-  // const { seriesTransaction, filterByMonth } = useTransactions();
+  const { transactions } = useTransactions({
+    filter,
+    startDate: rangeDate?.startDate,
+    endDate: rangeDate?.endDate,
+  });
+  // const { transactionsByMonth } = getTransactionsByMonths(transactions);
 
   useEffect(() => {
-    if (!transactionsByMonth) return;
-
-    // get transaction last index because is last month
-    const transactionsLastMonth =
-      transactionsByMonth[transactionsByMonth.length - 1]?.transactions;
-
-    // console.log(transactionsLastMonth);
-
-    if (!transactionsLastMonth) return;
+    if (!transactions) return;
 
     // separate incomes and egress
-    const incomeTr = transactionsLastMonth.filter((tr) => tr.type === 1);
-    const egressTr = transactionsLastMonth.filter((tr) => tr.type === 2);
+    const incomeTr = transactions.filter(({ type, transferType }) => {
+      if (type === 1 && transferType === 1) {
+        return true;
+      }
+      if (type === 2 && transferType === 2) {
+        return true;
+      }
+      return false;
+    });
+    const egressTr = transactions.filter(({ type, transferType }) => {
+      if (type === 2 && transferType === 1) {
+        return true;
+      }
+      if (type === 1 && transferType === 2) {
+        return true;
+      }
+      return false;
+    });
 
     // get alone amounts
     const incomes = incomeTr.map((tr) => tr.amount);
@@ -71,20 +86,20 @@ const DetailAmounts = ({ className, cardClassName }: DetailAmountProps) => {
     setIncomeTransactions({
       color: "#22c55e",
       name: "Ingresos",
-      data: [...incomes.reverse()],
+      data: [...incomes],
     });
 
     setEgressTransactions({
       color: "#ef4444",
       name: "Egresos",
-      data: [...egress.reverse()],
+      data: [...egress],
     });
-  }, [transactionsByMonth]);
+  }, [transactions]);
 
   return (
     <section
       className={clsx(
-        "flex h-full w-full min-w-[40rem] flex-col gap-2 overflow-auto md:min-w-fit",
+        "scrollbar-customized flex h-full w-full min-w-[40rem] flex-col gap-2 overflow-auto md:min-w-fit",
         className,
       )}
     >

@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React, { useEffect, useMemo } from "react";
 
 import { getQueryKey } from "@trpc/react-query";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
@@ -12,42 +12,41 @@ import { format } from "date-fns";
 import { DATE_FORMAT_TRANS } from "~/lib/constants/config";
 import { es } from "date-fns/locale";
 import { useParams } from "next/navigation";
+import { FILTERS, FilterOptions } from "~/types/transactions";
+import { useFilterContext } from "~/lib/context/filterContext";
 
-export const formatterTransactions = (
-  transactions: Transaction[],
-): Transaction[] => {
-  const formatted = transactions?.map((tr: Transaction) => {
-    return {
-      ...tr,
-      createdAt: format(String(tr.createdAt), DATE_FORMAT_TRANS, {
-        locale: es,
-      }) as any,
-      updatedAt: format(String(tr.updatedAt), DATE_FORMAT_TRANS, {
-        locale: es,
-      }) as any,
-    };
-  });
-  return formatted as Transaction[];
+const initialOptions = {
+  filter: 0,
 };
 
-export const useTransactions = () => {
+export const useTransactions = (options: FilterOptions) => {
   const params = useParams();
   const queryClient = useQueryClient();
-
   const accountId = params?.acc ? String(params?.acc) : undefined;
 
   const hasTransactionsCached = useMemo(() => {
     const transactionsKey = getQueryKey(
       api.transaction.getTransactions,
-      { accountId },
+      {
+        accountId: Number(accountId),
+        filter: options?.filter ?? FILTERS.none,
+        startDate: options?.startDate,
+        endDate: options?.endDate,
+      },
       "query",
     );
+
     const transactionCache = queryClient.getQueryData(transactionsKey);
     return Boolean(transactionCache);
-  }, []);
+  }, [options]);
 
   const { data, isLoading } = api.transaction.getTransactions.useQuery(
-    { accountId: accountId as any },
+    {
+      accountId: Number(accountId) as any,
+      filter: options?.filter ?? FILTERS.none,
+      startDate: options?.startDate,
+      endDate: options?.endDate,
+    },
     {
       enabled: !!accountId && !hasTransactionsCached,
     },
@@ -83,4 +82,21 @@ export const getMonths = (transactions: Transaction[]) => {
   }, []);
 
   return data;
+};
+
+export const formatterTransactions = (
+  transactions: Transaction[],
+): Transaction[] => {
+  const formatted = transactions?.map((tr: Transaction) => {
+    return {
+      ...tr,
+      createdAt: format(String(tr.createdAt), DATE_FORMAT_TRANS, {
+        locale: es,
+      }) as any,
+      updatedAt: format(String(tr.updatedAt), DATE_FORMAT_TRANS, {
+        locale: es,
+      }) as any,
+    };
+  });
+  return formatted as Transaction[];
 };

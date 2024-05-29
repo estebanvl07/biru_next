@@ -12,22 +12,22 @@ const AnalyticsPage = () => {
   return (
     <DashboardLayout title="Análisis y estadisticas">
       <div className="grid grid-cols-12 gap-2">
-        <article className="col-span-7">
+        <article className="col-span-12 lg:col-span-7">
           <CardBalanceAccount />
         </article>
-        <article className="col-span-5">
-          <DetailAmounts />
+        <article className="col-span-12 lg:col-span-5">
+          <DetailAmounts className="!min-w-full flex-col md:flex-row lg:flex-col" />
         </article>
-        <article className="col-span-7">
+        <article className="col-span-12 xl:col-span-7">
           <AnnualBalance />
         </article>
-        <article className="col-span-5">
+        <article className="col-span-12 xl:col-span-5">
           <PieChartAmountByCategoires />
         </article>
-        <article className="col-span-6">
+        <article className="col-span-12 lg:col-span-6">
           <LastTransactions transactionsMaxLength={5} />
         </article>
-        <article className="col-span-6">
+        <article className="col-span-12 lg:col-span-6">
           <CategoriesPercent />
         </article>
       </div>

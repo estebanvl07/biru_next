@@ -1,4 +1,6 @@
 import type { Prisma, PrismaClient } from "@prisma/client";
+import { FILTERS, FilterOptions } from "~/types/transactions";
+import { filtersHander } from "../filterHandler";
 
 export async function createTransaction(
   db: PrismaClient,
@@ -119,6 +121,28 @@ export async function deleteTransaction(db: PrismaClient, id: number) {
 export function getTransactionsByAccount(db: PrismaClient, accountId: number) {
   return db.transaction.findMany({
     where: { accountId },
+    include: { userAccount: true, category: true, entity: true, goal: true },
+    orderBy: {
+      createdAt: "desc",
+    },
+  });
+}
+
+export async function getTransactionsByFilter(
+  db: PrismaClient,
+  options: FilterOptions,
+) {
+  const { accountId } = options;
+  const { filterEndDate, filterStartDate } = filtersHander(options);
+
+  return db.transaction.findMany({
+    where: {
+      accountId,
+      date: {
+        gte: filterStartDate,
+        lt: filterEndDate,
+      },
+    },
     include: { userAccount: true, category: true, entity: true, goal: true },
     orderBy: {
       createdAt: "desc",

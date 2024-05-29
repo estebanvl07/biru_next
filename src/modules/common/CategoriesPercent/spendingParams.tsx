@@ -5,6 +5,7 @@ import { Icon } from "@iconify/react/dist/iconify.js";
 import dynamic from "next/dynamic";
 
 import { Category } from "@prisma/client";
+import { useResize } from "~/lib/hooks/useResize";
 
 interface SpendingParamsProps {
   category?: Category;
@@ -18,10 +19,11 @@ const SpendingParams = ({
   percentBalance = 0,
 }: SpendingParamsProps) => {
   const percentValue = Number(percent.split("%")[0]);
+  const { size } = useResize();
 
   return (
     <div className="flex flex-col items-center pb-8" title={category?.name}>
-      <div className="relative flex h-[110px] w-[110px] items-center justify-center">
+      <div className="relative flex h-[150px] w-[150px] items-center justify-center">
         <Chart
           options={{
             chart: {
@@ -50,18 +52,14 @@ const SpendingParams = ({
             },
 
             colors: ["#3E1FE9"],
-            fill: {
-              // colors: ["#e11d48"],
-            },
-
             stroke: {
               lineCap: "round",
             },
           }}
           series={[percentValue]}
           type="radialBar"
-          height={180}
-          width={180}
+          height={size === 1024 ? 180 : 200}
+          width={size === 1024 ? 180 : 200}
         />
         <div className="itmes-center absolute flex flex-col justify-center">
           <div className="flex justify-center">

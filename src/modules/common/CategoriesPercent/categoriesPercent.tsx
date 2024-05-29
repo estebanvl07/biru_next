@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Pagination } from "swiper/modules";
 
-import { Card } from "~/modules/components";
+import { Card, Empty } from "~/modules/components";
 import SpendingParams from "./spendingParams";
 import { getPercent } from "~/lib/helpers";
 
@@ -14,6 +14,8 @@ import "swiper/css";
 import "swiper/css/pagination";
 import { api } from "~/utils/api";
 import { useTransactions } from "~/modules/transactions/hook/useTransactions.hook";
+import { useResize } from "~/lib/hooks/useResize";
+import { useFilterContext } from "~/lib/context/filterContext";
 
 type ChartInfoType = {
   category: Category;
@@ -23,9 +25,16 @@ type ChartInfoType = {
 const CategoriesPercent = () => {
   const [chartPieInfo, setChartPieInfo] = useState<ChartInfoType[]>([]);
   const [totalBalance, setTotalBalance] = useState<number>();
+  const { filter, rangeDate } = useFilterContext();
+
+  const { isMobile } = useResize();
 
   const { data: categories } = api.category.getAll.useQuery();
-  const { transactions } = useTransactions();
+
+  const { transactions } = useTransactions({
+    filter,
+    ...rangeDate,
+  });
   // TODO: convert to hook
   useEffect(() => {
     if (!categories || !transactions) return;
@@ -34,10 +43,10 @@ const CategoriesPercent = () => {
       transactions.reduce(
         (acc, transaction) => {
           const { categoryId } = transaction;
-          if (!acc[categoryId]) {
-            acc[categoryId] = [];
+          if (!acc[categoryId as number]) {
+            acc[categoryId as number] = [];
           }
-          acc[categoryId]!.push(transaction);
+          acc[categoryId as number]!.push(transaction);
           return acc;
         },
         {} as Record<number, Transaction[]>,
@@ -71,7 +80,7 @@ const CategoriesPercent = () => {
 
     transactionsSeries.map((amount, index) => {
       const chartInfo = {
-        category: categoryOptions[index],
+        category: categoryOptions[index] ?? { name: "Sin categoría" },
         amount,
       } as ChartInfoType;
 
@@ -93,19 +102,27 @@ const CategoriesPercent = () => {
   return (
     <Card className="h-full flex-col">
       <h3 className="mb-2">Porcentajes de categorías</h3>
-      <section className="flex h-full max-w-full flex-wrap items-center justify-center py-2">
-        {chartPieInfo && (
+      <section className="flex h-full w-full max-w-full flex-wrap items-center justify-center py-2">
+        {chartPieInfo && categories?.length !== 0 && (
           <>
             <Swiper
-              slidesPerView={chartPieInfo.length < 3 ? chartPieInfo.length : 3}
-              spaceBetween={30}
+              slidesPerView={
+                isMobile
+                  ? chartPieInfo.length > 1
+                    ? 2
+                    : 1
+                  : chartPieInfo.length > 3
+                    ? 3
+                    : chartPieInfo.length
+              }
+              spaceBetween={isMobile ? 10 : 50}
               navigation={true}
               pagination={{
                 type: "bullets",
               }}
               color="#d3d3d3"
               modules={[Pagination]}
-              className="mySwiper"
+              className="mySwiper w-full"
             >
               {chartPieInfo.map((info) => {
                 return (
@@ -121,7 +138,7 @@ const CategoriesPercent = () => {
           </>
         )}
         {chartPieInfo.length === 0 && (
-          <span className="mx-auto text-sm">No se encontraron resulados</span>
+          <Empty description="No encontramos datos" />
         )}
       </section>
     </Card>

@@ -37,17 +37,19 @@ const CategotyCard = ({
       onClick={onClick}
       title={description ?? "Sin descripción"}
     >
-      <Icon
-        icon={icon}
-        className={clsx(
-          "right-4 text-indigo-600 dark:text-indigo-400",
-          iconClassName,
-          {
-            "!text-indigo-400/25": state === 2,
-          },
-        )}
-        width={32}
-      />
+      {icon && (
+        <Icon
+          icon={icon}
+          className={clsx(
+            "right-4 text-indigo-600 dark:text-indigo-400",
+            iconClassName,
+            {
+              "!text-indigo-400/25": state === 2,
+            },
+          )}
+          width={32}
+        />
+      )}
       <p
         className={clsx(
           "max-w-32 overflow-hidden text-ellipsis whitespace-nowrap font-medium dark:text-white",

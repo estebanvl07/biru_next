@@ -5,7 +5,6 @@ import { Card } from "~/modules/components";
 import { ListTransactions } from "~/modules/common";
 // import { ListTransaction } from ""
 
-import type { ITransaction } from "~/types/transactions";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import { api } from "~/utils/api";
@@ -14,9 +13,10 @@ import {
   formatterTransactions,
 } from "~/modules/transactions/hook/useTransactions.hook";
 import { LoaderSkeleton } from "~/modules/Loaders";
+import { Transaction } from "@prisma/client";
 
 interface LastTransactionsProps {
-  transactions?: ITransaction[];
+  transactions?: Transaction[];
   showHeader?: boolean;
   transactionsMaxLength?: number;
   cardClassName?: string;
@@ -30,8 +30,9 @@ const LastTransactions: FC<LastTransactionsProps> = ({
 }) => {
   const params = useParams<{ acc: string }>();
 
-  const { transactions, isLoading } = useTransactions();
+  const { transactions, isLoading } = useTransactions({});
   const formatted = formatterTransactions(transactions);
+
   return (
     <Card
       className={clsx("flex !h-full flex-col rounded-xl !px-4", cardClassName)}

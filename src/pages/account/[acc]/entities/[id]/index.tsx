@@ -1,21 +1,22 @@
-import dynamic from "next/dynamic";
-import { Icon } from "@iconify/react/dist/iconify.js";
-import { Chip } from "@nextui-org/react";
-import { User } from "@nextui-org/user";
-import { Transaction } from "@prisma/client";
-import { format } from "date-fns";
-import { es } from "date-fns/locale";
+import React, { useCallback, useEffect, useState } from "react";
 import { GetServerSideProps } from "next";
 import { useParams } from "next/navigation";
 import { useRouter } from "next/router";
-import React, { useCallback, useEffect, useState } from "react";
+
+import { Icon } from "@iconify/react/dist/iconify.js";
+import { Chip } from "@nextui-org/react";
+import { User } from "@nextui-org/user";
 import { detailColumns } from "~/modules/Entities/table";
 import { Card, Table } from "~/modules/components";
 import Actions from "~/modules/components/molecules/Table/Actions";
 import DashboardLayout from "~/modules/layouts/Dashboard";
-import { EntityIncludes } from "~/types/entities/entity.types";
-import { api } from "~/utils/api";
+
+import { format } from "date-fns";
+import { es } from "date-fns/locale";
 import { createServerSideCaller } from "~/utils/serverSideCaller/serverSideCaller";
+
+import type { EntityIncludes } from "~/types/entities/entity.types";
+import type { Transaction } from "@prisma/client";
 
 const DetailEntityPage = ({ entity }: { entity: EntityIncludes }) => {
   const [isClient, setIsClient] = useState(false);

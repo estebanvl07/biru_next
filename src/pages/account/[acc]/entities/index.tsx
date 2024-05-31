@@ -11,8 +11,11 @@ import { format } from "date-fns";
 import { es } from "date-fns/locale";
 import { useResize } from "~/lib/hooks/useResize";
 import MobileEntityPage from "~/modules/Entities/MobileEntityContent";
+import Actions from "~/modules/components/molecules/Table/Actions";
+import { useRouter } from "next/router";
 
 export default function EntitiesPage() {
+  const router = useRouter();
   const params = useParams();
   const { entities, isLoading } = useEntity();
   const { size } = useResize();
@@ -47,7 +50,17 @@ export default function EntitiesPage() {
       case "createdAt":
         return <span>{format(String(cellValue), "PPP", { locale: es })}</span>;
       case "actions":
-        return "actions";
+        return (
+          <Actions
+            onClickView={() =>
+              router.push(`/account/${params?.acc}/entities/${entity.id}`)
+            }
+            onClickEdit={() =>
+              router.push(`/account/${params?.acc}/entities/${entity.id}/edit`)
+            }
+            onClickDelete={() => console.log("delete")}
+          />
+        );
       default:
         return (
           <span>

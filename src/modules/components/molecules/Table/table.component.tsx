@@ -28,6 +28,7 @@ const DataTable = <T,>({
   hasTopContent = true,
   hasBottomContent = true,
   filterKeys,
+  footerConfig,
 }: TableProps<T>) => {
   const [filterValue, setFilterValue] = useState("");
   const [statusFilter, setStatusFilter] = useState<Selection>("all");
@@ -111,6 +112,7 @@ const DataTable = <T,>({
                 onNextPage={onNextPage}
                 onPreviousPage={onPreviousPage}
                 pages={pages}
+                {...footerConfig}
               />
             )
           }

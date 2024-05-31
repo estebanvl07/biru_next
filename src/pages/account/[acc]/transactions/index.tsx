@@ -18,14 +18,17 @@ import { TransactionIncludes } from "~/types/transactions";
 import { useResize } from "~/lib/hooks/useResize";
 import MobileTransactionPage from "~/modules/transactions/MobileTransactionPage";
 import { api } from "~/utils/api";
+import Actions from "~/modules/components/molecules/Table/Actions";
+import { useRouter } from "next/router";
 
 const TransactionPage = () => {
+  const router = useRouter();
   const params = useParams<{ acc: string }>();
-  const { transactions, isLoading } = useTransactions({});
 
   const { size } = useResize();
-
   const isMobile = Boolean(size && size <= 768);
+
+  const { transactions, isLoading } = useTransactions({});
 
   const renderCell = useCallback(
     (transaction: TransactionIncludes, columnKey: React.Key) => {
@@ -128,24 +131,19 @@ const TransactionPage = () => {
           null;
         case "actions":
           return (
-            <div className="relative flex items-center gap-2">
-              Menu
-              {/* <Tooltip content="Details">
-              <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
-                <EyeIcon />
-              </span>
-            </Tooltip>
-            <Tooltip content="Edit user">
-              <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
-                <EditIcon />
-              </span>
-            </Tooltip>
-            <Tooltip color="danger" content="Delete user">
-              <span className="text-lg text-danger cursor-pointer active:opacity-50">
-                <DeleteIcon />
-              </span>
-            </Tooltip> */}
-            </div>
+            <Actions
+              onClickView={() =>
+                router.push(
+                  `/account/${params?.acc}/transactions/${transaction.id}`,
+                )
+              }
+              onClickEdit={() =>
+                router.push(
+                  `/account/${params?.acc}/transactions/edit/${transaction.id}`,
+                )
+              }
+              hasDelete={false}
+            />
           );
         default:
           return cellValue;

@@ -16,6 +16,11 @@ export interface TopContentProps {
   newButtonText?: string;
 }
 
+export interface BottomConfig {
+  hasPagination?: boolean;
+  navButtons?: boolean;
+}
+
 type ColumnsProps = {
   uid: string;
   name: string;
@@ -26,10 +31,19 @@ type ColumnsProps = {
 export interface TableProps<T> {
   headerConfig: TopContentProps;
   columns: ColumnsProps[];
+  footerConfig?: BottomConfig;
   hasTopContent?: boolean;
   hasBottomContent?: boolean;
   filterKeys?: string | string[];
   renderCell?: (item: any, columnKey: any) => void;
   isLoading?: boolean;
   data: T[];
+}
+
+export interface BottomContentProps extends BottomConfig {
+  onPreviousPage: () => void;
+  onNextPage: () => void;
+  page: number;
+  pages: number;
+  setPage: Dispatch<SetStateAction<number>>;
 }

@@ -16,6 +16,7 @@ const TopContent = React.memo(
     hasSearch = true,
     newButtonText,
     filterValue,
+    inputPlaceholder = "Buscar",
     setFilterValue,
     setPage,
     redirectTo,
@@ -44,7 +45,7 @@ const TopContent = React.memo(
         <div className="flex items-center justify-between">
           {hasSearch && (
             <Input
-              placeholder="Buscar transacción"
+              placeholder={inputPlaceholder}
               startContent={<Icon icon="iconoir:search" width={18} />}
               className="!w-[40%]"
               value={filterValue}

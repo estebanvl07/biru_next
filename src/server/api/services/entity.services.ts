@@ -14,7 +14,12 @@ export async function createEntity(
 }
 
 export async function getEntities(db: PrismaClient, userId: string) {
-  return await db.entities.findMany({ where: { userId } });
+  return await db.entities.findMany({
+    where: { userId },
+    orderBy: {
+      createdAt: "desc",
+    },
+  });
 }
 
 export async function getEntityById(

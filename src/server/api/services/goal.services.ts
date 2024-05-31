@@ -14,7 +14,10 @@ export async function createGoal(
 }
 
 export async function getGoals(db: PrismaClient, userId: string) {
-  return await db.goals.findMany({ where: { userId } });
+  return await db.goals.findMany({
+    where: { userId },
+    orderBy: { createdAt: "desc" },
+  });
 }
 
 export async function getGoalById(

@@ -24,7 +24,7 @@ export const menuOptions = [
       {
         id: 2,
         name: "Entidades",
-        icon: "lets-icons:user",
+        icon: "ph:users-bold",
         href: "/entities",
       },
       {
@@ -83,22 +83,22 @@ export const menuOptions = [
         href: "/category",
       },
 
-      // {
-      //   id: 4,
-      //   name: "Cuentas",
-      //   icon: "wpf:bank-cards",
-      //   href: "/all-accounts",
-      // },
+      {
+        id: 3,
+        name: "Configuración",
+        icon: "ep:setting",
+        href: "/setting",
+      },
     ],
   },
 ];
 
 export const mobileOptions = [
   {
-    id: 1,
-    name: "Metas",
-    icon: "ph:target",
-    href: "/goals",
+    id: 5,
+    name: "Dashboard",
+    icon: "akar-icons:dashboard",
+    href: "/main",
   },
   {
     id: 2,
@@ -107,15 +107,15 @@ export const mobileOptions = [
     href: "/transactions",
   },
   {
-    id: 5,
-    name: "Dashboard",
-    icon: "akar-icons:dashboard",
-    href: "/main",
+    id: 1,
+    name: "Metas",
+    icon: "ph:target",
+    href: "/goals",
   },
   {
     id: 3,
     name: "Entidades",
-    icon: "lets-icons:user",
+    icon: "ph:users-bold",
     href: "/entities",
   },
   {

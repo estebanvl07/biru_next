@@ -1,6 +1,7 @@
 import clsx from "clsx";
 import type { UserAccount } from "@prisma/client";
 import { motion } from "framer-motion";
+
 interface AccountCardProps {
   account: Required<UserAccount>;
   onClick?: (account: UserAccount) => void;

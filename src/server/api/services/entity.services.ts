@@ -21,5 +21,8 @@ export async function getEntityById(
   db: PrismaClient,
   { userId, id }: entityByIdType,
 ) {
-  return await db.entities.findMany({ where: { userId, id } });
+  return await db.entities.findMany({
+    where: { userId, id },
+    include: { transactions: true },
+  });
 }

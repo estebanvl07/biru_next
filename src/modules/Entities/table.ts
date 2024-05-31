@@ -29,4 +29,31 @@ const columns = [
   },
 ];
 
-export { columns };
+const detailColumns = [
+  {
+    name: "TRANSACCIÓN",
+    uid: "amount",
+    sortable: true,
+  },
+  {
+    name: "REFERENCIA",
+    uid: "reference",
+    sortable: true,
+  },
+  {
+    name: "DESCRIPCION",
+    uid: "description",
+    sortable: true,
+  },
+  {
+    name: "TIPO",
+    uid: "type",
+    sortable: true,
+  },
+  {
+    name: "ACCIONES",
+    uid: "actions",
+    sortable: true,
+  },
+];
+export { columns, detailColumns };

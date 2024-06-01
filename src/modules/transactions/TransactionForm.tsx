@@ -1,12 +1,8 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import {
-  Card,
-  // Input,
-  ButtonGroup,
-  InputDate,
-} from "~/modules/components";
+import { useRouter } from "next/router";
+import { useParams } from "next/navigation";
 
 import {
   Accordion,
@@ -19,8 +15,8 @@ import {
   SelectItem,
   User,
 } from "@nextui-org/react";
+import { ButtonGroup, InputDate } from "~/modules/components";
 
-import { useRouter } from "next/router";
 import { api } from "~/utils/api";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -31,41 +27,74 @@ import { Alert } from "~/modules/components/molecules/Alert.component";
 import { amountFormatter } from "~/utils/formatters";
 
 import { useAccounts, useCurrentAccount } from "~/modules/Account/hooks";
-import { useParams } from "next/navigation";
 import { useAlert } from "~/lib/hooks/useAlert";
 import { useEntity } from "~/modules/Entities/hook/entities.hook";
 import { useCategory } from "../category/hook/category.hook";
 import { useGoals } from "../Goals/hook/goal.hook";
 
 import { AnimatePresence, motion } from "framer-motion";
-import { Goals } from "@prisma/client";
 import { capitalize } from "../components/molecules/Table/utils";
 import { format } from "date-fns";
 import { es } from "date-fns/locale";
-import { useQueryClient } from "@tanstack/react-query";
-import { getQueryKey } from "@trpc/react-query";
+
+import type { Goals } from "@prisma/client";
+import type { TransactionIncludes } from "~/types/transactions";
 
 interface TransactionFormProps {
   type: "goal" | "transfer";
+  mode?: "create" | "edit";
+  transactionDefault?: TransactionIncludes;
 }
 
-const TransactionForm = ({ type }: TransactionFormProps) => {
+const TransactionForm = ({
+  type,
+  mode = "create",
+  transactionDefault,
+}: TransactionFormProps) => {
   const [amountValue, setAmountValue] = useState("");
   const [goalSelected, setGoalSelected] = useState<Goals>();
-
-  const params = useParams();
-  const router = useRouter();
 
   const { account } = useCurrentAccount();
   const { entities } = useEntity();
   const { accounts } = useAccounts();
   const { categories } = useCategory();
-  const { goals, isLoading: isLoadingGoals } = useGoals();
+  const { goals } = useGoals();
+
+  const params = useParams();
+  const router = useRouter();
 
   const query = router.query;
 
   const { mutate: createTransactionMutation } =
     api.transaction.create.useMutation();
+
+  const { mutate: updateTransactionMutation } =
+    api.transaction.update.useMutation();
+
+  const getCurrentDate = (): Date => {
+    const date = new Date();
+    date.setDate(date.getDate() - 1);
+    return new Date(date);
+  };
+
+  const defaultCategory =
+    categories && transactionDefault && transactionDefault.categoryId
+      ? [String(transactionDefault.categoryId)]
+      : undefined;
+
+  const defaultEntity =
+    entities && transactionDefault && transactionDefault.entityId
+      ? [String(transactionDefault.entityId)]
+      : undefined;
+
+  const defaultDate =
+    mode === "create"
+      ? getCurrentDate()
+      : transactionDefault
+        ? transactionDefault.date
+        : undefined;
+
+  const defaultType = transactionDefault ? transactionDefault.type : undefined;
 
   const {
     register,
@@ -92,33 +121,67 @@ const TransactionForm = ({ type }: TransactionFormProps) => {
 
   const onSubmit = () => {
     const payload = getValues();
-    createTransactionMutation(payload, {
-      onSuccess() {
-        setProps({
-          ...props,
-          type: "success",
-          cancel: false,
-          confirmProps: {
-            onClick: () => {
-              router.push(`/account/${params?.acc}/transactions`);
+    if (mode === "create") {
+      createTransactionMutation(payload, {
+        onSuccess() {
+          setProps({
+            ...props,
+            type: "success",
+            cancel: false,
+            confirmProps: {
+              onClick: () => {
+                router.push(`/account/${params?.acc}/transactions`);
+              },
             },
+          });
+          reset();
+          onOpen();
+        },
+        onError(error, variables, context) {
+          setProps({
+            ...props,
+            type: "error",
+          });
+          onOpen();
+        },
+      });
+      return;
+    }
+    if (transactionDefault) {
+      console.log(transactionDefault);
+      console.log({ id: String(transactionDefault.id), ...payload });
+      updateTransactionMutation(
+        { id: String(transactionDefault.id), ...payload },
+        {
+          onSuccess() {
+            setProps({
+              ...props,
+              type: "success",
+              cancel: false,
+              confirmProps: {
+                onClick: () => {
+                  router.push(`/account/${params?.acc}/transactions`);
+                },
+              },
+            });
+            reset();
+            onOpen();
           },
-        });
-        reset();
-        onOpen();
-      },
-      onError(error, variables, context) {
-        setProps({
-          ...props,
-          type: "error",
-        });
-        onOpen();
-      },
-    });
+          onError(error, variables, context) {
+            setProps({
+              ...props,
+              type: "error",
+            });
+            onOpen();
+          },
+        },
+      );
+    }
   };
 
+  // query params
   useEffect(() => {
-    if (!account) return;
+    if (!account && transactionDefault) return;
     setValue("accountId", account.id);
     setValue("type", Number(query.type) as any);
     setValue("transferType", type === "goal" ? 2 : 1);
@@ -128,6 +191,7 @@ const TransactionForm = ({ type }: TransactionFormProps) => {
         router.query?.goal ? Number(router.query.goal) : undefined,
       );
     }
+
     if (query?.type) {
       setValue("type", Number(query.type) as any);
     } else {
@@ -135,7 +199,38 @@ const TransactionForm = ({ type }: TransactionFormProps) => {
     }
   }, [account, query]);
 
-  useEffect(() => {}, []);
+  useEffect(() => {
+    if (query.goal) {
+      setGoalSelected(goals.find((goal) => goal.id === Number(query.goal)));
+    }
+  }, [goals]);
+
+  useEffect(() => {
+    if (transactionDefault) {
+      const {
+        amount,
+        categoryId,
+        description,
+        entityId,
+        date,
+        reference,
+        recipient,
+        type: typeDef,
+      } = transactionDefault;
+
+      setValue("amount", amount);
+      setAmountValue(amountFormatter(String(amount)).formatted);
+      setValue("type", typeDef as 1 | 2);
+      setValue("transferType", type === "transfer" ? 1 : 2);
+
+      description && setValue("description", description);
+      date && setValue("date", new Date(date));
+      recipient && setValue("recipient", recipient);
+      reference && setValue("reference", reference);
+      categoryId && setValue("categoryId", categoryId);
+      entityId && setValue("entityId", entityId);
+    }
+  }, [transactionDefault]);
 
   return (
     <AnimatePresence>
@@ -170,7 +265,7 @@ const TransactionForm = ({ type }: TransactionFormProps) => {
             startContent={
               <div className="pointer-events-none flex items-center">
                 <span className="text-small text-default-400">$</span>
-                {watch("type") === 2 && <span className="ml-1">-</span>}
+                {defaultType === 2 && <span className="ml-1">-</span>}
               </div>
             }
             endContent={
@@ -178,7 +273,13 @@ const TransactionForm = ({ type }: TransactionFormProps) => {
                 <ButtonGroup
                   containerClassName="w-fit"
                   buttonClass="text-xs !py-1"
-                  defaultSelected={query?.type ? Number(query?.type) : 1}
+                  defaultSelected={
+                    defaultType
+                      ? defaultType
+                      : query?.type
+                        ? Number(query?.type)
+                        : 1
+                  }
                   options={[
                     {
                       id: 1,
@@ -214,7 +315,6 @@ const TransactionForm = ({ type }: TransactionFormProps) => {
               <Select
                 items={goals ?? []}
                 placeholder="Seleccione la meta"
-                onChange={(e) => console.log(e)}
                 label="Meta"
                 isRequired
                 classNames={{
@@ -383,7 +483,8 @@ const TransactionForm = ({ type }: TransactionFormProps) => {
                     label="Fecha de transacción"
                     containerClassName="mt-4"
                     changeValue={(newDate) => setValue("date", newDate)}
-                    currentDate
+                    value={watch("date")}
+                    defaultValue={defaultDate}
                   />
                   <section className="flex w-full flex-col gap-2 sm:flex-row">
                     <Select
@@ -415,6 +516,7 @@ const TransactionForm = ({ type }: TransactionFormProps) => {
                           </div>
                         ));
                       }}
+                      defaultSelectedKeys={defaultCategory}
                       isInvalid={Boolean(errors?.categoryId)}
                       errorMessage={errors?.categoryId?.message ?? ""}
                     >
@@ -435,6 +537,7 @@ const TransactionForm = ({ type }: TransactionFormProps) => {
                       items={entities ?? []}
                       placeholder="Seleccionar entidad"
                       label="Entidad"
+                      selectedKeys={defaultEntity}
                       classNames={{
                         label: "group-data-[filled=true]:-translate-y-5",
                         trigger: "min-h-[70px]",
@@ -611,12 +714,11 @@ const TransactionForm = ({ type }: TransactionFormProps) => {
               color="primary"
               isDisabled={type === "goal" && goals.length === 0}
             >
-              Crear Transacción
-              {/* {hasEdit ? "Actualizar Transacción" : "Crear Transacción"} */}
+              {mode === "edit" ? "Actualizar Transacción" : "Crear Transacción"}
             </Button>
             <Button
               className="border-1 py-1 text-sm sm:w-fit"
-              variant="bordered"
+              onClick={() => router.back()}
             >
               Cancelar
             </Button>

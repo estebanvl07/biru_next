@@ -43,54 +43,66 @@ export async function createTransaction(
 
   return result;
 }
+
 export async function updateTransaction(
   db: PrismaClient,
   id: number,
   data: Prisma.TransactionUncheckedUpdateInput,
 ) {
   return db.$transaction(async (db) => {
+    const oldTransaction = await db.transaction.findUnique({
+      where: { id },
+      select: {
+        amount: true,
+        type: true,
+        accountId: true,
+        transferType: true,
+      },
+    });
+
+    if (!oldTransaction) {
+      throw new Error("Transaction not found");
+    }
+
+    const transferType = oldTransaction.transferType;
+
+    // Obtain the new amount and type if provided, otherwise use old values
+    const newAmount =
+      data.amount !== undefined
+        ? (data.amount as number)
+        : oldTransaction.amount;
+    const newType =
+      data.type !== undefined ? (data.type as number) : oldTransaction.type;
+
+    let amountDiff = 0;
+
+    if (transferType === 1) {
+      // Transfer type
+      amountDiff =
+        newAmount * (newType === 1 ? 1 : -1) -
+        oldTransaction.amount * (oldTransaction.type === 1 ? 1 : -1);
+    } else if (transferType === 2) {
+      // Savings type
+      amountDiff =
+        newAmount * (newType === 1 ? -1 : 1) -
+        oldTransaction.amount * (oldTransaction.type === 1 ? -1 : 1);
+    }
+
+    console.log(amountDiff);
+
+    await db.userAccount.update({
+      where: { id: oldTransaction.accountId },
+      data: {
+        balance: {
+          increment: amountDiff,
+        },
+      },
+    });
+
     const transaction = await db.transaction.update({
       where: { id },
       data,
     });
-
-    if (
-      typeof data.amount !== "undefined" ||
-      typeof data.type !== "undefined"
-    ) {
-      const oldTransaction = await db.transaction.findUnique({
-        where: { id },
-        select: {
-          amount: true,
-          type: true,
-          accountId: true,
-          transferType: true,
-        },
-      });
-
-      const transferType = oldTransaction!.transferType;
-      const typeMultiplier = transferType === 1 ? 1 : -1;
-
-      let amountDiff = 0;
-      if (transferType === 1) {
-        amountDiff =
-          (data.amount as number) *
-            (data.type === 1 ? typeMultiplier : -typeMultiplier) -
-          oldTransaction!.amount *
-            (oldTransaction!.type === 1 ? typeMultiplier : -typeMultiplier);
-      } else if (transferType === 2) {
-        amountDiff = (data.amount as number) * typeMultiplier;
-      }
-
-      await db.userAccount.update({
-        where: { id: oldTransaction!.accountId },
-        data: {
-          balance: {
-            increment: amountDiff,
-          },
-        },
-      });
-    }
 
     return transaction;
   });
@@ -147,5 +159,15 @@ export async function getTransactionsByFilter(
     orderBy: {
       createdAt: "desc",
     },
+  });
+}
+
+export async function getTransactionById(
+  db: PrismaClient,
+  { accountId, id }: { accountId: number; id: number },
+) {
+  return db.transaction.findMany({
+    where: { accountId, id },
+    include: { userAccount: true, category: true, entity: true, goal: true },
   });
 }

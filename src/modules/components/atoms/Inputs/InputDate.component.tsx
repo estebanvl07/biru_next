@@ -15,7 +15,7 @@ import { DATE_FORMAT_TRANS } from "~/lib/constants/config";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import { today, getLocalTimeZone } from "@internationalized/date";
 
-interface InputDateProps extends Omit<InputProps, "value"> {
+interface InputDateProps extends Omit<InputProps, "value" | "defaultValue"> {
   value?: Date;
   dateFormat?: string;
   interval?: boolean;
@@ -23,6 +23,7 @@ interface InputDateProps extends Omit<InputProps, "value"> {
   changeValue?: (val: Date) => void;
   minValueToday?: boolean;
   showAbsoluteCalendar?: boolean;
+  defaultValue?: Date | null;
   currentDate?: boolean;
   contentClassName?: string;
 }
@@ -38,6 +39,7 @@ const InputDate: FC<InputDateProps> = ({
   interval = false,
   contentInputClassName,
   minValueToday = false,
+  defaultValue,
   currentDate = false,
   showAbsoluteCalendar = true,
   ...props
@@ -59,8 +61,8 @@ const InputDate: FC<InputDateProps> = ({
   };
 
   useEffect(() => {
-    if (currentDate) {
-      const date = new Date();
+    if (Boolean(defaultValue)) {
+      const date = new Date(defaultValue as Date);
       date.setDate(date.getDate() - 1);
       handleNewDate(date);
     }

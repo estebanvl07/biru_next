@@ -1,13 +1,13 @@
 import { Transaction } from "@prisma/client";
-import { createTransaction } from "~/modules/transactions/schema";
+import {
+  createTransaction,
+  updateTransaction,
+} from "~/modules/transactions/schema";
 import { filter, filterInput } from "~/modules/common/schema";
 import * as TransactionServices from "~/server/api/services/transactions.services";
 
-import {
-  createTRPCRouter,
-  protectedProcedure,
-} from "~/server/api/trpc";
-
+import { createTRPCRouter, protectedProcedure } from "~/server/api/trpc";
+import { z } from "zod";
 
 // interface MyEvents {
 //   new: (data: Transaction) => void;
@@ -34,6 +34,16 @@ export const transactionsRouter = createTRPCRouter({
     .query(({ input, ctx }) => {
       return TransactionServices.getTransactionsByFilter(ctx.db, input);
     }),
+  getTransactionById: protectedProcedure
+    .input(
+      z.object({
+        accountId: z.number(),
+        id: z.number(),
+      }),
+    )
+    .query(({ input, ctx }) => {
+      return TransactionServices.getTransactionById(ctx.db, input);
+    }),
   create: protectedProcedure
     .input(createTransaction)
     .mutation(async ({ ctx, input }) => {
@@ -42,6 +52,21 @@ export const transactionsRouter = createTRPCRouter({
         ...input,
         userId,
       });
+      return response;
+    }),
+  update: protectedProcedure
+    .input(updateTransaction)
+    .mutation(async ({ ctx, input }) => {
+      const userId = ctx.session.user.id;
+      const { id, ...transaction } = input;
+      const response = await TransactionServices.updateTransaction(
+        ctx.db,
+        Number(id),
+        {
+          ...transaction,
+          userId,
+        },
+      );
       return response;
     }),
 });

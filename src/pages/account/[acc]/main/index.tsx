@@ -64,10 +64,10 @@ const HomePage = () => {
                 <div className="flex gap-2">
                   <Button
                     href={`/account/${params?.acc}/transactions/new?type=2`}
-                    color="primary"
+                    // color="default"
                     as={Link}
-                    variant="bordered"
-                    className="flex items-center gap-2 border-1 dark:!text-primary"
+                    // variant="bordered"
+                    className="flex items-center gap-2 bg-default-100"
                   >
                     <Icon icon="iconamoon:arrow-top-right-1" width={18} /> Nuevo
                     Egreso

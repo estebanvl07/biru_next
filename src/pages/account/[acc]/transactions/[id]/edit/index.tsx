@@ -18,7 +18,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
 
   const formatted = {
     ...transaction,
-    date: transaction?.date?.toISOString(),
+    date: transaction?.date?.toISOString() || null,
     createdAt: transaction?.createdAt.toISOString(),
     updatedAt: transaction?.updatedAt.toISOString(),
     entity: transaction?.entity
@@ -38,6 +38,9 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     goal: transaction?.goal
       ? {
           ...transaction.goal,
+          goalDate: transaction?.goal
+            ? transaction.goal.goalDate?.toISOString()
+            : null,
           createdAt: transaction?.goal.createdAt.toISOString(),
           updatedAt: transaction?.goal.updatedAt.toISOString(),
         }
@@ -69,13 +72,7 @@ const EditTransactionPage = ({
     <DashboardLayout title="Detalle de transacción">
       <TransactionForm
         mode="edit"
-        type={
-          !Boolean(query.transferType)
-            ? "transfer"
-            : query.transferType === "1"
-              ? "transfer"
-              : "goal"
-        }
+        type={transaction.transferType === 1 ? "transfer" : "goal"}
         transactionDefault={transaction}
       />
     </DashboardLayout>

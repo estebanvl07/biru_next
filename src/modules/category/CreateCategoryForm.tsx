@@ -9,7 +9,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import clsx from "clsx";
 
 import { Input, Radio, RadioGroup } from "@nextui-org/react";
-import { Button } from "~/modules/components";
+import { Button, ButtonGroup } from "~/modules/components";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import { IconSearcher } from "~/modules/category/IconSelector";
 
@@ -24,7 +24,7 @@ const CreateCategoryForm = ({ hasEdit = false }: { hasEdit?: boolean }) => {
   const [modalActive, setModalActive] = useState(false);
 
   const params = useParams();
-  const { type } = router.query;
+  const query = router.query;
 
   const {
     register,
@@ -37,6 +37,8 @@ const CreateCategoryForm = ({ hasEdit = false }: { hasEdit?: boolean }) => {
     resolver: zodResolver(createCategory),
   });
 
+  const icon = watch("icon") || "";
+
   const alertConfig: any = {
     type: "quest",
     cancel: true,
@@ -48,8 +50,6 @@ const CreateCategoryForm = ({ hasEdit = false }: { hasEdit?: boolean }) => {
 
   const { isOpen, onClose, onOpen, props, setProps } = useAlert(alertConfig);
   const category = api.category.create.useMutation();
-
-  const icon = watch("icon") || "fe:smile-plus";
 
   const onSubmit = () => {
     onClose();
@@ -100,31 +100,36 @@ const CreateCategoryForm = ({ hasEdit = false }: { hasEdit?: boolean }) => {
           onOpen();
         }}
       >
-        <RadioGroup
-          size="sm"
-          orientation="horizontal"
-          label="Tipo"
-          required
-          isRequired
-          isInvalid={Boolean(errors?.type)}
-          errorMessage={errors?.type?.message}
-          {...register("type")}
-        >
-          <Radio
-            value="1"
-            onClick={() => setValue("type", 1 as any)}
-            color="success"
-          >
-            Ingreso
-          </Radio>
-          <Radio
-            value="2"
-            onClick={() => setValue("type", 1 as any)}
-            color="danger"
-          >
-            Egreso
-          </Radio>
-        </RadioGroup>
+        <label>
+          Tipo <span className="text-danger">*</span>
+          <ButtonGroup
+            containerClassName="w-fit"
+            buttonClass="text-xs !py-1.5"
+            options={[
+              {
+                id: 1,
+                label: "Ingreso",
+                title: "Ingreso",
+                icon: "ph:trend-up",
+                onClick: () => {
+                  setValue("type", 1);
+                },
+                colorSelected:
+                  "!bg-green-500 border border-green-500 text-white",
+              },
+              {
+                id: 2,
+                icon: "ph:trend-down",
+                label: "Egreso",
+                title: "Egreso",
+                onClick: () => {
+                  setValue("type", 2);
+                },
+                colorSelected: "!bg-red-500 border border-red-500 text-white",
+              },
+            ]}
+          />
+        </label>
         <Input
           label="Nombre"
           startContent={
@@ -160,10 +165,14 @@ const CreateCategoryForm = ({ hasEdit = false }: { hasEdit?: boolean }) => {
           label="Icono"
           onClick={() => setModalActive(true)}
           startContent={
-            <Icon icon={icon} className="dark:text-slate-200" width={18} />
+            <Icon
+              icon={icon || "fe:smile-plus"}
+              className="dark:text-slate-200"
+              width={18}
+            />
           }
-          placeholder="Gastos de la universidad"
-          value={icon}
+          placeholder="Selecciona un icono"
+          value={icon ?? ""}
           {...register("icon")}
           errorMessage={errors.icon?.message}
         />

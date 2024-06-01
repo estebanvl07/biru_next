@@ -5,6 +5,7 @@ import { userAccountRouter } from "./routers/userAccount";
 import { usersRouter } from "./routers/users";
 import { entityRouter } from "./routers/entity";
 import { goalsRouter } from "./routers/goals";
+import { recoverRouter } from "./routers/recover";
 
 /**
  * This is the primary router for your server.
@@ -18,6 +19,7 @@ export const appRouter = createTRPCRouter({
   transaction: transactionsRouter,
   entity: entityRouter,
   goals: goalsRouter,
+  recover: recoverRouter
 });
 
 // export type definition of API

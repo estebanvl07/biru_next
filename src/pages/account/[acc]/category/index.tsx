@@ -47,7 +47,7 @@ const CategoryPage = () => {
           color="primary"
           isIconOnly={isMobile as any}
         >
-          <Icon icon="ph:plus" width={18} /> {!isMobile && "Crear"}
+          <Icon icon="ph:plus" width={18} /> {!isMobile && "Crear Categoría"}
         </Button>
       </nav>
       {isLoading ? (

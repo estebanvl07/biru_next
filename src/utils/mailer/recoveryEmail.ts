@@ -1,10 +1,8 @@
 export const RecoveryEmail = ({
   name,
-  description,
   code,
 }: {
   name: string;
-  description: string;
   code: string;
 }) => {
   return `
@@ -56,7 +54,7 @@ export const RecoveryEmail = ({
                     />
                     <hr />
                     <h3>¡Hola, ${name}!</h3>
-                    <p>${description}</p>
+                    <p>Hemos recibido una solicitud de recuperación de contraseña, tu código de recuperación es: </p>
                     <p class="id_code">
                         ${code}
                     </p>

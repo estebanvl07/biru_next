@@ -8,6 +8,7 @@ import {
   geActivationCode,
   activationCodeUsed,
 } from "./verificationCode.services";
+import { getAccountById } from "./userAccount.services";
 
 export async function registerUser(
   db: PrismaClient,
@@ -118,4 +119,32 @@ export async function authPasswordUser(
   }
 
   return user;
+}
+
+export async function changePassword(
+  db: PrismaClient,
+  code: string,
+  password: string,
+) {
+  try {
+    const { userId, id: verificationCodeId } = await geActivationCode(db, code);
+
+    console.log(userId);
+
+    const passwordHashed = hashPassword(password);
+    const user = await db.userPassword.update({
+      where: {
+        userId,
+      },
+      data: {
+        password: passwordHashed,
+      },
+    });
+
+    await activationCodeUsed(db, verificationCodeId);
+
+    return user;
+  } catch (error) {
+    console.error(error);
+  }
 }

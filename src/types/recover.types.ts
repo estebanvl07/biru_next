@@ -1,0 +1,5 @@
+export enum STEPS_RECOVER {
+  "VALIDATE" = 1,
+  "VALIDATE_CODE" = 2,
+  "CHANGE_PASSWORD" = 3,
+}

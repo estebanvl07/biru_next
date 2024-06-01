@@ -127,10 +127,17 @@ const TransactionForm = ({
           setProps({
             ...props,
             type: "success",
-            cancel: false,
+            cancel: true,
             confirmProps: {
+              text: "Ver tabla",
               onClick: () => {
                 router.push(`/account/${params?.acc}/transactions`);
+              },
+            },
+            cancelProps: {
+              text: "Volver",
+              onClick: () => {
+                router.back();
               },
             },
           });

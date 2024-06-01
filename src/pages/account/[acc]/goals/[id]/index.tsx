@@ -3,10 +3,10 @@ import { Progress } from "@nextui-org/progress";
 import { format } from "date-fns";
 import { redirect, useParams } from "next/navigation";
 import { useRouter } from "next/router";
-import React, { useCallback } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import GoalCard from "~/modules/Goals/GoalCard";
 import { columns } from "~/modules/Goals/table";
-import { Table } from "~/modules/components";
+import { Card, Table } from "~/modules/components";
 import DashboardLayout from "~/modules/layouts/Dashboard";
 import { api } from "~/utils/api";
 import { createServerSideCaller } from "~/utils/serverSideCaller/serverSideCaller";
@@ -16,6 +16,7 @@ import { Chip } from "@nextui-org/react";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import { capitalize } from "~/modules/components/molecules/Table/utils";
 import { es } from "date-fns/locale";
+import Actions from "~/modules/components/molecules/Table/Actions";
 
 const DetailGoalPage = ({
   goalData,
@@ -24,7 +25,10 @@ const DetailGoalPage = ({
   goalData: GoalsIncludes;
   acc: number;
 }) => {
-  const { goal, saved, name, goalDate, description, state } = goalData;
+  const router = useRouter();
+  const params = useParams();
+  const [isClient, setIsClient] = useState(false);
+  const { goal, saved, name, goalDate, description, state, id } = goalData;
 
   const renderCell = useCallback(
     (transaction: Transaction, columnKey: React.Key) => {
@@ -32,9 +36,12 @@ const DetailGoalPage = ({
       switch (columnKey) {
         case "amount":
           return (
-            <h4 className="text-lg font-semibold">
-              <span className="text-sm">$</span> {cellValue?.toLocaleString()}
-            </h4>
+            <div className="flex flex-col text-lg font-semibold">
+              <h4 className="text-lg">$ {cellValue?.toLocaleString()}</h4>
+              <span className="text-xs font-normal">
+                {transaction.description || "sin descripción"}
+              </span>
+            </div>
           );
         case "type":
           return (
@@ -60,39 +67,53 @@ const DetailGoalPage = ({
           null;
         case "actions":
           return (
-            <div className="relative flex items-center gap-2">
-              Menu
-              {/* <Tooltip content="Details">
-              <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
-                <EyeIcon />
-              </span>
-            </Tooltip>
-            <Tooltip content="Edit user">
-              <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
-                <EditIcon />
-              </span>
-            </Tooltip>
-            <Tooltip color="danger" content="Delete user">
-              <span className="text-lg text-danger cursor-pointer active:opacity-50">
-                <DeleteIcon />
-              </span>
-            </Tooltip> */}
-            </div>
+            <Actions
+              onClickView={() =>
+                router.push({
+                  pathname: "/account/[acc]/transactions/[id]",
+                  query: {
+                    acc: String(params?.acc),
+                    id: String(transaction?.id),
+                  },
+                })
+              }
+              onClickEdit={() =>
+                router.push({
+                  pathname: "/account/[acc]/transactions/[id]/edit",
+                  query: {
+                    acc: String(params?.acc),
+                    id: String(transaction?.id),
+                    goal: id,
+                  },
+                })
+              }
+              onClickDelete={() => {}}
+            />
           );
         default:
           return cellValue;
       }
     },
-    [],
+    [params, isClient],
   );
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
 
   return (
     <DashboardLayout>
-      <div className="flex w-full gap-6">
-        <div className="w-80 rounded-xl bg-default-50 px-6 py-4 dark:bg-default-200">
-          <h3>{name}</h3>
-          <p className="my-4">{description ?? "Sin descripción"}</p>
-          <ul className="flex flex-col gap-2 [&>li>span]:font-semibold [&>li]:text-xs">
+      <div className="flex w-full flex-col gap-6">
+        <Card>
+          <ul className="grid w-full grid-cols-4 gap-2 [&>li>span]:font-semibold [&>li]:text-xs">
+            <li>
+              <span>Nombre:</span>
+              <p>{name}</p>
+            </li>
+            <li>
+              <span>Descripción:</span>
+              <p>{description || "N/A"}</p>
+            </li>
             <li>
               <span>Monto de Meta:</span>
               <p>$ {goal.toLocaleString()}</p>
@@ -103,7 +124,7 @@ const DetailGoalPage = ({
             </li>
             <li>
               <span>Estado:</span>
-              <p>
+              <div>
                 <Chip
                   color={
                     state === 1 ? "primary" : state === 2 ? "success" : "danger"
@@ -117,7 +138,7 @@ const DetailGoalPage = ({
                       ? "Terminado"
                       : "Cancelado"}
                 </Chip>
-              </p>
+              </div>
             </li>
             <li>
               <span>Fecha limite:</span>
@@ -130,8 +151,8 @@ const DetailGoalPage = ({
               </p>
             </li>
           </ul>
-        </div>
-        <aside className="flex-grow">
+        </Card>
+        {isClient && (
           <Table
             columns={columns}
             data={goalData.transactions ?? []}
@@ -141,7 +162,7 @@ const DetailGoalPage = ({
               redirectTo: `/account/${acc}/transactions/new?transferType=2&goal=${goalData.id}`,
             }}
           />
-        </aside>
+        )}
       </div>
     </DashboardLayout>
   );

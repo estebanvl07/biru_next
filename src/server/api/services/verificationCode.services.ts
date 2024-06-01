@@ -27,6 +27,10 @@ export async function geActivationCode(db: PrismaClient, code: string) {
   return verificationCode;
 }
 
+export async function findCode(db: PrismaClient, code: string) {
+  return db.userVerificationCode.findFirst({ where: { token: code } });
+}
+
 export const activationCodeUsed = (
   db: PrismaClient,
   verificationCodeId: number,

@@ -1,5 +1,3 @@
-import { useEffect, useState } from "react";
-
 import { useParams } from "next/navigation";
 import { motion } from "framer-motion";
 import Link from "next/link";
@@ -7,13 +5,13 @@ import Link from "next/link";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import { Button, Input } from "@nextui-org/react";
 import DashboardLayout from "~/modules/layouts/Dashboard";
+import { LoaderSkeleton } from "~/modules/Loaders";
+import GoalCard from "~/modules/Goals/GoalCard";
 
 import { useSearch } from "~/lib/hooks";
 import { Goals } from "@prisma/client";
 import { groupedAnimation } from "~/modules/animations";
-import { LoaderSkeleton } from "~/modules/Loaders";
 import { useGoals } from "~/modules/Goals/hook/goal.hook";
-import GoalCard from "~/modules/Goals/GoalCard";
 import { useResize } from "~/lib/hooks/useResize";
 
 export default function GoalPage() {
@@ -22,7 +20,7 @@ export default function GoalPage() {
   const { isMobile } = useResize();
   const { goals, isLoading } = useGoals();
 
-  const { newList, onSearch } = useSearch<Goals>({
+  const { newList, onSearch, query } = useSearch<Goals>({
     data: goals ?? [],
     keys: ["name", "saved"],
   });
@@ -62,7 +60,7 @@ export default function GoalPage() {
           animate="visible"
         >
           {newList.length === 0 ? (
-            <p>No tienes metas creadas</p>
+            <p>No encontramos resultados con "{query}"</p>
           ) : (
             newList?.map((props) => (
               <GoalCard key={props.id} goalInfo={props} />

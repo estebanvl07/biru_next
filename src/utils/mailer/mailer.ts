@@ -36,24 +36,13 @@ export const mailer = {
 
     return transporter.sendMail(signupOptions, handleMailerError);
   },
-  recover({
-    to,
-    name,
-    description,
-    code,
-  }: {
-    to: string;
-    name: string;
-    description: string;
-    code: string;
-  }) {
+  recover({ to, name, code }: { to: string; name: string; code: string }) {
     const configMailer = {
       from: fromNoreply,
       to,
       subject: "Recuperación de contraseña",
       html: RecoveryEmail({
         name,
-        description,
         code,
       }),
     };

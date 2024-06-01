@@ -110,17 +110,17 @@ const LoginPage = () => {
               isRequired
             />
 
-            {/* <Link
-        href="/recover"
-        className="w-fit text-sm text-indigo-800 dark:text-indigo-500"
-      >
-        Recuperar contraseña
-      </Link> */}
             <Button variantStyle="fill" type="submit" className="mt-2">
               Iniciar sesión
             </Button>
           </form>
-          <span className="mt-6 flex w-full items-center justify-center gap-2 text-sm">
+          <Link
+            href="/recover"
+            className="mt-6 w-fit text-indigo-800 dark:text-indigo-500"
+          >
+            ¿Olvidaste tu contraseña?
+          </Link>
+          <span className="mt-2 flex w-full items-center justify-center gap-2 text-sm">
             ¿No tienes cuenta?,
             <Link
               href="/register"

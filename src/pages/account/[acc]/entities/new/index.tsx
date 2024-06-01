@@ -10,6 +10,7 @@ import { useRouter } from "next/router";
 import { useParams } from "next/navigation";
 import { Alert } from "~/modules/components/molecules/Alert.component";
 import { useAlert } from "~/lib/hooks/useAlert";
+import { ButtonGroup } from "~/modules/components";
 
 const NewEntityPage = () => {
   const router = useRouter();
@@ -75,34 +76,36 @@ const NewEntityPage = () => {
           onOpen();
         }}
       >
-        <RadioGroup
-          label="Tipo"
-          size="sm"
-          className="mb-2"
-          isRequired
-          orientation="horizontal"
-          defaultChecked
-        >
-          <Radio
-            value="1"
-            type="checkbox"
-            color="success"
-            onClick={() => setValue("type", 1)}
-            defaultChecked
-            size="sm"
-          >
-            Ingreso
-          </Radio>
-
-          <Radio
-            value="2"
-            color="danger"
-            onClick={() => setValue("type", 2)}
-            size="sm"
-          >
-            Egreso
-          </Radio>
-        </RadioGroup>
+        <label>
+          Tipo <span className="text-danger">*</span>
+          <ButtonGroup
+            containerClassName="w-fit"
+            buttonClass="text-xs !py-1.5"
+            options={[
+              {
+                id: 1,
+                label: "Ingreso",
+                title: "Ingreso",
+                icon: "ph:trend-up",
+                onClick: () => {
+                  setValue("type", 1);
+                },
+                colorSelected:
+                  "!bg-green-500 border border-green-500 text-white",
+              },
+              {
+                id: 2,
+                icon: "ph:trend-down",
+                label: "Egreso",
+                title: "Egreso",
+                onClick: () => {
+                  setValue("type", 2);
+                },
+                colorSelected: "!bg-red-500 border border-red-500 text-white",
+              },
+            ]}
+          />
+        </label>
         <Input
           required
           isRequired

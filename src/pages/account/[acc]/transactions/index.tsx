@@ -1,4 +1,4 @@
-import { useCallback } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 
 import { Icon } from "@iconify/react/dist/iconify.js";
@@ -17,11 +17,11 @@ import { TransactionIncludes } from "~/types/transactions";
 
 import { useResize } from "~/lib/hooks/useResize";
 import MobileTransactionPage from "~/modules/transactions/MobileTransactionPage";
-import { api } from "~/utils/api";
 import Actions from "~/modules/components/molecules/Table/Actions";
 import { useRouter } from "next/router";
 
 const TransactionPage = () => {
+  const [isClient, setIsClient] = useState(false);
   const router = useRouter();
   const params = useParams<{ acc: string }>();
 
@@ -29,6 +29,8 @@ const TransactionPage = () => {
   const isMobile = Boolean(size && size <= 768);
 
   const { transactions, isLoading } = useTransactions({});
+
+  console.log(transactions);
 
   const renderCell = useCallback(
     (transaction: TransactionIncludes, columnKey: React.Key) => {
@@ -87,7 +89,7 @@ const TransactionPage = () => {
                 )}
               </div>
               <aside>
-                <h4 className="text-lg font-semibold">
+                <h4 className="whitespace-nowrap text-lg font-semibold">
                   <span className="text-sm">$</span>{" "}
                   {transaction.amount.toLocaleString()}
                 </h4>
@@ -133,14 +135,22 @@ const TransactionPage = () => {
           return (
             <Actions
               onClickView={() =>
-                router.push(
-                  `/account/${params?.acc}/transactions/${transaction.id}`,
-                )
+                router.push({
+                  pathname: "/account/[acc]/transactions/[id]",
+                  query: {
+                    acc: String(params?.acc),
+                    id: String(transaction.id),
+                  },
+                })
               }
               onClickEdit={() =>
-                router.push(
-                  `/account/${params?.acc}/transactions/edit/${transaction.id}`,
-                )
+                router.push({
+                  pathname: "/account/[acc]/transactions/[id]/edit",
+                  query: {
+                    acc: String(params?.acc),
+                    id: String(transaction.id),
+                  },
+                })
               }
               hasDelete={false}
             />
@@ -149,12 +159,16 @@ const TransactionPage = () => {
           return cellValue;
       }
     },
-    [],
+    [isClient, params],
   );
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
 
   return (
     <DashboardLayout title="Transacciones">
-      {!isMobile ? (
+      {!isMobile && isClient ? (
         <Table
           headerConfig={{
             title: "",

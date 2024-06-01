@@ -8,6 +8,7 @@ import HeaderMobile from "./templates/dashbaord/Header/HeaderMobile";
 import BottomMobileNav from "./templates/dashbaord/BottomMobileNav";
 
 import { motion, AnimatePresence } from "framer-motion";
+import { Icon } from "@iconify/react/dist/iconify.js";
 
 const variants = {
   hidden: { opacity: 0, x: -200, y: 0 },
@@ -58,6 +59,17 @@ const DashboardLayout = ({
               exit="exit"
             >
               {children}
+              <footer className="mt-4 flex w-full items-center justify-between text-xs">
+                <p>Desarrollado por Esteban vl & Pedro Va</p>
+                <span className="flex items-center gap-1">
+                  Hecho con
+                  <Icon
+                    icon="mdi:heart-outline"
+                    width={24}
+                    className="text-red-500"
+                  />
+                </span>
+              </footer>
             </motion.main>
           </AnimatePresence>
         </div>

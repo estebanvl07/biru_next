@@ -15,8 +15,6 @@ const ChangePasswordForm = ({
   goStep?: (step: STEPS_RECOVER) => void;
   code: string;
 }) => {
-  console.log(code);
-
   const router = useRouter();
 
   const [showPassword, setShowPassword] = useState(false);
@@ -44,7 +42,7 @@ const ChangePasswordForm = ({
           alert("Las contraseñas se ha cambiado con exito");
           console.log(data);
         },
-        onError(error, variables, context) {
+        onError(error) {
           console.log(error);
         },
       },
@@ -52,86 +50,84 @@ const ChangePasswordForm = ({
   };
 
   return (
-    <form
-      className="m-auto flex w-full max-w-[24rem] flex-col items-center justify-center gap-2"
-      onSubmit={handleSubmit(onSubmit)}
-    >
-      <h2>Cambiar Contraseña</h2>
+    <section className="m-auto flex w-full max-w-[24rem] flex-col items-center justify-center gap-2">
+      <h1 className="mb-1 text-pretty text-center text-2xl font-bold tracking-tight  text-primary dark:text-indigo-300">
+        Cambiar Contraseña
+      </h1>
       <p className="mb-2 text-center">Introduzca su nueva contraseña</p>
-      <Input
-        label="Contraseña"
-        type={showPassword ? "text" : "password"}
-        placeholder="••••••••"
-        autoComplete="current-password"
-        startContent={
-          <button
-            type="button"
-            onClick={(e) => {
-              e.preventDefault();
-              e.stopPropagation();
-              setShowPassword(!showPassword);
-            }}
-          >
-            <Icon
-              icon={
-                showPassword ? "majesticons:eye-line" : "mdi:eye-off-outline"
-              }
-              width={18}
-            />
-          </button>
-        }
-        {...register("password")}
-        isInvalid={Boolean(errors.password)}
-        errorMessage={errors.password?.message}
-        required
-        isRequired
-      />
-
-      <Input
-        label="Confirmar Contraseña"
-        type={showConfirmPassword ? "text" : "password"}
-        placeholder="••••••••"
-        autoComplete="current-password"
-        startContent={
-          <button
-            type="button"
-            onClick={(e) => {
-              e.preventDefault();
-              e.stopPropagation();
-              setShowConfirmPassword(!showConfirmPassword);
-            }}
-          >
-            <Icon
-              icon={
-                showConfirmPassword
-                  ? "majesticons:eye-line"
-                  : "mdi:eye-off-outline"
-              }
-              width={18}
-            />
-          </button>
-        }
-        {...register("confirmPassword")}
-        isInvalid={Boolean(errors.confirmPassword)}
-        errorMessage={errors.confirmPassword?.message}
-        required
-        isRequired
-      />
-      <nav className="mt-2 flex w-full flex-col items-center gap-2 sm:flex-row">
-        <Button color="primary" type="submit" className=" w-full flex-1">
-          Cambiar Contraseña
-        </Button>
-        <Button className="flex-1" onClick={() => router.back()}>
-          Cancelar
-        </Button>
-      </nav>
-      <p
-        className="mt-2 cursor-pointer text-sm text-primary dark:text-indigo-300"
-        onClick={() => goStep && goStep(STEPS_RECOVER.VALIDATE)}
+      <form
+        className="flex w-full flex-col items-center justify-center gap-2"
+        onSubmit={handleSubmit(onSubmit)}
       >
-        ¿No tienes un código?
-      </p>
-    </form>
+        <Input
+          label="Contraseña"
+          type={showPassword ? "text" : "password"}
+          placeholder="••••••••"
+          autoComplete="current-password"
+          startContent={
+            <button
+              type="button"
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                setShowPassword(!showPassword);
+              }}
+            >
+              <Icon
+                icon={
+                  showPassword ? "majesticons:eye-line" : "mdi:eye-off-outline"
+                }
+                width={18}
+              />
+            </button>
+          }
+          {...register("password")}
+          isInvalid={Boolean(errors.password)}
+          errorMessage={errors.password?.message}
+          required
+          isRequired
+        />
+
+        <Input
+          label="Confirmar Contraseña"
+          type={showConfirmPassword ? "text" : "password"}
+          placeholder="••••••••"
+          autoComplete="current-password"
+          startContent={
+            <button
+              type="button"
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                setShowConfirmPassword(!showConfirmPassword);
+              }}
+            >
+              <Icon
+                icon={
+                  showConfirmPassword
+                    ? "majesticons:eye-line"
+                    : "mdi:eye-off-outline"
+                }
+                width={18}
+              />
+            </button>
+          }
+          {...register("confirmPassword")}
+          isInvalid={Boolean(errors.confirmPassword)}
+          errorMessage={errors.confirmPassword?.message}
+          required
+          isRequired
+        />
+        <nav className="mt-2 flex w-full flex-col items-center gap-2 sm:flex-row">
+          <Button color="primary" type="submit" className=" w-full flex-1">
+            Cambiar Contraseña
+          </Button>
+          <Button className="flex-1" onClick={() => router.back()}>
+            Cancelar
+          </Button>
+        </nav>
+      </form>
+    </section>
   );
 };
 

@@ -28,7 +28,17 @@ export async function geActivationCode(db: PrismaClient, code: string) {
 }
 
 export async function findCode(db: PrismaClient, code: string) {
-  return db.userVerificationCode.findFirst({ where: { token: code } });
+  const tokenFound = await db.userVerificationCode.findFirst({
+    where: { token: code },
+  });
+
+  if (!tokenFound) {
+    throw new TRPCError({
+      code: "NOT_FOUND",
+      message: "El código no es válido",
+    });
+  }
+  return tokenFound;
 }
 
 export const activationCodeUsed = (

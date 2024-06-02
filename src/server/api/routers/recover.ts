@@ -1,9 +1,10 @@
 import { CodeSchema, RecoverSchema } from "~/modules/Recover/schema";
-import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc";
+import { createTRPCRouter, publicProcedure } from "../trpc";
+import { z } from "zod";
+
 import * as EmailServices from "../services/email.services";
 import * as VerifyCode from "../services/verificationCode.services";
 import * as UserServices from "../services/users.services";
-import { z } from "zod";
 
 export const recoverRouter = createTRPCRouter({
   verifyEmail: publicProcedure

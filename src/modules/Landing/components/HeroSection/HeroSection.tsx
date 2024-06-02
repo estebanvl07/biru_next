@@ -20,7 +20,7 @@ export const HeroSection = () => {
       <Header />
       <span className="absolute -top-20 h-[40%] w-[98%] rounded-b-[20rem] bg-none blur-3xl dark:bg-indigo-950/40"></span>
       <div className="absolute -top-12 h-[40rem] w-4/5 bg-opacity-10 bg-[url('/grid.svg')] bg-cover bg-center bg-no-repeat opacity-15 dark:opacity-30"></div>
-      <div className="flex h-full w-full flex-col-reverse items-center justify-center gap-8 px-4 md:flex-col md:gap-4">
+      <div className="flex h-full w-full flex-col items-center justify-center gap-8 px-4 md:flex-col md:gap-4">
         <motion.article
           initial={{
             scale: 0.6,
@@ -42,7 +42,7 @@ export const HeroSection = () => {
               <Icon icon="material-symbols:finance-mode-rounded" width={20} />
             </span>
           </Chip>
-          <h1 className="z-10 my-2 text-center font-encode text-5xl font-bold !leading-none tracking-tight md:text-6xl">
+          <h1 className="z-10 my-2 text-center font-encode text-4xl font-bold !leading-none tracking-tight sm:text-5xl md:text-6xl">
             Domina tu{" "}
             <span className="highlight font-encode text-primary dark:text-primary-light">
               futuro financiero
@@ -91,7 +91,7 @@ export const HeroSection = () => {
           transition={{
             duration: 0.5,
           }}
-          className="fade-bottom relative h-44 w-full items-center justify-center overflow-hidden md:flex md:h-[20rem]"
+          className="fade-bottom relative hidden h-44 w-full items-center justify-center overflow-hidden md:flex md:h-[20rem]"
         >
           <Image
             src={isDark ? "/dashboard-dark.png" : "/dashboard-light.png"}

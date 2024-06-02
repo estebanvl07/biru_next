@@ -1,17 +1,17 @@
+import clsx from "clsx";
+
 import { Button } from "@nextui-org/button";
 import Image from "next/image";
 import Link from "next/link";
-import React, { useEffect, useState } from "react";
-import { HandlerTheme } from "../atoms";
-import { useTheme } from "~/lib/hooks";
-import { useResize } from "~/lib/hooks/useResize";
-import clsx from "clsx";
-import { usePathname } from "next/navigation";
 import { Icon } from "@iconify/react/dist/iconify.js";
+
+import { HandlerTheme } from "../atoms";
+import { useResize } from "~/lib/hooks/useResize";
+import { usePathname } from "next/navigation";
 import { useThemeContext } from "~/lib/context/themeContext";
 
 export const Header = () => {
-  const { theme } = useThemeContext()
+  const { theme } = useThemeContext();
   const { isMobile, size } = useResize();
 
   return (
@@ -35,8 +35,8 @@ export const Header = () => {
               isIconOnly
               radius="full"
               as={Link}
-              color="primary"
               href="/login"
+              className="bg-default-100"
               variant="flat"
             >
               <Icon

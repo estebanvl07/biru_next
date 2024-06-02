@@ -1,21 +1,21 @@
 import { useForm } from "react-hook-form";
 import { useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
-import clsx from "clsx";
 import { Input, Spinner } from "@nextui-org/react";
 import Link from "next/link";
+import clsx from "clsx";
 
 import { Button, SignInOptions } from "~/modules/components";
 import { SuccessfullyCreated } from "~/modules/Register/components";
 import { BasicLayout } from "~/modules/layouts";
 import { Icon } from "@iconify/react/dist/iconify.js";
 
-import { api } from "~/utils/api";
-
 import {
   registerUserInput,
   type RegisterUserInputType,
 } from "~/modules/Register/resolver";
+
+import { api } from "~/utils/api";
 import withAuthRedirect from "~/lib/helpers/withAuthRedirect";
 import { useThemeContext } from "~/lib/context/themeContext";
 
@@ -44,7 +44,10 @@ const Register = () => {
     error?.data?.code === "BAD_REQUEST" ? error?.message : "";
 
   return (
-    <BasicLayout>
+    <BasicLayout
+      title="Registrate en Biru"
+      description="Registarte ahora en biru, se parte de nuestro equipo y empiza a organizar tu vida financiera"
+    >
       {isSuccess ? (
         <SuccessfullyCreated />
       ) : (
@@ -57,9 +60,9 @@ const Register = () => {
               ¡Crear nueva cuenta!
             </h1>
             <span className="text-pretty text-center text-sm text-slate-400">
-              Estas a un paso de ser parte del equipo de Biru
+              Estás a un paso de ser parte de nuestro equipo, únete ahora.
             </span>
-            <SignInOptions />
+            <SignInOptions title="" />
             <form
               className="mt-4 flex w-full flex-col gap-2"
               onSubmit={handleSubmit(onSubmit)}

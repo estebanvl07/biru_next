@@ -18,6 +18,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 
 import { loginInput, type LoginInputType } from "~/modules/Login/resolver";
 import { useThemeContext } from "~/lib/context/themeContext";
+import { Alert } from "~/modules/components/molecules/Alert.component";
+import { useAlert } from "~/lib/hooks/useAlert";
 
 const LoginPage = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -31,6 +33,9 @@ const LoginPage = () => {
 
   const { theme } = useThemeContext();
   const router = useRouter();
+  const { isOpen, props, onOpen, onClose, setProps } = useAlert({
+    type: "error",
+  });
 
   const onSubmit = async ({ email, password }: LoginInputType) => {
     try {
@@ -40,18 +45,24 @@ const LoginPage = () => {
         callbackUrl: CALLBACK_SIGN_IN_URL,
         redirect: false,
       });
-      console.log("sing-in", response);
-
-      if (response?.ok) {
-        await router.replace("/account");
+      if (!response?.ok) {
+        throw new Error(response?.error as string);
       }
+      await router.replace("/account");
     } catch (error) {
-      console.error("sign-in", error);
+      if (error instanceof Error) {
+        setProps({
+          body: <span className="text-center">{error.message}</span>,
+          ...props,
+        });
+        onOpen();
+      }
     }
   };
 
   return (
     <BasicLayout>
+      <Alert isOpen={isOpen} onClose={onClose} {...props} />
       <div className="my-auto flex h-full w-full flex-row justify-center  px-4 py-6">
         {theme === "dark" && (
           <span className="absolute top-0 h-screen w-full bg-[url(/point.svg)] bg-repeat"></span>

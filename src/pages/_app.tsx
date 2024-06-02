@@ -1,5 +1,5 @@
 import { SessionProvider } from "next-auth/react";
-import { Lato, Montserrat } from "next/font/google";
+import { Montserrat } from "next/font/google";
 
 import { api } from "~/utils/api";
 import { NextUIProvider } from "@nextui-org/react";
@@ -7,9 +7,10 @@ import { NextUIProvider } from "@nextui-org/react";
 import { type Session } from "next-auth";
 import { type AppType } from "next/app";
 
-import "~/styles/globals.css";
 import { ThemeProvider } from "~/lib/context/themeContext";
 import { FilterProvider } from "~/lib/context/filterContext";
+
+import "~/styles/globals.css";
 
 const montserrat = Montserrat({
   subsets: ["latin"],

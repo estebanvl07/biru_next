@@ -1,7 +1,5 @@
 import withAuthRedirect from "~/lib/helpers/withAuthRedirect";
 import { Landing } from "~/modules/Landing";
-import { Header } from "~/modules/components/Header";
-import { BasicLayout } from "~/modules/layouts";
 
 const Home = () => {
   return (

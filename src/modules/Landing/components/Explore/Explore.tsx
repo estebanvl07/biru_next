@@ -1,9 +1,9 @@
 import Image from "next/image";
 import Link from "next/link";
 
-import { Button } from "~/modules/components";
 import { motion } from "framer-motion";
 import { useThemeContext } from "~/lib/context/themeContext";
+import { Button } from "@nextui-org/button";
 
 export const Explore = () => {
   const { theme } = useThemeContext();
@@ -65,11 +65,15 @@ export const Explore = () => {
           blanditiis tenetur consequuntur delectus, dolores autem ducimus
           voluptas! Non, molestiae!
         </p>
-        <Link href="/register" aria-label="Inicia aquí">
-          <Button className="mt-8 w-full lg:w-fit">
-            <span className="whitespace-nowrap">Iniciar ahora</span>
-          </Button>
-        </Link>
+        <Button
+          href="/register"
+          aria-label="Inicia aquí"
+          color="primary"
+          as={Link}
+          className="mt-8 w-full lg:w-fit"
+        >
+          <span className="whitespace-nowrap">Iniciar ahora</span>
+        </Button>
       </motion.aside>
     </section>
   );

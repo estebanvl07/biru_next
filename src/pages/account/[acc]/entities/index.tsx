@@ -79,7 +79,6 @@ export default function EntitiesPage() {
         <Table
           headerConfig={{
             title: "",
-            keySearch: ["name"],
             redirectTo: `/account/${Number(params?.acc)}/entities/new`,
           }}
           columns={columns}

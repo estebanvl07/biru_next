@@ -1,12 +1,7 @@
-import { Goals, Transaction } from "@prisma/client";
 import { useQueryClient } from "@tanstack/react-query";
 import { getQueryKey } from "@trpc/react-query";
 import { useMemo } from "react";
 import { api } from "~/utils/api";
-
-export interface GoalsIncludes extends Goals {
-  transactions: Transaction[];
-}
 
 export const useGoals = () => {
   const queryClient = useQueryClient();

@@ -40,6 +40,18 @@ export async function getGoalById(
 ) {
   return await db.goals.findMany({
     where: { userId, id },
-    include: { transactions: true, _count: true },
+    include: {
+      transactions: {
+        include: {
+          category: true,
+          entity: true,
+          userAccount: true,
+        },
+        orderBy: {
+          createdAt: "desc",
+        },
+      },
+      _count: true,
+    },
   });
 }

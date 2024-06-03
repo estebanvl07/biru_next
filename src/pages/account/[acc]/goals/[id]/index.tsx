@@ -14,9 +14,13 @@ import Actions from "~/modules/components/molecules/Table/Actions";
 import { columns } from "~/modules/Goals/table";
 import { Card, Table } from "~/modules/components";
 import DashboardLayout from "~/modules/layouts/Dashboard";
-import { GoalsIncludes } from "~/modules/Goals/hook/goal.hook";
-import { Chip } from "@nextui-org/react";
+import { GoalsIncludes } from "~/types/goal/goal.types";
+import { Button, Chip, Link } from "@nextui-org/react";
 import { Icon } from "@iconify/react/dist/iconify.js";
+import { useResize } from "~/lib/hooks/useResize";
+import { LastTransactions } from "~/modules/common";
+import { formatDatesOfTransactions } from "~/lib/resource/formatDatesOfTransactions";
+import { getPercent } from "~/lib/helpers";
 
 const DetailGoalPage = ({
   goalData,
@@ -27,6 +31,7 @@ const DetailGoalPage = ({
 }) => {
   const router = useRouter();
   const params = useParams();
+  const { isMobile } = useResize();
   const [isClient, setIsClient] = useState(false);
   const { goal, saved, name, goalDate, description, state, id } = goalData;
 
@@ -104,8 +109,22 @@ const DetailGoalPage = ({
   return (
     <DashboardLayout>
       <div className="flex w-full flex-col gap-6">
-        <Card>
-          <ul className="grid w-full grid-cols-4 gap-2 [&>li>span]:font-semibold [&>li]:text-xs">
+        <Card className="flex flex-col">
+          <header className="mb-4 flex flex-row items-center justify-between">
+            <h3>Información de categoría</h3>
+            <Button
+              as={Link}
+              href={`/account/${params?.acc}/goals/${id}/edit`}
+              color="primary"
+              size="sm"
+              isIconOnly={isMobile}
+              className="sm:w-fit"
+            >
+              <Icon icon="akar-icons:edit" width={18} />
+              {!isMobile && "Editar Entidad"}
+            </Button>
+          </header>
+          <ul className="mb-2 grid w-full grid-cols-2 gap-2 sm:grid-cols-4 [&>li>span]:font-semibold [&>li]:text-xs">
             <li>
               <span>Nombre:</span>
               <p>{name}</p>
@@ -121,6 +140,14 @@ const DetailGoalPage = ({
             <li>
               <span>Total Ahorrado:</span>
               <p>$ {saved.toLocaleString()}</p>
+            </li>
+            <li>
+              <span>Faltante:</span>
+              <p>$ {Number(goal - saved).toLocaleString()}</p>
+            </li>
+            <li>
+              <span>Progreso:</span>
+              <p>$ {getPercent(saved, goal)}</p>
             </li>
             <li>
               <span>Estado:</span>
@@ -145,14 +172,14 @@ const DetailGoalPage = ({
               <p>
                 {goalDate
                   ? capitalize(
-                      format(new Date(String(goalDate)), "LLL", { locale: es }),
+                      format(new Date(String(goalDate)), "PPP", { locale: es }),
                     )
                   : "N/A"}
               </p>
             </li>
           </ul>
         </Card>
-        {isClient && (
+        {!isMobile ? (
           <Table
             columns={columns}
             data={goalData.transactions ?? []}
@@ -161,6 +188,11 @@ const DetailGoalPage = ({
             headerConfig={{
               redirectTo: `/account/${acc}/transactions/new?transferType=2&goal=${goalData.id}`,
             }}
+          />
+        ) : (
+          <LastTransactions
+            transactions={goalData.transactions as any}
+            showHeader={false}
           />
         )}
       </div>
@@ -174,21 +206,14 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const helper = await createServerSideCaller(ctx);
   const [goal] = await helper.goals.getGoalById.fetch({ id: Number(id) });
 
-  const transactionSerialize = goal?.transactions.map((trans) => {
-    return {
-      ...trans,
-      date: trans?.date ? trans?.date.toISOString() : null,
-      createdAt: trans?.createdAt.toISOString(),
-      updatedAt: trans?.updatedAt.toISOString(),
-    };
-  });
-
   const goalData = {
     ...goal,
     goalDate: goal?.goalDate ? goal?.goalDate.toISOString() : null,
     createdAt: goal?.createdAt.toISOString(),
     updatedAt: goal?.updatedAt.toISOString(),
-    transactions: transactionSerialize,
+    transactions: goal?.transactions
+      ? formatDatesOfTransactions(goal.transactions as any)
+      : null,
   };
 
   return {

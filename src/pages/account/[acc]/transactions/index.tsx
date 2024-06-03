@@ -119,7 +119,7 @@ const TransactionPage = () => {
               />
             </Chip>
           );
-        case "createdAt":
+        case "date":
           return (
             <span>
               {transaction.date ? (

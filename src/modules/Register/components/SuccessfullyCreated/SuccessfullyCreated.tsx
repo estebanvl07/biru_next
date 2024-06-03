@@ -1,6 +1,6 @@
 import { Icon } from "@iconify/react/dist/iconify.js";
+import { Button } from "@nextui-org/button";
 import Link from "next/link";
-import { Button } from "~/modules/components";
 
 export const SuccessfullyCreated = () => {
   return (
@@ -15,9 +15,9 @@ export const SuccessfullyCreated = () => {
         Para activar tu cuenta, verifica si llegó un correo <br /> que contiene
         tu link de activación
       </p>
-      <Link href="/login">
-        <Button className="mt-6">Volver</Button>
-      </Link>
+      <Button color="primary" as={Link} href="/login" className="mt-6">
+        Volver
+      </Button>
     </div>
   );
 };

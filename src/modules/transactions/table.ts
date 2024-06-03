@@ -21,7 +21,33 @@ const columns = [
   },
   {
     name: "FECHA DE TRANSACCION",
-    uid: "createdAt",
+    uid: "date",
+  },
+  {
+    name: "ACTIONS",
+    uid: "actions",
+  },
+];
+
+export const basicColumns = [
+  {
+    name: "ID",
+    uid: "id",
+    sortable: false,
+  },
+  {
+    name: "TRANSACCION",
+    uid: "amount",
+    sortable: true,
+  },
+  {
+    name: "TIPO",
+    uid: "type",
+    sortable: true,
+  },
+  {
+    name: "FECHA DE TRANSACCION",
+    uid: "date",
   },
   {
     name: "ACTIONS",

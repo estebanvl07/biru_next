@@ -28,5 +28,5 @@ export interface TransactionIncludes extends Transaction {
   goal?: Goals;
   entity?: Entities;
   user: User;
-  useAccount: UserAccount;
+  userAccount: UserAccount;
 }

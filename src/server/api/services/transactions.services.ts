@@ -88,8 +88,6 @@ export async function updateTransaction(
         oldTransaction.amount * (oldTransaction.type === 1 ? -1 : 1);
     }
 
-    console.log(amountDiff);
-
     await db.userAccount.update({
       where: { id: oldTransaction.accountId },
       data: {
@@ -168,3 +166,8 @@ export async function getTransactionById(db: PrismaClient, id: number) {
     include: { userAccount: true, category: true, entity: true, goal: true },
   });
 }
+
+type ThenArg<T> = T extends PromiseLike<infer U> ? U : T;
+export type TransactionIncludes = ThenArg<
+  ReturnType<typeof getTransactionById>
+>;

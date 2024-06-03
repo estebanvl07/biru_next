@@ -104,7 +104,7 @@ export const mobileOptions = [
     id: 5,
     name: "Dashboard",
     icon: "akar-icons:dashboard",
-    href: "",
+    href: "/main",
   },
   {
     id: 2,

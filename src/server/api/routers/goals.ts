@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { createTRPCRouter, protectedProcedure } from "../trpc";
-import { createGoal } from "~/modules/Goals/schema";
+import { createGoal, updateGoal } from "~/modules/Goals/schema";
 import * as GoalsServices from "../services/goal.services";
 
 export const goalsRouter = createTRPCRouter({
@@ -14,6 +14,14 @@ export const goalsRouter = createTRPCRouter({
       const userId = ctx.session.user.id;
       return GoalsServices.createGoal(ctx.db, { ...input, userId });
     }),
+  update: protectedProcedure.input(updateGoal).mutation(({ ctx, input }) => {
+    const userId = ctx.session.user.id;
+    return GoalsServices.updateGoal(ctx.db, {
+      ...input,
+      id: Number(input.id),
+      userId,
+    });
+  }),
   getGoalById: protectedProcedure
     .input(z.object({ id: z.number() }))
     .query(({ input, ctx }) => {

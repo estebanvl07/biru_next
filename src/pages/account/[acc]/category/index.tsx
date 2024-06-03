@@ -16,10 +16,12 @@ import { groupedAnimation } from "~/modules/animations";
 import { useResize } from "~/lib/hooks/useResize";
 import { useCategory } from "~/modules/category/hook/category.hook";
 import { LoaderSkeleton } from "~/modules/Loaders";
+import { useRouter } from "next/router";
 
 // TODO: detail category
 const CategoryPage = () => {
   const params = useParams();
+  const router = useRouter();
   const { isMobile } = useResize();
   const { categories, isLoading } = useCategory();
 
@@ -71,7 +73,13 @@ const CategoryPage = () => {
                       key={category.id}
                       category={category}
                       onClick={() => {
-                        console.log(category);
+                        router.push({
+                          pathname: "/account/[acc]/category/[id]",
+                          query: {
+                            acc: params?.acc,
+                            id: category.id,
+                          },
+                        });
                       }}
                     />
                   );

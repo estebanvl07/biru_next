@@ -1,5 +1,4 @@
-import React, { useState } from "react";
-// import { getServerAuthSession } from "~/server/auth";
+import React, { useEffect, useState } from "react";
 
 import { useRouter } from "next/router";
 import { useParams } from "next/navigation";
@@ -18,8 +17,17 @@ import { type CreateCategory, createCategory } from "~/modules/category/schema";
 import { api } from "~/utils/api";
 import { Alert } from "../components/molecules/Alert.component";
 import { useAlert } from "~/lib/hooks/useAlert";
+import { CategoryIncludes } from "~/types/category/category.types";
 
-const CreateCategoryForm = ({ hasEdit = false }: { hasEdit?: boolean }) => {
+interface CategoryFormProps {
+  hasEdit?: boolean;
+  categoryDefault?: CategoryIncludes;
+}
+
+const CreateCategoryForm = ({
+  hasEdit = false,
+  categoryDefault,
+}: CategoryFormProps) => {
   const router = useRouter();
   const [modalActive, setModalActive] = useState(false);
 
@@ -50,9 +58,44 @@ const CreateCategoryForm = ({ hasEdit = false }: { hasEdit?: boolean }) => {
   const { isOpen, onClose, onOpen, props, setProps } = useAlert(alertConfig);
   const category = api.category.create.useMutation();
 
+  const { mutate: CategoryUpdateMutation } = api.category.update.useMutation();
+
   const onSubmit = () => {
     onClose();
     const data = getValues();
+
+    if (hasEdit) {
+      CategoryUpdateMutation(
+        { ...data, id: String(categoryDefault?.id) },
+        {
+          onSuccess() {
+            setProps({
+              ...props,
+              type: "success",
+              cancel: false,
+              confirm: true,
+              confirmProps: {
+                onClick: () => {
+                  router.push(`/account/${params?.acc}/category`);
+                },
+              },
+            });
+            reset();
+            onOpen();
+          },
+          onError() {
+            setProps({
+              ...props,
+              type: "error",
+              cancel: true,
+              confirm: false,
+            });
+            onOpen();
+          },
+        },
+      );
+      return;
+    }
 
     return category.mutateAsync(
       {
@@ -88,11 +131,20 @@ const CreateCategoryForm = ({ hasEdit = false }: { hasEdit?: boolean }) => {
     );
   };
 
+  useEffect(() => {
+    if (categoryDefault) {
+      setValue("type", Number(categoryDefault.type));
+      setValue("name", categoryDefault.name || "");
+      setValue("description", categoryDefault.description || "");
+      categoryDefault.icon && setValue("icon", categoryDefault.icon);
+    }
+  }, []);
+
   return (
     <>
       <Alert isOpen={isOpen} onClose={onClose} {...props} />
       <form
-        className="flex w-full max-w-[32rem] flex-col gap-2 pt-6 md:pt-0"
+        className="flex w-full flex-col gap-2 pt-6 sm:max-w-[32rem] md:pt-0"
         onSubmit={(e) => {
           e.preventDefault();
           setProps(alertConfig);
@@ -104,6 +156,7 @@ const CreateCategoryForm = ({ hasEdit = false }: { hasEdit?: boolean }) => {
           <ButtonGroup
             containerClassName="w-fit"
             buttonClass="text-xs !py-1.5"
+            defaultSelected={categoryDefault?.type || 1}
             options={[
               {
                 id: 1,
@@ -176,8 +229,12 @@ const CreateCategoryForm = ({ hasEdit = false }: { hasEdit?: boolean }) => {
           errorMessage={errors.icon?.message}
         />
 
-        <div className="mb-2 flex w-full flex-col gap-2 pt-3 md:flex-row">
-          <Button type="submit" className="w-fit py-1 text-sm" color="primary">
+        <div className="mb-2 flex w-full flex-col gap-2 pt-3 sm:flex-row">
+          <Button
+            type="submit"
+            className="w-full py-1 text-sm sm:w-fit"
+            color="primary"
+          >
             <Icon
               icon="lucide:loader-circle"
               className={clsx(
@@ -187,7 +244,7 @@ const CreateCategoryForm = ({ hasEdit = false }: { hasEdit?: boolean }) => {
             />
             {hasEdit ? "Actualizar Categoría" : "Crear Categoría"}
           </Button>
-          <Button className="w-fit bg-default-100 py-1 text-sm">
+          <Button className="w-full bg-default-100 py-1 text-sm sm:w-fit">
             Cancelar
           </Button>
         </div>

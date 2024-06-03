@@ -15,7 +15,7 @@ import { LoaderSkeleton } from "~/modules/Loaders";
 import type { TransactionIncludes } from "~/types/transactions";
 
 interface LastTransactionsProps {
-  transactions?: TransactionIncludes[];
+  transactions?: TransactionIncludes[] | undefined;
   showHeader?: boolean;
   transactionsMaxLength?: number;
   cardClassName?: string;
@@ -26,6 +26,7 @@ const LastTransactions: FC<LastTransactionsProps> = ({
   showHeader = true,
   cardClassName,
   transactionsMaxLength,
+  transactions: transactionsDefault,
 }) => {
   const params = useParams<{ acc: string }>();
 
@@ -53,7 +54,14 @@ const LastTransactions: FC<LastTransactionsProps> = ({
       {isLoading ? (
         <LoaderSkeleton skeletonType="ListItem" />
       ) : (
-        <ListTransactions maxLength={transactionsMaxLength} data={formatted} />
+        <ListTransactions
+          maxLength={transactionsMaxLength}
+          data={
+            transactionsDefault
+              ? formatterTransactions(transactionsDefault)
+              : formatted
+          }
+        />
       )}
     </Card>
   );

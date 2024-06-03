@@ -190,6 +190,7 @@ const TransactionForm = ({
   useEffect(() => {
     if (!account && transactionDefault) return;
     setValue("accountId", account?.id);
+    setValue("categoryId", Number(query?.category));
     setValue("type", Number(query.type) as any);
     setValue("transferType", type === "goal" ? 2 : 1);
     if (type === "goal") {
@@ -531,7 +532,7 @@ const TransactionForm = ({
                           </div>
                         ));
                       }}
-                      defaultSelectedKeys={defaultCategory}
+                      defaultSelectedKeys={defaultCategory || query?.category}
                       isInvalid={Boolean(errors?.categoryId)}
                       errorMessage={errors?.categoryId?.message ?? ""}
                     >

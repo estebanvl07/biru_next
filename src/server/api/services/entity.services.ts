@@ -13,6 +13,19 @@ export async function createEntity(
   return result;
 }
 
+export async function updateEntity(
+  db: PrismaClient,
+  data: Prisma.EntitiesUncheckedUpdateInput,
+) {
+  const { id, ...entity } = data;
+
+  const result = await db.entities.update({
+    where: { id: Number(id) },
+    data: entity,
+  });
+  return result;
+}
+
 export async function getEntities(db: PrismaClient, userId: string) {
   return await db.entities.findMany({
     where: { userId },

@@ -13,6 +13,20 @@ export async function createGoal(
   return result;
 }
 
+export async function updateGoal(
+  db: PrismaClient,
+  data: Prisma.GoalsUncheckedUpdateInput,
+) {
+  const { id, ...goal } = data;
+
+  const result = await db.goals.update({
+    where: { id: Number(id) },
+    data: goal,
+  });
+
+  return result;
+}
+
 export async function getGoals(db: PrismaClient, userId: string) {
   return await db.goals.findMany({
     where: { userId },

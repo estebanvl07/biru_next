@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { createTRPCRouter, protectedProcedure } from "../trpc";
-import { createEntity } from "~/modules/Entities/schema";
+import { createEntity, updateEntity } from "~/modules/Entities/schema";
 import * as EntityServices from "../services/entity.services";
 
 export const entityRouter = createTRPCRouter({
@@ -14,6 +14,14 @@ export const entityRouter = createTRPCRouter({
       const userId = ctx.session.user.id;
       return EntityServices.createEntity(ctx.db, { ...input, userId });
     }),
+  update: protectedProcedure.input(updateEntity).mutation(({ ctx, input }) => {
+    const userId = ctx.session.user.id;
+    return EntityServices.updateEntity(ctx.db, {
+      ...input,
+      id: Number(input.id),
+      userId,
+    });
+  }),
   getEntityById: protectedProcedure
     .input(z.object({ id: z.number() }))
     .query(({ input, ctx }) => {

@@ -1,5 +1,5 @@
 import { createTRPCRouter, protectedProcedure } from "~/server/api/trpc";
-import { createCategory } from "~/modules/category/schema";
+import { createCategory, updateCategory } from "~/modules/category/schema";
 import * as categoryServices from "~/server/api/services/category.services";
 import { z } from "zod";
 
@@ -10,6 +10,16 @@ export const categoriesRouter = createTRPCRouter({
       const userId = ctx.session.user.id;
       return categoryServices.createCategory(ctx.db, {
         ...input,
+        userId,
+      });
+    }),
+  update: protectedProcedure
+    .input(updateCategory)
+    .mutation(({ ctx, input }) => {
+      const userId = ctx.session.user.id;
+      return categoryServices.updateCategory(ctx.db, {
+        ...input,
+        id: Number(input.id),
         userId,
       });
     }),
@@ -26,4 +36,10 @@ export const categoriesRouter = createTRPCRouter({
     const userId = ctx.session.user.id;
     return categoryServices.getAllCategories(ctx.db, userId);
   }),
+  getCategoryById: protectedProcedure
+    .input(z.number())
+    .query(async ({ ctx, input }) => {
+      const userId = ctx.session.user.id;
+      return categoryServices.getCategoryById(ctx.db, input, userId);
+    }),
 });

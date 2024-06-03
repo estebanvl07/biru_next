@@ -2,7 +2,7 @@ import React from "react";
 import Link from "next/link";
 
 import { Input } from "@nextui-org/react";
-import { Button } from "~/modules/components/atoms";
+import { Button } from "@nextui-org/button";
 import { Icon } from "@iconify/react/dist/iconify.js";
 
 import { type TopContentProps } from "~/types/component/table.types";
@@ -59,15 +59,15 @@ const TopContent = React.memo(
                 Exportar
               </Button>
             )} */}
-            {hasNew && (
-              <Button>
-                <Link
-                  href={redirectTo ?? "new"}
-                  className="flex items-center gap-2"
-                >
-                  <Icon icon="ic:round-plus" width={18} />
-                  {newButtonText ?? "Crear Nuevo"}
-                </Link>
+            {hasNew && redirectTo && (
+              <Button
+                color="primary"
+                as={Link}
+                href={redirectTo ?? "new"}
+                className="flex items-center gap-2"
+              >
+                <Icon icon="ic:round-plus" width={18} />
+                {newButtonText ?? "Crear Nuevo"}
               </Button>
             )}
           </div>

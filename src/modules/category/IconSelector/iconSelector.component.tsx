@@ -1,8 +1,8 @@
 import React from "react";
 import { Icon } from "@iconify/react";
-import { Button, Input } from "~/modules/components";
 import IconItem from "./iconItem.component";
 import { useGetIcons } from "./useGetIcons";
+import { Button, Input } from "@nextui-org/react";
 
 interface IconSearchResult {
   selected: (icon: string) => void;
@@ -28,12 +28,11 @@ const IconSelector: React.FC<IconSearchResult> = ({
       </p>
 
       <Input
-        containerClassName="mb-4"
-        mainClassName="!h-auto"
+        className="mb-4"
         label="Icono:"
         placeholder="Work, Food"
         type="text"
-        iconPath="solar:ghost-smile-linear"
+        startContent={<Icon icon="solar:ghost-smile-linear" />}
         onChange={(e) => setQuery(e.target.value)}
       />
 
@@ -77,6 +76,7 @@ const IconSelector: React.FC<IconSearchResult> = ({
       {results.length > 0 && (
         <footer className="mt-4 flex justify-center gap-2">
           <Button
+            color="primary"
             onClick={() => {
               selected(iconSelected);
               onHideModal();
@@ -84,7 +84,7 @@ const IconSelector: React.FC<IconSearchResult> = ({
           >
             Seleccionar
           </Button>
-          <Button variantStyle="outline" onClick={onHideModal}>
+          <Button className="bg-slate-100" onClick={onHideModal}>
             Cancelar
           </Button>
         </footer>

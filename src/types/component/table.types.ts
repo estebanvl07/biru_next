@@ -1,7 +1,6 @@
 import { Dispatch, SetStateAction } from "react";
 
 export interface TopContentProps {
-  keySearch: string[];
   title?: string;
   hasSearch?: boolean;
   hasExport?: boolean;

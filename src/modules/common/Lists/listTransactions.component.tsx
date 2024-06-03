@@ -1,16 +1,20 @@
 import React from "react";
 
 import TransactionItem from "./TransactionItem.component";
+import { Empty } from "~/modules/components";
+import { useParams } from "next/navigation";
+import { TransactionIncludes } from "~/types/transactions";
 
 type Props = {
-  data?: any[] | undefined;
-  emptyText?: string;
+  data?: TransactionIncludes[] | undefined;
   maxLength?: number;
 };
 
-const ListTransactions = React.memo(({ data, emptyText, maxLength }: Props) => {
+const ListTransactions = React.memo(({ data, maxLength }: Props) => {
+  const params = useParams<{ acc: string }>();
+
   return (
-    <ul className="scrollbar-customize flex h-fit w-full flex-col overflow-auto rounded-md  bg-transparent text-sm">
+    <ul className="scrollbar-customize flex h-full w-full flex-col overflow-auto rounded-md  bg-transparent text-sm">
       {data?.map((item, index) => {
         if (maxLength && index + 1 > maxLength) return null;
         return (
@@ -18,14 +22,17 @@ const ListTransactions = React.memo(({ data, emptyText, maxLength }: Props) => {
             key={item.id}
             index={index}
             item={item}
-            length={data.length}
+            length={maxLength || data.length}
           />
         );
       })}
       {data?.length === 0 && (
-        <p className="py-4 text-center font-extralight text-zinc-400">
-          {emptyText ?? "No se encontraron datos"}
-        </p>
+        <Empty
+          icon="bitcoin-icons:transactions-filled"
+          className="py-4"
+          buttonText="Crear Transacción"
+          href={`/account/${params?.acc}/transactions/new`}
+        />
       )}
     </ul>
   );

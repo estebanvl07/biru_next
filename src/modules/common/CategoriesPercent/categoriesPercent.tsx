@@ -1,21 +1,20 @@
-"use client";
 import { useEffect, useState } from "react";
 
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Pagination } from "swiper/modules";
-
 import { Card, Empty } from "~/modules/components";
 import SpendingParams from "./spendingParams";
 import { getPercent } from "~/lib/helpers";
 
 import type { Category, Transaction } from "@prisma/client";
 
-import "swiper/css";
-import "swiper/css/pagination";
 import { api } from "~/utils/api";
 import { useTransactions } from "~/modules/transactions/hook/useTransactions.hook";
 import { useResize } from "~/lib/hooks/useResize";
 import { useFilterContext } from "~/lib/context/filterContext";
+
+import "swiper/css";
+import "swiper/css/pagination";
 
 type ChartInfoType = {
   category: Category;

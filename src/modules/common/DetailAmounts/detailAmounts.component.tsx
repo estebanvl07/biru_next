@@ -1,16 +1,11 @@
-"use client";
 import { useEffect, useState } from "react";
 import clsx from "clsx";
 
 import CardDetailAmount from "./CardDetailAmount";
 
 import { getPercent } from "~/lib/helpers";
-// import { useTransactions } from "~/lib/hooks/useTransactions";
-import { Card } from "~/modules/components";
 import { useTransactions } from "~/modules/transactions/hook/useTransactions.hook";
-import { Icon } from "@iconify/react/dist/iconify.js";
 import { useCurrentAccount } from "~/modules/Account/hooks";
-import { getTransactionsByMonths } from "~/modules/transactions/hook/useHandlerTransactions.hook";
 import { useParams } from "next/navigation";
 import { useFilterContext } from "~/lib/context/filterContext";
 import { Series } from "~/types/chart.types";
@@ -50,7 +45,7 @@ const DetailAmounts = ({ className, cardClassName }: DetailAmountProps) => {
   // const { transactionsByMonth } = getTransactionsByMonths(transactions);
 
   useEffect(() => {
-    if (!transactions) return;
+    if (!transactions || !account) return;
 
     // separate incomes and egress
     const incomeTr = transactions.filter(({ type, transferType }) => {
@@ -94,7 +89,14 @@ const DetailAmounts = ({ className, cardClassName }: DetailAmountProps) => {
       name: "Egresos",
       data: [...egress],
     });
-  }, [transactions]);
+
+    const totalAmountTransactions = amountIncome + amountEgress;
+
+    setFlowsMoney({
+      incomePercentParsed: getPercent(amountIncome!, totalAmountTransactions),
+      egressPercentParsed: getPercent(amountEgress!, totalAmountTransactions),
+    });
+  }, [transactions, account]);
 
   return (
     <section

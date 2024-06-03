@@ -25,7 +25,6 @@ const LineChart = ({
   offsetY,
   hasformatNumber = true,
 }: ChartProps) => {
-  // TODO: darkmdoe pending
   const { theme } = useThemeContext();
 
   const isDark = theme === "dark";

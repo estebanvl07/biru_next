@@ -1,5 +1,5 @@
 import type { Prisma, PrismaClient } from "@prisma/client";
-import { FILTERS, FilterOptions } from "~/types/transactions";
+import { FilterOptions } from "~/types/transactions";
 import { filtersHander } from "../filterHandler";
 
 export async function createTransaction(
@@ -135,7 +135,7 @@ export function getTransactionsByAccount(db: PrismaClient, accountId: number) {
     where: { accountId },
     include: { userAccount: true, category: true, entity: true, goal: true },
     orderBy: {
-      createdAt: "desc",
+      date: "desc",
     },
   });
 }
@@ -162,12 +162,9 @@ export async function getTransactionsByFilter(
   });
 }
 
-export async function getTransactionById(
-  db: PrismaClient,
-  { accountId, id }: { accountId: number; id: number },
-) {
-  return db.transaction.findMany({
-    where: { accountId, id },
+export async function getTransactionById(db: PrismaClient, id: number) {
+  return await db.transaction.findMany({
+    where: { id },
     include: { userAccount: true, category: true, entity: true, goal: true },
   });
 }

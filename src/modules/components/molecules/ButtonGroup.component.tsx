@@ -2,18 +2,20 @@ import { useEffect, useState } from "react";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import clsx from "clsx";
 
+type ButtonOptions = {
+  id?: number;
+  label: string;
+  icon?: string;
+  title?: string;
+  iconClass?: string;
+  onClick: () => void;
+  colorSelected?: string;
+};
+
 type ButtonGroupProps = {
   buttonClass?: string;
   defaultSelected?: number;
-  options: {
-    id?: number;
-    label: string;
-    icon?: string;
-    title?: string;
-    iconClass?: string;
-    onClick: () => void;
-    colorSelected?: string;
-  }[];
+  options: ButtonOptions[];
   containerClassName?: string;
 };
 

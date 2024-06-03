@@ -39,18 +39,18 @@ const MobileSettingPage = () => {
       <Section
         title="Aplicación"
         options={[
-          {
-            id: 1,
-            text: "Editar Perfil",
-            startContent: <Icon icon="mage:user" width={20} />,
-            // href: "/setting/profile",
-          },
-          {
-            id: 2,
-            text: "Notificaciones",
-            startContent: <Icon icon="lucide:bell" width={20} />,
-            // href: "/setting/notifications",
-          },
+          // {
+          //   id: 1,
+          //   text: "Editar Perfil",
+          //   startContent: <Icon icon="mage:user" width={20} />,
+          //   href: "/setting/profile",
+          // },
+          // {
+          //   id: 2,
+          //   text: "Notificaciones",
+          //   startContent: <Icon icon="lucide:bell" width={20} />,
+          //   href: "/setting/notifications",
+          // },
           {
             id: 3,
             text: "Tema",

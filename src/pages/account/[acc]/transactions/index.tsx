@@ -30,8 +30,6 @@ const TransactionPage = () => {
 
   const { transactions, isLoading } = useTransactions({});
 
-  console.log(transactions);
-
   const renderCell = useCallback(
     (transaction: TransactionIncludes, columnKey: React.Key) => {
       const cellValue = transaction[columnKey as keyof TransactionIncludes];
@@ -113,7 +111,11 @@ const TransactionPage = () => {
               color={transaction.type === 1 ? "success" : "danger"}
             >
               <Icon
-                icon={transaction.type === 1 ? "ph:trend-up" : "ph:trend-down"}
+                icon={
+                  transaction.type === 1
+                    ? "iconamoon:arrow-bottom-left-1"
+                    : "iconamoon:arrow-top-right-1"
+                }
               />
             </Chip>
           );
@@ -167,12 +169,14 @@ const TransactionPage = () => {
   }, []);
 
   return (
-    <DashboardLayout title="Transacciones">
+    <DashboardLayout
+      title="Transacciones"
+      headDescription="Listado de tu historial de transacciones"
+    >
       {!isMobile && isClient ? (
         <Table
           headerConfig={{
             title: "",
-            keySearch: ["title"],
             redirectTo: `/account/${Number(params?.acc)}/transactions/new`,
             newButtonText: "Crear Transacción",
           }}
@@ -183,7 +187,7 @@ const TransactionPage = () => {
           renderCell={renderCell}
         />
       ) : (
-        <MobileTransactionPage transactions={transactions ?? []} />
+        <MobileTransactionPage transactions={(transactions as any) ?? []} />
       )}
     </DashboardLayout>
   );

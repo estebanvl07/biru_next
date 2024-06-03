@@ -1,14 +1,13 @@
-import { Tab, Tabs } from "@nextui-org/react";
-
-import DashboardLayout from "~/modules/layouts/Dashboard";
-import { Icon } from "@iconify/react/dist/iconify.js";
-import TransactionForm from "~/modules/transactions/TransactionForm";
-import { AnimatePresence, LayoutGroup } from "framer-motion";
-import { useGoals } from "~/modules/Goals/hook/goal.hook";
-import { Card, Empty } from "~/modules/components";
 import { useParams } from "next/navigation";
 import { useRouter } from "next/router";
 import { useResize } from "~/lib/hooks/useResize";
+import { useGoals } from "~/modules/Goals/hook/goal.hook";
+
+import { Tab, Tabs } from "@nextui-org/react";
+import DashboardLayout from "~/modules/layouts/Dashboard";
+import TransactionForm from "~/modules/transactions/TransactionForm";
+import { Icon } from "@iconify/react/dist/iconify.js";
+import { Card, Empty } from "~/modules/components";
 
 const NewTransactionPage = () => {
   const params = useParams();
@@ -17,7 +16,10 @@ const NewTransactionPage = () => {
   const { goals, isLoading: goalIsLoading } = useGoals();
 
   return (
-    <DashboardLayout title="Crear Transacción">
+    <DashboardLayout
+      title="Crear Transacción"
+      headDescription="Crea una nueva transacción"
+    >
       <Tabs
         color="primary"
         defaultSelectedKey={

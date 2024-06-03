@@ -1,24 +1,25 @@
 import React from "react";
 import { useSession } from "next-auth/react";
+import dynamic from "next/dynamic";
 
+import Head from "next/head";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 
-import AccountCard from "~/modules/Account/AccountCard";
 import { HeaderApp } from "~/modules/layouts/templates/dashbaord";
+import { Icon } from "@iconify/react/dist/iconify.js";
+import { Button } from "@nextui-org/button";
+import HeaderMobile from "~/modules/layouts/templates/dashbaord/Header/HeaderMobile";
+const AccountCard = dynamic(import("~/modules/Account/AccountCard"), {
+  ssr: false,
+});
 
 import type { GetServerSideProps } from "next";
 import { useAccounts } from "~/modules/Account/hooks";
 import { createServerSideCaller } from "~/utils/serverSideCaller/serverSideCaller";
-import DashboardLayout from "~/modules/layouts/Dashboard";
-import { Icon } from "@iconify/react/dist/iconify.js";
-import WhitoutSideBar from "~/modules/layouts/templates/dashbaord/whitout-sidebar";
-import Head from "next/head";
 import { useResize } from "~/lib/hooks/useResize";
-import HeaderMobile from "~/modules/layouts/templates/dashbaord/Header/HeaderMobile";
-import { Button } from "@nextui-org/button";
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const helpers = await createServerSideCaller(ctx);
@@ -66,13 +67,13 @@ const AccountPage = () => {
   return (
     <>
       <Head>
-        <title>Biru - Cuentas</title>
+        <title>Biru - Mis Cuentas</title>
         <meta
           name="description"
           content="Selecciona una cuenta para continuar"
         />
       </Head>
-      <div className="relative grid h-screen w-full grid-cols-6 flex-row dark:bg-slate-950">
+      <main className="relative grid h-screen w-full grid-cols-6 flex-row dark:bg-slate-950">
         <aside className="relative col-span-2 hidden w-full flex-col justify-center bg-primary px-8 text-white lg:flex dark:bg-slate-900">
           <Image
             src="/logo-white.svg"
@@ -81,7 +82,7 @@ const AccountPage = () => {
             width={80}
             height={49}
           />
-          <div className="mt-12">
+          <article className="mt-12">
             <div className="mb-6 grid h-16 w-16 place-content-center rounded-full border bg-white dark:border-none dark:bg-slate-800">
               <Icon
                 icon="material-symbols:account-balance-outline"
@@ -90,14 +91,13 @@ const AccountPage = () => {
               />
             </div>
             <h4 className="mb-4 text-2xl font-medium ">
-              Hola {session?.user.name?.split(" ")[0]}, <br /> Bienvenido de
-              vuelta
+              Hola {session?.user.name?.split(" ")[0]}, <br /> Bienvenido
             </h4>
             <p className="mb-2 w-80 text-sm text-slate-300">
               Selecciona una cuenta, o crea una nueva para administrar tus
               finanzas. Tu futuro financiero está a solo un clic de distancia
             </p>
-          </div>
+          </article>
         </aside>
         <section className="col-span-6 flex flex-col justify-start px-4 py-4 md:px-12 lg:col-span-4">
           {isDesktop ? (
@@ -106,40 +106,37 @@ const AccountPage = () => {
             <HeaderMobile title="Cuentas" />
           )}
 
-          <div className="mt-4 flex h-full flex-col">
-            <header className="flex items-center justify-between">
-              <h3>Mis cuentas</h3>
-              <Button
-                color="primary"
-                variant="flat"
-                type="button"
-                as={Link}
-                href="/account/new"
-                isIconOnly={isMobile}
-              >
-                <Icon icon="ph:plus" width={18} /> {!isMobile && "Crear Cuenta"}
-              </Button>
-            </header>
-            <motion.div
-              className="mt-2 flex flex-wrap gap-2 py-2"
-              variants={container}
-              initial="hidden"
-              animate="visible"
+          <nav className="mt-4 flex items-center justify-between">
+            <h3>Mis cuentas</h3>
+            <Button
+              color="primary"
+              type="button"
+              as={Link}
+              href="/account/new"
+              isIconOnly={isMobile}
             >
-              {accounts.map((account) => {
-                return (
-                  <AccountCard
-                    key={account.id}
-                    account={account}
-                    hoverStyles
-                    onClick={() => navigateAccount(account.id)}
-                  />
-                );
-              })}
-            </motion.div>
-          </div>
+              <Icon icon="ph:plus" width={18} /> {!isMobile && "Crear Cuenta"}
+            </Button>
+          </nav>
+          <motion.div
+            className="mt-2 grid grid-cols-1 flex-wrap gap-2 py-2 sm:grid-cols-2 xl:flex"
+            variants={container}
+            initial="hidden"
+            animate="visible"
+          >
+            {accounts.map((account) => {
+              return (
+                <AccountCard
+                  key={account.id}
+                  account={account}
+                  hoverStyles
+                  onClick={() => navigateAccount(account.id)}
+                />
+              );
+            })}
+          </motion.div>
         </section>
-      </div>
+      </main>
     </>
   );
 };

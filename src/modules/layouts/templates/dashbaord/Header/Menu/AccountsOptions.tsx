@@ -34,7 +34,7 @@ const AccountsOptions = () => {
                 className="px-3 font-semibold text-black hover:rounded-lg dark:!text-slate-100"
                 color="primary"
                 onClick={() => {
-                  void router.push(`/account/${account.id}/main`);
+                  router.push(`/account/${account.id}/main`);
                 }}
                 textValue={account.name}
               >

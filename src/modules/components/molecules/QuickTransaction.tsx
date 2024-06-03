@@ -1,12 +1,14 @@
+import Link from "next/link";
 import { Icon } from "@iconify/react/dist/iconify.js";
+
 import { Button } from "@nextui-org/button";
 import { Avatar } from "@nextui-org/react";
-import Link from "next/link";
-import { useParams } from "next/navigation";
-import { useEntity } from "~/modules/Entities/hook/entities.hook";
 import { Card } from "../atoms";
 
-const SendsToEntities = () => {
+import { useParams } from "next/navigation";
+import { useEntity } from "~/modules/Entities/hook/entities.hook";
+
+const QuickTransaction = () => {
   const params = useParams();
   const { entities } = useEntity();
 
@@ -47,4 +49,4 @@ const SendsToEntities = () => {
   );
 };
 
-export default SendsToEntities;
+export default QuickTransaction;

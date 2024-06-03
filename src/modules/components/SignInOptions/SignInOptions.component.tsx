@@ -1,10 +1,8 @@
-"use client";
-
 import { Icon } from "@iconify/react/dist/iconify.js";
-import { signIn } from "next-auth/react";
-import React from "react";
-import { CALLBACK_SIGN_IN_URL } from "~/lib/constants/config";
 import { Button, ButtonGroup } from "@nextui-org/button";
+
+import { CALLBACK_SIGN_IN_URL } from "~/lib/constants/config";
+import { signIn } from "next-auth/react";
 
 const SignInOptions = ({ title }: { title?: string }) => {
   return (

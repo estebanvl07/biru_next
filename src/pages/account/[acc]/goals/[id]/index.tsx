@@ -1,22 +1,22 @@
-import type { GetServerSideProps } from "next";
-import { Progress } from "@nextui-org/progress";
-import { format } from "date-fns";
-import { redirect, useParams } from "next/navigation";
+import { useParams } from "next/navigation";
 import { useRouter } from "next/router";
 import React, { useCallback, useEffect, useState } from "react";
-import GoalCard from "~/modules/Goals/GoalCard";
+
+import { createServerSideCaller } from "~/utils/serverSideCaller/serverSideCaller";
+import { capitalize } from "~/modules/components/molecules/Table/utils";
+import { es } from "date-fns/locale";
+import { format } from "date-fns";
+
+import type { GetServerSideProps } from "next";
+import { Transaction } from "@prisma/client";
+
+import Actions from "~/modules/components/molecules/Table/Actions";
 import { columns } from "~/modules/Goals/table";
 import { Card, Table } from "~/modules/components";
 import DashboardLayout from "~/modules/layouts/Dashboard";
-import { api } from "~/utils/api";
-import { createServerSideCaller } from "~/utils/serverSideCaller/serverSideCaller";
-import { Goals, Transaction } from "@prisma/client";
 import { GoalsIncludes } from "~/modules/Goals/hook/goal.hook";
 import { Chip } from "@nextui-org/react";
 import { Icon } from "@iconify/react/dist/iconify.js";
-import { capitalize } from "~/modules/components/molecules/Table/utils";
-import { es } from "date-fns/locale";
-import Actions from "~/modules/components/molecules/Table/Actions";
 
 const DetailGoalPage = ({
   goalData,
@@ -157,8 +157,8 @@ const DetailGoalPage = ({
             columns={columns}
             data={goalData.transactions ?? []}
             renderCell={renderCell}
+            filterKeys={["amount"]}
             headerConfig={{
-              keySearch: ["amount"],
               redirectTo: `/account/${acc}/transactions/new?transferType=2&goal=${goalData.id}`,
             }}
           />

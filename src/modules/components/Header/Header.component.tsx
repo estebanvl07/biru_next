@@ -1,8 +1,8 @@
+import Image from "next/image";
+import Link from "next/link";
 import clsx from "clsx";
 
 import { Button } from "@nextui-org/button";
-import Image from "next/image";
-import Link from "next/link";
 import { Icon } from "@iconify/react/dist/iconify.js";
 
 import { HandlerTheme } from "../atoms";

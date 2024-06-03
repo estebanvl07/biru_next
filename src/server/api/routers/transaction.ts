@@ -1,32 +1,12 @@
-import { Transaction } from "@prisma/client";
 import {
   createTransaction,
   updateTransaction,
 } from "~/modules/transactions/schema";
-import { filter, filterInput } from "~/modules/common/schema";
+import { filterInput } from "~/modules/common/schema";
 import * as TransactionServices from "~/server/api/services/transactions.services";
 
 import { createTRPCRouter, protectedProcedure } from "~/server/api/trpc";
 import { z } from "zod";
-
-// interface MyEvents {
-//   new: (data: Transaction) => void;
-//   // update: (data: Transaction) => void;
-// }
-
-// declare interface MyEventEmitter {
-//   on<TEv extends keyof MyEvents>(event: TEv, listener: MyEvents[TEv]): this;
-//   off<TEv extends keyof MyEvents>(event: TEv, listener: MyEvents[TEv]): this;
-//   once<TEv extends keyof MyEvents>(event: TEv, listener: MyEvents[TEv]): this;
-//   emit<TEv extends keyof MyEvents>(
-//     event: TEv,
-//     ...args: Parameters<MyEvents[TEv]>
-//   ): boolean;
-// }
-
-// class MyEventEmitter extends EventEmitter {}
-
-// const ee = new MyEventEmitter();
 
 export const transactionsRouter = createTRPCRouter({
   getTransactions: protectedProcedure
@@ -37,12 +17,11 @@ export const transactionsRouter = createTRPCRouter({
   getTransactionById: protectedProcedure
     .input(
       z.object({
-        accountId: z.number(),
         id: z.number(),
       }),
     )
     .query(({ input, ctx }) => {
-      return TransactionServices.getTransactionById(ctx.db, input);
+      return TransactionServices.getTransactionById(ctx.db, input.id);
     }),
   create: protectedProcedure
     .input(createTransaction)

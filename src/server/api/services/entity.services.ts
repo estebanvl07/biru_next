@@ -28,6 +28,12 @@ export async function getEntityById(
 ) {
   return await db.entities.findMany({
     where: { userId, id },
-    include: { transactions: true },
+    include: {
+      transactions: {
+        orderBy: {
+          date: "desc",
+        },
+      },
+    },
   });
 }

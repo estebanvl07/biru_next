@@ -1,18 +1,19 @@
-import { Table } from "~/modules/components";
-import DashboardLayout from "~/modules/layouts/Dashboard";
-
-import { columns } from "~/modules/Entities/table";
-import { useEntity } from "~/modules/Entities/hook/entities.hook";
+import { useRouter } from "next/router";
 import { useParams } from "next/navigation";
 import { useCallback } from "react";
+import { Table } from "~/modules/components";
+import { format } from "date-fns";
+
+import MobileEntityPage from "~/modules/Entities/MobileEntityContent";
+import { useResize } from "~/lib/hooks/useResize";
+import { useEntity } from "~/modules/Entities/hook/entities.hook";
+import { es } from "date-fns/locale";
+
+import DashboardLayout from "~/modules/layouts/Dashboard";
+import { columns } from "~/modules/Entities/table";
 import { Entities } from "@prisma/client";
 import { Chip, User } from "@nextui-org/react";
-import { format } from "date-fns";
-import { es } from "date-fns/locale";
-import { useResize } from "~/lib/hooks/useResize";
-import MobileEntityPage from "~/modules/Entities/MobileEntityContent";
 import Actions from "~/modules/components/molecules/Table/Actions";
-import { useRouter } from "next/router";
 
 export default function EntitiesPage() {
   const router = useRouter();

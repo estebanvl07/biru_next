@@ -8,7 +8,7 @@ interface DashboardProps {
   headDescription?: string;
 }
 
-const WhitoutSideBar: FC<DashboardProps> = ({
+const WithoutSideBar: FC<DashboardProps> = ({
   children,
   title,
   headDescription,
@@ -29,4 +29,4 @@ const WhitoutSideBar: FC<DashboardProps> = ({
   );
 };
 
-export default WhitoutSideBar;
+export default WithoutSideBar;

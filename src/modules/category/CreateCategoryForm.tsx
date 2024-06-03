@@ -8,8 +8,8 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import clsx from "clsx";
 
-import { Input, Radio, RadioGroup } from "@nextui-org/react";
-import { Button, ButtonGroup } from "~/modules/components";
+import { Button, Input } from "@nextui-org/react";
+import { ButtonGroup } from "~/modules/components";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import { IconSearcher } from "~/modules/category/IconSelector";
 
@@ -24,7 +24,6 @@ const CreateCategoryForm = ({ hasEdit = false }: { hasEdit?: boolean }) => {
   const [modalActive, setModalActive] = useState(false);
 
   const params = useParams();
-  const query = router.query;
 
   const {
     register,
@@ -178,7 +177,7 @@ const CreateCategoryForm = ({ hasEdit = false }: { hasEdit?: boolean }) => {
         />
 
         <div className="mb-2 flex w-full flex-col gap-2 pt-3 md:flex-row">
-          <Button type="submit" className="w-fit py-1 text-sm">
+          <Button type="submit" className="w-fit py-1 text-sm" color="primary">
             <Icon
               icon="lucide:loader-circle"
               className={clsx(
@@ -186,9 +185,9 @@ const CreateCategoryForm = ({ hasEdit = false }: { hasEdit?: boolean }) => {
                 // category.isLoading && "animate-spin opacity-100",
               )}
             />
-            {hasEdit ? "Actualizar" : "Crear"}
+            {hasEdit ? "Actualizar Categoría" : "Crear Categoría"}
           </Button>
-          <Button className="w-fit py-1 text-sm" variantStyle="outline">
+          <Button className="w-fit bg-default-100 py-1 text-sm">
             Cancelar
           </Button>
         </div>

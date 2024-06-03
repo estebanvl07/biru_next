@@ -4,7 +4,10 @@ export const parseAmount = (amount: number | undefined) => {
   return `${parseFloat((amount / 1000).toFixed(1))}k`;
 };
 
-export const getPercent = (value: number, amount: number | undefined) => {
+export const getPercent = (
+  value: number,
+  amount: number | undefined,
+): string => {
   if (value === 0 || typeof amount === "undefined") return "0%";
   return `${((value / amount) * 100).toFixed(1)}%`;
 };

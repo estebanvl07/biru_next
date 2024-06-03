@@ -1,10 +1,11 @@
-import React, { EventHandler, FormEvent, useEffect, useState } from "react";
+import React, { FormEvent, useState } from "react";
 import Modal from "../atoms/Modal.component";
-import { useOnActive } from "~/lib/hooks";
+import clsx from "clsx";
 import { SystemCategories } from "~/lib/resource/system-catetories";
+import { useOnActive } from "~/lib/hooks";
+
 import { Button, Chip } from "@nextui-org/react";
 import { Icon } from "@iconify/react/dist/iconify.js";
-import clsx from "clsx";
 import { api } from "~/utils/api";
 import { CreateCategory } from "~/modules/category/schema";
 

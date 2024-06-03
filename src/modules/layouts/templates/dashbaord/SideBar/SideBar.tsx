@@ -1,5 +1,4 @@
 import clsx from "clsx";
-import React, { LegacyRef, RefAttributes } from "react";
 import ButtonSignOut from "./ButtonSignOut";
 import OptionsList from "./OptionsList";
 

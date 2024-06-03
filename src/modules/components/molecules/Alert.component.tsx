@@ -1,16 +1,8 @@
+import clsx from "clsx";
+
+import { Modal, ModalBody, ModalContent, ModalFooter } from "@nextui-org/modal";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import { Button, ButtonProps } from "@nextui-org/button";
-import {
-  Modal,
-  ModalBody,
-  ModalContent,
-  ModalFooter,
-  useDisclosure,
-} from "@nextui-org/modal";
-import clsx from "clsx";
-import ReactDOM from "react-dom";
-import React, { useEffect } from "react";
-import { useOnActive } from "~/lib/hooks";
 
 type TypeAlerts = "success" | "warning" | "error" | "info" | "quest";
 

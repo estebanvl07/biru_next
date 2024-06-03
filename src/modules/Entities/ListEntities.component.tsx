@@ -1,5 +1,5 @@
-import { Entities } from "@prisma/client";
 import React from "react";
+import { Entities } from "@prisma/client";
 import EntityItem from "./EntityItem";
 
 type EntityListProps = {

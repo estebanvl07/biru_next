@@ -10,16 +10,9 @@ type IconSearcherProps = {
 
 const IconSearcher = ({ selected, isOpen, onClose }: IconSearcherProps) => {
   return (
-    // <Dialog
-    //   header="Icono de categoría"
-    //   visible
-    //   style={{ width: "50vw" }}
-    //   onHide={onHideModal}
-    // >
     <Modal isOpen={isOpen} onClose={onClose} title="Iconos">
       <IconSelector selected={selected} onHideModal={onClose} />
     </Modal>
-    // </Dialog>
   );
 };
 

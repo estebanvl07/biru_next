@@ -7,15 +7,15 @@ import { ListTransactions } from "../common";
 
 import { useSearch } from "~/lib/hooks";
 
-import type { Transaction } from "@prisma/client";
+import { TransactionIncludes } from "~/types/transactions";
 
 const MobileTransactionPage = ({
   transactions,
 }: {
-  transactions: Transaction[];
+  transactions: TransactionIncludes[];
 }) => {
   const params = useParams();
-  const { newList, onSearch } = useSearch<Transaction>({
+  const { newList, onSearch } = useSearch<TransactionIncludes>({
     data: transactions,
     keys: ["description", "amount", "recipient"],
   });

@@ -1,10 +1,10 @@
 import { Z_NUMBER, Z_STRING, updateSchema, z } from "~/lib/resolver/zod";
 
 export const input = {
-  balance: Z_NUMBER,
   name: Z_STRING,
-  reference: Z_STRING,
   type: Z_NUMBER,
+  balance: z.optional(z.number()),
+  reference: z.optional(z.string()),
 };
 
 export const createUserAccount = z.object(input);

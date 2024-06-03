@@ -1,6 +1,7 @@
 import clsx from "clsx";
-import type { UserAccount } from "@prisma/client";
 import { motion } from "framer-motion";
+
+import type { UserAccount } from "@prisma/client";
 
 interface AccountCardProps {
   account: Required<UserAccount>;
@@ -23,11 +24,11 @@ const AccoundCard = ({
   hoverStyles,
   onClick,
 }: AccountCardProps) => {
-  const balance = account.balance?.toLocaleString() ?? "0.";
+  const balance = account.balance?.toLocaleString() ?? "0";
   return (
-    <motion.div
+    <motion.article
       className={clsx(
-        "hover:bg-primar/10 group flex min-w-full cursor-pointer flex-col rounded-xl border bg-default-50 px-6 py-4 shadow-sm transition-all md:min-w-80  dark:border-white/10 dark:bg-default-100",
+        "hover:bg-primar/10 group flex min-w-full cursor-pointer flex-col rounded-xl border bg-default-50 px-6 py-4 shadow-sm transition-all xl:min-w-80  dark:border-white/10 dark:bg-default-100",
         className,
         {
           "hover:border-primary hover:bg-primary/5": hoverStyles,
@@ -36,14 +37,18 @@ const AccoundCard = ({
       variants={item}
       onClick={() => onClick?.(account)}
     >
-      <div className="flex items-start justify-between">
+      <main className="flex items-start justify-between">
         <aside>
-          <p className="font-semibold">{account?.name}</p>
-          <span>{account.reference ?? "Sin referencia"}</span>
+          <h4 className="font-semibold">{account?.name}</h4>
+          <span>
+            {account.reference === "" || account.reference === null
+              ? "Sin referencia"
+              : account.reference}
+          </span>
         </aside>
-        <p className="text-base font-semibold md:mb-2">$ {balance}</p>
-      </div>
-    </motion.div>
+        <span className="text-base font-semibold md:mb-2">$ {balance}</span>
+      </main>
+    </motion.article>
   );
 };
 

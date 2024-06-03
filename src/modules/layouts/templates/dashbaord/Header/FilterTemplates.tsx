@@ -1,21 +1,11 @@
 import React, { useState } from "react";
 import { options } from "./filterOptions";
-import {
-  DateValue,
-  RangeCalendar,
-  Select,
-  SelectItem,
-} from "@nextui-org/react";
+import { RangeCalendar, Select, SelectItem } from "@nextui-org/react";
 
 import { Icon } from "@iconify/react/dist/iconify.js";
-import type { RangeValue } from "@nextui-org/react";
 import { AnimatePresence, motion } from "framer-motion";
 import { useOutsideClick } from "~/lib/hooks";
-import { api } from "~/utils/api";
 import { useParams } from "next/navigation";
-import { createTRPCQueryUtils, createTRPCReact } from "@trpc/react-query";
-import { QueryClient } from "@tanstack/react-query";
-import { AppRouter } from "~/server/api/root";
 import { FILTERS } from "~/types/transactions";
 import { useFilterContext } from "~/lib/context/filterContext";
 

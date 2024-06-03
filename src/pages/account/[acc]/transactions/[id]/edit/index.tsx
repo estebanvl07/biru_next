@@ -8,13 +8,14 @@ import { TransactionIncludes } from "~/types/transactions";
 import { createServerSideCaller } from "~/utils/serverSideCaller/serverSideCaller";
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
-  const { id, acc } = ctx.params!;
+  const { id } = ctx.params!;
 
   const helper = await createServerSideCaller(ctx);
   const [transaction] = await helper.transaction.getTransactionById.fetch({
-    accountId: Number(acc),
     id: Number(id),
   });
+
+  console.log(transaction);
 
   const formatted = {
     ...transaction,
@@ -68,8 +69,13 @@ const EditTransactionPage = ({
   const router = useRouter();
   const query = router.query;
 
+  console.log(transaction);
+
   return (
-    <DashboardLayout title="Detalle de transacción">
+    <DashboardLayout
+      title="Detalle de transacción"
+      headDescription="Editar una transacción"
+    >
       <TransactionForm
         mode="edit"
         type={transaction.transferType === 1 ? "transfer" : "goal"}

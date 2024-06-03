@@ -1,8 +1,7 @@
-import React, { useEffect, useMemo } from "react";
+import { useMemo } from "react";
 
 import { getQueryKey } from "@trpc/react-query";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { useCurrentAccount } from "~/modules/Account/hooks";
+import { useQueryClient } from "@tanstack/react-query";
 
 import { months } from "~/lib/resource/months";
 
@@ -12,12 +11,12 @@ import { format } from "date-fns";
 import { DATE_FORMAT_TRANS } from "~/lib/constants/config";
 import { es } from "date-fns/locale";
 import { useParams } from "next/navigation";
-import { FILTERS, FilterOptions } from "~/types/transactions";
-import { useFilterContext } from "~/lib/context/filterContext";
 
-const initialOptions = {
-  filter: 0,
-};
+import {
+  FILTERS,
+  FilterOptions,
+  TransactionIncludes,
+} from "~/types/transactions";
 
 export const useTransactions = (options: FilterOptions) => {
   const params = useParams();
@@ -85,9 +84,9 @@ export const getMonths = (transactions: Transaction[]) => {
 };
 
 export const formatterTransactions = (
-  transactions: Transaction[],
-): Transaction[] => {
-  const formatted = transactions?.map((tr: Transaction) => {
+  transactions: TransactionIncludes[],
+): TransactionIncludes[] => {
+  const formatted = transactions?.map((tr: TransactionIncludes) => {
     return {
       ...tr,
       createdAt: format(String(tr.createdAt), DATE_FORMAT_TRANS, {
@@ -98,5 +97,5 @@ export const formatterTransactions = (
       }) as any,
     };
   });
-  return formatted as Transaction[];
+  return formatted as TransactionIncludes[];
 };

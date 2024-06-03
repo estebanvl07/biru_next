@@ -3,7 +3,6 @@ import { useParams } from "next/navigation";
 
 import { Icon } from "@iconify/react/dist/iconify.js";
 import { Button, Input } from "@nextui-org/react";
-import { ListTransactions } from "../common";
 
 import { useSearch } from "~/lib/hooks";
 

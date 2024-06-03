@@ -1,5 +1,5 @@
 import { Button, Pagination } from "@nextui-org/react";
-import React, { Dispatch, SetStateAction } from "react";
+import React from "react";
 import { BottomContentProps } from "~/types/component/table.types";
 
 const BottomContent = React.memo(

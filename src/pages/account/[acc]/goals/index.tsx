@@ -26,7 +26,10 @@ export default function GoalPage() {
   });
 
   return (
-    <DashboardLayout title="Ahorros">
+    <DashboardLayout
+      title="Metas"
+      headDescription="Listado de metas del usuario"
+    >
       <header className="mb-2 flex items-center gap-2">
         <Input
           placeholder="Buscar"
@@ -49,7 +52,6 @@ export default function GoalPage() {
           </Button>
         </nav>
       </header>
-
       {isLoading ? (
         <LoaderSkeleton skeletonType="Saving" />
       ) : (

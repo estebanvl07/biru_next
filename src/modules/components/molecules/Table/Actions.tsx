@@ -1,7 +1,5 @@
 import { Icon } from "@iconify/react/dist/iconify.js";
 import { Tooltip } from "@nextui-org/react";
-import React from "react";
-import { string } from "zod";
 
 interface ActionsProps {
   detailText?: string;

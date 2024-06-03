@@ -19,7 +19,6 @@ import MobileDashboard from "~/modules/Dashboard/MobileDashboard";
 import EntitiesGroup from "~/modules/components/molecules/EntitiesGroup";
 import CategoiresSuggestion from "~/modules/components/molecules/CategoiresSuggestion";
 import { useCategory } from "~/modules/category/hook/category.hook";
-import { categoriesRouter } from "~/server/api/routers/category";
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const accountId = Number(ctx.params!.acc);
@@ -38,12 +37,17 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
 
 const HomePage = () => {
   const params = useParams();
+
   const { account } = useCurrentAccount();
   const { categories, isLoading } = useCategory();
   const { isDesktop, size } = useResize();
 
   return (
-    <DashboardLayout title="Dashboard" hasFilter>
+    <DashboardLayout
+      title="Dashboard"
+      headDescription="Dashboard de la cuenta seleccionada"
+      hasFilter
+    >
       {size && size <= 768 ? (
         <MobileDashboard />
       ) : (
@@ -59,14 +63,14 @@ const HomePage = () => {
 
             <aside className="items-center md:flex">
               <EntitiesGroup />
-              {isDesktop && <hr className="mx-6 h-12 w-[1px] border-l" />}
+              {isDesktop && (
+                <hr className="mx-6 h-12 w-[1px] border-l dark:border-white/10" />
+              )}
               {isDesktop && (
                 <div className="flex gap-2">
                   <Button
                     href={`/account/${params?.acc}/transactions/new?type=2`}
-                    // color="default"
                     as={Link}
-                    // variant="bordered"
                     className="flex items-center gap-2 bg-default-100"
                   >
                     <Icon icon="iconamoon:arrow-top-right-1" width={18} /> Nuevo
@@ -86,16 +90,17 @@ const HomePage = () => {
             </aside>
           </div>
           <div className="grid grid-cols-12 gap-2">
-            <div className="col-span-12 flex flex-col gap-2 lg:col-span-7">
+            <div className="col-span-12 flex flex-col gap-2 xl:col-span-7">
               <DetailAmounts className="md:flex-row" />
               <CardBalanceAccount />
             </div>
-            <article className=" col-span-12 lg:col-span-5">
+            <article className=" col-span-12 xl:col-span-5">
               <LastTransactions transactionsMaxLength={5} />
             </article>
           </div>
         </>
       )}
+
       {!isLoading && categories?.length === 0 && <CategoiresSuggestion />}
     </DashboardLayout>
   );

@@ -47,14 +47,12 @@ const TransactionItem: FC<TransactionItemProps> = ({ item, index, length }) => {
 
   return (
     <li
-      key={item.id}
       className={clsx(
         "flex flex-col border-gray-100 px-1 hover:bg-slate-100 dark:border-white/10 dark:hover:bg-slate-800/40",
         {
           "border-b ": index !== length - 1,
         },
       )}
-      // onClick={() => selectTransaction()}
     >
       <Link
         href={`/transactions/${item.id}`}
@@ -63,7 +61,7 @@ const TransactionItem: FC<TransactionItemProps> = ({ item, index, length }) => {
         )}
         title={getName()}
       >
-        <div className="flex items-center gap-3">
+        <aside className="flex items-center gap-3">
           {item.entityId ? (
             <Avatar color="primary" name={item.entity?.name} />
           ) : (
@@ -72,14 +70,14 @@ const TransactionItem: FC<TransactionItemProps> = ({ item, index, length }) => {
             </span>
           )}
           <div className="flex flex-col">
-            <p className="mb-1 overflow-hidden text-ellipsis text-nowrap font-semibold xl:w-32 dark:font-normal">
+            <h6 className="mb-1 overflow-hidden text-ellipsis text-nowrap font-semibold xl:w-32 dark:font-normal">
               {getName()}
-            </p>
+            </h6>
             <span className="overflow-hidden text-ellipsis text-nowrap text-xs text-slate-500 xl:w-32 dark:text-slate-400">
               {`${format(item.date ?? item.createdAt, DATE_FORMAT_TRANS)}`}
             </span>
           </div>
-        </div>
+        </aside>
         <p
           className={clsx(
             "whitespace-nowrap text-base font-semibold dark:font-semibold",

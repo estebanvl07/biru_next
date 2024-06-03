@@ -6,7 +6,6 @@ import { es } from "date-fns/locale";
 
 import { useOnActive, useOutsideClick } from "~/lib/hooks";
 
-// import Input from "./Input.component";
 import { Input } from "@nextui-org/react";
 
 import type { InputProps } from "./input.types";
@@ -88,12 +87,10 @@ const InputDate: FC<InputDateProps> = ({
             className="dark:text-slate-200"
           />
         }
-        // iconPath="flowbite:calendar-month-solid"
         className={className}
         value={inputValue}
         onClick={onActive}
-        // onContentClick={onActive}
-      ></Input>
+      />
       {isActive && (
         <Calendar
           color="primary"

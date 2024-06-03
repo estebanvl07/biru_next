@@ -39,6 +39,12 @@ export const menuOptions = [
         icon: "material-symbols:analytics-outline",
         href: "/analytics",
       },
+      {
+        id: 5,
+        name: "Categorías",
+        icon: "iconamoon:category",
+        href: "/category",
+      },
 
       // {
       //   id: 5,
@@ -78,9 +84,9 @@ export const menuOptions = [
     menus: [
       {
         id: 1,
-        name: "Categorías",
-        icon: "iconamoon:category",
-        href: "/category",
+        name: "Ayuda",
+        icon: "material-symbols:help-outline",
+        href: "/help",
       },
 
       {
@@ -98,7 +104,7 @@ export const mobileOptions = [
     id: 5,
     name: "Dashboard",
     icon: "akar-icons:dashboard",
-    href: "/main",
+    href: "",
   },
   {
     id: 2,

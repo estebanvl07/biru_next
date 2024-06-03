@@ -1,4 +1,3 @@
-"use client";
 import { FC } from "react";
 import { useParams } from "next/navigation";
 import clsx from "clsx";
@@ -17,12 +16,7 @@ interface EntityItemProps {
 
 const EntityItem: FC<EntityItemProps> = ({ entity, index }) => {
   const params = useParams();
-  const { avatar, createdAt, description, reference, id, name, type } = entity;
-
-  const icon = {
-    1: "eva:diagonal-arrow-right-up-fill",
-    2: "eva:diagonal-arrow-right-down-fill",
-  }[type === 1 ? 1 : 2];
+  const { avatar, createdAt, id, name, type } = entity;
 
   return (
     <li
@@ -32,7 +26,6 @@ const EntityItem: FC<EntityItemProps> = ({ entity, index }) => {
           "border-b ": index !== length - 1,
         },
       )}
-     
     >
       <Link
         href={`/account/${params?.acc}/entities/${id}`}

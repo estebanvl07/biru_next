@@ -1,26 +1,29 @@
+import { useRouter } from "next/router";
+import { useParams } from "next/navigation";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { useOnActive } from "~/lib/hooks";
 
 import { Icon } from "@iconify/react/dist/iconify.js";
 import { Button, Input, Textarea } from "@nextui-org/react";
 import { IconSearcher } from "~/modules/category/IconSelector";
 import { InputDate } from "~/modules/components";
 import DashboardLayout from "~/modules/layouts/Dashboard";
+import { Alert } from "~/modules/components/molecules/Alert.component";
+
+import { useOnActive } from "~/lib/hooks";
 import { createGoal } from "~/modules/Goals/schema";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Alert } from "~/modules/components/molecules/Alert.component";
 import { useAlert } from "~/lib/hooks/useAlert";
 import { api } from "~/utils/api";
-import { useRouter } from "next/router";
-import { useParams } from "next/navigation";
 import { amountFormatter } from "~/utils/formatters";
-import { useState } from "react";
 
 export default function NewGoalPage() {
   const [goalAmount, setGoalAmount] = useState("");
   const [initialAmount, setInitialAmount] = useState("");
+
   const router = useRouter();
   const params = useParams();
+
   const { isActive, onActive, onDisabled } = useOnActive();
   const { mutate: createGoalgMutation } = api.goals.create.useMutation();
   const {
@@ -30,7 +33,6 @@ export default function NewGoalPage() {
     formState: { errors },
     watch,
     reset,
-    handleSubmit,
   } = useForm<createGoal>({
     resolver: zodResolver(createGoal),
   });
@@ -109,9 +111,7 @@ export default function NewGoalPage() {
             isRequired
             label="Monto de meta"
             placeholder="0.00"
-            // labelPlacement="outside"
             className="!appearance-none"
-            // onValueChange={(val) => setValue("amount", Number(val))}
             value={goalAmount}
             onValueChange={(val) => {
               const { formatted, raw } = amountFormatter(val);
@@ -185,7 +185,10 @@ export default function NewGoalPage() {
           <Button color="primary" type="submit">
             Crear Meta
           </Button>
-          <Button color="primary" className="border-1" variant="bordered">
+          <Button
+            className="border-1 bg-default-100"
+            onClick={() => router.back()}
+          >
             Cancelar
           </Button>
         </div>

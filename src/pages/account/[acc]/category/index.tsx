@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { useParams, usePathname } from "next/navigation";
+import { useParams } from "next/navigation";
 import React from "react";
 
 import { Button, Input } from "@nextui-org/react";
@@ -9,7 +9,6 @@ import { motion } from "framer-motion";
 import DashboardLayout from "~/modules/layouts/Dashboard";
 import CategoryCard from "~/modules/category/CategoryCard";
 
-import { api } from "~/utils/api";
 import { useSearch } from "~/lib/hooks";
 
 import type { Category } from "@prisma/client";

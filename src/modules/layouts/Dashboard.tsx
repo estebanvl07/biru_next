@@ -9,6 +9,8 @@ import BottomMobileNav from "./templates/dashbaord/BottomMobileNav";
 
 import { motion, AnimatePresence } from "framer-motion";
 import { Icon } from "@iconify/react/dist/iconify.js";
+import MainLoader from "../Loaders/mainLoader.component";
+import { useEffect, useState } from "react";
 
 const variants = {
   hidden: { opacity: 0, x: -200, y: 0 },
@@ -31,6 +33,12 @@ const DashboardLayout = ({
 }) => {
   const router = useRouter();
   const { size } = useResize();
+
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
 
   return (
     <div className="flex overflow-hidden dark:bg-slate-950">
@@ -58,7 +66,7 @@ const DashboardLayout = ({
               animate="enter"
               exit="exit"
             >
-              {children}
+              {isClient ? <>{children}</> : <MainLoader />}
               <footer className="mt-4 flex w-full items-center justify-between text-xs">
                 <p>Desarrollado por Esteban vl & Pedro Va</p>
                 <span className="flex items-center gap-1">

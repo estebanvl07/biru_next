@@ -1,15 +1,13 @@
-import React from "react";
-import { useCurrentAccount } from "../Account/hooks";
-import { CardBalanceAccount, DetailAmounts, LastTransactions } from "../common";
-import { Button } from "@nextui-org/button";
-import Link from "next/link";
 import { useParams } from "next/navigation";
+import Link from "next/link";
+
+import { DetailAmounts, LastTransactions } from "../common";
 import { Icon } from "@iconify/react/dist/iconify.js";
-import CreationMenu from "../layouts/templates/dashbaord/Header/CreationMenu/CreationMenu";
-import { useSession } from "next-auth/react";
 import { Chip, Skeleton } from "@nextui-org/react";
-import SendsToEntities from "../components/molecules/SendsToEntities";
+import MobileFilter from "../layouts/templates/dashbaord/Header/MobileFilter";
+
 import { motion } from "framer-motion";
+import { useCurrentAccount } from "../Account/hooks";
 import { onlyScale } from "../animations";
 
 const MobileDashboard = () => {
@@ -20,35 +18,24 @@ const MobileDashboard = () => {
     <div className="z-0 flex flex-col gap-2">
       <section className="z-20 flex flex-col items-center justify-center  pt-4">
         <span className="text-lg">Balance actual</span>
-        <div className="flex items-center gap-2">
-          <motion.h2
-            {...onlyScale}
-            className="mb-2 flex w-fit text-5xl font-bold"
-          >
-            {isLoading ? (
-              <Skeleton className="h-10 w-32 rounded-xl" />
-            ) : (
-              <>
-                <span className="mr-1 text-xl opacity-80">$</span>
-                {account?.balance?.toLocaleString()}
-              </>
-            )}
-          </motion.h2>
-        </div>
+        <motion.h2
+          {...onlyScale}
+          className="mb-2 flex w-fit items-center text-5xl font-bold"
+        >
+          {isLoading ? (
+            <Skeleton className="h-10 w-32 rounded-xl" />
+          ) : (
+            <>
+              <span className="mr-1 text-xl opacity-80">$</span>
+              {account?.balance?.toLocaleString()}
+            </>
+          )}
+        </motion.h2>
         <article className="flex gap-2">
           <Chip color="success" className="text-white">
             74.8
           </Chip>
-          <label className="flex items-center gap-2 text-small text-default-500">
-            <select
-              className="rounded-md bg-default-100 p-1 text-small text-default-500 outline-none"
-              // onChange={onRowsPerPageChange}
-            >
-              <option value="5">Mes</option>
-              <option value="10">6 Meses</option>
-              <option value="15">1 Año</option>
-            </select>
-          </label>
+          <MobileFilter />
         </article>
         <motion.nav
           initial={{
@@ -91,6 +78,9 @@ const MobileDashboard = () => {
           </Link>
         </motion.nav>
       </section>
+      <div className="overflow-x-auto scrollbar-hide">
+        <DetailAmounts className="!flex-row overflow-auto" />
+      </div>
       <LastTransactions transactionsMaxLength={10} />
     </div>
   );

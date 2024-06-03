@@ -189,7 +189,7 @@ const TransactionForm = ({
   // query params
   useEffect(() => {
     if (!account && transactionDefault) return;
-    setValue("accountId", account.id);
+    setValue("accountId", account?.id);
     setValue("type", Number(query.type) as any);
     setValue("transferType", type === "goal" ? 2 : 1);
     if (type === "goal") {
@@ -203,6 +203,14 @@ const TransactionForm = ({
       setValue("type", Number(query.type) as any);
     } else {
       setValue("type", 1);
+    }
+
+    if (query?.entity) {
+      setValue("entityId", Number(query.entity));
+
+      const entity = entities.find((ent) => ent.id === Number(query.entity));
+      setValue("reference", entity?.reference || "");
+      setValue("recipient", entity?.name);
     }
   }, [account, query]);
 
@@ -544,7 +552,7 @@ const TransactionForm = ({
                       items={entities ?? []}
                       placeholder="Seleccionar entidad"
                       label="Entidad"
-                      selectedKeys={defaultEntity}
+                      defaultSelectedKeys={defaultEntity ?? query.entity}
                       classNames={{
                         label: "group-data-[filled=true]:-translate-y-5",
                         trigger: "min-h-[70px]",

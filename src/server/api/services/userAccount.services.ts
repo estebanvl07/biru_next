@@ -15,16 +15,32 @@ export function setSeed(db: PrismaClient, userId: string) {
   });
 }
 
-export function createAccount(
+export async function createAccount(
   db: PrismaClient,
   data: Prisma.UserAccountUncheckedCreateInput,
 ) {
-  return db.userAccount.create({
+  const accountCreated = await db.userAccount.create({
     data: {
       ...data,
       state: 1,
     },
   });
+
+  if (data.balance) {
+    await db.transaction.create({
+      data: {
+        amount: data.balance,
+        description: "Balance incial",
+        date: new Date(),
+        type: 1,
+        state: 1,
+        accountId: accountCreated.id,
+        userId: data.userId,
+      },
+    });
+  }
+
+  return accountCreated;
 }
 
 async function createDefaultAccounts(db: PrismaClient, userId: string) {

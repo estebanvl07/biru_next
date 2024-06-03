@@ -1,8 +1,9 @@
-import { Icon } from "@iconify/react/dist/iconify.js";
-import { Avatar, AvatarGroup, Button } from "@nextui-org/react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
-import React from "react";
+
+import { Icon } from "@iconify/react/dist/iconify.js";
+import { Avatar, AvatarGroup, Button } from "@nextui-org/react";
+
 import { useEntity } from "~/modules/Entities/hook/entities.hook";
 
 const EntitiesGroup = () => {
@@ -21,6 +22,14 @@ const EntitiesGroup = () => {
           <Avatar
             color="primary"
             key={entity.id}
+            as={Link}
+            href={{
+              pathname: "/account/[acc]/entities/[id]",
+              query: {
+                acc: params?.acc,
+                id: entity.id,
+              },
+            }}
             name={entity.name}
             src={entity.avatar ?? undefined}
           />

@@ -9,7 +9,6 @@ import { STEPS_RECOVER } from "~/types/recover.types";
 import { useRouter } from "next/router";
 
 const ChangePasswordForm = ({
-  goStep,
   code,
 }: {
   goStep?: (step: STEPS_RECOVER) => void;
@@ -34,7 +33,6 @@ const ChangePasswordForm = ({
     if (payload.password !== payload.confirmPassword) {
       return alert("Las contraseñas deben ser iguales");
     }
-
     ChangePassowordMutation(
       { password: payload.password, code },
       {

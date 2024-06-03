@@ -1,12 +1,12 @@
-"use client";
 import { FC, useState } from "react";
 import { Icon } from "@iconify/react/dist/iconify.js";
 
-import { Button } from "~/modules/components";
 import { useOutsideClick } from "~/lib/hooks";
+import { options } from "../layouts/templates/dashbaord/Header/filterOptions";
+import { FILTERS } from "~/types/transactions";
 
 interface FilterListProps {
-  filterbyType: (type: number) => void;
+  filterbyType: (type: FILTERS) => void;
 }
 
 // TODO: refactorize component
@@ -16,16 +16,26 @@ const ChartsFilterList: FC<FilterListProps> = ({ filterbyType }) => {
 
   return (
     <div className="absolute right-3 top-3" ref={contentRef}>
-      <Button variantStyle="empty" onClick={() => setShowList(!showList)}>
+      <button onClick={() => setShowList(!showList)}>
         <Icon icon="mi:options-vertical" />
-      </Button>
+      </button>
       {showList && (
-        <ul className="absolute right-0 top-7 z-20 flex w-fit flex-col rounded-md border bg-white p-1 shadow-lg [&>li]:cursor-pointer [&>li]:rounded-sm [&>li]:px-3 [&>li]:py-1 [&>li]:text-sm hover:[&>li]:bg-gray-100">
-          <li onClick={() => filterbyType(1)}>Hoy</li>
-          <li onClick={() => filterbyType(2)}>Semana</li>
-          <li onClick={() => filterbyType(3)}>Mes</li>
-          {/* <li onClick={() => filterbyType(4)}>Año</li>
-          <li onClick={() => filterbyType(4)}>Personalizado</li> */}
+        <ul className="absolute right-0 top-7 z-20 flex w-32 flex-col rounded-md border bg-white p-1 shadow-lg [&>li]:cursor-pointer [&>li]:rounded-sm [&>li]:px-3 [&>li]:py-1 [&>li]:text-sm hover:[&>li]:bg-gray-100">
+          {options.map((opt) => {
+            if (opt.value === 5) return null;
+            return (
+              <li
+                key={opt.value}
+                value={opt.value}
+                onClick={() => {
+                  filterbyType(opt.value);
+                  setShowList(false);
+                }}
+              >
+                {opt.name}
+              </li>
+            );
+          })}
         </ul>
       )}
     </div>

@@ -1,5 +1,4 @@
 import { Icon } from "@iconify/react/dist/iconify.js";
-import { Button } from "~/modules/components";
 
 type Props = {
   path: string;
@@ -9,9 +8,9 @@ type Props = {
 const IconItem = ({ path, setIcon }: Props) => {
   return (
     <li className="relative flex aspect-square items-center justify-center">
-      <Button variantStyle="empty" onClick={() => setIcon(path)}>
+      <button onClick={() => setIcon(path)}>
         <Icon icon={path} width={32} className="hover:scale-105" />
-      </Button>
+      </button>
     </li>
   );
 };

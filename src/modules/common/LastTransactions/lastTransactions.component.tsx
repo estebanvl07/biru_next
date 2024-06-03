@@ -3,20 +3,19 @@ import { FC } from "react";
 
 import { Card } from "~/modules/components";
 import { ListTransactions } from "~/modules/common";
-// import { ListTransaction } from ""
 
 import Link from "next/link";
 import { useParams } from "next/navigation";
-import { api } from "~/utils/api";
 import {
   useTransactions,
   formatterTransactions,
 } from "~/modules/transactions/hook/useTransactions.hook";
 import { LoaderSkeleton } from "~/modules/Loaders";
-import { Transaction } from "@prisma/client";
+
+import type { TransactionIncludes } from "~/types/transactions";
 
 interface LastTransactionsProps {
-  transactions?: Transaction[];
+  transactions?: TransactionIncludes[];
   showHeader?: boolean;
   transactionsMaxLength?: number;
   cardClassName?: string;
@@ -31,7 +30,7 @@ const LastTransactions: FC<LastTransactionsProps> = ({
   const params = useParams<{ acc: string }>();
 
   const { transactions, isLoading } = useTransactions({});
-  const formatted = formatterTransactions(transactions);
+  const formatted = formatterTransactions(transactions as any);
 
   return (
     <Card
@@ -39,7 +38,7 @@ const LastTransactions: FC<LastTransactionsProps> = ({
     >
       {showHeader && (
         <div className="mb-4 flex items-center justify-between md:px-2">
-          <h2 className="text-xl font-semibold">Transacciones</h2>
+          <h3>Ultimas Transacciones</h3>
           <Link
             href={{
               pathname: "/account/[acc]/transactions",
@@ -54,12 +53,7 @@ const LastTransactions: FC<LastTransactionsProps> = ({
       {isLoading ? (
         <LoaderSkeleton skeletonType="ListItem" />
       ) : (
-        // <LoaderSkeleton skeletonType="ListItem" />
-        <ListTransactions
-          maxLength={transactionsMaxLength}
-          data={formatted}
-          emptyText="No se encontraron transacciones"
-        />
+        <ListTransactions maxLength={transactionsMaxLength} data={formatted} />
       )}
     </Card>
   );

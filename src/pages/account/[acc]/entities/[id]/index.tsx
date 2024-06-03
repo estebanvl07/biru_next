@@ -56,7 +56,12 @@ const DetailEntityPage = ({ entity }: { entity: EntityIncludes }) => {
               color={transaction.type === 1 ? "success" : "danger"}
             >
               <Icon
-                icon={transaction.type === 1 ? "ph:trend-up" : "ph:trend-down"}
+                icon={
+                  transaction.type === 1
+                    ? "iconamoon:arrow-bottom-left-1"
+                    : "iconamoon:arrow-top-right-1"
+                }
+                width={18}
               />
             </Chip>
           );
@@ -121,12 +126,14 @@ const DetailEntityPage = ({ entity }: { entity: EntityIncludes }) => {
             {isClient && (
               <Table
                 headerConfig={{
-                  keySearch: ["amount", "reference"],
-                  hasNew: false,
+                  hasNew: true,
+                  newButtonText: "Nueva Transacción",
+                  redirectTo: `/account/${params?.acc}/transactions/new?entity=${params?.id}`,
                 }}
                 footerConfig={{
                   navButtons: false,
                 }}
+                filterKeys={["amount", "description", "reference"]}
                 columns={detailColumns}
                 data={entity.transactions}
                 renderCell={renderCell}

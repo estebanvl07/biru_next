@@ -1,20 +1,13 @@
 import { useForm } from "react-hook-form";
-// import { Button, Card, Input, Select } from "~/modules/components";
-import { Input, Select, SelectItem } from "@nextui-org/react";
-import { useParams, useRouter } from "next/navigation";
+import { Button, Input, Select, SelectItem } from "@nextui-org/react";
+import { useRouter } from "next/navigation";
 
 import { Icon } from "@iconify/react/dist/iconify.js";
 import { api } from "~/utils/api";
 import WhitoutSideBar from "~/modules/layouts/templates/dashbaord/whitout-sidebar";
-import { zodResolver } from "@hookform/resolvers/zod";
-import {
-  type CreateUserAccount,
-  createUserAccount,
-} from "~/modules/Account/schema";
-import { UserAccount } from "@prisma/client";
-import { Button } from "~/modules/components";
-import { useEffect } from "react";
-// import * as yup from "yup";
+
+import { amountFormatter } from "~/utils/formatters";
+import { useState } from "react";
 
 const optionsTypeAccount = [
   {
@@ -33,7 +26,7 @@ const optionsTypeAccount = [
 
 const CreateAccount = ({ hasEdit = false }: { hasEdit?: boolean }) => {
   const router = useRouter();
-
+  const [balanceVal, setBalanceVal] = useState("");
   const userAccount = api.userAccount.create.useMutation();
 
   const {
@@ -59,18 +52,17 @@ const CreateAccount = ({ hasEdit = false }: { hasEdit?: boolean }) => {
 
   return (
     <WhitoutSideBar title="Crear Cuenta">
-      <div className="mt-4 flex w-full items-center justify-center">
+      <section className="m-auto mt-4 flex w-full max-w-[32rem] flex-col items-center justify-center">
+        <h2>Inscribir cuenta</h2>
+        <p className="mb-4 text-center md:max-w-[80%]">
+          Inscribe las cuentas que tengas disponibles, y lleva más ordenado tus
+          ingresos
+        </p>
         <form
-          className="flex w-full  max-w-[32rem] flex-col items-center justify-center gap-2 pt-6 md:pt-0"
+          className="mt-6 flex w-full max-w-[32rem] flex-col items-center justify-center gap-2 md:pt-0"
           onSubmit={handleSubmit(onsubmit)}
         >
-          <h2>Inscribir cuenta</h2>
-          <p className="mb-2 text-center md:max-w-[80%]">
-            Inscribe las cuentas que tengas disponibles, y lleva más ordenado
-            tus ingresos
-          </p>
           <Input
-            required
             isRequired
             startContent={
               <Icon
@@ -85,22 +77,7 @@ const CreateAccount = ({ hasEdit = false }: { hasEdit?: boolean }) => {
             {...register("name")}
             errorMessage={errors.name?.message as string}
           />
-          <Input
-            startContent={
-              <Icon
-                icon="quill:creditcard"
-                width={18}
-                className="dark:text-slate-200"
-              />
-            }
-            placeholder="Número de cuenta"
-            label="Referencia"
-            className="w-full"
-            {...register("reference")}
-            errorMessage={errors.reference?.message as string}
-          />
           <Select
-            required
             isRequired
             startContent={
               <Icon
@@ -110,11 +87,10 @@ const CreateAccount = ({ hasEdit = false }: { hasEdit?: boolean }) => {
               />
             }
             items={optionsTypeAccount}
-            // changeOption={(option) => setValue("type", Number(option.value))}
             label="Tipo de cuenta"
             variant="flat"
             placeholder="Seleccione el tipo de cuenta"
-            {...register("type")}
+            isInvalid={Boolean(errors.type)}
             errorMessage={errors.type?.message as any}
           >
             {optionsTypeAccount.map((opt) => (
@@ -122,12 +98,29 @@ const CreateAccount = ({ hasEdit = false }: { hasEdit?: boolean }) => {
                 key={opt.value}
                 color="primary"
                 className="font-montserrat"
+                onClick={() => setValue("type", Number(opt.value))}
                 value={opt.value}
               >
                 {opt.name}
               </SelectItem>
             ))}
           </Select>
+
+          <Input
+            startContent={
+              <Icon
+                icon="quill:creditcard"
+                width={18}
+                className="dark:text-slate-200"
+              />
+            }
+            placeholder="EJ: 000-000000-00"
+            label="Referencia"
+            className="w-full"
+            isInvalid={Boolean(errors.reference)}
+            errorMessage={errors.reference?.message as string}
+            {...register("reference")}
+          />
 
           <Input
             title="Si no agregas un balance el por defeco será 0"
@@ -139,27 +132,30 @@ const CreateAccount = ({ hasEdit = false }: { hasEdit?: boolean }) => {
               />
             }
             label="Balance Inicial"
-            type="number"
             placeholder="Agrega un balance por defecto"
+            value={balanceVal}
+            onChange={(e) => {
+              const { formatted, raw } = amountFormatter(e.target.value);
+              setBalanceVal(formatted);
+              setValue("balance", raw);
+            }}
             className="w-full"
-            onChange={(e) => setValue("balance", Number(e.target.value))}
-            // {...register("balance")}
+            isInvalid={Boolean(errors.balance)}
             errorMessage={errors.balance?.message as any}
           />
           <div className="flex w-full  flex-col gap-2 pt-3 md:flex-row">
-            <Button className="w-full" type="submit">
+            <Button color="primary" className="w-full" type="submit">
               {hasEdit ? "Actualizar cuenta" : "Crear cuenta"}
             </Button>
             <Button
-              className="w-full"
-              variantStyle="outline"
+              className="w-full bg-default-100"
               onClick={() => router.push("/account")}
             >
               Cancelar
             </Button>
           </div>
         </form>
-      </div>
+      </section>
     </WhitoutSideBar>
   );
 };

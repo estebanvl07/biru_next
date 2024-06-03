@@ -1,12 +1,9 @@
-const Chart = dynamic(() => import("react-apexcharts"), {
-  ssr: false, // Evita que se ejecute en el servidor
-});
+import Chart from "react-apexcharts";
 import React, { useEffect, useState } from "react";
 import { Card } from "~/modules/components";
 import { parseAmount } from "~/lib/helpers";
 
 import { FONT_FAMILY } from "~/lib/constants/config";
-import dynamic from "next/dynamic";
 import { getTransactionsByMonths } from "~/modules/transactions/hook/useHandlerTransactions.hook";
 
 import { useThemeContext } from "~/lib/context/themeContext";

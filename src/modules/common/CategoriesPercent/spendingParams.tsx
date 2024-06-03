@@ -1,8 +1,5 @@
-const Chart = dynamic(() => import("react-apexcharts"), {
-  ssr: false, // Evita que se ejecute en el servidor
-});
+import Chart from "react-apexcharts"
 import { Icon } from "@iconify/react/dist/iconify.js";
-import dynamic from "next/dynamic";
 
 import { Category } from "@prisma/client";
 import { useResize } from "~/lib/hooks/useResize";

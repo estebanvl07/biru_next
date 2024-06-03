@@ -1,12 +1,8 @@
-const Chart = dynamic(() => import("react-apexcharts"), {
-  ssr: false, // Evita que se ejecute en el servidor
-});
-
+import Chart from "react-apexcharts";
 import { parseAmount } from "~/lib/helpers";
 
 import { FONT_FAMILY } from "~/lib/constants/config";
 import type { ChartProps } from "~/types/chart.types";
-import dynamic from "next/dynamic";
 import { useThemeContext } from "~/lib/context/themeContext";
 
 // TODO: refactorize component

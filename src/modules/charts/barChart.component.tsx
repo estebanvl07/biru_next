@@ -1,11 +1,8 @@
-const Chart = dynamic(() => import("react-apexcharts"), {
-  ssr: false, // Evita que se ejecute en el servidor
-});
+import Chart from "react-apexcharts";
 
 import { parseAmount } from "~/lib/helpers";
 
 import { FONT_FAMILY } from "~/lib/constants/config";
-import dynamic from "next/dynamic";
 import { useTheme } from "~/lib/hooks";
 import { ChartProps } from "~/types/chart.types";
 

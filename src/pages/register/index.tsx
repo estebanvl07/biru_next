@@ -1,11 +1,11 @@
 import { useForm } from "react-hook-form";
 import { useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Input, Spinner } from "@nextui-org/react";
+import { Button, Input, Spinner } from "@nextui-org/react";
 import Link from "next/link";
 import clsx from "clsx";
 
-import { Button, SignInOptions } from "~/modules/components";
+import { SignInOptions } from "~/modules/components";
 import { SuccessfullyCreated } from "~/modules/Register/components";
 import { BasicLayout } from "~/modules/layouts";
 import { Icon } from "@iconify/react/dist/iconify.js";
@@ -119,7 +119,7 @@ const Register = () => {
                 isRequired
               />
 
-              <Button variantStyle="fill" className="mt-2" type="submit">
+              <Button color="primary" className="mt-2" type="submit">
                 Registrarme
                 <Spinner
                   color="current"

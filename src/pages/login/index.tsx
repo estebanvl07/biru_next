@@ -6,14 +6,13 @@ import { BasicLayout } from "~/modules/layouts";
 import { signIn } from "next-auth/react";
 import React, { useState } from "react";
 
-import { Button } from "~/modules/components";
 import { Icon } from "@iconify/react/dist/iconify.js";
 
 import { CALLBACK_SIGN_IN_URL } from "~/lib/constants/config";
 
 import { useRouter } from "next/router";
 import { useForm } from "react-hook-form";
-import { Input } from "@nextui-org/react";
+import { Button, Input } from "@nextui-org/react";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import { loginInput, type LoginInputType } from "~/modules/Login/resolver";
@@ -124,7 +123,7 @@ const LoginPage = () => {
               isRequired
             />
 
-            <Button variantStyle="fill" type="submit" className="mt-2">
+            <Button color="primary" type="submit" className="mt-2">
               Iniciar sesión
             </Button>
           </form>

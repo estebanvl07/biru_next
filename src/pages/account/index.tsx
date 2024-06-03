@@ -1,6 +1,5 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
-import dynamic from "next/dynamic";
 
 import Head from "next/head";
 import Image from "next/image";
@@ -12,9 +11,7 @@ import { HeaderApp } from "~/modules/layouts/templates/dashbaord";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import { Button } from "@nextui-org/button";
 import HeaderMobile from "~/modules/layouts/templates/dashbaord/Header/HeaderMobile";
-const AccountCard = dynamic(import("~/modules/Account/AccountCard"), {
-  ssr: false,
-});
+import AccountCard from "~/modules/Account/AccountCard";
 
 import type { GetServerSideProps } from "next";
 import { useAccounts } from "~/modules/Account/hooks";
@@ -57,12 +54,18 @@ const container = {
 };
 
 const AccountPage = () => {
+  const [isClient, setIsClient] = useState(false);
+
   const router = useRouter();
   const { accounts } = useAccounts();
   const { isMobile, isDesktop } = useResize();
   const { data: session } = useSession();
 
   const navigateAccount = (id: number) => router.push(`/account/${id}/main`);
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
 
   return (
     <>
@@ -118,23 +121,25 @@ const AccountPage = () => {
               <Icon icon="ph:plus" width={18} /> {!isMobile && "Crear Cuenta"}
             </Button>
           </nav>
-          <motion.div
-            className="mt-2 grid grid-cols-1 flex-wrap gap-2 py-2 sm:grid-cols-2 xl:flex"
-            variants={container}
-            initial="hidden"
-            animate="visible"
-          >
-            {accounts.map((account) => {
-              return (
-                <AccountCard
-                  key={account.id}
-                  account={account}
-                  hoverStyles
-                  onClick={() => navigateAccount(account.id)}
-                />
-              );
-            })}
-          </motion.div>
+          {isClient && (
+            <motion.div
+              className="mt-2 grid grid-cols-1 flex-wrap gap-2 py-2 sm:grid-cols-2 xl:flex"
+              variants={container}
+              initial="hidden"
+              animate="visible"
+            >
+              {accounts.map((account) => {
+                return (
+                  <AccountCard
+                    key={account.id}
+                    account={account}
+                    hoverStyles
+                    onClick={() => navigateAccount(account.id)}
+                  />
+                );
+              })}
+            </motion.div>
+          )}
         </section>
       </main>
     </>

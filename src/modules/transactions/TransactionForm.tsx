@@ -71,12 +71,6 @@ const TransactionForm = ({
   const { mutate: updateTransactionMutation } =
     api.transaction.update.useMutation();
 
-  const getCurrentDate = (): Date => {
-    const date = new Date();
-    date.setDate(date.getDate() - 1);
-    return new Date(date);
-  };
-
   const defaultCategory =
     categories && transactionDefault && transactionDefault.categoryId
       ? [String(transactionDefault.categoryId)]
@@ -89,7 +83,7 @@ const TransactionForm = ({
 
   const defaultDate =
     mode === "create"
-      ? getCurrentDate()
+      ? new Date()
       : transactionDefault
         ? transactionDefault.date
         : undefined;
@@ -144,7 +138,7 @@ const TransactionForm = ({
           reset();
           onOpen();
         },
-        onError(error, variables, context) {
+        onError() {
           setProps({
             ...props,
             type: "error",

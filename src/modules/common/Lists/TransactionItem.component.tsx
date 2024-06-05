@@ -9,6 +9,7 @@ import { Avatar } from "@nextui-org/react";
 
 import { DATE_FORMAT_TRANS } from "~/lib/constants/config";
 import type { TransactionIncludes } from "~/types/transactions";
+import { useParams } from "next/navigation";
 
 interface TransactionItemProps {
   item: TransactionIncludes;
@@ -17,6 +18,8 @@ interface TransactionItemProps {
 }
 
 const TransactionItem: FC<TransactionItemProps> = ({ item, index, length }) => {
+  const params = useParams();
+
   const icon = {
     1: "eva:diagonal-arrow-right-up-fill",
     2: "eva:diagonal-arrow-right-down-fill",
@@ -55,7 +58,13 @@ const TransactionItem: FC<TransactionItemProps> = ({ item, index, length }) => {
       )}
     >
       <Link
-        href={`/transactions/${item.id}`}
+        href={{
+          pathname: "/account/[acc]/transactions/[id]",
+          query: {
+            acc: params?.acc,
+            id: item.id,
+          },
+        }}
         className={clsx(
           "flex cursor-pointer items-center justify-between border-gray-400/60 px-2 py-3 transition-all duration-300 dark:border-white/10",
         )}

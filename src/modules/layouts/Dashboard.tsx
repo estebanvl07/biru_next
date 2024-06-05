@@ -31,10 +31,10 @@ const DashboardLayout = ({
   serviceOptions?: boolean;
   hasFilter?: boolean;
 }) => {
+  const [isClient, setIsClient] = useState(false);
+
   const router = useRouter();
   const { size } = useResize();
-
-  const [isClient, setIsClient] = useState(false);
 
   useEffect(() => {
     setIsClient(true);

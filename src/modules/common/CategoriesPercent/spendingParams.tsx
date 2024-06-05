@@ -1,4 +1,8 @@
-import Chart from "react-apexcharts"
+import dynamic from "next/dynamic";
+const Chart = dynamic(() => import("react-apexcharts"), {
+  ssr: false, // Evita que se ejecute en el servidor
+});
+
 import { Icon } from "@iconify/react/dist/iconify.js";
 
 import { Category } from "@prisma/client";

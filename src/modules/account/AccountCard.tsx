@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 import type { UserAccount } from "@prisma/client";
 
 interface AccountCardProps {
-  account: Required<UserAccount>;
+  account: UserAccount;
   onClick?: (account: UserAccount) => void;
   hoverStyles?: boolean;
   className?: string;

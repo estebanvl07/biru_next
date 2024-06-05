@@ -1,4 +1,8 @@
-import Chart from "react-apexcharts";
+import dynamic from "next/dynamic";
+const Chart = dynamic(() => import("react-apexcharts"), {
+  ssr: false, // Evita que se ejecute en el servidor
+});
+
 import React, { useEffect, useState } from "react";
 import { Card } from "~/modules/components";
 import { parseAmount } from "~/lib/helpers";

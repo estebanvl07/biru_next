@@ -40,7 +40,7 @@ const HomePage = () => {
 
   const { account } = useCurrentAccount();
   const { categories, isLoading } = useCategory();
-  const { isDesktop, size } = useResize();
+  const { isDesktop, isMobile } = useResize();
 
   return (
     <DashboardLayout
@@ -48,7 +48,7 @@ const HomePage = () => {
       headDescription="Dashboard de la cuenta seleccionada"
       hasFilter
     >
-      {size && size <= 768 ? (
+      {isMobile ? (
         <MobileDashboard />
       ) : (
         <>

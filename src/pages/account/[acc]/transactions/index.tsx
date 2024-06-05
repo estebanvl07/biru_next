@@ -49,7 +49,9 @@ const TransactionPage = () => {
 
       const getIcon = (): string => {
         const typeIcon =
-          transaction.type === 1 ? "ph:trend-up" : "ph:trend-down";
+          transaction.type === 1
+            ? "iconamoon:arrow-bottom-left-1"
+            : "iconamoon:arrow-top-right-1";
 
         if (transaction.transferType === 2 && transaction.goal) {
           return (transaction.goal.icon as string) || typeIcon;

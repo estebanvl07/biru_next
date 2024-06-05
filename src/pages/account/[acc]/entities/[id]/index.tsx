@@ -4,7 +4,7 @@ import { useParams } from "next/navigation";
 import { useRouter } from "next/router";
 
 import { Icon } from "@iconify/react/dist/iconify.js";
-import { Chip } from "@nextui-org/react";
+import { Button, Chip } from "@nextui-org/react";
 import { User } from "@nextui-org/user";
 import { detailColumns } from "~/modules/Entities/table";
 import { Card, Table } from "~/modules/components";
@@ -17,11 +17,15 @@ import { createServerSideCaller } from "~/utils/serverSideCaller/serverSideCalle
 
 import type { EntityIncludes } from "~/types/entities/entity.types";
 import type { Transaction } from "@prisma/client";
+import { useResize } from "~/lib/hooks/useResize";
+import Link from "next/link";
 
 const DetailEntityPage = ({ entity }: { entity: EntityIncludes }) => {
   const [isClient, setIsClient] = useState(false);
   const router = useRouter();
   const params = useParams();
+
+  const { isMobile } = useResize();
 
   const renderCell = useCallback(
     (transaction: Transaction, columnKey: React.Key) => {
@@ -103,7 +107,21 @@ const DetailEntityPage = ({ entity }: { entity: EntityIncludes }) => {
       <DashboardLayout title="Detalle de Entidad">
         <div className="flex flex-col gap-6">
           <Card className="flex flex-col">
-            <ul className="grid w-full grid-cols-4 gap-2 [&>li>p]:text-default-500 [&>li>span]:font-medium [&>li]:flex [&>li]:flex-col [&>li]:items-start">
+            <header className="mb-4 flex flex-row items-center justify-between">
+              <h3>Información de Entidad</h3>
+              <Button
+                as={Link}
+                href={`/account/${params?.acc}/entities/${entity.id}/edit`}
+                color="primary"
+                size="sm"
+                isIconOnly={isMobile}
+                className="sm:w-fit"
+              >
+                <Icon icon="akar-icons:edit" width={18} />
+                {!isMobile && "Editar Entidad"}
+              </Button>
+            </header>
+            <ul className="grid w-full grid-cols-4 gap-2 text-xs [&>li>p]:text-default-500 [&>li>span]:font-medium [&>li]:flex [&>li]:flex-col [&>li]:items-start">
               <li>
                 <span>Nombre</span>
                 <p>{entity.name}</p>

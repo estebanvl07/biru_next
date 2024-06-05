@@ -10,7 +10,6 @@ import { Avatar, Chip } from "@nextui-org/react";
 
 import { format } from "date-fns";
 import { es } from "date-fns/locale";
-import { useTransactions } from "~/modules/Transactions/hook/useTransactions.hook";
 import { capitalize } from "~/modules/components/molecules/Table/utils";
 
 import { TransactionIncludes } from "~/types/transactions";
@@ -19,6 +18,7 @@ import { useResize } from "~/lib/hooks/useResize";
 import MobileTransactionPage from "~/modules/Transactions/MobileTransactionPage";
 import Actions from "~/modules/components/molecules/Table/Actions";
 import { useRouter } from "next/router";
+import { api } from "~/utils/api";
 
 const TransactionPage = () => {
   const [isClient, setIsClient] = useState(false);
@@ -28,7 +28,14 @@ const TransactionPage = () => {
   const { size } = useResize();
   const isMobile = Boolean(size && size <= 768);
 
-  const { transactions, isLoading } = useTransactions({});
+  const { data: transactions, isLoading } =
+    api.transaction.getTransactions.useQuery(
+      {
+        accountId: Number(params?.acc),
+        filter: 0,
+      },
+      { enabled: Boolean(params?.acc) },
+    );
 
   const renderCell = useCallback(
     (transaction: TransactionIncludes, columnKey: React.Key) => {

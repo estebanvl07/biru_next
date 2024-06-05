@@ -13,12 +13,16 @@ import { Goals } from "@prisma/client";
 import { groupedAnimation } from "~/modules/animations";
 import { useGoals } from "~/modules/Goals/hook/goal.hook";
 import { useResize } from "~/lib/hooks/useResize";
+import { api } from "~/utils/api";
 
 export default function GoalPage() {
   const params = useParams();
 
   const { isMobile } = useResize();
-  const { goals, isLoading } = useGoals();
+
+  const { data: goals, isLoading } = api.goals.getGoals.useQuery(undefined, {
+    enabled: Boolean(params?.acc),
+  });
 
   const { newList, onSearch, query } = useSearch<Goals>({
     data: goals ?? [],

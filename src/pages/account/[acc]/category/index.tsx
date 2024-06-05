@@ -14,16 +14,20 @@ import { useSearch } from "~/lib/hooks";
 import type { Category } from "@prisma/client";
 import { groupedAnimation } from "~/modules/animations";
 import { useResize } from "~/lib/hooks/useResize";
-import { useCategory } from "~/modules/Category/hook/category.hook";
 import { LoaderSkeleton } from "~/modules/Loaders";
 import { useRouter } from "next/router";
+import { api } from "~/utils/api";
 
 // TODO: detail category
 const CategoryPage = () => {
   const params = useParams();
   const router = useRouter();
   const { isMobile } = useResize();
-  const { categories, isLoading } = useCategory();
+
+  const { data: categories, isLoading } = api.category.getAll.useQuery(
+    undefined,
+    { enabled: Boolean(params?.acc) },
+  );
 
   const { newList, onSearch, query } = useSearch<Category>({
     data: categories ?? [],

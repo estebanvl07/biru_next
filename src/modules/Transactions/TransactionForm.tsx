@@ -1,4 +1,3 @@
-"use client";
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/router";
@@ -184,7 +183,7 @@ const TransactionForm = ({
   useEffect(() => {
     if (!account && transactionDefault) return;
     setValue("accountId", account?.id);
-    setValue("categoryId", Number(query?.category));
+    query?.category && setValue("categoryId", Number(query.category));
     setValue("type", Number(query.type) as any);
     setValue("transferType", type === "goal" ? 2 : 1);
     if (type === "goal") {

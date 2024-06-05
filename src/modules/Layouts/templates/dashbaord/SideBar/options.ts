@@ -82,12 +82,13 @@ export const menuOptions = [
     id: 3,
     title: "Configuración",
     menus: [
-      {
-        id: 1,
-        name: "Ayuda",
-        icon: "material-symbols:help-outline",
-        href: "/help",
-      },
+      // {
+      //   id: 1,
+      //   name: "Ayuda",
+      //   disabled: true,
+      //   icon: "material-symbols:help-outline",
+      //   href: "/help",
+      // },
 
       {
         id: 3,
@@ -101,7 +102,7 @@ export const menuOptions = [
 
 export const mobileOptions = [
   {
-    id: 5,
+    id: 1,
     name: "Dashboard",
     icon: "akar-icons:dashboard",
     href: "/main",
@@ -113,21 +114,27 @@ export const mobileOptions = [
     href: "/transactions",
   },
   {
-    id: 1,
+    id: 3,
     name: "Metas",
     icon: "ph:target",
     href: "/goals",
   },
   {
-    id: 3,
+    id: 4,
     name: "Entidades",
     icon: "ph:users-bold",
     href: "/entities",
   },
   {
-    id: 4,
+    id: 5,
     name: "Categorías",
     icon: "iconamoon:category",
     href: "/category",
+  },
+  {
+    id: 6,
+    name: "Análisis",
+    icon: "material-symbols:analytics-outline",
+    href: "/analytics",
   },
 ];

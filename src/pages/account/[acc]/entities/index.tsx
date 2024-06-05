@@ -6,7 +6,6 @@ import { format } from "date-fns";
 
 import MobileEntityPage from "~/modules/Entities/MobileEntityContent";
 import { useResize } from "~/lib/hooks/useResize";
-import { useEntity } from "~/modules/Entities/hook/entities.hook";
 import { es } from "date-fns/locale";
 
 import DashboardLayout from "~/modules/Layouts/Dashboard";
@@ -14,12 +13,17 @@ import { columns } from "~/modules/Entities/table";
 import { Entities } from "@prisma/client";
 import { Chip, User } from "@nextui-org/react";
 import Actions from "~/modules/components/molecules/Table/Actions";
+import { api } from "~/utils/api";
 
 export default function EntitiesPage() {
   const router = useRouter();
   const params = useParams();
-  const { entities, isLoading } = useEntity();
   const { size } = useResize();
+
+  const { data: entities, isLoading } = api.entity.getEntities.useQuery(
+    undefined,
+    { enabled: Boolean(params?.acc) },
+  );
 
   const isMobile = Boolean(size && size <= 768);
 
@@ -87,7 +91,7 @@ export default function EntitiesPage() {
           data={entities ?? []}
         />
       ) : (
-        <MobileEntityPage entities={entities} />
+        <MobileEntityPage entities={entities ?? []} />
       )}
     </DashboardLayout>
   );

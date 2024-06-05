@@ -7,7 +7,6 @@ import { Icon } from "@iconify/react/dist/iconify.js";
 import { Button, Input, Textarea } from "@nextui-org/react";
 import { IconSearcher } from "~/modules/Category/IconSelector";
 import { InputDate } from "~/modules/components";
-import DashboardLayout from "~/modules/Layouts/Dashboard";
 import { Alert } from "~/modules/components/molecules/Alert.component";
 
 import { useOnActive } from "~/lib/hooks";
@@ -97,7 +96,30 @@ const GoalForm = ({ hasEdit, goalDefault }: GoalFormProps) => {
         saved: Number(payload.saved),
         goal: Number(payload.goal),
       },
-      {},
+      {
+        onSuccess() {
+          setProps({
+            ...props,
+            type: "success",
+            cancel: false,
+            confirmProps: {
+              onClick: () => {
+                router.push(`/account/${params?.acc}/goals`);
+              },
+            },
+          });
+          reset();
+          onOpen();
+        },
+        onError() {
+          setProps({
+            ...props,
+            type: "error",
+            cancel: false,
+          });
+          onOpen();
+        },
+      },
     );
   };
 

@@ -9,7 +9,7 @@ import { User } from "@nextui-org/user";
 import { detailColumns } from "~/modules/Entities/table";
 import { Card, Table } from "~/modules/components";
 import Actions from "~/modules/components/molecules/Table/Actions";
-import DashboardLayout from "~/modules/layouts/Dashboard";
+import DashboardLayout from "~/modules/Layouts/Dashboard";
 
 import { format } from "date-fns";
 import { es } from "date-fns/locale";

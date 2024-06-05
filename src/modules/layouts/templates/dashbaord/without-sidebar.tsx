@@ -1,6 +1,6 @@
 import Head from "next/head";
 import React, { FC } from "react";
-import { HeaderApp } from "~/modules/layouts/templates/dashbaord";
+import { HeaderApp } from "~/modules/Layouts/templates/dashbaord";
 
 interface DashboardProps {
   children: React.ReactNode;

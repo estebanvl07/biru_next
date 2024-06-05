@@ -8,7 +8,7 @@ import { formatDatesOfTransactions } from "~/lib/resource/formatDatesOfTransacti
 import { Icon } from "@iconify/react/dist/iconify.js";
 import { Accordion, AccordionItem, Avatar, Chip } from "@nextui-org/react";
 import { User } from "@nextui-org/user";
-import DashboardLayout from "~/modules/layouts/Dashboard";
+import DashboardLayout from "~/modules/Layouts/Dashboard";
 import { Card } from "~/modules/components";
 
 import { TransactionIncludes } from "~/types/transactions";

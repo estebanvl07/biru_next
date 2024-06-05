@@ -13,12 +13,12 @@ import { Transaction } from "@prisma/client";
 import Actions from "~/modules/components/molecules/Table/Actions";
 import { columns } from "~/modules/Goals/table";
 import { Card, Table } from "~/modules/components";
-import DashboardLayout from "~/modules/layouts/Dashboard";
+import DashboardLayout from "~/modules/Layouts/Dashboard";
 import { GoalsIncludes } from "~/types/goal/goal.types";
 import { Button, Chip, Link } from "@nextui-org/react";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import { useResize } from "~/lib/hooks/useResize";
-import { LastTransactions } from "~/modules/common";
+import { LastTransactions } from "~/modules/Common";
 import { formatDatesOfTransactions } from "~/lib/resource/formatDatesOfTransactions";
 import { getPercent } from "~/lib/helpers";
 

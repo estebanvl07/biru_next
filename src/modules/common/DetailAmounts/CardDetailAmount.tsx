@@ -1,7 +1,7 @@
 import clsx from "clsx";
 
 import { Card, Empty } from "~/modules/components";
-import { LineChart } from "~/modules/charts";
+import { LineChart } from "~/modules/Charts";
 
 import { useResize } from "~/lib/hooks/useResize";
 import { Series } from "~/types/chart.types";

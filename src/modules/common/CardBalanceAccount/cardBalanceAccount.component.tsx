@@ -1,15 +1,15 @@
 import { useEffect, useState } from "react";
 import { Card } from "~/modules/components";
-import { LineChart } from "~/modules/charts";
+import { LineChart } from "~/modules/Charts";
 
 import { useCurrentAccount } from "~/modules/Account/hooks";
-import { useTransactions } from "~/modules/transactions/hook/useTransactions.hook";
+import { useTransactions } from "~/modules/Transactions/hook/useTransactions.hook";
 import { Empty } from "~/modules/components/molecules";
 import { useParams } from "next/navigation";
 
 import { useFilterContext } from "~/lib/context/filterContext";
 import { Series } from "~/types/chart.types";
-import ChartsFilterList from "~/modules/charts/chartsFilterList";
+import ChartsFilterList from "~/modules/Charts/chartsFilterList";
 import { format } from "date-fns";
 import { es } from "date-fns/locale";
 import { FILTERS, TransactionIncludes } from "~/types/transactions";

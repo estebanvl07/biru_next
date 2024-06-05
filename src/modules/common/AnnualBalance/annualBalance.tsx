@@ -8,11 +8,11 @@ import { Card } from "~/modules/components";
 import { parseAmount } from "~/lib/helpers";
 
 import { FONT_FAMILY } from "~/lib/constants/config";
-import { getTransactionsByMonths } from "~/modules/transactions/hook/useHandlerTransactions.hook";
+import { getTransactionsByMonths } from "~/modules/Transactions/hook/useHandlerTransactions.hook";
 
 import { useThemeContext } from "~/lib/context/themeContext";
 import { useFilterContext } from "~/lib/context/filterContext";
-import { useTransactions } from "~/modules/transactions/hook";
+import { useTransactions } from "~/modules/Transactions/hook";
 
 const initialValues = {
   color: "",

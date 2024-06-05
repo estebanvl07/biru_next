@@ -1,4 +1,4 @@
-import DashboardLayout from "~/modules/layouts/Dashboard";
+import DashboardLayout from "~/modules/Layouts/Dashboard";
 import EntityForm from "~/modules/Entities/EntityForm";
 
 const NewEntityPage = () => {

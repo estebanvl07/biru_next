@@ -1,10 +1,10 @@
 import { useParams } from "next/navigation";
 import Link from "next/link";
 
-import { DetailAmounts, LastTransactions } from "../common";
+import { DetailAmounts, LastTransactions } from "../Common";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import { Chip, Skeleton } from "@nextui-org/react";
-import MobileFilter from "../layouts/templates/dashbaord/Header/MobileFilter";
+import MobileFilter from "../Layouts/templates/dashbaord/Header/MobileFilter";
 
 import { motion } from "framer-motion";
 import { useCurrentAccount } from "../Account/hooks";

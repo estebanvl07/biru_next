@@ -10,9 +10,9 @@ import clsx from "clsx";
 import { Button, Input } from "@nextui-org/react";
 import { ButtonGroup } from "~/modules/components";
 import { Icon } from "@iconify/react/dist/iconify.js";
-import { IconSearcher } from "~/modules/category/IconSelector";
+import { IconSearcher } from "~/modules/Category/IconSelector";
 
-import { type CreateCategory, createCategory } from "~/modules/category/schema";
+import { type CreateCategory, createCategory } from "~/modules/Category/schema";
 
 import { api } from "~/utils/api";
 import { Alert } from "../components/molecules/Alert.component";

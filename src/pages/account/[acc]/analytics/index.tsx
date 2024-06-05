@@ -4,9 +4,9 @@ import {
   LastTransactions,
   AnnualBalance,
   CategoriesPercent,
-} from "~/modules/common";
-import { PieChartAmountByCategoires } from "~/modules/charts";
-import DashboardLayout from "~/modules/layouts/Dashboard";
+} from "~/modules/Common";
+import { PieChartAmountByCategoires } from "~/modules/Charts";
+import DashboardLayout from "~/modules/Layouts/Dashboard";
 
 const AnalyticsPage = () => {
   return (

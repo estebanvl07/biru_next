@@ -2,14 +2,14 @@ import clsx from "clsx";
 import { FC } from "react";
 
 import { Card } from "~/modules/components";
-import { ListTransactions } from "~/modules/common";
+import { ListTransactions } from "~/modules/Common";
 
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import {
   useTransactions,
   formatterTransactions,
-} from "~/modules/transactions/hook/useTransactions.hook";
+} from "~/modules/Transactions/hook/useTransactions.hook";
 import { LoaderSkeleton } from "~/modules/Loaders";
 
 import type { TransactionIncludes } from "~/types/transactions";

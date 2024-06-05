@@ -6,15 +6,15 @@ import { Button, Input } from "@nextui-org/react";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import { motion } from "framer-motion";
 
-import DashboardLayout from "~/modules/layouts/Dashboard";
-import CategoryCard from "~/modules/category/CategoryCard";
+import DashboardLayout from "~/modules/Layouts/Dashboard";
+import CategoryCard from "~/modules/Category/CategoryCard";
 
 import { useSearch } from "~/lib/hooks";
 
 import type { Category } from "@prisma/client";
 import { groupedAnimation } from "~/modules/animations";
 import { useResize } from "~/lib/hooks/useResize";
-import { useCategory } from "~/modules/category/hook/category.hook";
+import { useCategory } from "~/modules/Category/hook/category.hook";
 import { LoaderSkeleton } from "~/modules/Loaders";
 import { useRouter } from "next/router";
 

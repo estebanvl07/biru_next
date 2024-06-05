@@ -4,7 +4,7 @@ import Link from "next/link";
 
 import { Icon } from "@iconify/react/dist/iconify.js";
 import { Button, Input } from "@nextui-org/react";
-import DashboardLayout from "~/modules/layouts/Dashboard";
+import DashboardLayout from "~/modules/Layouts/Dashboard";
 import { LoaderSkeleton } from "~/modules/Loaders";
 import GoalCard from "~/modules/Goals/GoalCard";
 

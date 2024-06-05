@@ -7,10 +7,10 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 
-import { HeaderApp } from "~/modules/layouts/templates/dashbaord";
+import { HeaderApp } from "~/modules/Layouts/templates/dashbaord";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import { Button } from "@nextui-org/button";
-import HeaderMobile from "~/modules/layouts/templates/dashbaord/Header/HeaderMobile";
+import HeaderMobile from "~/modules/Layouts/templates/dashbaord/Header/HeaderMobile";
 import AccountCard from "~/modules/Account/AccountCard";
 
 import type { GetServerSideProps } from "next";

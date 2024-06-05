@@ -9,7 +9,7 @@ import { getPercent } from "~/lib/helpers";
 import type { Category, Transaction } from "@prisma/client";
 
 import { api } from "~/utils/api";
-import { useTransactions } from "~/modules/transactions/hook/useTransactions.hook";
+import { useTransactions } from "~/modules/Transactions/hook/useTransactions.hook";
 import { useResize } from "~/lib/hooks/useResize";
 import { useFilterContext } from "~/lib/context/filterContext";
 

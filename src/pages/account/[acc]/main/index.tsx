@@ -6,9 +6,9 @@ import {
   CardBalanceAccount,
   DetailAmounts,
   LastTransactions,
-} from "~/modules/common";
+} from "~/modules/Common";
 import { Icon } from "@iconify/react/dist/iconify.js";
-import DashboardLayout from "~/modules/layouts/Dashboard";
+import DashboardLayout from "~/modules/Layouts/Dashboard";
 import { Button } from "@nextui-org/react";
 
 import { useCurrentAccount } from "~/modules/Account/hooks";
@@ -18,7 +18,7 @@ import { useResize } from "~/lib/hooks/useResize";
 import MobileDashboard from "~/modules/Dashboard/MobileDashboard";
 import EntitiesGroup from "~/modules/components/molecules/EntitiesGroup";
 import CategoiresSuggestion from "~/modules/components/molecules/CategoiresSuggestion";
-import { useCategory } from "~/modules/category/hook/category.hook";
+import { useCategory } from "~/modules/Category/hook/category.hook";
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const accountId = Number(ctx.params!.acc);

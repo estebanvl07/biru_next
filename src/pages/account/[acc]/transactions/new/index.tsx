@@ -4,8 +4,8 @@ import { useResize } from "~/lib/hooks/useResize";
 import { useGoals } from "~/modules/Goals/hook/goal.hook";
 
 import { Tab, Tabs } from "@nextui-org/react";
-import DashboardLayout from "~/modules/layouts/Dashboard";
-import TransactionForm from "~/modules/transactions/TransactionForm";
+import DashboardLayout from "~/modules/Layouts/Dashboard";
+import TransactionForm from "~/modules/Transactions/TransactionForm";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import { Card, Empty } from "~/modules/components";
 

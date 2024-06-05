@@ -1,6 +1,6 @@
 import React from "react";
 
-import Section from "~/modules/profile/Section";
+import Section from "~/modules/Profile/Section";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import { Avatar } from "@nextui-org/react";
 

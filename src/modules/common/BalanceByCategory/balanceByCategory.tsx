@@ -2,10 +2,10 @@ import { useEffect, useState } from "react";
 
 import { Card, Empty } from "~/modules/components";
 import { Spinner } from "@nextui-org/spinner";
-import PieChart from "~/modules/charts/pieChart";
+import PieChart from "~/modules/Charts/pieChart";
 
-import { useCategory } from "../../category/hook/category.hook";
-import { useTransactions } from "../../transactions/hook/useTransactions.hook";
+import { useCategory } from "../../Category/hook/category.hook";
+import { useTransactions } from "../../Transactions/hook/useTransactions.hook";
 import { useFilterContext } from "~/lib/context/filterContext";
 
 import type { Transaction } from "@prisma/client";

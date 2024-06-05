@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 
 import { Icon } from "@iconify/react/dist/iconify.js";
 import { api } from "~/utils/api";
-import WhitoutSideBar from "~/modules/layouts/templates/dashbaord/without-sidebar";
+import WhitoutSideBar from "~/modules/Layouts/templates/dashbaord/without-sidebar";
 
 import { amountFormatter } from "~/utils/formatters";
 import { useState } from "react";

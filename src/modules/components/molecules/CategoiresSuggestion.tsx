@@ -7,7 +7,7 @@ import { useOnActive } from "~/lib/hooks";
 import { Button, Chip } from "@nextui-org/react";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import { api } from "~/utils/api";
-import { CreateCategory } from "~/modules/category/schema";
+import { CreateCategory } from "~/modules/Category/schema";
 
 interface CategoriesSuggestion extends CreateCategory {
   id: number;

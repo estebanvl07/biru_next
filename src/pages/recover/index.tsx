@@ -7,7 +7,7 @@ import Link from "next/link";
 
 import ChangePasswordForm from "~/modules/Recover/ChangePasswordForm";
 import VerifyCode from "~/modules/Recover/VerifyCode";
-import { BasicLayout } from "~/modules/layouts";
+import { BasicLayout } from "~/modules/Layouts";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";

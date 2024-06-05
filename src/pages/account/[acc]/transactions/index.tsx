@@ -2,21 +2,21 @@ import { useCallback, useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 
 import { Icon } from "@iconify/react/dist/iconify.js";
-import DashboardLayout from "~/modules/layouts/Dashboard";
+import DashboardLayout from "~/modules/Layouts/Dashboard";
 import { Table } from "~/modules/components";
 
-import { columns } from "~/modules/transactions/table";
+import { columns } from "~/modules/Transactions/table";
 import { Avatar, Chip } from "@nextui-org/react";
 
 import { format } from "date-fns";
 import { es } from "date-fns/locale";
-import { useTransactions } from "~/modules/transactions/hook/useTransactions.hook";
+import { useTransactions } from "~/modules/Transactions/hook/useTransactions.hook";
 import { capitalize } from "~/modules/components/molecules/Table/utils";
 
 import { TransactionIncludes } from "~/types/transactions";
 
 import { useResize } from "~/lib/hooks/useResize";
-import MobileTransactionPage from "~/modules/transactions/MobileTransactionPage";
+import MobileTransactionPage from "~/modules/Transactions/MobileTransactionPage";
 import Actions from "~/modules/components/molecules/Table/Actions";
 import { useRouter } from "next/router";
 

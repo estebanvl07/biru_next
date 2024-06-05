@@ -2,7 +2,7 @@ import { FC, useState } from "react";
 import { Icon } from "@iconify/react/dist/iconify.js";
 
 import { useOutsideClick } from "~/lib/hooks";
-import { options } from "../layouts/templates/dashbaord/Header/filterOptions";
+import { options } from "../Layouts/templates/dashbaord/Header/filterOptions";
 import { FILTERS } from "~/types/transactions";
 
 interface FilterListProps {

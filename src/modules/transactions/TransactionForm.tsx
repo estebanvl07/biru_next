@@ -21,7 +21,7 @@ import { api } from "~/utils/api";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import { zodResolver } from "@hookform/resolvers/zod";
 
-import { createTransaction } from "~/modules/transactions/schema";
+import { createTransaction } from "~/modules/Transactions/schema";
 import { Alert } from "~/modules/components/molecules/Alert.component";
 
 import { amountFormatter } from "~/utils/formatters";
@@ -29,7 +29,7 @@ import { amountFormatter } from "~/utils/formatters";
 import { useAccounts, useCurrentAccount } from "~/modules/Account/hooks";
 import { useAlert } from "~/lib/hooks/useAlert";
 import { useEntity } from "~/modules/Entities/hook/entities.hook";
-import { useCategory } from "../category/hook/category.hook";
+import { useCategory } from "../Category/hook/category.hook";
 import { useGoals } from "../Goals/hook/goal.hook";
 
 import { AnimatePresence, motion } from "framer-motion";

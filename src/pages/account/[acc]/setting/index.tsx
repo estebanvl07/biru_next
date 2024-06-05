@@ -1,8 +1,8 @@
 import { Icon } from "@iconify/react/dist/iconify.js";
 import { Avatar, Tab, Tabs } from "@nextui-org/react";
-import DashboardLayout from "~/modules/layouts/Dashboard";
-import MobileSettingPage from "~/modules/profile/MobileSettingPage";
-import Section from "~/modules/profile/Section";
+import DashboardLayout from "~/modules/Layouts/Dashboard";
+import MobileSettingPage from "~/modules/Profile/MobileSettingPage";
+import Section from "~/modules/Profile/Section";
 
 import { signOut, useSession } from "next-auth/react";
 import { CALLBACK_SIGN_OUT_URL } from "~/lib/constants/config";

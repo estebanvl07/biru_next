@@ -7,7 +7,7 @@ import clsx from "clsx";
 
 import { SignInOptions } from "~/modules/components";
 import { SuccessfullyCreated } from "~/modules/Register/components";
-import { BasicLayout } from "~/modules/layouts";
+import { BasicLayout } from "~/modules/Layouts";
 import { Icon } from "@iconify/react/dist/iconify.js";
 
 import {

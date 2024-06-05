@@ -2,8 +2,8 @@ import { GetServerSideProps } from "next";
 import { useRouter } from "next/router";
 import React from "react";
 
-import DashboardLayout from "~/modules/layouts/Dashboard";
-import TransactionForm from "~/modules/transactions/TransactionForm";
+import DashboardLayout from "~/modules/Layouts/Dashboard";
+import TransactionForm from "~/modules/Transactions/TransactionForm";
 import { TransactionIncludes } from "~/types/transactions";
 import { createServerSideCaller } from "~/utils/serverSideCaller/serverSideCaller";
 

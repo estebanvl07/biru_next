@@ -1,7 +1,7 @@
 import Link from "next/link";
 import withAuthRedirect from "~/lib/helpers/withAuthRedirect";
 import { SignInOptions } from "~/modules/components";
-import { BasicLayout } from "~/modules/layouts";
+import { BasicLayout } from "~/modules/Layouts";
 
 import { signIn } from "next-auth/react";
 import React, { useState } from "react";

@@ -4,7 +4,7 @@ import clsx from "clsx";
 import CardDetailAmount from "./CardDetailAmount";
 
 import { getPercent } from "~/lib/helpers";
-import { useTransactions } from "~/modules/transactions/hook/useTransactions.hook";
+import { useTransactions } from "~/modules/Transactions/hook/useTransactions.hook";
 import { useCurrentAccount } from "~/modules/Account/hooks";
 import { useParams } from "next/navigation";
 import { useFilterContext } from "~/lib/context/filterContext";

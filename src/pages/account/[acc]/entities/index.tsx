@@ -9,7 +9,7 @@ import { useResize } from "~/lib/hooks/useResize";
 import { useEntity } from "~/modules/Entities/hook/entities.hook";
 import { es } from "date-fns/locale";
 
-import DashboardLayout from "~/modules/layouts/Dashboard";
+import DashboardLayout from "~/modules/Layouts/Dashboard";
 import { columns } from "~/modules/Entities/table";
 import { Entities } from "@prisma/client";
 import { Chip, User } from "@nextui-org/react";

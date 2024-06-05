@@ -1,8 +1,8 @@
 import {
   createTransaction,
   updateTransaction,
-} from "~/modules/transactions/schema";
-import { filterInput } from "~/modules/common/schema";
+} from "~/modules/Transactions/schema";
+import { filterInput } from "~/modules/Common/schema";
 import * as TransactionServices from "~/server/api/services/transactions.services";
 
 import { createTRPCRouter, protectedProcedure } from "~/server/api/trpc";

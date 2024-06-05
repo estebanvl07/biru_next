@@ -15,7 +15,7 @@ interface CategoriesSuggestion extends CreateCategory {
 
 const CategoiresSuggestion = () => {
   const [saved, setSaved] = useState(false);
-  const { onDisabled } = useOnActive(true);
+  const { isActive, onDisabled } = useOnActive(true);
   const [categories, setCategories] = useState<CategoriesSuggestion[]>([]);
 
   const CategoryMutation = api.category.createDefaults.useMutation();
@@ -39,50 +39,47 @@ const CategoiresSuggestion = () => {
   };
 
   return (
-    <>
-      {!saved && (
-        <Modal
-          isOpen={true}
-          onClose={onDisabled}
-          size="xl"
-          title="Seleccionar categorías"
-        >
-          <form className="mb-4 font-montserrat" onSubmit={handleSubmit}>
-            <p className="">
-              Selecciona algunas categorías para comenzar a crear tus
-              transacciones
-            </p>
-            <section className="my-6 flex flex-wrap items-center gap-x-4 gap-y-2">
-              {SystemCategories.map((props) => (
-                <SuggestionItem
-                  {...props}
-                  key={props.id}
-                  onSelected={(isSelected: boolean) => {
-                    if (isSelected) {
-                      setCategories((prev) =>
-                        prev ? [...prev, props] : [props],
-                      );
-                    } else {
-                      const newCategories = categories?.filter(
-                        (cat) => cat.id !== props.id,
-                      );
+    <Modal
+      isOpen={isActive}
+      onClose={onDisabled}
+      size="xl"
+      title="Seleccionar categorías"
+    >
+      <p>
+        <span className="font-semibold">Recuerda: </span>
+        Crear categorías te ayuda a saber con mas detalle como se mueve tu
+        dinero.
+      </p>
 
-                      setCategories(newCategories);
-                    }
-                  }}
-                />
-              ))}
-            </section>
+      <p className="mt-2">
+        Puedes seleccionar algunas de las siguientes opciones:
+      </p>
+      <form className="mb-4 font-montserrat" onSubmit={handleSubmit}>
+        <section className="mb-6 flex flex-wrap items-center gap-x-2 gap-y-2">
+          {SystemCategories.map((props) => (
+            <SuggestionItem
+              {...props}
+              key={props.id}
+              onSelected={(isSelected: boolean) => {
+                if (isSelected) {
+                  setCategories((prev) => (prev ? [...prev, props] : [props]));
+                } else {
+                  const newCategories = categories?.filter(
+                    (cat) => cat.id !== props.id,
+                  );
 
-            <footer className="">
-              <Button color="primary" type="submit">
-                Crear Categorias
-              </Button>
-            </footer>
-          </form>
-        </Modal>
-      )}
-    </>
+                  setCategories(newCategories);
+                }
+              }}
+            />
+          ))}
+        </section>
+
+        <Button color="primary" type="submit">
+          Crear Categorías
+        </Button>
+      </form>
+    </Modal>
   );
 };
 
@@ -93,8 +90,8 @@ const SuggestionItem = ({ icon, name, onSelected }: any) => {
     <Chip
       color="default"
       variant="bordered"
-      className={clsx("cursor-pointer", {
-        "bg-indigo-600/45 text-white transition-all": currentSelected,
+      className={clsx("cursor-pointer border-1", {
+        "bg-indigo-600 text-white transition-all": currentSelected,
       })}
       size="lg"
       onClick={() => {

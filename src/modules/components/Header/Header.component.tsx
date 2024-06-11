@@ -17,18 +17,16 @@ export const Header = () => {
   return (
     <header className="z-20 w-full px-4 sm:px-0">
       <div className="relative mx-auto flex max-w-[72rem] items-center justify-between gap-2 py-4 md:px-8">
-        <aside className="flex flex-grow basis-0">
-          <Link href="/">
-            <Image
-              src={theme === "dark" ? "/logo-dark.svg" : "/logo.svg"}
-              alt="Logo de Biru"
-              width={120}
-              height={60}
-            />
-          </Link>
-        </aside>
+        <Link href="/">
+          <Image
+            src={theme === "dark" ? "/logo-dark.svg" : "/logo.svg"}
+            alt="Logo de Biru"
+            width={120}
+            height={60}
+          />
+        </Link>
         {size && size >= 590 && <Navigator />}
-        <aside className="flex flex-grow basis-0 justify-end gap-2">
+        <div className="flex justify-end gap-2">
           <HandlerTheme />
           {isMobile && (
             <Button
@@ -46,7 +44,7 @@ export const Header = () => {
               />
             </Button>
           )}
-        </aside>
+        </div>
       </div>
     </header>
   );

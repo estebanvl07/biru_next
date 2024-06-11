@@ -1,16 +1,17 @@
 import { SessionProvider } from "next-auth/react";
+import { type AppType } from "next/app";
 import { Montserrat } from "next/font/google";
 
 import { api } from "~/utils/api";
 import { NextUIProvider } from "@nextui-org/react";
 
 import { type Session } from "next-auth";
-import { type AppType } from "next/app";
 
-import { ThemeProvider } from "~/lib/context/themeContext";
-import { FilterProvider } from "~/lib/context/filterContext";
+import { ThemeProvider } from "~/lib/context/Theme.context";
+import { FilterProvider } from "~/lib/context/Filter.context";
 
 import "~/styles/globals.css";
+import { Toaster } from "~/lib/context/Toaster.context";
 
 const montserrat = Montserrat({
   subsets: ["latin"],
@@ -29,6 +30,7 @@ const MyApp: AppType<{ session: Session | null }> = ({
             <div className={`font-sans ${montserrat.variable}`}>
               <Component {...pageProps} />
             </div>
+            <Toaster />
           </FilterProvider>
         </ThemeProvider>
       </NextUIProvider>

@@ -18,8 +18,16 @@ export const HeroSection = () => {
   return (
     <div className="fade-bottom relative z-10 mx-auto flex h-screen max-h-[56rem] w-full flex-col items-center md:overflow-hidden md:px-2">
       <Header />
-      <span className="absolute -top-20 h-[40%] w-[98%] rounded-b-[20rem] bg-none blur-3xl dark:bg-indigo-950/40"></span>
-      <div className="absolute -top-12 h-[40rem] w-4/5 bg-opacity-10 bg-[url('/grid.svg')] bg-cover bg-center bg-no-repeat opacity-15 dark:opacity-30"></div>
+      <div
+        className="absolute -top-20 h-[40%] w-[98%] rounded-b-[20rem] bg-none blur-3xl dark:bg-indigo-950/40"
+        aria-hidden="true"
+        aria-label="header-light-shadow"
+      />
+      <div
+        className="absolute -top-12 h-[40rem] w-4/5 bg-opacity-10 bg-[url('/grid.svg')] bg-cover bg-center bg-no-repeat opacity-15 dark:opacity-30"
+        aria-hidden="true"
+        aria-label="background-grid"
+      />
       <div className="flex h-full w-full flex-col items-center justify-center gap-8 px-4 md:flex-col md:gap-4">
         <motion.article
           initial={{
@@ -56,7 +64,7 @@ export const HeroSection = () => {
           </p>
 
           <nav className="order-2 mt-6 flex w-full flex-col justify-center gap-4 sm:max-w-md sm:flex-row md:order-1 lg:justify-start">
-            <Link href="/register" aria-label="registrate ahora">
+            <Link href="/login" aria-label="entra ahora">
               <Button
                 radius="full"
                 color="primary"
@@ -67,7 +75,7 @@ export const HeroSection = () => {
                 <Icon icon="material-symbols:login" width={24} />
               </Button>
             </Link>
-            <Link href="#" aria-label="Conoce como funciona aqui">
+            <Link href="#" aria-label="Conoce como funciona">
               <Button
                 radius="full"
                 color="primary"
@@ -98,7 +106,7 @@ export const HeroSection = () => {
             width={1160}
             height={500}
             className="w-[50rem] drop-shadow-2xl md:absolute md:top-0"
-            alt="Dashboard in mobile representation"
+            alt="Dashboard"
             data-todo="set size"
             loading="lazy"
           />

@@ -7,7 +7,7 @@ import { useTransactions } from "~/modules/Transactions/hook/useTransactions.hoo
 import { Empty } from "~/modules/components/molecules";
 import { useParams } from "next/navigation";
 
-import { useFilterContext } from "~/lib/context/filterContext";
+import { useFilterContext } from "~/lib/context/Filter.context";
 import { Series } from "~/types/chart.types";
 import ChartsFilterList from "~/modules/Charts/chartsFilterList";
 import { format } from "date-fns";

@@ -7,7 +7,7 @@ import { Button } from "@nextui-org/button";
 import { Header } from "~/modules/components/Header";
 import { Chip } from "@nextui-org/react";
 import { useResize } from "~/lib/hooks/useResize";
-import { useThemeContext } from "~/lib/context/themeContext";
+import { useThemeContext } from "~/lib/context/Theme.context";
 
 export const HeroSection = () => {
   const { theme } = useThemeContext();

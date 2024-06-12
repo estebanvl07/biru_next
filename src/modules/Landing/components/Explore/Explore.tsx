@@ -2,7 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 
 import { motion } from "framer-motion";
-import { useThemeContext } from "~/lib/context/themeContext";
+import { useThemeContext } from "~/lib/context/Theme.context";
 import { Button } from "@nextui-org/button";
 
 export const Explore = () => {

@@ -7,7 +7,7 @@ import { getPercent } from "~/lib/helpers";
 import { useTransactions } from "~/modules/Transactions/hook/useTransactions.hook";
 import { useCurrentAccount } from "~/modules/Account/hooks";
 import { useParams } from "next/navigation";
-import { useFilterContext } from "~/lib/context/filterContext";
+import { useFilterContext } from "~/lib/context/Filter.context";
 import { Series } from "~/types/chart.types";
 
 type DetailAmountProps = {

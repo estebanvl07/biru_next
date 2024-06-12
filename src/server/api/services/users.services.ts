@@ -8,42 +8,48 @@ import {
   geActivationCode,
   activationCodeUsed,
 } from "./verificationCode.services";
-import { getAccountById } from "./userAccount.services";
+import type { PrismaTransaction } from "~/server/db";
 
 export async function registerUser(
   db: PrismaClient,
   data: RegisterUserInputType,
-  // data: Prisma.UserCreateInput,
 ) {
   try {
-    const password = hashPassword(data.password);
-    const user = await db.user.create({
-      data: {
-        email: data.email.toLowerCase(),
-        name: data.name,
-        userPassword: {
-          create: {
-            password,
-            email: data.email.toLowerCase(),
+    async function userAccountTransaction(tx: PrismaTransaction) {
+      const password = hashPassword(data.password);
+      const user = await tx.user.create({
+        data: {
+          email: data.email.toLowerCase(),
+          name: data.name,
+          userPassword: {
+            create: {
+              password,
+              email: data.email.toLowerCase(),
+            },
           },
         },
-      },
-      include: {
-        userPassword: true,
-      },
-    });
-    await db.account.create({
-      data: {
-        provider: "credentials",
-        providerAccountId: user.userPassword!.id,
-        type: "credentials",
-        userId: user.id,
-      },
-    });
+        include: {
+          userPassword: true,
+        },
+      });
 
-    await sendConfirmationEmail(db, user);
+      await tx.account.create({
+        data: {
+          provider: "credentials",
+          providerAccountId: user.userPassword!.id,
+          type: "credentials",
+          userId: user.id,
+        },
+      });
 
-    return user;
+      user.userPassword = null;
+      return user;
+    }
+
+    return db.$transaction(async (tx) => {
+      const user = await userAccountTransaction(tx);
+      await sendConfirmationEmail(tx, user);
+    });
   } catch (error) {
     // log the instance of the error
     if (error instanceof PrismaClientKnownRequestError) {
@@ -111,7 +117,7 @@ export async function authPasswordUser(
 
   const isPasswordMatching = comparePassword(
     password,
-    user.userPassword.password ?? "",
+    user.userPassword.password,
   );
 
   if (!isPasswordMatching) {

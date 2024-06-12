@@ -7,7 +7,7 @@ import { parseAmount } from "~/lib/helpers";
 
 import { FONT_FAMILY } from "~/lib/constants/config";
 import type { ChartProps } from "~/types/chart.types";
-import { useThemeContext } from "~/lib/context/themeContext";
+import { useThemeContext } from "~/lib/context/Theme.context";
 
 // TODO: refactorize component
 const LineChart = ({

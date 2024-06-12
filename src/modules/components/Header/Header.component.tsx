@@ -8,7 +8,7 @@ import { Icon } from "@iconify/react/dist/iconify.js";
 import { HandlerTheme } from "../atoms";
 import { useResize } from "~/lib/hooks/useResize";
 import { usePathname } from "next/navigation";
-import { useThemeContext } from "~/lib/context/themeContext";
+import { useThemeContext } from "~/lib/context/Theme.context";
 
 export const Header = () => {
   const { theme } = useThemeContext();

@@ -11,7 +11,7 @@ import { BasicLayout } from "~/modules/Layouts";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { useThemeContext } from "~/lib/context/themeContext";
+import { useThemeContext } from "~/lib/context/Theme.context";
 import { RecoverSchema } from "~/modules/Recover/schema";
 import { api } from "~/utils/api";
 

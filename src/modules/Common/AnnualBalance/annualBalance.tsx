@@ -10,8 +10,8 @@ import { parseAmount } from "~/lib/helpers";
 import { FONT_FAMILY } from "~/lib/constants/config";
 import { getTransactionsByMonths } from "~/modules/Transactions/hook/useHandlerTransactions.hook";
 
-import { useThemeContext } from "~/lib/context/themeContext";
-import { useFilterContext } from "~/lib/context/filterContext";
+import { useThemeContext } from "~/lib/context/Theme.context";
+import { useFilterContext } from "~/lib/context/Filter.context";
 import { useTransactions } from "~/modules/Transactions/hook";
 
 const initialValues = {

@@ -16,9 +16,6 @@ const Register = () => {
   const { theme } = useThemeContext();
   const { mutateAsync: registerUser, isSuccess } =
     api.users.register.useMutation({
-      onSuccess: () => {
-        toast.success("Usuario registrado correctamente");
-      },
       onError: (error) => {
         toast.error(error.message);
       },

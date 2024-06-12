@@ -5,7 +5,7 @@ import { motion } from "framer-motion";
 import { RangeCalendar } from "@nextui-org/react";
 import { Icon } from "@iconify/react/dist/iconify.js";
 
-import { useFilterContext } from "~/lib/context/filterContext";
+import { useFilterContext } from "~/lib/context/Filter.context";
 import { useOnActive } from "~/lib/hooks";
 
 import { options } from "./filterOptions";

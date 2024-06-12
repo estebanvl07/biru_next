@@ -7,7 +7,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { useOutsideClick } from "~/lib/hooks";
 import { useParams } from "next/navigation";
 import { FILTERS } from "~/types/transactions";
-import { useFilterContext } from "~/lib/context/filterContext";
+import { useFilterContext } from "~/lib/context/Filter.context";
 
 const FilterTemplates = () => {
   const params = useParams();

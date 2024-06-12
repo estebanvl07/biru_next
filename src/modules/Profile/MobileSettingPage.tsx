@@ -7,7 +7,7 @@ import { Avatar } from "@nextui-org/react";
 import { CALLBACK_SIGN_OUT_URL } from "~/lib/constants/config";
 
 import { signOut, useSession } from "next-auth/react";
-import { useThemeContext } from "~/lib/context/themeContext";
+import { useThemeContext } from "~/lib/context/Theme.context";
 
 const MobileSettingPage = () => {
   const { data } = useSession();

@@ -18,9 +18,12 @@ export const RegisterForm = ({
     handleSubmit,
     register,
     formState: { errors, isSubmitting },
+    watch,
   } = useForm<RegisterUserInputType>({
     resolver: zodResolver(registerUserInput),
   });
+
+  console.log(watch("password"));
 
   return (
     <form

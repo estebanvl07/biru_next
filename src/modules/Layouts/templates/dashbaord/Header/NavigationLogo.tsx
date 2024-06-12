@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 
 import { useParams } from "next/navigation";
 
-import { useThemeContext } from "~/lib/context/themeContext";
+import { useThemeContext } from "~/lib/context/Theme.context";
 
 const NavigationLogo = () => {
   const { theme } = useThemeContext();
@@ -12,8 +12,8 @@ const NavigationLogo = () => {
 
   const src = {
     light: "/logo.svg",
-    dark: "/logo-dark.svg"
-  }[theme]
+    dark: "/logo-dark.svg",
+  }[theme];
 
   return (
     <Link href={params?.acc ? `/account/${params?.acc}/main` : "/account"}>

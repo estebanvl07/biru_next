@@ -2,8 +2,12 @@ import type { PrismaClient, User } from "@prisma/client";
 import { mailer } from "~/utils/mailer";
 import { generateRandomString } from "~/utils/crypto";
 import { TRPCError } from "@trpc/server";
+import type { PrismaTransaction } from "~/server/db";
 
-export async function sendConfirmationEmail(db: PrismaClient, user: User) {
+export async function sendConfirmationEmail(
+  db: PrismaClient | PrismaTransaction,
+  user: User,
+) {
   const token = generateRandomString(24);
   const name = user.name ?? "Usuario";
   // TODO: use dayjs or date-fns

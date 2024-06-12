@@ -46,12 +46,13 @@ export async function registerUser(
       return user;
     }
 
-    return db.$transaction(async (tx) => {
+    const user = await db.$transaction(async (tx) => {
       const user = await userAccountTransaction(tx);
       await sendConfirmationEmail(tx, user);
     });
+
+    return user;
   } catch (error) {
-    // log the instance of the error
     if (error instanceof PrismaClientKnownRequestError) {
       if (
         error.code === "P2002" &&

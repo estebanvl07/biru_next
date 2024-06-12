@@ -27,7 +27,7 @@ export const mailer = {
     token: string;
     name: string;
   }) {
-    const link = `${env.CLIENT_URL}/activation/${token}`;
+    const link = `${env.FRONTEND_URL}/activation/${token}`;
     const signupOptions = {
       from: fromNoreply,
       to,

@@ -21,8 +21,10 @@ const Register = () => {
       },
     });
 
-  const onSubmitHandler: RegisterFormProps["onSubmit"] = (data) => {
-    return registerUser(data);
+  const onSubmitHandler: RegisterFormProps["onSubmit"] = async (data) => {
+    try {
+      await registerUser(data);
+    } catch {}
   };
 
   return (
@@ -58,6 +60,56 @@ const Register = () => {
           </section>
         </div>
       )}
+      <li
+        aria-live="polite"
+        aria-atomic="true"
+        role="status"
+        tabindex="0"
+        className="toast group-[.toaster]:border-border group-[.toast]:bg-error group group-[.toaster]:bg-background group-[.toast]:text-red-600 group-[.toaster]:text-foreground group-[.toaster]:shadow-lg"
+        data-sonner-toast=""
+        data-styled="true"
+        data-mounted="true"
+        data-promise="false"
+        data-removed="false"
+        data-visible="true"
+        data-y-position="bottom"
+        data-x-position="right"
+        data-index="0"
+        data-front="true"
+        data-swiping="false"
+        data-dismissible="true"
+        data-type="error"
+        data-swipe-out="false"
+        data-expanded="false"
+        //       style="
+        //   --index: 0;
+        //   --toasts-before: 0;
+        //   --z-index: 1;
+        //   --offset: 0px;
+        //   --initial-height: 53.5px;
+        // "
+      >
+        <div data-icon="" className="">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 20 20"
+            fill="currentColor"
+            height="20"
+            width="20"
+          >
+            <path
+              fill-rule="evenodd"
+              d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-5a.75.75 0 01.75.75v4.5a.75.75 0 01-1.5 0v-4.5A.75.75 0 0110 5zm0 10a1 1 0 100-2 1 1 0 000 2z"
+              clip-rule="evenodd"
+            ></path>
+          </svg>
+        </div>
+        <div data-content="" className="">
+          <div data-title="" className="">
+            El correo ya esta en uso
+          </div>
+        </div>
+      </li>
     </BasicLayout>
   );
 };

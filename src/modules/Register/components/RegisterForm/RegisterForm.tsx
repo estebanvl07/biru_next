@@ -23,8 +23,6 @@ export const RegisterForm = ({
     resolver: zodResolver(registerUserInput),
   });
 
-  console.log(watch("password"));
-
   return (
     <form
       className="mt-4 flex w-full flex-col gap-2"

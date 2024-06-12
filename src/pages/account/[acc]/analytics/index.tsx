@@ -7,10 +7,19 @@ import {
 } from "~/modules/Common";
 import { PieChartAmountByCategoires } from "~/modules/Charts";
 import DashboardLayout from "~/modules/Layouts/Dashboard";
+import { useResize } from "~/lib/hooks/useResize";
+import MobileFilter from "~/modules/Layouts/templates/dashbaord/Header/MobileFilter";
 
 const AnalyticsPage = () => {
+  const { isMobile } = useResize();
+
   return (
     <DashboardLayout title="Análisis y estadisticas" hasFilter>
+      {isMobile && (
+        <div className="flex items-center gap-2">
+          <p>Filtrar por:</p> <MobileFilter />
+        </div>
+      )}
       <div className="mt-2 grid grid-cols-12 gap-2">
         <article className="col-span-12 lg:col-span-7">
           <CardBalanceAccount />

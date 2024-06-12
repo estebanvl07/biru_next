@@ -46,8 +46,10 @@ const EntityForm = ({ hasEdit, entityDefault }: EntityFormProps) => {
 
   const onSubmit = () => {
     onClose();
-    const payload = getValues();
-
+    const payload = {
+      ...getValues(),
+      reference: getValues("reference") || undefined,
+    };
     if (hasEdit) {
       EntityUpdateMutation(
         { ...payload, id: String(entityDefault?.id) },
@@ -77,6 +79,7 @@ const EntityForm = ({ hasEdit, entityDefault }: EntityFormProps) => {
       );
       return;
     }
+
     entityService.mutate(payload, {
       onSuccess() {
         setProps({
@@ -105,9 +108,9 @@ const EntityForm = ({ hasEdit, entityDefault }: EntityFormProps) => {
   useEffect(() => {
     if (entityDefault) {
       setValue("type", Number(entityDefault.type) as any);
-      setValue("description", entityDefault.description || "");
+      setValue("description", entityDefault.description || undefined);
       setValue("name", entityDefault.name);
-      setValue("reference", entityDefault.reference || "");
+      setValue("reference", entityDefault.reference || undefined);
     }
   }, []);
 

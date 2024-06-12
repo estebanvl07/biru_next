@@ -8,7 +8,7 @@ import GoalForm from "~/modules/Goals/GoalForm";
 
 const UpdateEntityPage = ({ goal }: { goal: GoalsIncludes }) => {
   return (
-    <DashboardLayout>
+    <DashboardLayout title="Editar Meta" headDescription="Edición de meta">
       <GoalForm hasEdit goalDefault={goal} />
     </DashboardLayout>
   );

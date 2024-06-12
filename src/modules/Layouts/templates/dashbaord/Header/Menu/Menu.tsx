@@ -8,6 +8,7 @@ import type { ListMenu } from "~/types/root.types";
 
 import { Listbox, ListboxItem } from "@nextui-org/react";
 import { useRouter } from "next/router";
+import { useParams } from "next/navigation";
 
 const OPTIONS: ListMenu[] = [
   {
@@ -15,17 +16,17 @@ const OPTIONS: ListMenu[] = [
     href: "/setting",
     icon: "mdi:account-outline",
   },
-  {
-    label: "Configurar tema",
-    href: "/setting/theme",
-    icon: "mingcute:settings-6-line",
-  },
-  {
-    label: "Ayuda",
-    href: "/help",
-    showLine: true,
-    icon: "material-symbols:help-outline",
-  },
+  // {
+  //   label: "Configurar tema",
+  //   href: "/setting/theme",
+  //   icon: "mingcute:settings-6-line",
+  // },
+  // {
+  //   label: "Ayuda",
+  //   href: "/help",
+  //   showLine: true,
+  //   icon: "material-symbols:help-outline",
+  // },
   {
     label: "Cerrar Sesión",
     icon: "humbleicons:logout",
@@ -40,6 +41,7 @@ const OPTIONS: ListMenu[] = [
 
 const Menu = ({ onHide }: { onHide: () => void }) => {
   const router = useRouter();
+  const params = useParams();
 
   return (
     <motion.div
@@ -61,7 +63,10 @@ const Menu = ({ onHide }: { onHide: () => void }) => {
             return (
               <ListboxItem
                 onClick={() => {
-                  if (option.href) return router.push(option.href);
+                  if (option.href)
+                    return router.push(
+                      `/account/${params?.acc}/${option.href}`,
+                    );
                   option.onClick && option.onClick();
                   onHide();
                 }}

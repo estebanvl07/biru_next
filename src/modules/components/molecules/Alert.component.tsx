@@ -69,6 +69,7 @@ export const Alert = ({
     <Modal
       size="sm"
       isOpen={isOpen}
+      placement="center"
       backdrop="opaque"
       hideCloseButton
       className="font-montserrat"

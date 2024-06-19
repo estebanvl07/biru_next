@@ -1,6 +1,7 @@
 import {
-  DetailAmounts,
-  CardBalanceAccount,
+  BalanceIncome,
+  BalanceEgress,
+  BalanceAccount,
   LastTransactions,
   AnnualBalance,
   CategoriesPercent,
@@ -16,16 +17,17 @@ const AnalyticsPage = () => {
   return (
     <DashboardLayout title="Análisis y estadisticas" hasFilter>
       {isMobile && (
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 px-content">
           <p>Filtrar por:</p> <MobileFilter />
         </div>
       )}
-      <div className="mt-2 grid grid-cols-12 gap-2">
+      <div className="mt-2 grid grid-cols-12 gap-2 px-content md:px-0">
         <article className="col-span-12 lg:col-span-7">
-          <CardBalanceAccount />
+          <BalanceAccount />
         </article>
-        <article className="col-span-12 lg:col-span-5">
-          <DetailAmounts className="!min-w-full flex-col md:flex-row lg:flex-col" />
+        <article className="col-span-12 flex flex-col gap-2 lg:col-span-5">
+          <BalanceIncome />
+          <BalanceEgress />
         </article>
         <article className="col-span-12 xl:col-span-7">
           <AnnualBalance />

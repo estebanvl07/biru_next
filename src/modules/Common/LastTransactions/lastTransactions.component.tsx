@@ -35,11 +35,14 @@ const LastTransactions: FC<LastTransactionsProps> = ({
 
   return (
     <Card
-      className={clsx("flex !h-full flex-col rounded-xl !px-4", cardClassName)}
+      className={clsx(
+        "flex !h-fit flex-col !px-0 py-4",
+        cardClassName,
+      )}
     >
       {showHeader && (
-        <div className="mb-4 flex items-center justify-between md:px-2">
-          <h3>Ultimas Transacciones</h3>
+        <div className="px-content mb-4 flex items-center justify-between md:px-6">
+          <h3>Últimas Transacciones</h3>
           <Link
             href={{
               pathname: "/account/[acc]/transactions",

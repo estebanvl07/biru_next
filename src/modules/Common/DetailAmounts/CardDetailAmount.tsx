@@ -5,6 +5,10 @@ import { LineChart } from "~/modules/Charts";
 
 import { useResize } from "~/lib/hooks/useResize";
 import { Series } from "~/types/chart.types";
+import { Spinner, Tooltip } from "@nextui-org/react";
+import { parseAmount } from "~/lib/helpers";
+import { FILTERS } from "~/types/transactions";
+import React from "react";
 
 type Props = {
   cardClassName?: string;
@@ -14,70 +18,87 @@ type Props = {
   icon: string;
   redirectHref?: string;
   title: string;
+  isLoading?: boolean;
   iconClassName?: string;
   color?: string;
+  noData?: boolean;
   badgeColor?: string;
 };
 
-const CardDetailAmount = ({
+const CardDetailAmount = React.memo(({
   title,
   amount,
   color,
   percent,
-  redirectHref,
+  isLoading,
   series,
+  noData,
   cardClassName,
 }: Props) => {
-  const { size } = useResize();
-
+  const { isMobile } = useResize();
   return (
     <Card
-      className={clsx("flex !h-full flex-grow overflow-hidden", cardClassName)}
+      className={clsx(
+        "flex flex-grow overflow-hidden !h-full flex-row",
+        cardClassName,
+      )}
     >
-      <aside className="flex flex-col justify-between">
-        <h4 className="mb-4 font-medium">{title}</h4>
-        <div>
-          <span className="text-nowrap text-2xl font-semibold">
-            $ {amount.toLocaleString()}
-          </span>
+      <header className="relative flex flex-col">
+        <h4 className="font-medium md:mb-4">{title}</h4>
+        <aside>
+          <Tooltip
+            content={`$ ${amount.toLocaleString()}`}
+            className="font-montserrat font-medium"
+          >
+            <span className="text-nowrap text-2xl font-semibold">
+              $ {parseAmount(amount)}
+            </span>
+          </Tooltip>
           {percent && (
-            <p className="mt-2 text-nowrap !text-xs">
+            <p className="text-nowrap !text-xs md:mt-2">
               <span className={clsx("font-semibold", color)}>{percent}</span> De{" "}
               {title}
             </p>
           )}
-        </div>
-      </aside>
-      {series && series[0]!.data.length > 0 ? (
-        <div className="relative flex-grow">
-          <section className="absolute -bottom-4 -right-3">
-            <LineChart
-              series={series}
-              heightChart="100%"
-              showLegend={false}
-              showToolBar={false}
-              showGrid={false}
-              showToolTip={true}
-              showYAxis={false}
-              offsetX={0}
-              offsetY={0}
-              showXAxis={false}
-              hasformatNumber={false}
-            />
-          </section>
-        </div>
-      ) : (
-        <div className="w-full py-4 ">
-          <Empty
-            description={`Sin ${title}`}
-            href={redirectHref}
-            iconWidth={32}
-            buttonText={`Crear ${title}`}
-          />
-        </div>
-      )}
+        </aside>
+      </header>
+      {
+        isLoading ? <div className="w-full grid place-content-center h-full"><Spinner /></div> :
+          <>
+            {noData && series && !isLoading ? (
+              <main className="relative flex-grow">
+                <section className="absolute -bottom-4 -right-3">
+                  <LineChart
+                    series={series}
+                    heightChart={isMobile ? "80%" : "100%"}
+                    hasZoom={false}
+                    showLegend={false}
+                    showToolBar={false}
+                    showGrid={false}
+                    showToolTip={false}
+                    bottomBorder={false}
+                    showYAxis={false}
+                    offsetX={0}
+                    offsetY={0}
+                    showXAxis={false}
+                    hasformatNumber={false}
+                  />
+                </section>
+              </main>
+            ) : (
+              <div className="w-full py-4 ">
+                <Empty
+                  icon="tabler:chart-area"
+                  description={`Sin ${title}`}
+                  iconWidth={32}
+                />
+              </div>
+            )}
+          </>
+      }
+
     </Card>
   );
-};
+});
 
 export default CardDetailAmount;

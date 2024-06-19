@@ -155,7 +155,7 @@ export async function getTransactionsByFilter(
     },
     include: { userAccount: true, category: true, entity: true, goal: true },
     orderBy: {
-      createdAt: "desc",
+      date: "desc",
     },
   });
 }

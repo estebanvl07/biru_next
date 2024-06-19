@@ -11,9 +11,9 @@ import { ChartProps } from "~/types/chart.types";
 // TODO: refactorize component
 const BarChart = ({
   series,
-  titleChart,
   keys,
-  heightChart = "120",
+  heightChart = "250",
+  widthChart = "100%",
   showLegend = true,
   showXAxis = true,
   showYAxis = true,
@@ -22,7 +22,7 @@ const BarChart = ({
   showToolBar = true,
   offsetX = 0,
   offsetY,
-  hasformatNumber = true,
+  bottomBorder = true,
 }: ChartProps) => {
   // TODO: darkmdoe pending
   const { isDark } = useTheme();
@@ -34,12 +34,8 @@ const BarChart = ({
       options={{
         chart: {
           type: "bar",
-          stacked: true,
           toolbar: {
             show: showToolBar,
-            tools: {
-              download: false,
-            },
           },
           offsetX,
           offsetY,
@@ -53,6 +49,7 @@ const BarChart = ({
           },
         },
         legend: {
+          show: showLegend,
           position: "top",
           horizontalAlign: "left",
           markers: {
@@ -81,19 +78,56 @@ const BarChart = ({
           enabled: false,
         },
         tooltip: {
-          enabled: Array.isArray(series) && series?.length !== 0 && showToolTip,
-          shared: false,
-          custom: function ({ series, seriesIndex, dataPointIndex, w }: any) {
+          custom: (props) => {
+            const config = props.w;
+            const currentValue = props.series[props.seriesIndex][
+              props.dataPointIndex
+            ] as number;
+            const currentLabelMonth =
+              config.globals.labels[props.dataPointIndex];
+            const title = config.globals.seriesNames[props.seriesIndex];
+
+            if (title === "Ingresos") {
+              return `
+                    <div  class="bg-white px-4 py-2 flex flex-col dark:bg-slate-950">
+                        <span class="text-black font-semibold">
+                        ${currentLabelMonth}
+                        </span>
+
+                        <div class="flex gap-8 w-full justify-between">
+
+                            <div class="flex gap-2 items-center">
+                                <div class="w-3 h-3 bg-primary rounded-full"></div>
+                                ${title}
+                            </div>
+                            <span class="font-semibold">
+                                $ ${currentValue.toLocaleString()}
+                            </span>
+
+                        </div>
+
+                    </div>
+                    `;
+            }
             return `
-                  <div class="bg-white px-6 py-2 flex flex-col justify-center border-[1px] dark:border-white/10 items-center dark:bg-slate-900">
-                    <span class="text-xs">${
-                      w.globals.initialSeries[seriesIndex].name
-                    }</span>
-                    <span class="font-semibold text-base">$ ${series[
-                      seriesIndex
-                    ][dataPointIndex]?.toLocaleString()}</span>
-                    
-                  </div>
+              <div  class="bg-white px-4 py-2 flex flex-col dark:bg-slate-950 border dark:border-white/10">
+                        <span class="text-black font-semibold">
+                        ${currentLabelMonth}
+                        </span>
+
+                        <div class="flex gap-8 w-full justify-between">
+
+                            <div class="flex gap-2 items-center">
+                                <div class="w-3 h-3 bg-indigo-300 rounded-full"></div>
+                                ${title}
+                            </div>
+                            <span class="font-semibold">
+                                $ ${currentValue.toLocaleString()}
+                            </span>
+
+                        </div>
+
+                    </div>
                 `;
           },
         },
@@ -101,7 +135,7 @@ const BarChart = ({
           text: "Sin datos para mostrar",
         },
         grid: {
-          xaxis: {},
+          show: showGrid,
           borderColor: isDark ? "#1e293b" : "#e5e7eb",
           padding: {
             top: 0,
@@ -109,7 +143,6 @@ const BarChart = ({
           },
         },
         yaxis: {
-          show: true,
           labels: {
             align: "left",
             padding: 15,
@@ -124,21 +157,25 @@ const BarChart = ({
         },
         xaxis: {
           axisBorder: {
-            show: false,
+            show: bottomBorder,
+          },
+          axisTicks: {
+            show: bottomBorder,
           },
           categories: keys ? keys : [],
           labels: {
+            show: showXAxis,
             style: {
-              fontFamily: FONT_FAMILY,
               colors: isDark ? "#f3f4f6" : "#000",
+              fontFamily: FONT_FAMILY,
               fontWeight: 600,
             },
           },
         },
       }}
-      series={series}
       type="bar"
-      width="100%"
+      series={series}
+      width={widthChart}
       height={heightChart}
     />
   );

@@ -11,6 +11,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import MainLoader from "../Loaders/mainLoader.component";
 import { useEffect, useState } from "react";
+import { Button } from "@nextui-org/button";
 
 const variants = {
   hidden: { opacity: 0, x: -200, y: 0 },
@@ -34,7 +35,7 @@ const DashboardLayout = ({
   const [isClient, setIsClient] = useState(false);
 
   const router = useRouter();
-  const { size } = useResize();
+  const { isMobile } = useResize();
 
   useEffect(() => {
     setIsClient(true);
@@ -47,18 +48,19 @@ const DashboardLayout = ({
         <meta name="description" content={headDescription} />
       </Head>
       {<SideBar serviceOptions={serviceOptions} />}
-      {size && size <= 768 && <BottomMobileNav />}
+      {isMobile && <BottomMobileNav />}
+
       <section className="z-0 h-full min-h-screen w-full flex-grow py-3 md:pl-60">
-        <div className="flex flex-col px-4 md:px-8">
-          {size && size >= 768 ? (
+        <div className="flex flex-col md:px-8">
+          {!isMobile ? (
             <HeaderApp title={title} hasFilter={hasFilter} />
           ) : (
             <HeaderMobile title={title} />
           )}
           <AnimatePresence>
             <motion.main
-              className={clsx("z-0", {
-                "pb-24": size && size <= 768,
+              className={clsx("z-0 px-content", {
+                "pb-16": isMobile,
               })}
               key={router.route}
               variants={variants}
@@ -67,17 +69,19 @@ const DashboardLayout = ({
               exit="exit"
             >
               {isClient ? <>{children}</> : <MainLoader />}
-              <footer className="mt-4 flex w-full items-center justify-between text-xs">
-                <p>Desarrollado por Esteban vl & Pedro Va</p>
-                <span className="flex items-center gap-1">
-                  Hecho con
-                  <Icon
-                    icon="mdi:heart-outline"
-                    width={24}
-                    className="text-red-500"
-                  />
-                </span>
-              </footer>
+              {!isMobile && (
+                <footer className="mt-4 flex w-full items-center justify-between text-xs">
+                  <p>Desarrollado por Esteban vl & Pedro Va</p>
+                  <span className="flex items-center gap-1">
+                    Hecho con
+                    <Icon
+                      icon="mdi:heart-outline"
+                      width={24}
+                      className="text-red-500"
+                    />
+                  </span>
+                </footer>
+              )}
             </motion.main>
           </AnimatePresence>
         </div>

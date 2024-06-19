@@ -9,7 +9,11 @@ export interface ChartProps {
   keys?: string[];
   titleChart?: string;
   heightChart?: string;
+  widthChart?: string;
   showToolBar?: boolean;
+  bottomBorder?: boolean;
+  curve?: Curve;
+  hasZoom?: boolean;
   showLegend?: boolean;
   showToolTip?: boolean;
   showXAxis?: boolean;
@@ -19,3 +23,12 @@ export interface ChartProps {
   showGrid?: boolean;
   hasformatNumber?: boolean;
 }
+
+type Curve =
+  | "smooth"
+  | "straight"
+  | "stepline"
+  | "linestep"
+  | "monotoneCubic"
+  | ("smooth" | "straight" | "stepline" | "linestep" | "monotoneCubic")[]
+  | undefined;

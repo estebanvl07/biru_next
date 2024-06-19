@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 import { getQueryKey } from "@trpc/react-query";
 import { useQueryClient } from "@tanstack/react-query";
@@ -17,6 +17,12 @@ import {
   FilterOptions,
   TransactionIncludes,
 } from "~/types/transactions";
+import { getPercent } from "~/lib/helpers";
+
+interface FilterByTypeProps {
+  type: 1 | 2;
+  options: FilterOptions;
+}
 
 export const useTransactions = (options: FilterOptions) => {
   const params = useParams();
@@ -54,11 +60,81 @@ export const useTransactions = (options: FilterOptions) => {
   return { transactions: data!, isLoading };
 };
 
+export const useFilterByType = ({ type, options }: FilterByTypeProps) => {
+  const { transactions, isLoading } = useTransactions({
+    filter: options.filter,
+    startDate: options?.startDate,
+    endDate: options?.endDate,
+  });
+
+  const [transactionFiltered, serTransactionFiltered] =
+    useState<TransactionIncludes[]>();
+  const [amounts, setAmount] = useState<number[]>();
+  const [noData, setNoData] = useState<boolean>(false);
+  const [totalAmounts, setTotalAmounts] = useState<{
+    income: number;
+    egress: number;
+  }>();
+  const [percents, setPercents] = useState<{
+    income: string;
+    egress: string;
+  }>();
+
+  useMemo(() => {
+    if (!transactions) return;
+    const icomesFilterd = transactions.filter(({ type, transferType }) => {
+      if (transferType === 1 && type === 1) return true;
+      if (transferType === 2 && type === 2) return true;
+      return false;
+    });
+    const egressFiltered = transactions.filter(({ type, transferType }) => {
+      if (transferType === 1 && type === 2) return true;
+      if (transferType === 2 && type === 1) return true;
+      return false;
+    });
+
+    if (type === 1) {
+      setAmount(icomesFilterd.map(({ amount }) => amount));
+    } else {
+      setAmount(egressFiltered.map(({ amount }) => amount));
+    }
+
+    const income = icomesFilterd.reduce((acc, { amount }) => acc + amount, 0);
+    const egress = egressFiltered.reduce((acc, { amount }) => acc + amount, 0);
+
+    const total = income + egress;
+
+    serTransactionFiltered(
+      type === 1 ? (icomesFilterd as any) : (egressFiltered as any),
+    );
+    setPercents({
+      income: getPercent(income!, total),
+      egress: getPercent(egress!, total),
+    });
+    setTotalAmounts({
+      income,
+      egress,
+    });
+    setNoData(transactions.length >= 1);
+  }, [transactions]);
+
+  return {
+    transactionFiltered,
+    totalAmounts,
+    amounts,
+    percents,
+    noData,
+    isLoading,
+  };
+};
+
 export const getMonths = (transactions: Transaction[]) => {
   const data = useMemo(() => {
+    if (!transactions) return;
+
     const indexMonths = new Set();
 
-    transactions.forEach((objeto) => {
+    transactions?.forEach((objeto) => {
       const m = objeto.createdAt.getMonth() + 1;
       indexMonths.add(m);
     });
@@ -77,8 +153,8 @@ export const getMonths = (transactions: Transaction[]) => {
       );
     });
 
-    return monthsNames;
-  }, []);
+    return monthsNames ?? [];
+  }, [transactions]);
 
   return data;
 };

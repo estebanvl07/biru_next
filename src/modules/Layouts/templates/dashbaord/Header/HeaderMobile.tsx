@@ -14,7 +14,7 @@ const HeaderMobile = ({ title = "Dashboard" }: { title?: string }) => {
   const { account } = useCurrentAccount();
 
   return (
-    <header className="z-10 flex w-full items-center justify-between py-2">
+    <header className="px-content z-10 flex w-full items-center justify-between py-2">
       <aside className="flex items-center gap-3">
         {pathname?.includes("main") || pathname === "/account" ? (
           <aside className="flex items-center gap-3">

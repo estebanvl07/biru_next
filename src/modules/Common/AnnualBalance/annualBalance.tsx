@@ -13,6 +13,7 @@ import { getTransactionsByMonths } from "~/modules/Transactions/hook/useHandlerT
 import { useThemeContext } from "~/lib/context/themeContext";
 import { useFilterContext } from "~/lib/context/filterContext";
 import { useTransactions } from "~/modules/Transactions/hook";
+import { BarChart } from "~/modules/Charts";
 
 const initialValues = {
   color: "",
@@ -70,7 +71,12 @@ const AnnualBalance = () => {
     <div className="h-full">
       <Card className="h-full flex-col !px-6">
         <h3 className="">Balance anual</h3>
-        <Chart
+        <BarChart
+          keys={months}
+          series={[incomeTransactions, egressTransactions] as any}
+          showGrid={false}
+        />
+        {/* <Chart
           options={{
             chart: {
               toolbar: {
@@ -208,7 +214,7 @@ const AnnualBalance = () => {
           series={[incomeTransactions, egressTransactions] as any}
           width="100%"
           height={250}
-        />
+        /> */}
       </Card>
     </div>
   );

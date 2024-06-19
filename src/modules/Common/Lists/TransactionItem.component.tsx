@@ -10,6 +10,7 @@ import { Avatar } from "@nextui-org/react";
 import { DATE_FORMAT_TRANS } from "~/lib/constants/config";
 import type { TransactionIncludes } from "~/types/transactions";
 import { useParams } from "next/navigation";
+import { hr } from "date-fns/locale";
 
 interface TransactionItemProps {
   item: TransactionIncludes;
@@ -51,10 +52,7 @@ const TransactionItem: FC<TransactionItemProps> = ({ item, index, length }) => {
   return (
     <li
       className={clsx(
-        "flex flex-col border-gray-100 px-1 hover:bg-slate-100 dark:border-white/10 dark:hover:bg-slate-800/40",
-        {
-          "border-b ": index !== length - 1,
-        },
+        "px-content flex flex-col border-gray-100 hover:bg-slate-100 md:px-6 dark:border-white/10 dark:hover:bg-slate-800/40",
       )}
     >
       <Link
@@ -66,7 +64,7 @@ const TransactionItem: FC<TransactionItemProps> = ({ item, index, length }) => {
           },
         }}
         className={clsx(
-          "flex cursor-pointer items-center justify-between border-gray-400/60 px-2 py-3 transition-all duration-300 dark:border-white/10",
+          "flex cursor-pointer items-center justify-between border-gray-400/60 py-3 transition-all duration-300 dark:border-white/10",
         )}
         title={getName()}
       >

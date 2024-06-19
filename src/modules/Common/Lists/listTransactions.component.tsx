@@ -14,7 +14,7 @@ const ListTransactions = React.memo(({ data, maxLength }: Props) => {
   const params = useParams<{ acc: string }>();
 
   return (
-    <ul className="scrollbar-customize flex h-full w-full flex-col overflow-auto rounded-md  bg-transparent text-sm">
+    <ul className="scrollbar-customize flex h-full w-full flex-col overflow-auto rounded-md bg-transparent text-sm">
       {data?.map((item, index) => {
         if (maxLength && index + 1 > maxLength) return null;
         return (

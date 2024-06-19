@@ -19,7 +19,10 @@ const LineChart = ({
   showXAxis = true,
   showYAxis = true,
   showToolTip = true,
+  hasZoom = true,
+  curve = "smooth",
   showGrid = true,
+  bottomBorder = true,
   showToolBar = true,
   offsetX = 0,
   offsetY,
@@ -43,6 +46,9 @@ const LineChart = ({
               download: false,
             },
           },
+          zoom: {
+            enabled: hasZoom,
+          },
           offsetX,
           offsetY,
         },
@@ -54,7 +60,7 @@ const LineChart = ({
           offsetY: 0,
         },
         stroke: {
-          curve: "smooth",
+          curve,
           width: 2.6,
         },
         fill: {
@@ -73,12 +79,11 @@ const LineChart = ({
           custom: function ({ series, seriesIndex, dataPointIndex, w }: any) {
             return `
                 <div class="bg-white px-6 py-2 flex flex-col justify-center border-[1px] dark:border-white/10 items-center dark:bg-slate-900">
-                  <span class="text-xs">${
-                    w.globals.initialSeries[seriesIndex].name
-                  }</span>
+                  <span class="text-xs">${w.globals.initialSeries[seriesIndex].name
+              }</span>
                   <span class="font-semibold text-base">$ ${series[seriesIndex][
-                    dataPointIndex
-                  ]?.toLocaleString()}</span>
+                dataPointIndex
+              ]?.toLocaleString()}</span>
                   
                 </div>
               `;
@@ -91,9 +96,6 @@ const LineChart = ({
           show: showGrid,
           borderColor: isDark ? "#1e293b" : "#e5e7eb",
           strokeDashArray: 4,
-          // padding: {
-          //   top: 0,
-          // },
         },
         yaxis: {
           show: showYAxis,
@@ -110,7 +112,6 @@ const LineChart = ({
             },
             style: {
               colors: isDark ? "#64748b" : "#000",
-
               fontFamily: FONT_FAMILY,
               fontWeight: 600,
               fontSize: "13",
@@ -118,11 +119,20 @@ const LineChart = ({
           },
         },
         xaxis: {
+          axisBorder: {
+            show: bottomBorder,
+          },
+          axisTicks: {
+            show: bottomBorder,
+          },
           categories: keys ?? [],
           labels: {
             show: showXAxis,
+            formatter: (val) => {
+              return val;
+            },
             style: {
-              colors: isDark ? "#f3f4f6" : "#000",
+              colors: isDark ? "#64748b" : "#000",
               fontFamily: FONT_FAMILY,
               fontWeight: 600,
             },

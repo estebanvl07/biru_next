@@ -1,7 +1,11 @@
 import { useParams } from "next/navigation";
 import Link from "next/link";
 
-import { DetailAmounts, LastTransactions } from "../Common";
+import {
+  BalanceEgress,
+  BalanceIncome,
+  LastTransactions,
+} from "~/modules/Common";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import { Chip, Skeleton } from "@nextui-org/react";
 import MobileFilter from "../Layouts/templates/dashbaord/Header/MobileFilter";
@@ -16,7 +20,7 @@ const MobileDashboard = () => {
 
   return (
     <div className="z-0 flex flex-col gap-2">
-      <section className="z-20 flex flex-col items-center justify-center  pt-4">
+      <section className="z-20 flex flex-col items-center justify-center pt-4">
         <span className="text-lg">Balance actual</span>
         <motion.h2
           {...onlyScale}
@@ -78,8 +82,9 @@ const MobileDashboard = () => {
           </Link>
         </motion.nav>
       </section>
-      <div className="overflow-x-auto scrollbar-hide">
-        <DetailAmounts className="!flex-row overflow-auto" />
+      <div className="flex gap-2 overflow-auto scrollbar-hide">
+        <BalanceIncome className="min-w-72" />
+        <BalanceEgress className="min-w-72" />
       </div>
       <LastTransactions transactionsMaxLength={10} />
     </div>

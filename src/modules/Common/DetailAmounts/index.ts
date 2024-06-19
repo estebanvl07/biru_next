@@ -1,1 +1,1 @@
-export { default as DetailAmounts } from "./detailAmounts.component";
+export { default as CardDetailAmount } from "./CardDetailAmount";

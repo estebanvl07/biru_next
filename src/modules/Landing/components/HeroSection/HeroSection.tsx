@@ -19,7 +19,10 @@ export const HeroSection = () => {
     <div className="fade-bottom relative z-10 mx-auto flex h-screen max-h-[56rem] w-full flex-col items-center md:overflow-hidden md:px-2">
       <Header />
       <span className="absolute -top-20 h-[40%] w-[98%] rounded-b-[20rem] bg-none blur-3xl dark:bg-indigo-950/40"></span>
-      <div className="absolute -top-12 h-[40rem] w-4/5 bg-opacity-10 bg-[url('/grid.svg')] bg-cover bg-center bg-no-repeat opacity-15 dark:opacity-30"></div>
+      {
+        isDark &&
+        <div className="absolute -top-12 h-[40rem] w-4/5 bg-opacity-10 bg-[url('/grid.svg')] bg-cover bg-center bg-no-repeat opacity-15 dark:opacity-30"></div>
+      }
       <div className="flex h-full w-full flex-col items-center justify-center gap-8 px-4 md:flex-col md:gap-4">
         <motion.article
           initial={{

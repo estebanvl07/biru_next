@@ -30,7 +30,6 @@ const OPTIONS: ListMenu[] = [
   {
     label: "Cerrar Sesión",
     icon: "humbleicons:logout",
-    href: "",
     onClick: () => {
       signOut({
         callbackUrl: CALLBACK_SIGN_OUT_URL,

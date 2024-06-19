@@ -2,6 +2,7 @@ import clsx from "clsx";
 import { motion } from "framer-motion";
 
 import type { UserAccount } from "@prisma/client";
+import { Tooltip } from "@nextui-org/react";
 
 interface AccountCardProps {
   account: UserAccount;
@@ -39,7 +40,10 @@ const AccoundCard = ({
     >
       <main className="flex items-start justify-between">
         <aside>
-          <h4 className="font-semibold">{account?.name}</h4>
+          <Tooltip content={account?.name} className="font-montserrat">
+            <h4 className="font-semibold w-32 whitespace-nowrap text-ellipsis overflow-hidden">{account?.name}</h4>
+          </Tooltip>
+
           <span>
             {account.reference === "" || account.reference === null
               ? "Sin referencia"

@@ -6,7 +6,7 @@ import Section from "~/modules/Profile/Section";
 
 import { signOut, useSession } from "next-auth/react";
 import { CALLBACK_SIGN_OUT_URL } from "~/lib/constants/config";
-import { useThemeContext } from "~/lib/context/themeContext";
+import { useThemeContext } from "~/lib/context/Theme.context";
 import { useResize } from "~/lib/hooks/useResize";
 import { Card } from "~/modules/components";
 

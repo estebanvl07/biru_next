@@ -3,7 +3,7 @@ const Chart = dynamic(() => import("react-apexcharts"), {
   ssr: false, // Evita que se ejecute en el servidor
 });
 
-import { useThemeContext } from "~/lib/context/themeContext";
+import { useThemeContext } from "~/lib/context/Theme.context";
 import { ChartProps } from "~/types/chart.types";
 
 import { FONT_FAMILY } from "~/lib/constants/config";

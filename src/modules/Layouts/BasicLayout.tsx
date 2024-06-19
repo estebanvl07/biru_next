@@ -20,7 +20,12 @@ export const BasicLayout: FC<LayoutProps> = ({
         <meta name="description" content={description} />
       </Head>
       <main className="relative flex h-full min-h-screen flex-col px-2 sm:px-0">
-        <span className="absolute -top-20 z-20 h-[40%] w-[98%] rounded-b-[20rem] bg-none blur-3xl dark:bg-indigo-950/40"></span>
+        {/* ??? */}
+        <span
+          className="absolute -top-20 h-[40%] w-[98%] rounded-b-[20rem] bg-none blur-3xl dark:bg-indigo-950/40"
+          aria-hidden="true"
+          aria-label="header-light-shadow"
+        />
         <Header />
         {children}
       </main>

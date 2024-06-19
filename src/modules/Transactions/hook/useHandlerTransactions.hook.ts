@@ -1,7 +1,7 @@
 import { Transaction } from "@prisma/client";
 import { useEffect, useState } from "react";
 import { months } from "~/lib/resource/months";
-import { useFilterContext } from "~/lib/context/filterContext";
+import { useFilterContext } from "~/lib/context/Filter.context";
 
 type BalanceByMonthType = {
   month: string;

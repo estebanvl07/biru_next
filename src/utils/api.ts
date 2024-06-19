@@ -4,18 +4,9 @@
  *
  * We also create a few inference helpers for input and output types.
  */
-import { useMutation } from "@tanstack/react-query";
-import {
-  TRPCLink,
-  createWSClient,
-  httpBatchLink,
-  loggerLink,
-  wsLink,
-} from "@trpc/client";
+import { httpBatchLink, loggerLink } from "@trpc/client";
 import { createTRPCNext } from "@trpc/next";
-import { ssrPrepass } from "@trpc/next/ssrPrepass";
 import { type inferRouterInputs, type inferRouterOutputs } from "@trpc/server";
-import getConfig from "next/config";
 import superjson from "superjson";
 
 import { type AppRouter } from "~/server/api/root";
@@ -26,23 +17,6 @@ const getBaseUrl = () => {
   return `http://localhost:${process.env.PORT ?? 3000}`; // dev SSR should use localhost
 };
 
-const { publicRuntimeConfig } = getConfig();
-const { WS_URL, APP_URL } = publicRuntimeConfig;
-
-// TODO: ending links to websockets
-function getEndingLink(): TRPCLink<AppRouter> {
-  const client = createWSClient({
-    url: WS_URL,
-  });
-  return wsLink({
-    client,
-    /**
-     * @link https://trpc.io/docs/v11/data-transformers
-     */
-    transformer: superjson,
-  });
-}
-
 /** A set of type-safe react-query hooks for your tRPC API. */
 export const api = createTRPCNext<AppRouter>({
   config() {
@@ -52,7 +26,6 @@ export const api = createTRPCNext<AppRouter>({
        *
        * @see https://trpc.io/docs/links
        */
-      ssrPrepass,
       links: [
         loggerLink({
           enabled: (opts) =>
@@ -66,13 +39,11 @@ export const api = createTRPCNext<AppRouter>({
            * @see https://trpc.io/docs/data-transformers
            */
           transformer: superjson,
-          url: `${APP_URL}/api/trpc`,
+          url: `${getBaseUrl()}/api/trpc`,
         }),
-        // getEndingLink(),
       ],
     };
   },
-
   /**
    * Whether tRPC should await queries when server rendering pages.
    *
@@ -80,21 +51,6 @@ export const api = createTRPCNext<AppRouter>({
    */
   ssr: false,
   transformer: superjson,
-  overrides: {
-    useMutation: {
-      async onSuccess(opts) {
-        /**
-         * @note that order here matters:
-         * The order here allows route changes in `onSuccess` without
-         * having a flash of content change whilst redirecting.
-         **/
-        // Calls the `onSuccess` defined in the `useQuery()`-options:
-        await opts.originalFn();
-        // Invalidate all queries in the react-query cache:
-        await opts.queryClient.invalidateQueries();
-      },
-    },
-  },
 });
 
 /**

@@ -12,9 +12,9 @@ import CredentialsProvider from "next-auth/providers/credentials";
 
 import { env } from "~/env";
 import { db } from "~/server/db";
-import { RequestError } from "~/lib/utility/errorClass";
 
 import { authPasswordUser } from "./api/services/users.services";
+import { RequestError } from "~/utils/errors/request.error";
 
 /**
  * Module augmentation for `next-auth` types. Allows us to add custom properties to the `session`

@@ -6,7 +6,7 @@ import PieChart from "~/modules/Charts/pieChart";
 
 import { useCategory } from "../../Category/hook/category.hook";
 import { useTransactions } from "../../Transactions/hook/useTransactions.hook";
-import { useFilterContext } from "~/lib/context/filterContext";
+import { useFilterContext } from "~/lib/context/Filter.context";
 
 import type { Transaction } from "@prisma/client";
 

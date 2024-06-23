@@ -8,7 +8,7 @@ interface LinkPops extends ListMenu {
 
 const LinkOption = ({ href, label, icon, onClick, onHide }: LinkPops) => {
   return (
-    <Link href={href} onClick={onHide}>
+    <Link href={href ?? "#"} onClick={onHide}>
       <li
         className="flex w-full items-center gap-2 px-4 py-2 text-sm hover:bg-gray-100 dark:hover:bg-slate-950"
         onClick={onClick}

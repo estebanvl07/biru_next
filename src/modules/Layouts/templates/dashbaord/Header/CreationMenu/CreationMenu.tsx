@@ -14,6 +14,7 @@ import {
 
 import type { ListMenu } from "~/types/root.types";
 import { useResize } from "~/lib/hooks/useResize";
+import Link from "next/link";
 
 interface OptionsProps {
   title: string;
@@ -110,7 +111,8 @@ const CreationMenu = () => {
                         key={index}
                         color="primary"
                         className="px-3 hover:!rounded-small dark:!text-slate-100"
-                        onClick={() => router.push(href)}
+                        as={Link}
+                        href={href}
                         showDivider={showLine}
                         startContent={<Icon icon={icon ?? ""} />}
                       >

@@ -29,16 +29,18 @@ const SpendingParams = ({
           options={{
             chart: {
               type: "radialBar",
-              foreColor: "#e11d48",
-
+              foreColor: "#a21caf",
               selection: {
                 stroke: {
-                  color: "#e11d48",
+                  color: "#a21caf",
                 },
               },
             },
             plotOptions: {
               radialBar: {
+                track: {
+  
+                },
                 hollow: {
                   margin: 0,
                   position: "back",

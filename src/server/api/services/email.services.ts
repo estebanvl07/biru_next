@@ -29,7 +29,7 @@ export async function sendConfirmationEmail(
   });
 }
 
-export async function userConfirmCode(db: PrismaClient, email: string) {
+export async function getConfirmCode(db: PrismaClient, email: string) {
   const [user] = await db.user.findMany({ where: { email } });
 
   if (!user) {
@@ -56,4 +56,6 @@ export async function userConfirmCode(db: PrismaClient, email: string) {
     name: user.name ?? "Invitado",
     to: user.email,
   });
+
+  return code;
 }

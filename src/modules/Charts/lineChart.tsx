@@ -119,13 +119,13 @@ const LineChart = ({
           },
         },
         xaxis: {
+          
           axisBorder: {
             show: bottomBorder,
           },
           axisTicks: {
             show: bottomBorder,
           },
-          categories: keys ?? [],
           labels: {
             show: showXAxis,
             formatter: (val) => {

@@ -12,7 +12,7 @@ const Home = () => {
           content="Biru es una aplicación que te ayuda a gestionar tus finanzas"
         />
       </Head>
-      <div className="flex h-full min-h-screen flex-col bg-white from-slate-950 to-slate-950 px-0 dark:bg-gradient-to-b">
+      <div className="flex h-full min-h-screen flex-col bg-white dark:bg-slate-950 px-0">
         <Landing />
       </div>
     </>

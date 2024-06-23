@@ -56,15 +56,9 @@ export const Explore = () => {
           fácil y sencilla
         </h2>
         <p className="mt-4  max-w-[26rem]">
-          Lorem ipsum, dolor sit amet consectetur adipisicing elit. Fugiat quam
-          perspiciatis cum recusandae repellat quidem.
+        Usar esta aplicación para gestionar tu negocio ofrece beneficios significativos. Simplifica la contabilidad y el seguimiento de transacciones, facilita la planificación financiera y mejora la transparencia operativa. Con información precisa y accesible, tomar decisiones informadas se vuelve más sencillo, impulsando así la eficiencia y el crecimiento empresarial.
         </p>
-        <p className="mt-4  max-w-[26rem]">
-          Lorem ipsum dolor sit amet consectetur, adipisicing elit. Amet fuga
-          consequatur quo nam id cumque nobis laboriosam vitae quod fugit
-          blanditiis tenetur consequuntur delectus, dolores autem ducimus
-          voluptas! Non, molestiae!
-        </p>
+        
         <Button
           href="/register"
           aria-label="Inicia aquí"

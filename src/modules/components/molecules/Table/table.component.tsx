@@ -125,7 +125,7 @@ const DataTable = <T,>({
             {({ uid, align, sorting, name }) => (
               <TableColumn
                 key={uid}
-                align={align ?? "start"}
+                align={align ?? "end"}
                 allowsSorting={sorting}
               >
                 {name}
@@ -137,7 +137,7 @@ const DataTable = <T,>({
               <TableRow key={item.name}>
                 {(columnKey) => {
                   return (
-                    <TableCell>
+                    <TableCell align="justify">
                       {renderCell
                         ? renderCell(item, columnKey)
                         : getKeyValue(item, columnKey)}

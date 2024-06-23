@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 
-import { useFilterContext } from "~/lib/context/filterContext";
+import { useFilterContext } from "~/lib/context/Filter.context";
 import { useFilterByType } from "~/modules/Transactions/hook";
 import { useParams } from "next/navigation";
 
@@ -13,14 +13,15 @@ const BalanceIncome = ({ className }: { className?: string }) => {
   const { filter, rangeDate } = useFilterContext();
   const params = useParams();
 
-  const { amounts, totalAmounts, percents, noData, isLoading } = useFilterByType({
-    type: 1,
-    options: {
-      filter,
-      startDate: rangeDate?.startDate,
-      endDate: rangeDate?.endDate,
-    },
-  });
+  const { amounts, totalAmounts, percents, noData, isLoading } =
+    useFilterByType({
+      type: 1,
+      options: {
+        filter,
+        startDate: rangeDate?.startDate,
+        endDate: rangeDate?.endDate,
+      },
+    });
 
   useEffect(() => {
     if (!amounts) return;
@@ -32,7 +33,7 @@ const BalanceIncome = ({ className }: { className?: string }) => {
       },
     ]);
   }, [amounts]);
-  
+
   return (
     <CardDetailAmount
       title="Ingreso"

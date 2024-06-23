@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-import { useFilterContext } from "~/lib/context/filterContext";
+import { useFilterContext } from "~/lib/context/Filter.context";
 import { useParams } from "next/navigation";
 import { useFilterByType } from "~/modules/Transactions/hook";
 
@@ -13,14 +13,15 @@ const BalanceEgress = ({ className }: { className?: string }) => {
   const [series, setSeries] = useState<Series[]>();
   const { filter, rangeDate } = useFilterContext();
 
-  const { amounts, totalAmounts, percents, noData, isLoading } = useFilterByType({
-    type: 2,
-    options: {
-      filter,
-      startDate: rangeDate?.startDate,
-      endDate: rangeDate?.endDate,
-    },
-  });
+  const { amounts, totalAmounts, percents, noData, isLoading } =
+    useFilterByType({
+      type: 2,
+      options: {
+        filter,
+        startDate: rangeDate?.startDate,
+        endDate: rangeDate?.endDate,
+      },
+    });
 
   useEffect(() => {
     if (!amounts) return;

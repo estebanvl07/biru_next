@@ -10,7 +10,7 @@ import {
 import { Empty } from "~/modules/components/molecules";
 import { useParams } from "next/navigation";
 
-import { useFilterContext } from "~/lib/context/filterContext";
+import { useFilterContext } from "~/lib/context/Filter.context";
 import { ChartProps, Series } from "~/types/chart.types";
 import ChartsFilterList from "~/modules/Charts/chartsFilterList";
 import { format } from "date-fns";
@@ -64,7 +64,7 @@ const BalanceAccount = ({
     ...rangeDate,
   });
 
-  const { months, series, date } = useTransactionSeries(transactions as any)
+  const { months, series, date } = useTransactionSeries(transactions as any);
 
   if (isMobile && hideWhenEmpty && transactions?.length === 0) return null;
 
@@ -97,7 +97,14 @@ const BalanceAccount = ({
         </header>
       )}
       <section className="block h-full w-full">
-        <LineChart keys={months} series={series} {...chartOptions} />
+        <LineChart
+          keys={months}
+          series={series}
+          heightChart="100%"
+          showXAxis={!isMobile}
+          showYAxis={!isMobile}
+          {...chartOptions}
+        />
         {/* {series && series[0]!?.data.length > 0 ? (
         ) : (
           <Empty

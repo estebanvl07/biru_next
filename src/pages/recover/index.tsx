@@ -35,7 +35,7 @@ export const RecoverPage = () => {
   const onSubmit = (payload: RecoverSchema) => {
     VerifyMutation(payload, {
       onSuccess() {
-        setSteps(STEPS_RECOVER.CHANGE_PASSWORD);
+        setSteps(STEPS_RECOVER.VALIDATE_CODE);
       },
       onError(error) {
         console.log(error);

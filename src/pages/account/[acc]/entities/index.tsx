@@ -14,6 +14,8 @@ import { Entities } from "@prisma/client";
 import { Chip, User } from "@nextui-org/react";
 import Actions from "~/modules/components/molecules/Table/Actions";
 import { api } from "~/utils/api";
+import _ from "lodash";
+import clsx from "clsx";
 
 export default function EntitiesPage() {
   const router = useRouter();
@@ -26,7 +28,7 @@ export default function EntitiesPage() {
   );
 
   const isMobile = Boolean(size && size <= 768);
-
+  
   const renderCell = useCallback((entity: Entities, columnKey: React.Key) => {
     const cellValue = entity[columnKey as keyof Entities];
     switch (columnKey) {
@@ -52,6 +54,10 @@ export default function EntitiesPage() {
             {cellValue === 1 ? "Activo" : "Inactivo"}
           </Chip>
         );
+      case "reference":
+        return <span className={clsx({
+          "text-gray-500 dark:text-gray-400 italic text-xs": !entity?.reference
+        })}>{entity.reference ?? "sin referencia"}</span>
       case "createdAt":
         return <span>{format(String(cellValue), "PPP", { locale: es })}</span>;
       case "actions":

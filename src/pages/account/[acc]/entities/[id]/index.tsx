@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback } from "react";
 import { GetServerSideProps } from "next";
 import { useParams } from "next/navigation";
 import { useRouter } from "next/router";
@@ -18,10 +18,11 @@ import { createServerSideCaller } from "~/utils/serverSideCaller/serverSideCalle
 import type { EntityIncludes } from "~/types/entities/entity.types";
 import type { Transaction } from "@prisma/client";
 import { useResize } from "~/lib/hooks/useResize";
+import { formatDatesOfTransactions } from "~/lib/resource/formatDatesOfTransactions";
 import Link from "next/link";
+import { ListTransactions } from "~/modules/Common";
 
 const DetailEntityPage = ({ entity }: { entity: EntityIncludes }) => {
-  const [isClient, setIsClient] = useState(false);
   const router = useRouter();
   const params = useParams();
 
@@ -34,7 +35,7 @@ const DetailEntityPage = ({ entity }: { entity: EntityIncludes }) => {
         case "amount":
           return (
             <User
-              name={transaction.amount.toLocaleString()}
+              name={`$ ${transaction.amount.toLocaleString()}`}
               classNames={{
                 name: "font-semibold text-lg",
                 description: "dark:text-slate-400",
@@ -98,9 +99,7 @@ const DetailEntityPage = ({ entity }: { entity: EntityIncludes }) => {
     [],
   );
 
-  useEffect(() => {
-    setIsClient(true);
-  }, []);
+  console.log(entity)
 
   return (
     <div>
@@ -121,7 +120,7 @@ const DetailEntityPage = ({ entity }: { entity: EntityIncludes }) => {
                 {!isMobile && "Editar Entidad"}
               </Button>
             </header>
-            <ul className="grid w-full grid-cols-4 gap-2 text-xs [&>li>p]:text-default-500 [&>li>span]:font-medium [&>li]:flex [&>li]:flex-col [&>li]:items-start">
+            <ul className="grid w-full grid-cols-2 md:grid-cols-4 gap-2 text-xs [&>li>p]:text-default-500 [&>li>span]:font-medium [&>li]:flex [&>li]:flex-col [&>li]:items-start">
               <li>
                 <span>Nombre</span>
                 <p>{entity.name}</p>
@@ -140,8 +139,13 @@ const DetailEntityPage = ({ entity }: { entity: EntityIncludes }) => {
               </li>
             </ul>
           </Card>
-          <div className="w-full min-w-[32rem]">
-            {isClient && (
+          <div className="w-full md:min-w-[32rem]">
+              {
+                isMobile ?
+                  <Card className="!px-2">
+                    <ListTransactions data={entity.transactions as any} />
+                  </Card>
+                :
               <Table
                 headerConfig={{
                   hasNew: true,
@@ -156,7 +160,8 @@ const DetailEntityPage = ({ entity }: { entity: EntityIncludes }) => {
                 data={entity.transactions}
                 renderCell={renderCell}
               />
-            )}
+              }
+         
           </div>
         </div>
       </DashboardLayout>
@@ -170,20 +175,13 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const helper = await createServerSideCaller(ctx);
   const [entity] = await helper.entity.getEntityById.fetch({ id: Number(id) });
 
-  const transactionSerialize = entity?.transactions.map((trans) => {
-    return {
-      ...trans,
-      date: trans?.date?.toISOString(),
-      createdAt: trans?.createdAt.toISOString(),
-      updatedAt: trans?.updatedAt.toISOString(),
-    };
-  });
-
+  const transactionSerialize = formatDatesOfTransactions(entity?.transactions as any)
+ 
   const entityData = {
     ...entity,
     createdAt: entity?.createdAt.toISOString(),
     updateAt: entity?.updateAt.toISOString(),
-    transactions: transactionSerialize,
+    transactions: transactionSerialize
   };
 
   return {

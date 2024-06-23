@@ -55,8 +55,7 @@ const BalanceAccount = ({
   const [currentFilter, setCurrentFilter] = useState<FILTERS | undefined>(
     defaultFilter,
   );
-  // const [serie, setSerie] = useState<Series[]>();
-  // const [months, setMonths] = useState<string[]>();
+
   const { filter, rangeDate } = useFilterContext();
 
   const { transactions, isLoading } = useTransactions({

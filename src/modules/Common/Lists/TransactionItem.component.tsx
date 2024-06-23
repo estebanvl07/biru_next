@@ -11,6 +11,7 @@ import { DATE_FORMAT_TRANS } from "~/lib/constants/config";
 import type { TransactionIncludes } from "~/types/transactions";
 import { useParams } from "next/navigation";
 import { hr } from "date-fns/locale";
+import { Transaction } from "@prisma/client";
 
 interface TransactionItemProps {
   item: TransactionIncludes;

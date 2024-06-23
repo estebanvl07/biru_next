@@ -4,9 +4,10 @@ import TransactionItem from "./TransactionItem.component";
 import { Empty } from "~/modules/components";
 import { useParams } from "next/navigation";
 import { TransactionIncludes } from "~/types/transactions";
+import type { Transaction } from "@prisma/client";
 
 type Props = {
-  data?: TransactionIncludes[] | undefined;
+  data: TransactionIncludes[];
   maxLength?: number;
 };
 

@@ -11,6 +11,10 @@ const config = {
   ],
   theme: {
     extend: {
+      gridTemplateColumns: {
+        '128-auto': 'repeat(auto-fit, minmax(128px, 1fr))',
+        '300-auto': 'repeat(auto-fit, minmax(300px, 1fr))',
+      },
       padding: {
         content: "14px",
       },

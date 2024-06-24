@@ -43,7 +43,7 @@ const CardDetailAmount = React.memo(({
         cardClassName,
       )}
     >
-      <header className="relative flex flex-col">
+      <header className="relative flex justify-between flex-col">
         <h4 className="font-medium md:mb-4">{title}</h4>
         <aside>
           <Tooltip

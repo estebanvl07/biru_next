@@ -38,9 +38,11 @@ model Goals {
   state        Int           @default(1) // 1:En curso, 2: Terminado, 3: Cancelado 
   userId       String
   goalDate     DateTime?
+  entityId     Int?
   createdAt    DateTime      @default(now())
   updatedAt    DateTime      @updatedAt
   transactions Transaction[]
+  entity       Entities?     @relation(fields: [entityId], references: [id])
 }
 
 model Entities {
@@ -56,6 +58,7 @@ model Entities {
   userId       String
   user         User          @relation(fields: [userId], references: [id], onDelete: Cascade)
   transactions Transaction[]
+  goals        Goals[]
 }
 
 model Category {

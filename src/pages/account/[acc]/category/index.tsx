@@ -63,7 +63,7 @@ const CategoryPage = () => {
             <span>No tienes categorías creadas</span>
           ) : (
             <motion.div
-              className="grid grid-cols-2 gap-2 md:flex md:grid-cols-2 md:flex-wrap lg:grid-cols-3 xl:grid-cols-4"
+              className="grid grid-cols-2 gap-2 md:grid-cols-128-auto"
               variants={groupedAnimation.container}
               initial="hidden"
               animate="visible"

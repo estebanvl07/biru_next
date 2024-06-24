@@ -24,7 +24,7 @@ const GoalCard = ({ goalInfo }: { goalInfo: Goals }) => {
         ...groupedAnimation.item,
       }}
       onClick={() => router.push(`/account/${params?.acc}/goals/${id}`)}
-      className="col-span-2 rounded-xl border bg-default-50 transition-all duration-300 sm:col-span-1 md:w-80 dark:border-white/10 dark:bg-default-200 dark:shadow-md"
+      className="col-span-2 rounded-xl border cursor-pointer bg-default-50 transition-all duration-300 sm:col-span-1 dark:border-white/10 dark:bg-default-200 dark:shadow-md"
     >
       <div className=" flex flex-col px-6 py-4">
         <header className="flex items-center justify-between">
@@ -42,7 +42,7 @@ const GoalCard = ({ goalInfo }: { goalInfo: Goals }) => {
           </aside>
           <aside>
             <p>Meta</p>
-            <h4 className="font-semibold text-primary">
+            <h4 className="font-semibold text-primary dark:text-primary-light">
               $ {goal.toLocaleString()}
             </h4>
           </aside>
@@ -53,6 +53,9 @@ const GoalCard = ({ goalInfo }: { goalInfo: Goals }) => {
           aria-label={`saving card - ${name}`}
           value={saved}
           maxValue={goal}
+          classNames={{
+            indicator: "dark:bg-indigo-400"
+          }}
           className="mb-2 mt-3 w-full rounded-full border bg-gray-200 dark:border-none dark:bg-slate-700"
         />
       </div>

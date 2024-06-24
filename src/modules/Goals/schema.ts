@@ -11,6 +11,7 @@ export const input = {
   goal: Z_NUMBER,
   saved: Z_NUMBER,
   description: z.optional(z.string()),
+  entityId: z.optional(z.number()),
   icon: z.optional(z.string()),
   goalDate: z.optional(Z_DATE),
 };

@@ -610,7 +610,7 @@ const TransactionForm = ({
                         className="dark:text-slate-200"
                       />
                     }
-                    label="Reference"
+                    label="Referencia"
                     placeholder="000-000000-00"
                     {...register("reference")}
                     isInvalid={Boolean(errors?.reference)}

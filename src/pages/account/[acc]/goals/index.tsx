@@ -4,6 +4,7 @@ import Link from "next/link";
 
 import { Icon } from "@iconify/react/dist/iconify.js";
 import { Button, Input } from "@nextui-org/react";
+import { Empty } from "~/modules/components";
 import DashboardLayout from "~/modules/Layouts/Dashboard";
 import { LoaderSkeleton } from "~/modules/Loaders";
 import GoalCard from "~/modules/Goals/GoalCard";
@@ -61,16 +62,26 @@ export default function GoalPage() {
       ) : (
         <motion.section
           variants={groupedAnimation.container}
-          className="mt-4 grid grid-cols-2 gap-2 md:flex md:flex-wrap"
+          className="mt-4 grid grid-cols-2 gap-2 md:grid-cols-300-auto"
           initial="hidden"
           animate="visible"
         >
-          {newList.length === 0 ? (
+          {query && newList.length === 0 ? (
             <p>No encontramos resultados con "{query}"</p>
           ) : (
-            newList?.map((props) => (
-              <GoalCard key={props.id} goalInfo={props} />
-            ))
+            <>
+              {newList.length === 0 ? (
+                <Empty
+                  className="py-10"
+                  description="Aún no tienes metas creadas"
+                  icon="tabler:target-off"
+                />
+              ) : (
+                newList?.map((props) => (
+                  <GoalCard key={props.id} goalInfo={props} />
+                ))
+              )}
+            </>
           )}
         </motion.section>
       )}

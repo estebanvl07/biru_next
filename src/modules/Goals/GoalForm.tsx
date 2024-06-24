@@ -4,7 +4,14 @@ import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 
 import { Icon } from "@iconify/react/dist/iconify.js";
-import { Button, Input, Textarea } from "@nextui-org/react";
+import {
+  Button,
+  Input,
+  Select,
+  SelectItem,
+  Textarea,
+  User,
+} from "@nextui-org/react";
 import { IconSearcher } from "~/modules/Category/IconSelector";
 import { InputDate } from "~/modules/components";
 import { Alert } from "~/modules/components/molecules/Alert.component";
@@ -16,6 +23,7 @@ import { useAlert } from "~/lib/hooks/useAlert";
 import { api } from "~/utils/api";
 import { amountFormatter } from "~/utils/formatters";
 import { GoalsIncludes } from "~/types/goal/goal.types";
+import { useEntity } from "../Entities/hook/entities.hook";
 
 interface GoalFormProps {
   hasEdit?: boolean;
@@ -28,6 +36,7 @@ const GoalForm = ({ hasEdit, goalDefault }: GoalFormProps) => {
 
   const router = useRouter();
   const params = useParams();
+  const { entities } = useEntity();
 
   const { isActive, onActive, onDisabled } = useOnActive();
   const { mutate: createGoalgMutation } = api.goals.create.useMutation();
@@ -210,6 +219,60 @@ const GoalForm = ({ hasEdit, goalDefault }: GoalFormProps) => {
             errorMessage={errors?.saved?.message}
           />
         </div>
+        <Select
+          items={entities ?? []}
+          placeholder="Seleccionar entidad"
+          label="Entidad"
+          // defaultSelectedKeys={defaultEntity ?? query.entity}
+          classNames={{
+            label: "group-data-[filled=true]:-translate-y-5",
+            trigger: "min-h-[70px]",
+            listboxWrapper: "max-h-[200px]",
+          }}
+          renderValue={(items) => {
+            return items.map(({ data: entity }) => (
+              <div
+                key={entity?.id}
+                className="py-1 font-montserrat dark:text-white"
+              >
+                <User
+                  name={entity?.name}
+                  description={
+                    entity?.description !== "" ? entity?.description : "N/A"
+                  }
+                  avatarProps={{
+                    src: entity?.avatar ?? undefined,
+                    size: "sm",
+                    name: entity?.name,
+                    color: "primary",
+                  }}
+                />
+              </div>
+            ));
+          }}
+          isInvalid={Boolean(errors?.entityId)}
+          errorMessage={errors?.entityId?.message ?? ""}
+        >
+          {(entity) => {
+            return (
+              <SelectItem
+                color="primary"
+                variant="solid"
+                onClick={() => {
+                  setValue("entityId", entity.id);
+                }}
+                key={entity.id}
+                className="py-1 font-montserrat dark:text-white"
+                textValue={entity.name}
+              >
+                <p>{entity.name}</p>
+                <span className="!text-xs opacity-60">
+                  {entity.description !== "" ? entity.description : "N/A"}
+                </span>
+              </SelectItem>
+            );
+          }}
+        </Select>
         <InputDate
           label="Fecha limite"
           placeholder="Seleccionar fecha de meta"

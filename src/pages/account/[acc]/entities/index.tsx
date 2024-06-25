@@ -14,6 +14,7 @@ import { columns } from "~/modules/Entities/table";
 import { Entities } from "@prisma/client";
 import { Chip, User } from "@nextui-org/react";
 import Actions from "~/modules/components/molecules/Table/Actions";
+import clsx from "clsx";
 
 export default function EntitiesPage() {
   const router = useRouter();
@@ -37,6 +38,16 @@ export default function EntitiesPage() {
               color: "primary",
             }}
           />
+        );
+      case "reference":
+        return (
+          <span
+            className={clsx({
+              "text-xs italic opacity-80": !entity.reference,
+            })}
+          >
+            {!entity.reference ? "Sin referencia" : entity.reference}
+          </span>
         );
       case "state":
         return (
@@ -71,7 +82,7 @@ export default function EntitiesPage() {
           </span>
         );
     }
-  }, []);
+  }, [entities]);
 
   return (
     <DashboardLayout title="Entidades">

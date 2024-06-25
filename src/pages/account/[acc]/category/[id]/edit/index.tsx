@@ -1,7 +1,7 @@
 import { GetServerSideProps } from "next";
 
-import CreateCategoryForm from "~/modules/category/CreateCategoryForm";
-import DashboardLayout from "~/modules/layouts/Dashboard";
+import CreateCategoryForm from "~/modules/Category/CreateCategoryForm";
+import DashboardLayout from "~/modules/Layouts/Dashboard";
 
 import { formatDatesOfTransactions } from "~/lib/resource/formatDatesOfTransactions";
 import { createServerSideCaller } from "~/utils/serverSideCaller/serverSideCaller";

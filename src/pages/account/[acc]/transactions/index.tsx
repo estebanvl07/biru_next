@@ -2,23 +2,23 @@ import { useCallback, useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 
 import { Icon } from "@iconify/react/dist/iconify.js";
-import DashboardLayout from "~/modules/layouts/Dashboard";
+import DashboardLayout from "~/modules/Layouts/Dashboard";
 import { Table } from "~/modules/components";
 
-import { columns } from "~/modules/transactions/table";
+import { columns } from "~/modules/Transactions/table";
 import { Avatar, Chip } from "@nextui-org/react";
 
 import { format } from "date-fns";
 import { es } from "date-fns/locale";
-import { useTransactions } from "~/modules/transactions/hook/useTransactions.hook";
 import { capitalize } from "~/modules/components/molecules/Table/utils";
 
 import { TransactionIncludes } from "~/types/transactions";
 
 import { useResize } from "~/lib/hooks/useResize";
-import MobileTransactionPage from "~/modules/transactions/MobileTransactionPage";
+import MobileTransactionPage from "~/modules/Transactions/MobileTransactionPage";
 import Actions from "~/modules/components/molecules/Table/Actions";
 import { useRouter } from "next/router";
+import { api } from "~/utils/api";
 
 const TransactionPage = () => {
   const [isClient, setIsClient] = useState(false);
@@ -28,7 +28,14 @@ const TransactionPage = () => {
   const { size } = useResize();
   const isMobile = Boolean(size && size <= 768);
 
-  const { transactions, isLoading } = useTransactions({});
+  const { data: transactions, isLoading } =
+    api.transaction.getTransactions.useQuery(
+      {
+        accountId: Number(params?.acc),
+        filter: 0,
+      },
+      { enabled: Boolean(params?.acc) },
+    );
 
   const renderCell = useCallback(
     (transaction: TransactionIncludes, columnKey: React.Key) => {
@@ -49,7 +56,9 @@ const TransactionPage = () => {
 
       const getIcon = (): string => {
         const typeIcon =
-          transaction.type === 1 ? "ph:trend-up" : "ph:trend-down";
+          transaction.type === 1
+            ? "iconamoon:arrow-bottom-left-1"
+            : "iconamoon:arrow-top-right-1";
 
         if (transaction.transferType === 2 && transaction.goal) {
           return (transaction.goal.icon as string) || typeIcon;

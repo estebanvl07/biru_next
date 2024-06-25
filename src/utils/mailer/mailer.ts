@@ -27,11 +27,12 @@ export const mailer = {
     token: string;
     name: string;
   }) {
+    const link = `${env.FRONTEND_URL}/activation/${token}`;
     const signupOptions = {
       from: fromNoreply,
       to,
       subject: "Bienvenido a Biru",
-      html: SignInTemplate({ name, link: token }),
+      html: SignInTemplate({ name, link }),
     };
 
     return transporter.sendMail(signupOptions, handleMailerError);

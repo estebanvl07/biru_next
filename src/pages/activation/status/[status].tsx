@@ -6,21 +6,13 @@ import {
 
 const options: ActivationStatusProps["status"][] = ["success", "error"];
 
-export async function getStaticPaths() {
-  return { paths: options, fallback: false };
-}
-
 export const getServerSideProps: GetServerSideProps<
   ActivationStatusProps
 > = async ({ params }) => {
   const status = params?.status as ActivationStatusProps["status"];
 
-  if (!status) {
-    return { notFound: true, props: {} };
-  }
-
-  if (!options.includes(status)) {
-    return { notFound: true, props: {} };
+  if (!status || !options.includes(status)) {
+    return { notFound: true };
   }
 
   return { props: { status } };

@@ -26,7 +26,7 @@ export const formatDatesOfTransactions = (
       goal: transaction?.goal
         ? {
             ...transaction.goal,
-            goalDate: transaction?.goal
+            goalDate: transaction?.goal?.goalDate
               ? transaction.goal.goalDate?.toISOString()
               : null,
             createdAt: transaction?.goal.createdAt.toISOString(),

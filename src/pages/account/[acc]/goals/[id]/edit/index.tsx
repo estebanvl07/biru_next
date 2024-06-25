@@ -1,14 +1,14 @@
 import { GetServerSideProps } from "next";
 import React from "react";
 import { formatDatesOfTransactions } from "~/lib/resource/formatDatesOfTransactions";
-import DashboardLayout from "~/modules/layouts/Dashboard";
+import DashboardLayout from "~/modules/Layouts/Dashboard";
 import { createServerSideCaller } from "~/utils/serverSideCaller/serverSideCaller";
 import { GoalsIncludes } from "~/types/goal/goal.types";
 import GoalForm from "~/modules/Goals/GoalForm";
 
 const UpdateEntityPage = ({ goal }: { goal: GoalsIncludes }) => {
   return (
-    <DashboardLayout>
+    <DashboardLayout title="Editar Meta" headDescription="Edición de meta">
       <GoalForm hasEdit goalDefault={goal} />
     </DashboardLayout>
   );

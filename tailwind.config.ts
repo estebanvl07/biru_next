@@ -7,11 +7,13 @@ const config = {
   darkMode: "selector",
   content: [
     "./src/**/*.tsx",
-    "./node_modules/@nextui-org/theme/dist/components/(accordion|badge|button|calendar|input|listbox|modal|pagination|progress|radio|select|skeleton|spinner|table|tabs|user|divider|ripple|popover|scroll-shadow|checkbox|spacer|avatar).js"
+    "./node_modules/@nextui-org/theme/dist/components/(accordion|badge|button|calendar|input|listbox|modal|pagination|progress|radio|select|skeleton|spinner|table|tabs|user|divider|ripple|popover|scroll-shadow|checkbox|spacer|avatar).js",
   ],
-  prefix: "",
   theme: {
     extend: {
+      padding: {
+        content: "14px",
+      },
       height: {
         "calc-64": "calc(100vh - 64px)",
         "calc-48": "calc(100vh - 48px)",

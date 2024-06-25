@@ -1,7 +1,7 @@
 import { Icon } from "@iconify/react";
 import { Button } from "@nextui-org/button";
 
-import { useThemeContext } from "~/lib/context/themeContext";
+import { useThemeContext } from "~/lib/context/Theme.context";
 
 const DarkMode = ({ className }: { className?: string }) => {
   const { theme, setTheme } = useThemeContext();

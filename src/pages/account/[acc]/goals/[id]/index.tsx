@@ -13,12 +13,12 @@ import { Transaction } from "@prisma/client";
 import Actions from "~/modules/components/molecules/Table/Actions";
 import { columns } from "~/modules/Goals/table";
 import { Card, Table } from "~/modules/components";
-import DashboardLayout from "~/modules/layouts/Dashboard";
+import DashboardLayout from "~/modules/Layouts/Dashboard";
 import { GoalsIncludes } from "~/types/goal/goal.types";
 import { Button, Chip, Link } from "@nextui-org/react";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import { useResize } from "~/lib/hooks/useResize";
-import { LastTransactions } from "~/modules/common";
+import { LastTransactions } from "~/modules/Common";
 import { formatDatesOfTransactions } from "~/lib/resource/formatDatesOfTransactions";
 import { getPercent } from "~/lib/helpers";
 
@@ -107,11 +107,11 @@ const DetailGoalPage = ({
   }, []);
 
   return (
-    <DashboardLayout>
+    <DashboardLayout title="Detalle de Meta" headDescription="Detalles de Meta">
       <div className="flex w-full flex-col gap-6">
         <Card className="flex flex-col">
           <header className="mb-4 flex flex-row items-center justify-between">
-            <h3>Información de categoría</h3>
+            <h3>Información de Meta</h3>
             <Button
               as={Link}
               href={`/account/${params?.acc}/goals/${id}/edit`}
@@ -121,7 +121,7 @@ const DetailGoalPage = ({
               className="sm:w-fit"
             >
               <Icon icon="akar-icons:edit" width={18} />
-              {!isMobile && "Editar Entidad"}
+              {!isMobile && "Editar Meta"}
             </Button>
           </header>
           <ul className="mb-2 grid w-full grid-cols-2 gap-2 sm:grid-cols-4 [&>li>span]:font-semibold [&>li]:text-xs">

@@ -8,44 +8,51 @@ import {
   geActivationCode,
   activationCodeUsed,
 } from "./verificationCode.services";
-import { getAccountById } from "./userAccount.services";
+import type { PrismaTransaction } from "~/server/db";
 
 export async function registerUser(
   db: PrismaClient,
   data: RegisterUserInputType,
-  // data: Prisma.UserCreateInput,
 ) {
   try {
-    const password = hashPassword(data.password);
-    const user = await db.user.create({
-      data: {
-        email: data.email.toLowerCase(),
-        name: data.name,
-        userPassword: {
-          create: {
-            password,
-            email: data.email.toLowerCase(),
+    async function userAccountTransaction(tx: PrismaTransaction) {
+      const password = hashPassword(data.password);
+      const user = await tx.user.create({
+        data: {
+          email: data.email.toLowerCase(),
+          name: data.name,
+          userPassword: {
+            create: {
+              password,
+              email: data.email.toLowerCase(),
+            },
           },
         },
-      },
-      include: {
-        userPassword: true,
-      },
-    });
-    await db.account.create({
-      data: {
-        provider: "credentials",
-        providerAccountId: user.userPassword!.id,
-        type: "credentials",
-        userId: user.id,
-      },
-    });
+        include: {
+          userPassword: true,
+        },
+      });
 
-    await sendConfirmationEmail(db, user);
+      await tx.account.create({
+        data: {
+          provider: "credentials",
+          providerAccountId: user.userPassword!.id,
+          type: "credentials",
+          userId: user.id,
+        },
+      });
+
+      user.userPassword = null;
+      return user;
+    }
+
+    const user = await db.$transaction(async (tx) => {
+      const user = await userAccountTransaction(tx);
+      await sendConfirmationEmail(tx, user);
+    });
 
     return user;
   } catch (error) {
-    // log the instance of the error
     if (error instanceof PrismaClientKnownRequestError) {
       if (
         error.code === "P2002" &&
@@ -111,7 +118,7 @@ export async function authPasswordUser(
 
   const isPasswordMatching = comparePassword(
     password,
-    user.userPassword.password ?? "",
+    user.userPassword.password,
   );
 
   if (!isPasswordMatching) {
@@ -129,17 +136,49 @@ export async function changePassword(
   try {
     const { userId, id: verificationCodeId } = await geActivationCode(db, code);
 
-    console.log(userId);
-
     const passwordHashed = hashPassword(password);
-    const user = await db.userPassword.update({
+
+    const user = await db.user.findFirst({
       where: {
-        userId,
-      },
-      data: {
-        password: passwordHashed,
-      },
-    });
+        id: userId
+      }
+    })
+
+    if (!user) {
+      throw new TRPCError({
+        code: "NOT_FOUND",
+        message: "El usuario no ha sido encontrado",
+      });
+    }
+
+    const [userPass] = await db.userPassword.findMany({
+      where: {
+        userId
+      }
+    })
+
+    console.log("user pass", userPass);
+    if (!userPass) {
+      console.log("because not user found");
+      
+      await db.userPassword.create({
+        data: {
+          state: 1,
+          userId,
+          email: user.email,
+          password: passwordHashed,
+        },
+      });
+    } else {
+      await db.userPassword.update({
+        where: {
+          userId,
+        },
+        data: {
+          password: passwordHashed,
+        },
+      });
+    }
 
     await activationCodeUsed(db, verificationCodeId);
 

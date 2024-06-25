@@ -1,7 +1,7 @@
 import { GetServerSideProps } from "next";
 import React from "react";
 import EntityForm from "~/modules/Entities/EntityForm";
-import DashboardLayout from "~/modules/layouts/Dashboard";
+import DashboardLayout from "~/modules/Layouts/Dashboard";
 import { EntityIncludes } from "~/types/entities/entity.types";
 import { createServerSideCaller } from "~/utils/serverSideCaller/serverSideCaller";
 

@@ -7,7 +7,7 @@ import { Icon } from "@iconify/react/dist/iconify.js";
 import { Button, Chip } from "@nextui-org/react";
 import { Card, Table } from "~/modules/components";
 import Actions from "~/modules/components/molecules/Table/Actions";
-import DashboardLayout from "~/modules/layouts/Dashboard";
+import DashboardLayout from "~/modules/Layouts/Dashboard";
 
 import { Transaction } from "@prisma/client";
 import { CategoryIncludes } from "~/types/category/category.types";
@@ -17,11 +17,11 @@ import { es } from "date-fns/locale";
 import { capitalize } from "~/modules/components/molecules/Table/utils";
 import { formatDatesOfTransactions } from "~/lib/resource/formatDatesOfTransactions";
 import { createServerSideCaller } from "~/utils/serverSideCaller/serverSideCaller";
-import { basicColumns } from "~/modules/transactions/table";
+import { basicColumns } from "~/modules/Transactions/table";
 
 import { GetServerSideProps } from "next";
 import { useResize } from "~/lib/hooks/useResize";
-import { LastTransactions } from "~/modules/common";
+import { LastTransactions } from "~/modules/Common";
 
 const DetailCategory = ({ category }: { category: CategoryIncludes }) => {
   const { name, description, type, icon, transactions } = category;

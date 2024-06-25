@@ -4,7 +4,7 @@ import Link from "next/link";
 
 import { Icon } from "@iconify/react/dist/iconify.js";
 import { Button, Input } from "@nextui-org/react";
-import DashboardLayout from "~/modules/layouts/Dashboard";
+import DashboardLayout from "~/modules/Layouts/Dashboard";
 import { LoaderSkeleton } from "~/modules/Loaders";
 import GoalCard from "~/modules/Goals/GoalCard";
 
@@ -13,12 +13,16 @@ import { Goals } from "@prisma/client";
 import { groupedAnimation } from "~/modules/animations";
 import { useGoals } from "~/modules/Goals/hook/goal.hook";
 import { useResize } from "~/lib/hooks/useResize";
+import { api } from "~/utils/api";
 
 export default function GoalPage() {
   const params = useParams();
 
   const { isMobile } = useResize();
-  const { goals, isLoading } = useGoals();
+
+  const { data: goals, isLoading } = api.goals.getGoals.useQuery(undefined, {
+    enabled: Boolean(params?.acc),
+  });
 
   const { newList, onSearch, query } = useSearch<Goals>({
     data: goals ?? [],

@@ -1,5 +1,5 @@
 import { createTRPCRouter, protectedProcedure } from "~/server/api/trpc";
-import { createCategory, updateCategory } from "~/modules/category/schema";
+import { createCategory, updateCategory } from "~/modules/Category/schema";
 import * as categoryServices from "~/server/api/services/category.services";
 import { z } from "zod";
 

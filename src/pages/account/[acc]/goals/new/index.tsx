@@ -1,4 +1,4 @@
-import DashboardLayout from "~/modules/layouts/Dashboard";
+import DashboardLayout from "~/modules/Layouts/Dashboard";
 import GoalForm from "~/modules/Goals/GoalForm";
 
 export default function NewGoalPage() {

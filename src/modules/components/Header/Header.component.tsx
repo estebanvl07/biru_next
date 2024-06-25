@@ -8,7 +8,7 @@ import { Icon } from "@iconify/react/dist/iconify.js";
 import { HandlerTheme } from "../atoms";
 import { useResize } from "~/lib/hooks/useResize";
 import { usePathname } from "next/navigation";
-import { useThemeContext } from "~/lib/context/themeContext";
+import { useThemeContext } from "~/lib/context/Theme.context";
 
 export const Header = () => {
   const { theme } = useThemeContext();
@@ -17,18 +17,19 @@ export const Header = () => {
   return (
     <header className="z-20 w-full px-4 sm:px-0">
       <div className="relative mx-auto flex max-w-[72rem] items-center justify-between gap-2 py-4 md:px-8">
-        <aside className="flex flex-grow basis-0">
-          <Link href="/">
-            <Image
-              src={theme === "dark" ? "/logo-dark.svg" : "/logo.svg"}
-              alt="Logo de Biru"
-              width={120}
-              height={60}
-            />
-          </Link>
-        </aside>
+        <div className="flex-grow basis-0">
+        <Link href="/">
+          <Image
+            src={theme === "dark" ? "/logo-dark.svg" : "/logo.svg"}
+            alt="Logo de Biru"
+            width={120}
+            height={60}
+          />
+        </Link>
+
+        </div>
         {size && size >= 590 && <Navigator />}
-        <aside className="flex flex-grow basis-0 justify-end gap-2">
+        <div className="flex flex-grow basis-0 justify-end gap-2">
           <HandlerTheme />
           {isMobile && (
             <Button
@@ -46,7 +47,7 @@ export const Header = () => {
               />
             </Button>
           )}
-        </aside>
+        </div>
       </div>
     </header>
   );
@@ -74,7 +75,7 @@ const Navigator = () => {
   return (
     <nav
       className={clsx(
-        "mx-auto flex w-fit items-center justify-center gap-6 rounded-full bg-primary/10 px-6 py-1 text-primary dark:bg-slate-950/60 dark:text-primary-light [&>a]:transition-all hover:[&>a]:scale-105",
+        "mx-auto relative flex w-fit items-center justify-center gap-6 rounded-full bg-primary/10 px-6 py-1 text-primary dark:bg-slate-950/60 dark:text-primary-light [&>a]:transition-all hover:[&>a]:scale-105",
         {
           " !gap-3 [&>a]:!text-xs": isMobile,
         },
@@ -82,15 +83,21 @@ const Navigator = () => {
     >
       {NAVIGATOR_LINKS.map(({ href, text }, i) => {
         return (
+          <div className="flex flex-col w-fit h-full relative items-center justify-center">
           <Link
             key={i}
             href={href}
             className={clsx("font-normal", {
               "font-semibold": pathname === href,
             })}
-          >
+            >
             {text}
           </Link>
+          {
+            pathname === href &&
+            <span className="w-3/6 bg-primary dark:bg-primary-light absolute -bottom-1 light h-[2px] rounded-full"></span>
+          }
+          </div>
         );
       })}
     </nav>

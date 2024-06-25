@@ -10,7 +10,7 @@ export const recoverRouter = createTRPCRouter({
   verifyEmail: publicProcedure
     .input(RecoverSchema)
     .mutation(({ ctx, input }) => {
-      return EmailServices.userComfirmCode(ctx.db, input.email);
+      return EmailServices.getConfirmCode(ctx.db, input.email);
     }),
   verifyCode: publicProcedure.input(CodeSchema).mutation(({ ctx, input }) => {
     return VerifyCode.findCode(ctx.db, input.code);

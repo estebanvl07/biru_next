@@ -1,7 +1,7 @@
 import type { Prisma, PrismaClient } from "@prisma/client";
 import { SystemCategories } from "~/lib/resource/system-catetories";
 import { Category } from "~/modules/Loaders/ski.components";
-import { CreateCategory } from "~/modules/category/schema";
+import { CreateCategory } from "~/modules/Category/schema";
 
 export function createCategory(
   db: PrismaClient,
@@ -68,7 +68,7 @@ export async function getCategoryById(
           category: true,
           entity: true,
           goal: true,
-          userAccount: true
+          userAccount: true,
         },
         orderBy: {
           createdAt: "desc",

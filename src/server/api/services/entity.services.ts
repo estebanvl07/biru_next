@@ -43,6 +43,10 @@ export async function getEntityById(
     where: { userId, id },
     include: {
       transactions: {
+        include: {
+          category: true,
+          entity: true
+        },
         orderBy: {
           date: "desc",
         },

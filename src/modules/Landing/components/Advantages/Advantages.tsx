@@ -14,37 +14,37 @@ const cards = [
     icon: "iconamoon:category",
     title: "Crea categorías",
     description:
-      "Mantén un orden de tus transacciones y crea categorías donde indicas en que gastas tu dinero",
+      "Separar gastos por categorías mejora la claridad financiera, permite controlar presupuestos y fomenta hábitos de ahorro efectivos.",
   },
   {
     id: 2,
     icon: "ph:wallet-bold",
     title: "Multiples cuentas",
     description:
-      "Lleva en orden no solo tus finanzas personales si no también tus negocios e inversiones",
+      "Tener varias cuentas para diferentes fines simplifica la gestión financiera, ayuda a cumplir metas específicas y minimiza confusiones contables.",
     color: "primary",
   },
   {
     id: 3,
-    icon: "iconamoon:category",
+    icon: "material-symbols:balance",
     title: "Balances",
     description:
-      "Lleva un balance de tus cuentas y mira las estadísticas de ingresos y egresos",
+      "Saber los balances de una cuenta es crucial para tomar decisiones financieras informadas, evitar sobregiros y planificar con precisión.",
   },
   {
     id: 4,
-    icon: "ph:wallet-bold",
-    title: "Multiples cuentas",
+    icon: "material-symbols:analytics-outline",
+    title: "Análisis",
     description:
-      "Lleva en orden no solo tus finanzas personales si no también tus negocios e inversiones",
+      "El análisis de gastos permite identificar patrones de consumo, ajustar presupuestos y optimizar la gestión financiera personal o empresarial.",
     color: "primary",
   },
   {
     id: 5,
-    icon: "iconamoon:category",
-    title: "Balances",
+    icon: "ph:users-bold",
+    title: "Entidades",
     description:
-      "Lleva un balance de tus cuentas y mira las estadísticas de ingresos y egresos",
+      "Crear entidades claras para registros financieros simplifica el seguimiento de transacciones y mejora la gestión contable.",
   },
 ];
 
@@ -95,7 +95,7 @@ export const Advantages = () => {
           }}
           modules={[Pagination]}
           slidesPerView={isMobile ? 1 : 3}
-          spaceBetween={isMobile ? 10 : 300}
+          spaceBetween={isMobile ? 10 : 30}
           className="mySwipper"
         >
           {cards.map((card) => {

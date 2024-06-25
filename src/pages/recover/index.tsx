@@ -7,11 +7,11 @@ import Link from "next/link";
 
 import ChangePasswordForm from "~/modules/Recover/ChangePasswordForm";
 import VerifyCode from "~/modules/Recover/VerifyCode";
-import { BasicLayout } from "~/modules/layouts";
+import { BasicLayout } from "~/modules/Layouts";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { useThemeContext } from "~/lib/context/themeContext";
+import { useThemeContext } from "~/lib/context/Theme.context";
 import { RecoverSchema } from "~/modules/Recover/schema";
 import { api } from "~/utils/api";
 
@@ -35,7 +35,7 @@ export const RecoverPage = () => {
   const onSubmit = (payload: RecoverSchema) => {
     VerifyMutation(payload, {
       onSuccess() {
-        setSteps(STEPS_RECOVER.CHANGE_PASSWORD);
+        setSteps(STEPS_RECOVER.VALIDATE_CODE);
       },
       onError(error) {
         console.log(error);

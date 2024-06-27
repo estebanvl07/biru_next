@@ -28,6 +28,7 @@ export const env = createEnv({
     FACEBOOK_CLIENT_SECRET: z.string(),
     NODEMAILER_KEY: z.string(),
     FRONTEND_URL: z.string().url(),
+    JWT_CHANGE_PASSWORD: z.string(),
   },
 
   /**
@@ -54,6 +55,7 @@ export const env = createEnv({
     FACEBOOK_CLIENT_SECRET: process.env.FACEBOOK_CLIENT_SECRET,
     NODEMAILER_KEY: process.env.NODEMAILER_KEY,
     FRONTEND_URL: process.env.FRONTEND_URL,
+    JWT_CHANGE_PASSWORD: process.env.JWT_CHANGE_PASSWORD,
   },
   /**
    * Run `build` or `dev` with `SKIP_ENV_VALIDATION` to skip env validation. This is especially

@@ -3,6 +3,7 @@ import { z } from "zod";
 export const messages = {
   required: "Campo Requerido",
   email: "Correo inválido",
+  length: (length: number) => `Debe tener ${length} caracteres`,
   min: {
     string: (min: number) => `Mínimo de ${min} caracteres`,
     number: (min: number) => `Mínimo de ${min}`,

@@ -3,21 +3,21 @@ import React from "react";
 import { BasicLayout } from "~/modules/Layouts";
 import { LoginForm } from "~/modules/Login";
 import { SignInOptions } from "~/modules/components";
-import { useThemeContext } from "~/lib/context/Theme.context";
 import withAuthRedirect from "~/lib/helpers/withAuthRedirect";
 
-const LoginPage = () => {
-  const { theme } = useThemeContext();
+export async function getStaticProps() {
+  return {
+    props: {},
+  };
+}
 
+const LoginPage = () => {
   return (
     <BasicLayout
       title="Iniciar sesión"
       description="Inicia sesión en Biru para acceder a tu cuenta."
     >
       <div className="my-auto flex h-full w-full flex-row justify-center px-4 py-6">
-        {theme === "dark" && (
-          <span className="absolute top-0 h-screen w-full bg-[url(/point.svg)] bg-repeat"></span>
-        )}
         <section className="relative flex h-full w-full max-w-[25rem] flex-grow flex-col items-center justify-center gap-2">
           <h1 className="text-pretty text-2xl font-bold tracking-tight text-primary dark:text-indigo-300">
             ¡Bienvenido de vuelta!

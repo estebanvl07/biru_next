@@ -26,6 +26,7 @@ export const BasicLayout: FC<LayoutProps> = ({
           aria-hidden="true"
           aria-label="header-light-shadow"
         />
+        <div className="absolute top-0 -z-0 hidden h-screen w-full bg-[url(/point.svg)] bg-repeat dark:block" />
         <Header />
         {children}
       </main>

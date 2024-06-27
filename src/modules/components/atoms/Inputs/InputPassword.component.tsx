@@ -1,5 +1,6 @@
-import { type FC, useState, forwardRef } from "react";
-import { Input, InputProps } from "@nextui-org/react";
+/* eslint-disable react/display-name */
+import { useState, forwardRef } from "react";
+import { Input, type InputProps } from "@nextui-org/react";
 import { Icon } from "@iconify/react/dist/iconify.js";
 
 type InputPasswordProps = Omit<InputProps, "type" | "startContent">;

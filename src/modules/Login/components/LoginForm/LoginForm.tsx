@@ -30,7 +30,8 @@ export const LoginForm = () => {
         redirect: false,
       });
       if (!response?.ok) {
-        throw new Error(response?.error as string);
+        const errorMessage = response?.error ?? "Intente mas tarde.";
+        throw new Error(errorMessage);
       }
       await router.replace("/account");
     } catch (error) {

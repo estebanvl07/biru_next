@@ -1,4 +1,3 @@
-import { useState } from "react";
 import Link from "next/link";
 import { SignInOptions } from "~/modules/components";
 import {
@@ -8,12 +7,16 @@ import {
 } from "~/modules/Register/components";
 import { BasicLayout } from "~/modules/Layouts";
 import withAuthRedirect from "~/lib/helpers/withAuthRedirect";
-import { useThemeContext } from "~/lib/context/Theme.context";
 import { api } from "~/utils/api";
 import { toast } from "sonner";
 
+export async function getStaticProps() {
+  return {
+    props: {},
+  };
+}
+
 const Register = () => {
-  const { theme } = useThemeContext();
   const { mutateAsync: registerUser, isSuccess } =
     api.users.register.useMutation({
       onError: (error) => {
@@ -36,9 +39,6 @@ const Register = () => {
         <SuccessfullyCreated />
       ) : (
         <div className="my-auto flex h-full w-full justify-center px-4 py-6">
-          {theme === "dark" && (
-            <span className="absolute top-0 h-screen w-full bg-[url(/point.svg)] bg-repeat"></span>
-          )}
           <section className="relative flex h-full w-full max-w-[25rem] flex-col items-center justify-center gap-2">
             <h1 className="mb-1 text-pretty text-center text-2xl font-bold tracking-tight  text-primary dark:text-indigo-300">
               ¡Crear nueva cuenta!
@@ -60,7 +60,7 @@ const Register = () => {
           </section>
         </div>
       )}
-      <li
+      {/* <li
         aria-live="polite"
         aria-atomic="true"
         role="status"
@@ -109,7 +109,7 @@ const Register = () => {
             El correo ya esta en uso
           </div>
         </div>
-      </li>
+      </li> */}
     </BasicLayout>
   );
 };

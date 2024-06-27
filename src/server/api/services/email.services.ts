@@ -1,8 +1,11 @@
 import type { PrismaClient, User } from "@prisma/client";
 import { mailer } from "~/utils/mailer";
 import { generateRandomString } from "~/utils/crypto";
-import { TRPCError } from "@trpc/server";
 import type { PrismaTransaction } from "~/server/db";
+import {
+  VerificationCodeType,
+  createVerificationCode,
+} from "./verificationCode.services";
 
 export async function sendConfirmationEmail(
   db: PrismaClient | PrismaTransaction,
@@ -22,6 +25,14 @@ export async function sendConfirmationEmail(
     },
   });
 
+  await createVerificationCode(
+    db,
+    user.id,
+    VerificationCodeType.Activation,
+    token,
+    expireAt,
+  );
+
   mailer.userConfirmationEmail({
     name,
     to: user.email,
@@ -29,31 +40,27 @@ export async function sendConfirmationEmail(
   });
 }
 
-export async function userConfirmCode(db: PrismaClient, email: string) {
-  const [user] = await db.user.findMany({ where: { email } });
-
-  if (!user) {
-    throw new TRPCError({
-      code: "NOT_FOUND",
-      message: "El usuario no ha sido encontrado",
-    });
-  }
-
-  const code = generateRandomString(6);
+export async function recoverUserEmail(
+  db: PrismaClient | PrismaTransaction,
+  user: User,
+) {
+  const code = generateRandomString(4).toUpperCase(); // TODO: numbers only
+  const name = user.name ?? "Usuario";
+  // TODO: use dayjs or date-fns
   const expireAt = new Date(new Date().getTime() + 24 * 60 * 60 * 1000);
 
-  await db.userVerificationCode.create({
-    data: {
-      type: 1,
-      token: code,
-      expireAt,
-      userId: user.id,
-    },
-  });
-
-  mailer.recover({
+  await createVerificationCode(
+    db,
+    user.id,
+    VerificationCodeType.Recovery,
     code,
-    name: user.name ?? "Invitado",
+    expireAt,
+  );
+
+  // TODO: send the link the recovery page
+  mailer.recoverUser({
+    name,
     to: user.email,
+    code,
   });
 }

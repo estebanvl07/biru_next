@@ -2,6 +2,12 @@ import Head from "next/head";
 import withAuthRedirect from "~/lib/helpers/withAuthRedirect";
 import { Landing } from "~/modules/Landing";
 
+export async function getStaticProps() {
+  return {
+    props: {},
+  };
+}
+
 const Home = () => {
   return (
     <>

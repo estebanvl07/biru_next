@@ -13,3 +13,7 @@ export function generateRandomString(length: number) {
 
   return alphanumericString;
 }
+
+export function generateRandomNumberLength(length: number) {
+  return Math.floor(Math.random() * 10 ** length);
+}

@@ -37,7 +37,7 @@ const ActivationCTA: FC<ActivationResultProps> = ({ status }) => {
 export const ActivationResult: FC<ActivationResultProps> = ({ status }) => {
   return (
     <BasicLayout>
-      <div className="flex flex-col items-center justify-center px-6">
+      <div className="z-10 flex flex-col items-center justify-center px-6">
         <ActivationIcon status={status} />
         <ActivationMessage status={status} />
         <ActivationCTA status={status} />

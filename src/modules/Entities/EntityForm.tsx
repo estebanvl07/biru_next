@@ -108,9 +108,9 @@ const EntityForm = ({ hasEdit, entityDefault }: EntityFormProps) => {
   useEffect(() => {
     if (entityDefault) {
       setValue("type", Number(entityDefault.type) as any);
-      setValue("description", entityDefault.description || undefined);
+      setValue("description", entityDefault.description ?? undefined);
       setValue("name", entityDefault.name);
-      setValue("reference", entityDefault.reference || undefined);
+      setValue("reference", entityDefault.reference ?? undefined);
     }
   }, []);
 

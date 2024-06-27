@@ -4,7 +4,7 @@ import nodemailer, { type Transport } from "nodemailer";
 import BrevoTransport from "nodemailer-brevo-transport";
 import { env } from "~/env";
 
-const fromNoreply = "Biru <noreply@biru.com>";
+const FROM_NO_REPLAY = "Biru <noreply@biru.com>";
 
 const getBrevoTransport = (): Transport<string> =>
   new BrevoTransport({ apiKey: env.NODEMAILER_KEY }) as never;
@@ -28,25 +28,26 @@ export const mailer = {
     name: string;
   }) {
     const link = `${env.FRONTEND_URL}/activation/${token}`;
-    const signupOptions = {
-      from: fromNoreply,
+    const signUpOptions = {
+      from: FROM_NO_REPLAY,
       to,
       subject: "Bienvenido a Biru",
       html: SignInTemplate({ name, link }),
     };
 
-    return transporter.sendMail(signupOptions, handleMailerError);
+    return transporter.sendMail(signUpOptions, handleMailerError);
   },
-  recover({ to, name, code }: { to: string; name: string; code: string }) {
-    const configMailer = {
-      from: fromNoreply,
+  recoverUser({ to, name, code }: { to: string; name: string; code: string }) {
+    // TODO: const link = `${env.FRONTEND_URL}/recover/${code}`;
+    const recoverOptions = {
+      from: FROM_NO_REPLAY,
       to,
-      subject: "Recuperación de contraseña",
+      subject: "Recuperación de usuario Biru",
       html: RecoveryEmail({
         name,
         code,
       }),
     };
-    return transporter.sendMail(configMailer, handleMailerError);
+    return transporter.sendMail(recoverOptions, handleMailerError);
   },
 };

@@ -9,24 +9,24 @@ import {
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import clsx from "clsx";
-import { RegisterFormProps } from "./RegisterForm.types";
+import type { RegisterFormProps } from "./RegisterForm.types";
 
-export const RegisterForm = ({
-  onSubmit: onSubmitProps,
-}: RegisterFormProps) => {
+export const RegisterForm = ({ onSubmit }: RegisterFormProps) => {
   const {
     handleSubmit,
     register,
     formState: { errors, isSubmitting },
-    watch,
   } = useForm<RegisterUserInputType>({
     resolver: zodResolver(registerUserInput),
   });
 
   return (
     <form
-      className="mt-4 flex w-full flex-col gap-2"
-      onSubmit={handleSubmit(onSubmitProps)}
+      className={clsx(
+        "flex w-full flex-col items-center justify-center gap-2",
+        { "pointer-events-none animate-pulse": isSubmitting },
+      )}
+      onSubmit={handleSubmit(onSubmit)}
     >
       <Input
         required

@@ -6,7 +6,7 @@ import { createServerSideCaller } from "~/utils/serverSideCaller/serverSideCalle
 import { GoalsIncludes } from "~/types/goal/goal.types";
 import GoalForm from "~/modules/Goals/GoalForm";
 
-const UpdateEntityPage = ({ goal }: { goal: GoalsIncludes }) => {
+export default function UpdateEntityPage ({ goal }: { goal: GoalsIncludes }) {
   return (
     <DashboardLayout title="Editar Meta" headDescription="Edición de meta">
       <GoalForm hasEdit goalDefault={goal} />
@@ -36,5 +36,3 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     },
   };
 };
-
-export default UpdateEntityPage;

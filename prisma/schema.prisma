@@ -35,6 +35,7 @@ model Goals {
   icon         String?
   goal         Int
   saved        Int
+  type         Int          @default(1) // 1:Ingreso, 2:Egreso
   state        Int           @default(1) // 1:En curso, 2: Terminado, 3: Cancelado 
   userId       String
   goalDate     DateTime?

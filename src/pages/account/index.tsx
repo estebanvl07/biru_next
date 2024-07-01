@@ -104,7 +104,7 @@ const AccountPage = () => {
         </aside>
         <section className="col-span-6 flex flex-col justify-start px-4 py-4 md:px-12 lg:col-span-4">
           {isDesktop ? (
-            <HeaderApp title="Cuentas" />
+            <HeaderApp title="Cuentas" hasFilter={false} />
           ) : (
             <HeaderMobile title="Cuentas" />
           )}

@@ -2,7 +2,12 @@ import Link from "next/link";
 import { useParams } from "next/navigation";
 import type { GetServerSideProps } from "next";
 
-import { BalanceAccount, LastTransactions, BalanceIncome, BalanceEgress } from "~/modules/Common";
+import {
+  BalanceAccount,
+  LastTransactions,
+  BalanceIncome,
+  BalanceEgress,
+} from "~/modules/Common";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import DashboardLayout from "~/modules/Layouts/Dashboard";
 import { Button } from "@nextui-org/react";
@@ -59,9 +64,9 @@ const HomePage = () => {
 
             <aside className="items-center md:flex">
               <EntitiesGroup />
-              {isDesktop && (
-                <hr className="mx-6 h-12 w-[1px] border-l dark:border-white/10" />
-              )}
+
+              <hr className="mx-6 h-12 w-[1px] border-l dark:border-white/10 hiddem md:block" />
+
               {isDesktop && (
                 <div className="flex gap-2">
                   <Button

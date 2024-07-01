@@ -9,8 +9,12 @@ export async function createGoal(
   db: PrismaClient,
   data: Prisma.GoalsUncheckedCreateInput,
 ) {
-  const result = await db.goals.create({ data });
+  const result = await db.goals.create({ data: { ...data, saved: 0 } });
   return result;
+}
+
+export async function goalsUpdateType(db: PrismaClient) {
+  return await db.goals.updateMany({ data: { type: 1 } });
 }
 
 export async function updateGoal(

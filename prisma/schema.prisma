@@ -23,6 +23,7 @@ model UserAccount {
   state        Int?          @default(1) // 1: activo, 0: inactivo
   createdAt    DateTime      @default(now())
   updatedAt    DateTime      @updatedAt
+  lastAccess   DateTime
   userId       String
   user         User          @relation(fields: [userId], references: [id], onDelete: Cascade)
   transactions Transaction[]
@@ -34,8 +35,8 @@ model Goals {
   description  String?
   icon         String?
   goal         Int
-  saved        Int
-  type         Int          @default(1) // 1:Ingreso, 2:Egreso
+  saved        Int           @default(0)
+  type         Int           @default(1) // 1:Ingreso, 2:Egreso
   state        Int           @default(1) // 1:En curso, 2: Terminado, 3: Cancelado 
   userId       String
   goalDate     DateTime?
@@ -112,15 +113,15 @@ model UserPassword {
 }
 
 model UserVerificationCode {
-  id        Int       @id @default(autoincrement())
-  token     String
-  type      Int // 1: activation, 2: recovery
-  userId    String
-  usedAt    DateTime?
-  expireAt  DateTime
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
-  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id            Int       @id @default(autoincrement())
+  token         String
+  type          Int // 1: activation, 2: recovery
+  userId        String
+  usedAt        DateTime?
+  expireAt      DateTime
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  user          User      @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 // Necessary for Next auth

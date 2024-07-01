@@ -35,7 +35,7 @@ const LastTransactions: FC<LastTransactionsProps> = ({
 
 
   return (
-    <Card className={clsx("flex !h-fit flex-col !px-0 py-4", cardClassName)}>
+    <Card className={clsx("flex flex-col !px-0 py-4", cardClassName)}>
       {showHeader && (
         <div className="mb-4 flex items-center justify-between px-content md:px-6">
           <h3>Últimas Transacciones</h3>

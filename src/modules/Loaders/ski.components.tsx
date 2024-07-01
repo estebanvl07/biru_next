@@ -48,7 +48,7 @@ export const SavingCardLoader = () => {
 
 export const TransactionItemLoader = () => {
   return (
-    <div className="flex flex-col gap-2">
+    <div className="flex flex-col gap-2 px-2">
       {[1, 2, 3].map((i) => (
         <div key={i} className="flex items-center justify-between p-2">
           <aside className="flex items-center gap-2">

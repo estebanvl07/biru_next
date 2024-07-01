@@ -96,21 +96,22 @@ const BalanceAccount = ({
         </header>
       )}
       <section className="block h-full w-full">
-        <LineChart
-          keys={months}
-          series={series}
-          heightChart="100%"
-          showXAxis={!isMobile}
-          showYAxis={!isMobile}
-          {...chartOptions}
-        />
-        {/* {series && series[0]!?.data.length > 0 ? (
+        {series && series[0]!?.data.length > 0 ? (
+          <LineChart
+            keys={months}
+            series={series}
+            heightChart="100%"
+            showXAxis={!isMobile}
+            showYAxis={!isMobile}
+            {...chartOptions}
+          />
         ) : (
           <Empty
+            className="py-6"
             href={`/account/${params?.acc}/transactions/new`}
             buttonText="Crear Transacción"
           />
-        )} */}
+        )}
       </section>
     </Card>
   );

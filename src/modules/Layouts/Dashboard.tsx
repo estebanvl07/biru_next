@@ -59,7 +59,7 @@ const DashboardLayout = ({
           )}
           <AnimatePresence>
             <motion.main
-              className={clsx("z-0 px-content", {
+              className={clsx("z-0 px-content md:px-0", {
                 "pb-16": isMobile,
               })}
               key={router.route}

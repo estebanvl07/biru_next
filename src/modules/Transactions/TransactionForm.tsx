@@ -38,6 +38,7 @@ import { es } from "date-fns/locale";
 
 import type { Goals } from "@prisma/client";
 import type { TransactionIncludes } from "~/types/transactions";
+import { toast } from "sonner";
 
 interface TransactionFormProps {
   type: "goal" | "transfer";
@@ -64,10 +65,10 @@ const TransactionForm = ({
 
   const query = router.query;
 
-  const { mutate: createTransactionMutation } =
+  const { mutateAsync: createTransactionMutation } =
     api.transaction.create.useMutation();
 
-  const { mutate: updateTransactionMutation } =
+  const { mutateAsync: updateTransactionMutation } =
     api.transaction.update.useMutation();
 
   const defaultCategory =
@@ -89,6 +90,20 @@ const TransactionForm = ({
 
   const defaultType = transactionDefault ? transactionDefault.type : undefined;
 
+  const defaultGoalKey = transactionDefault?.goalId
+    ? [`${transactionDefault.goalId}`]
+    : undefined || query?.goal
+      ? [`${query.goal}`]
+      : undefined;
+
+  const defaultAccountKey = transactionDefault?.accountId
+    ? [`${transactionDefault.accountId}`]
+    : undefined || account
+      ? [`${account.id}`]
+      : undefined;
+
+  console.log(defaultAccountKey);
+
   const {
     register,
     formState: { errors },
@@ -104,6 +119,7 @@ const TransactionForm = ({
     cancel: true,
     confirmProps: {
       onClick: () => {
+        onClose();
         onSubmit();
       },
     },
@@ -115,65 +131,37 @@ const TransactionForm = ({
   const onSubmit = () => {
     const payload = getValues();
     if (mode === "create") {
-      createTransactionMutation(payload, {
-        onSuccess() {
-          setProps({
-            ...props,
-            type: "success",
-            cancel: true,
-            confirmProps: {
-              text: "Ver tabla",
-              onClick: () => {
-                router.push(`/account/${params?.acc}/transactions`);
-              },
+      toast.promise(
+        createTransactionMutation(
+          { ...payload, date: new Date() },
+          {
+            onSuccess() {
+              reset();
             },
-            cancelProps: {
-              text: "Volver",
-              onClick: () => {
-                router.back();
-              },
-            },
-          });
-          reset();
-          onOpen();
+          },
+        ),
+        {
+          loading: "Creando Transacción...",
+          success: "La transacción se ha creado con éxito.",
+          error: "Hubo un error, intente de nuevo",
         },
-        onError() {
-          setProps({
-            ...props,
-            type: "error",
-          });
-          onOpen();
-        },
-      });
+      );
       return;
     }
     if (transactionDefault) {
-      console.log(transactionDefault);
-      console.log({ id: String(transactionDefault.id), ...payload });
-      updateTransactionMutation(
-        { id: String(transactionDefault.id), ...payload },
+      toast.promise(
+        updateTransactionMutation(
+          { id: String(transactionDefault.id), ...payload },
+          {
+            onSuccess() {
+              reset();
+            },
+          },
+        ),
         {
-          onSuccess() {
-            setProps({
-              ...props,
-              type: "success",
-              cancel: false,
-              confirmProps: {
-                onClick: () => {
-                  router.push(`/account/${params?.acc}/transactions`);
-                },
-              },
-            });
-            reset();
-            onOpen();
-          },
-          onError(error, variables, context) {
-            setProps({
-              ...props,
-              type: "error",
-            });
-            onOpen();
-          },
+          loading: "Actualizando Transacción...",
+          success: "La transacción se ha actualizado con éxito.",
+          error: "Hubo un error, intente de nuevo",
         },
       );
     }
@@ -184,7 +172,6 @@ const TransactionForm = ({
     if (!account && transactionDefault) return;
     setValue("accountId", account?.id);
     query?.category && setValue("categoryId", Number(query.category));
-    setValue("type", Number(query.type) as any);
     setValue("transferType", type === "goal" ? 2 : 1);
     if (type === "goal") {
       setValue(
@@ -193,7 +180,7 @@ const TransactionForm = ({
       );
     }
 
-    if (query?.type) {
+    if (query?.type && type === "transfer") {
       setValue("type", Number(query.type) as any);
     } else {
       setValue("type", 1);
@@ -278,43 +265,45 @@ const TransactionForm = ({
               </div>
             }
             endContent={
-              <div>
-                <ButtonGroup
-                  containerClassName="w-fit"
-                  buttonClass="text-xs !py-1"
-                  defaultSelected={
-                    defaultType
-                      ? defaultType
-                      : query?.type
-                        ? Number(query?.type)
-                        : 1
-                  }
-                  options={[
-                    {
-                      id: 1,
-                      label: "Ing",
-                      title: "Ingreso",
-                      icon: "ph:trend-up",
-                      onClick: () => {
-                        setValue("type", 1);
+              type === "transfer" ? (
+                <div>
+                  <ButtonGroup
+                    containerClassName="w-fit"
+                    buttonClass="text-xs !py-1"
+                    defaultSelected={
+                      defaultType
+                        ? defaultType
+                        : query?.type
+                          ? Number(query?.type)
+                          : 1
+                    }
+                    options={[
+                      {
+                        id: 1,
+                        label: "Ing",
+                        title: "Ingreso",
+                        icon: "ph:trend-up",
+                        onClick: () => {
+                          setValue("type", 1);
+                        },
+                        colorSelected:
+                          "!bg-green-500 border border-green-500 text-white",
                       },
-                      colorSelected:
-                        "!bg-green-500 border border-green-500 text-white",
-                    },
-                    {
-                      id: 2,
-                      icon: "ph:trend-down",
-                      label: "Egr",
-                      title: "Egreso",
-                      onClick: () => {
-                        setValue("type", 2);
+                      {
+                        id: 2,
+                        icon: "ph:trend-down",
+                        label: "Egr",
+                        title: "Egreso",
+                        onClick: () => {
+                          setValue("type", 2);
+                        },
+                        colorSelected:
+                          "!bg-red-500 border border-red-500 text-white",
                       },
-                      colorSelected:
-                        "!bg-red-500 border border-red-500 text-white",
-                    },
-                  ]}
-                />
-              </div>
+                    ]}
+                  />
+                </div>
+              ) : null
             }
             isInvalid={Boolean(errors?.amount)}
             errorMessage={errors?.amount?.message}
@@ -350,16 +339,14 @@ const TransactionForm = ({
                     </div>
                   ));
                 }}
-                defaultSelectedKeys={
-                  query?.goal ? [`${query.goal}`] : undefined
-                }
+                defaultSelectedKeys={defaultGoalKey}
                 isInvalid={Boolean(errors?.categoryId)}
                 errorMessage={errors?.categoryId?.message ?? ""}
               >
                 {(goal) => (
                   <SelectItem
                     color="primary"
-                    variant="flat"
+                    variant="solid"
                     onClick={(e) => {
                       setGoalSelected((prev) =>
                         prev?.id === goal.id ? undefined : goal,
@@ -389,7 +376,7 @@ const TransactionForm = ({
               </Select>
               <Select
                 items={accounts ?? []}
-                placeholder="¿De que cuenta saldrá el dinero?"
+                placeholder="Seleccione una cuenta"
                 label="Cuenta"
                 classNames={{
                   label: "group-data-[filled=true]:-translate-y-7",
@@ -411,7 +398,7 @@ const TransactionForm = ({
                 }}
                 required
                 isRequired
-                defaultSelectedKeys={account ? [`${account.id}`] : undefined}
+                defaultSelectedKeys={defaultAccountKey}
                 isInvalid={Boolean(errors?.categoryId)}
                 errorMessage={errors?.categoryId?.message ?? ""}
               >
@@ -584,9 +571,13 @@ const TransactionForm = ({
                             color="primary"
                             variant="solid"
                             onClick={() => {
-                              setValue("entityId", entity.id);
-                              setValue("reference", String(entity.reference));
-                              setValue("recipient", String(entity.name));
+                              entity.id && setValue("entityId", entity.id);
+                              entity.reference &&
+                                setValue("reference", String(entity.reference));
+                              entity.name &&
+                                setValue("recipient", String(entity.name));
+                              entity.description &&
+                                setValue("description", entity.description);
                             }}
                             key={entity.id}
                             className="py-1 font-montserrat dark:text-white"
@@ -726,7 +717,7 @@ const TransactionForm = ({
               {mode === "edit" ? "Actualizar Transacción" : "Crear Transacción"}
             </Button>
             <Button
-              className="border-1 py-1 text-sm sm:w-fit"
+              className="py-1 text-sm sm:w-fit"
               onClick={() => router.back()}
             >
               Cancelar

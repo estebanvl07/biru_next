@@ -29,7 +29,7 @@ const BalanceIncome = ({ className }: { className?: string }) => {
       {
         color: "#22c55e",
         name: "Ingresos",
-        data: [...amounts],
+        data: amounts.length === 0 ? [0,0] : amounts.length ? [0, ...amounts] : [...amounts],
       },
     ]);
   }, [amounts]);
@@ -38,7 +38,7 @@ const BalanceIncome = ({ className }: { className?: string }) => {
     <CardDetailAmount
       title="Ingreso"
       amount={totalAmounts?.income ?? 0}
-      color="text-green-500"
+      color="text-green-500 bg-green-500/20"
       icon="iconamoon:arrow-bottom-left-1"
       series={series ?? []}
       percent={percents?.income ?? "0%"}

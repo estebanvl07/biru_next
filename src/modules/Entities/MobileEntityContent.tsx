@@ -30,7 +30,6 @@ const MobileEntityPage = ({ entities }: { entities: Entities[] }) => {
           color="primary"
           as={Link}
           href={`/account/${params?.acc}/entities/new`}
-          className="border-1"
           isIconOnly
         >
           <Icon

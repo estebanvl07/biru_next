@@ -21,10 +21,7 @@ const EntityItem: FC<EntityItemProps> = ({ entity, index }) => {
   return (
     <li
       className={clsx(
-        "flex flex-col border-gray-100 px-1 hover:bg-slate-100 dark:border-white/10 dark:hover:bg-slate-800/40",
-        {
-          "border-b ": index !== length - 1,
-        },
+        "flex flex-col px-1 hover:bg-slate-100 dark:hover:bg-slate-800/40"
       )}
     >
       <Link

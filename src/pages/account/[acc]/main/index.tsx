@@ -26,6 +26,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
 
   const helpers = await createServerSideCaller(ctx);
   await helpers.userAccount.getOne.prefetch({ id: accountId });
+  await helpers.userAccount.setLastAccess.prefetch({ id: Number(accountId) });
 
   const trpcState = helpers.dehydrate();
 
@@ -65,7 +66,7 @@ const HomePage = () => {
             <aside className="items-center md:flex">
               <EntitiesGroup />
 
-              <hr className="mx-6 h-12 w-[1px] border-l dark:border-white/10 hiddem md:block" />
+              <hr className="hiddem mx-6 h-12 w-[1px] border-l md:block dark:border-white/10" />
 
               {isDesktop && (
                 <div className="flex gap-2">

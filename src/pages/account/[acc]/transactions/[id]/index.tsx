@@ -52,7 +52,7 @@ const DetailTransactionPage = ({
       title="Detalle de transacción"
       headDescription="detalle de transacción"
     >
-      <div className="flex max-w-[40rem] flex-col gap-2 py-8">
+      <div className="flex max-w-[40rem] flex-col gap-2">
         <Card className="mx-2 flex items-center justify-between rounded-xl border px-6 py-4">
           <aside className="flex items-center">
             {transferType === 2 ? (
@@ -158,6 +158,22 @@ const DetailTransactionPage = ({
               <li>
                 <span>Monto:</span>
                 <p>$ {amount.toLocaleString()}</p>
+              </li>
+
+              <li>
+                <span>Categoría:</span>
+                <p>
+                  {category?.name ? (
+                    <Chip variant="flat" color="default" size="sm">
+                      <span className="flex flex-row items-center gap-2 font-semibold">
+                        <Icon icon={category.icon ?? ""} width={16} />{" "}
+                        {category.name}
+                      </span>
+                    </Chip>
+                  ) : (
+                    "Ninguna"
+                  )}
+                </p>
               </li>
 
               <li>

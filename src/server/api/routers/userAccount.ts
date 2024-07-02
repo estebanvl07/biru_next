@@ -27,4 +27,10 @@ export const userAccountRouter = createTRPCRouter({
       const userId = ctx.session.user.id;
       return userAccount.getAccountById(ctx.db, { ...input, userId });
     }),
+  setLastAccess: protectedProcedure
+    .input(z.object({ id: z.number() }))
+    .query(async ({ ctx, input }) => {
+      const { id } = input;
+      return userAccount.setLastAccess(ctx.db, id);
+    }),
 });

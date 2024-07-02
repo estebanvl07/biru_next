@@ -99,8 +99,6 @@ const DetailEntityPage = ({ entity }: { entity: EntityIncludes }) => {
     [],
   );
 
-  console.log(entity)
-
   return (
     <div>
       <DashboardLayout title="Detalle de Entidad">
@@ -142,9 +140,7 @@ const DetailEntityPage = ({ entity }: { entity: EntityIncludes }) => {
           <div className="w-full md:min-w-[32rem]">
               {
                 isMobile ?
-                  <Card className="!px-2">
                     <ListTransactions data={entity.transactions as any} />
-                  </Card>
                 :
               <Table
                 headerConfig={{

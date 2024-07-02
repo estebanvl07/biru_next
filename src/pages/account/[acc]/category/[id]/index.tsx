@@ -21,7 +21,7 @@ import { basicColumns } from "~/modules/Transactions/table";
 
 import { GetServerSideProps } from "next";
 import { useResize } from "~/lib/hooks/useResize";
-import { LastTransactions } from "~/modules/Common";
+import { ListTransactions } from "~/modules/Common";
 
 const DetailCategory = ({ category }: { category: CategoryIncludes }) => {
   const { name, description, type, icon, transactions } = category;
@@ -101,7 +101,7 @@ const DetailCategory = ({ category }: { category: CategoryIncludes }) => {
   );
 
   return (
-    <DashboardLayout>
+    <DashboardLayout title="Detalle de categoría" headDescription="Detalle de la categoria y las transacciones asociadas">
       <Card className="mb-4 flex flex-col">
         <header className="mb-4 flex flex-row items-center justify-between">
           <h3>Información de categoría</h3>
@@ -167,9 +167,8 @@ const DetailCategory = ({ category }: { category: CategoryIncludes }) => {
           data={transactions}
         />
       ) : (
-        <LastTransactions
-          transactions={transactions as any}
-          showHeader={false}
+        <ListTransactions
+          data={transactions as any}
         />
       )}
     </DashboardLayout>

@@ -144,17 +144,17 @@ const CreateCategoryForm = ({
     <>
       <Alert isOpen={isOpen} onClose={onClose} {...props} />
       <form
-        className="flex w-full flex-col gap-2 pt-6 sm:max-w-[32rem] md:pt-0"
+        className="flex w-full flex-col gap-2 sm:max-w-[32rem]"
         onSubmit={(e) => {
           e.preventDefault();
           setProps(alertConfig);
           onOpen();
         }}
       >
-        <label>
+        <label className="text-xs">
           Tipo <span className="text-danger">*</span>
           <ButtonGroup
-            containerClassName="w-fit"
+            containerClassName="w-fit mt-1"
             buttonClass="text-xs !py-1.5"
             defaultSelected={categoryDefault?.type || 1}
             options={[

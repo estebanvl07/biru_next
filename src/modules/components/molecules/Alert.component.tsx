@@ -115,13 +115,9 @@ export const Alert = ({
                 onClose();
                 cancelProps?.onClick && cancelProps?.onClick(e);
               }}
-              variant={cancelProps?.variant ?? "bordered"}
-              className={clsx(cancelProps?.className, {
-                "!border-1":
-                  cancelProps?.variant === "bordered" ||
-                  !Boolean(cancelProps?.variant),
-              })}
-              color={cancelProps?.color ?? "primary"}
+              variant={cancelProps?.variant}
+              className={clsx(cancelProps?.className)}
+              color={cancelProps?.color}
               {...cancelProps}
             >
               {cancelProps?.text ?? "Cancelar"}

@@ -82,16 +82,20 @@ export const useFilterByType = ({ type, options }: FilterByTypeProps) => {
 
   useMemo(() => {
     if (!transactions) return;
-    const icomesFilterd = transactions.filter(({ type, transferType }) => {
-      if (transferType === 1 && type === 1) return true;
-      if (transferType === 2 && type === 2) return true;
-      return false;
-    });
-    const egressFiltered = transactions.filter(({ type, transferType }) => {
-      if (transferType === 1 && type === 2) return true;
-      if (transferType === 2 && type === 1) return true;
-      return false;
-    });
+    const icomesFilterd = transactions.filter(
+      ({ type, transferType, ...tran }) => {
+        if (transferType === 1 && type === 1) return true;
+        if (tran.goal?.type === 1) return true;
+        return false;
+      },
+    );
+    const egressFiltered = transactions.filter(
+      ({ type, transferType, ...tran }) => {
+        if (transferType === 1 && type === 2) return true;
+        if (tran.goal?.type === 2) return true;
+        return false;
+      },
+    );
 
     if (type === 1) {
       setAmount(icomesFilterd.map(({ amount }) => amount));

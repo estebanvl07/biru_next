@@ -12,6 +12,9 @@ import { useAlert } from "~/lib/hooks/useAlert";
 import { ButtonGroup } from "~/modules/components";
 import { EntityIncludes } from "~/types/entities/entity.types";
 import { useEffect } from "react";
+import { error } from "console";
+import { messages } from "./../../lib/resolver/zod";
+import { toast } from "sonner";
 
 interface EntityFormProps {
   hasEdit?: boolean;
@@ -30,8 +33,8 @@ const EntityForm = ({ hasEdit, entityDefault }: EntityFormProps) => {
   } = useForm<createEntity>({
     resolver: zodResolver(createEntity),
   });
-  const entityService = api.entity.create.useMutation();
-  const { mutate: EntityUpdateMutation } = api.entity.update.useMutation();
+  const { mutateAsync: EntityCreateMutation } = api.entity.create.useMutation();
+  const { mutateAsync: EntityUpdateMutation } = api.entity.update.useMutation();
 
   const alertConfig: any = {
     type: "quest",
@@ -51,58 +54,36 @@ const EntityForm = ({ hasEdit, entityDefault }: EntityFormProps) => {
       reference: getValues("reference") || undefined,
     };
     if (hasEdit) {
-      EntityUpdateMutation(
-        { ...payload, id: String(entityDefault?.id) },
+      toast.promise(
+        EntityUpdateMutation(
+          { ...payload, id: String(entityDefault?.id) },
+          {
+            onSuccess() {
+              reset();
+            },
+           
+          },
+        ),
         {
-          onSuccess() {
-            setProps({
-              ...props,
-              type: "success",
-              cancel: false,
-              confirmProps: {
-                onClick: () => {
-                  router.push(`/account/${params?.acc}/entities`);
-                },
-              },
-            });
-            reset();
-            onOpen();
-          },
-          onError() {
-            setProps({
-              ...props,
-              type: "error",
-              cancel: false,
-            });
-          },
+          loading: "Actualizando Entidad...",
+          success: "La entidad se ha actualizado con éxito",
+          error: "Hubo un error, intente de nuevo",
         },
       );
       return;
     }
-
-    entityService.mutate(payload, {
-      onSuccess() {
-        setProps({
-          ...props,
-          type: "success",
-          cancel: false,
-          confirmProps: {
-            onClick: () => {
-              router.push(`/account/${params?.acc}/entities`);
-            },
-          },
-        });
-        reset();
-        onOpen();
+    toast.promise(
+      EntityCreateMutation(payload, {
+        onSuccess() {
+          reset();
+        },
+      }),
+      {
+        loading: "Creando Entidad...",
+        success: "La entidad se ha creado con éxito",
+        error: "Hubo un error, intente de nuevo",
       },
-      onError() {
-        setProps({
-          ...props,
-          type: "error",
-          cancel: false,
-        });
-      },
-    });
+    );
   };
 
   useEffect(() => {
@@ -157,6 +138,9 @@ const EntityForm = ({ hasEdit, entityDefault }: EntityFormProps) => {
               },
             ]}
           />
+          {errors.type && (
+            <span className="text-danger">regerg{errors.type.message}</span>
+          )}
         </label>
         <Input
           required

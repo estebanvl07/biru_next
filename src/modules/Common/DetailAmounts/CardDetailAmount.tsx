@@ -1,3 +1,4 @@
+import React from "react";
 import clsx from "clsx";
 
 import { Card, Empty } from "~/modules/components";
@@ -5,10 +6,9 @@ import { LineChart } from "~/modules/Charts";
 
 import { useResize } from "~/lib/hooks/useResize";
 import { Series } from "~/types/chart.types";
-import { Spinner, Tooltip } from "@nextui-org/react";
+import { Spinner, Tooltip, Chip } from "@nextui-org/react";
 import { parseAmount } from "~/lib/helpers";
 import { FILTERS } from "~/types/transactions";
-import React from "react";
 
 type Props = {
   cardClassName?: string;
@@ -56,7 +56,7 @@ const CardDetailAmount = React.memo(({
           </Tooltip>
           {percent && (
             <p className="text-nowrap !text-xs md:mt-2">
-              <span className={clsx("font-semibold", color)}>{percent}</span> De{" "}
+              <Chip size="sm" variant="flat" className={color} >{percent}</Chip> De{" "}
               {title}
             </p>
           )}

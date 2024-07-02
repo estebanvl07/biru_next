@@ -1,6 +1,6 @@
 import type { Prisma, PrismaClient } from "@prisma/client";
 import { FilterOptions } from "~/types/transactions";
-import { filtersHander } from "../filterHandler";
+import { filtersHandler } from "../filterHandler";
 
 export async function createTransaction(
   db: PrismaClient,
@@ -11,32 +11,51 @@ export async function createTransaction(
       data,
     });
 
-    let validate;
-    if (data.transferType === 1) {
-      validate = data.type === 1 ? 1 : -1;
-    } else {
-      validate = data.type === 1 ? -1 : 1;
-    }
-
     if (data.transferType === 2) {
+      const goal = await db.goals.findFirst({
+        where: { id: Number(data.goalId) },
+      });
+
+      let validate;
+      if (goal?.type === 1) {
+        validate = data.type === 1 ? 1 : -1;
+      } else {
+        validate = data.type === 1 ? -1 : 1;
+      }
+
       await db.goals.update({
         where: { id: Number(data.goalId) },
         data: {
           saved: {
-            increment: data.amount * (data.type === 1 ? 1 : -1),
+            increment: data.amount,
+          },
+        },
+      });
+
+      await db.userAccount.update({
+        where: { id: data.accountId },
+        data: {
+          balance: {
+            increment: data.amount * validate,
+          },
+        },
+      });
+    } else {
+      let validate;
+      if (data.transferType === 1) {
+        validate = data.type === 1 ? 1 : -1;
+      } else {
+        validate = data.type === 1 ? -1 : 1;
+      }
+      await db.userAccount.update({
+        where: { id: data.accountId },
+        data: {
+          balance: {
+            increment: data.amount * validate,
           },
         },
       });
     }
-
-    await db.userAccount.update({
-      where: { id: data.accountId },
-      data: {
-        balance: {
-          increment: data.amount * validate,
-        },
-      },
-    });
 
     return transaction;
   });
@@ -143,7 +162,7 @@ export async function getTransactionsByFilter(
   options: FilterOptions,
 ) {
   const { accountId } = options;
-  const { filterEndDate, filterStartDate } = filtersHander(options);
+  const { filterEndDate, filterStartDate } = filtersHandler(options);
 
   return db.transaction.findMany({
     where: {

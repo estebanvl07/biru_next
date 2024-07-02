@@ -1,6 +1,7 @@
 import { GetServerSideProps } from "next";
 import { useRouter } from "next/router";
 import React from "react";
+import { formatDatesOfTransactions } from "~/lib/resource/formatDatesOfTransactions";
 
 import DashboardLayout from "~/modules/Layouts/Dashboard";
 import TransactionForm from "~/modules/Transactions/TransactionForm";
@@ -11,52 +12,15 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const { id } = ctx.params!;
 
   const helper = await createServerSideCaller(ctx);
-  const [transaction] = await helper.transaction.getTransactionById.fetch({
+  const transaction = await helper.transaction.getTransactionById.fetch({
     id: Number(id),
   });
 
-  console.log(transaction);
-
-  const formatted = {
-    ...transaction,
-    date: transaction?.date?.toISOString() || null,
-    createdAt: transaction?.createdAt.toISOString(),
-    updatedAt: transaction?.updatedAt.toISOString(),
-    entity: transaction?.entity
-      ? {
-          ...transaction.entity,
-          createdAt: transaction?.entity.createdAt.toISOString(),
-          updateAt: transaction?.entity.updateAt.toISOString(),
-        }
-      : null,
-    category: transaction?.category
-      ? {
-          ...transaction.category,
-          createdAt: transaction?.category.createdAt.toISOString(),
-          updatedAt: transaction?.category.updatedAt.toISOString(),
-        }
-      : null,
-    goal: transaction?.goal
-      ? {
-          ...transaction.goal,
-          goalDate: transaction?.goal
-            ? transaction.goal.goalDate?.toISOString()
-            : null,
-          createdAt: transaction?.goal.createdAt.toISOString(),
-          updatedAt: transaction?.goal.updatedAt.toISOString(),
-        }
-      : null,
-    userAccount: transaction?.userAccount
-      ? {
-          createdAt: transaction?.userAccount.createdAt.toISOString(),
-          updatedAt: transaction?.userAccount.updatedAt.toISOString(),
-        }
-      : null,
-  };
+  const [tr] = formatDatesOfTransactions(transaction as any);
 
   return {
     props: {
-      transaction: formatted,
+      transaction: tr,
     },
   };
 };
@@ -67,9 +31,6 @@ const EditTransactionPage = ({
   transaction: TransactionIncludes;
 }) => {
   const router = useRouter();
-  const query = router.query;
-
-  console.log(transaction);
 
   return (
     <DashboardLayout

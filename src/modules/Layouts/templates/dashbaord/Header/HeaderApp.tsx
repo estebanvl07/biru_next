@@ -16,7 +16,7 @@ const HeaderApp = ({
   const { account } = useCurrentAccount();
 
   return (
-    <header className="z-10 mb-2 flex w-full items-center justify-between md:h-16">
+    <header className="z-10 mb-4 flex w-full items-center justify-between md:h-16">
       <aside className="flex items-center gap-3">
         {!pathname?.includes("main") && <NavigationBack />}
         <div className="flex flex-col items-start justify-center">

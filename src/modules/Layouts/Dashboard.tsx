@@ -6,6 +6,7 @@ import { HeaderApp, SideBar } from "./templates/dashbaord";
 import { useResize } from "~/lib/hooks/useResize";
 import HeaderMobile from "./templates/dashbaord/Header/HeaderMobile";
 import BottomMobileNav from "./templates/dashbaord/BottomMobileNav";
+import { useCurrentAccount } from "~/modules/Account/hooks"
 
 import { motion, AnimatePresence } from "framer-motion";
 import { Icon } from "@iconify/react/dist/iconify.js";
@@ -33,13 +34,19 @@ const DashboardLayout = ({
   hasFilter?: boolean;
 }) => {
   const [isClient, setIsClient] = useState(false);
-
+  const { account, isLoading } = useCurrentAccount()
   const router = useRouter();
   const { isMobile } = useResize();
 
   useEffect(() => {
     setIsClient(true);
   }, []);
+
+  useEffect(() => {
+    if (isLoading === false && !account) {
+      router.push("/account")
+    }
+  }, [isLoading])
 
   return (
     <div className="flex overflow-hidden dark:bg-slate-950">

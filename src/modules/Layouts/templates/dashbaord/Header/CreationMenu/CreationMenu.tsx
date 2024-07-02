@@ -49,7 +49,7 @@ const CreationMenu = () => {
         {
           label: "Meta",
           icon: "mdi:cash-minus",
-          href: `${BASIC_URL}transactions/new?type=2`,
+          href: `${BASIC_URL}transactions/new?transferType=2`,
         },
       ],
     },

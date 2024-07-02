@@ -78,7 +78,7 @@ const TransactionItem: FC<TransactionItemProps> = ({ item, index, length }) => {
             </span>
           )}
           <div className="flex flex-col">
-            <h6 className="mb-1 overflow-hidden text-ellipsis text-nowrap font-semibold xl:w-32 dark:font-normal">
+            <h6 className="mb-1 overflow-hidden w-24 text-ellipsis text-nowrap font-semibold xl:w-32 dark:font-normal">
               {getName()}
             </h6>
             <span className="overflow-hidden text-ellipsis text-nowrap text-xs text-slate-500 xl:w-32 dark:text-slate-400">

@@ -1,6 +1,6 @@
 import { FILTERS, FilterOptions } from "~/types/transactions";
 
-export const filtersHander = (options: FilterOptions) => {
+export const filtersHandler = (options: FilterOptions) => {
   const { filter, startDate, endDate } = options;
 
   const now = new Date();
@@ -34,8 +34,6 @@ export const filtersHander = (options: FilterOptions) => {
     default:
       break;
   }
-
-  console.log("FILTROS!!!", filterStartDate, filterEndDate);
 
   return {
     filterStartDate,

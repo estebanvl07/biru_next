@@ -29,7 +29,7 @@ const BalanceEgress = ({ className }: { className?: string }) => {
       {
         color: "#dc2626",
         name: "Ingresos",
-        data: [...amounts],
+        data: amounts.length === 0 ? [0,0] : amounts.length ? [0, ...amounts] : [...amounts],
       },
     ]);
   }, [amounts]);
@@ -39,7 +39,7 @@ const BalanceEgress = ({ className }: { className?: string }) => {
       title="Egreso"
       amount={totalAmounts?.egress ?? 0}
       icon="iconamoon:arrow-top-right-1"
-      color="text-red-500"
+      color="text-red-500 bg-red-500/20"
       series={series ?? []}
       noData={noData}
       isLoading={isLoading}

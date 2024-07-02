@@ -18,7 +18,7 @@ import { GoalsIncludes } from "~/types/goal/goal.types";
 import { Button, Chip, Link } from "@nextui-org/react";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import { useResize } from "~/lib/hooks/useResize";
-import { LastTransactions } from "~/modules/Common";
+import { LastTransactions, ListTransactions } from "~/modules/Common";
 import { formatDatesOfTransactions } from "~/lib/resource/formatDatesOfTransactions";
 import { getPercent } from "~/lib/helpers";
 
@@ -190,10 +190,7 @@ const DetailGoalPage = ({
             }}
           />
         ) : (
-          <LastTransactions
-            transactions={goalData.transactions as any}
-            showHeader={false}
-          />
+            <ListTransactions data={goalData.transactions as any} />
         )}
       </div>
     </DashboardLayout>

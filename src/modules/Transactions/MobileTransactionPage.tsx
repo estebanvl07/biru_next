@@ -34,7 +34,6 @@ const MobileTransactionPage = ({
           color="primary"
           as={Link}
           href={`/account/${params?.acc}/transactions/new`}
-          className="border-1"
           isIconOnly
         >
           <Icon

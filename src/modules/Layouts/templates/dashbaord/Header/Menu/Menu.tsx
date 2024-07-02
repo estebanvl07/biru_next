@@ -11,11 +11,11 @@ import { useRouter } from "next/router";
 import { useParams } from "next/navigation";
 
 const OPTIONS: ListMenu[] = [
-  {
-    label: "Perfil",
-    href: "/setting",
-    icon: "mdi:account-outline",
-  },
+  // {
+  //   label: "Perfil",
+  //   href: "/setting",
+  //   icon: "mdi:account-outline",
+  // },
   // {
   //   label: "Configurar tema",
   //   href: "/setting/theme",

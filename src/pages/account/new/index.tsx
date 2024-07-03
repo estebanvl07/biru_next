@@ -9,7 +9,7 @@ import WhitoutSideBar from "~/modules/Layouts/templates/dashbaord/without-sideba
 import { amountFormatter } from "~/utils/formatters";
 import { useState } from "react";
 
-const optionsTypeAccount = [
+export const optionsTypeAccount = [
   {
     name: "Efectivo",
     value: 1,

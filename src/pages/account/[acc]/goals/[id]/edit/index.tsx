@@ -1,10 +1,10 @@
 import { GetServerSideProps } from "next";
 import React from "react";
-import { formatDatesOfTransactions } from "~/lib/resource/formatDatesOfTransactions";
 import DashboardLayout from "~/modules/Layouts/Dashboard";
 import { createServerSideCaller } from "~/utils/serverSideCaller/serverSideCaller";
 import { GoalsIncludes } from "~/types/goal/goal.types";
 import GoalForm from "~/modules/Goals/GoalForm";
+import { formatDatesOfGoals } from "~/lib/resource/formatDatesOfGoals";
 
 export default function UpdateEntityPage ({ goal }: { goal: GoalsIncludes }) {
   return (
@@ -18,17 +18,9 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const { id } = ctx.params!;
 
   const helper = await createServerSideCaller(ctx);
-  const [goal] = await helper.goals.getGoalById.fetch({ id: Number(id) });
+  const goals = await helper.goals.getGoalById.fetch({ id: Number(id) });
 
-  const goalData = {
-    ...goal,
-    goalDate: goal?.goalDate ? goal?.goalDate.toISOString() : null,
-    createdAt: goal?.createdAt.toISOString(),
-    updatedAt: goal?.updatedAt.toISOString(),
-    transactions: goal?.transactions
-      ? formatDatesOfTransactions(goal.transactions as any)
-      : null,
-  };
+  const [goalData] = formatDatesOfGoals(goals);
 
   return {
     props: {

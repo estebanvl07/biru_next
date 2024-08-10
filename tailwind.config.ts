@@ -46,7 +46,7 @@ const config = {
             default: {
               DEFAULT: "#e2e8f0",
               50: "#f8fafc",
-              100: "#f1f5f9",
+              100: "#fff",
               200: "#e2e8f0",
               300: "#cbd5e1",
             },

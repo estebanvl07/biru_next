@@ -45,6 +45,7 @@ export async function getGoalById(
   return await db.goals.findMany({
     where: { userId, id },
     include: {
+      entity: true,
       transactions: {
         include: {
           category: true,

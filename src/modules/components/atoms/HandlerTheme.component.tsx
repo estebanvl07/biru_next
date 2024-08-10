@@ -16,7 +16,7 @@ const DarkMode = ({ className }: { className?: string }) => {
       variant="flat"
       radius="full"
       color="primary"
-      className="bg-default-50"
+      className="bg-default-200"
       onClick={toggleTheme}
     >
       {theme === "dark" ? (

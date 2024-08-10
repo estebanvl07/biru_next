@@ -16,7 +16,7 @@ import { type TableProps } from "~/types/component/table.types";
 import BottomContent from "./BottomContent";
 import { useCallback, useMemo, useState } from "react";
 
-import { useSearch } from "~/lib/hooks";
+import { useSearch, useTheme } from "~/lib/hooks";
 import { LoaderSkeleton } from "~/modules/Loaders";
 
 const DataTable = <T,>({
@@ -26,6 +26,7 @@ const DataTable = <T,>({
   isLoading = false,
   renderCell,
   hasTopContent = true,
+  removeWrapper,
   hasBottomContent = true,
   filterKeys,
   footerConfig,
@@ -38,6 +39,8 @@ const DataTable = <T,>({
     column: "age",
     direction: "ascending",
   });
+
+  const { isDark } = useTheme()
   const { onSearch, newList } = useSearch({
     data,
     keys: filterKeys ?? "",
@@ -50,8 +53,7 @@ const DataTable = <T,>({
   const items = useMemo(() => {
     const start = (page - 1) * rowsPerPage;
     const end = start + rowsPerPage;
-
-    return newList.slice(start, end);
+    return newList.slice(start, end)
   }, [page, newList, rowsPerPage]);
 
   // TODO: sorted columns
@@ -85,6 +87,7 @@ const DataTable = <T,>({
         <LoaderSkeleton skeletonType="Table" />
       ) : (
         <Table
+          removeWrapper
           className="dark:text-white"
           color="primary"
           isHeaderSticky
@@ -119,7 +122,7 @@ const DataTable = <T,>({
           bottomContentPlacement="outside"
         >
           <TableHeader
-            className="dark:!bg-default-200 dark:shadow-none"
+            className="dark:shadow-none"
             columns={columns}
           >
             {({ uid, align, sorting, name }) => (

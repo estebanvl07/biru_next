@@ -55,6 +55,11 @@ const GoalForm = ({ hasEdit, goalDefault }: GoalFormProps) => {
     resolver: zodResolver(createGoal),
   });
 
+  const defaultEntity =
+  entities && goalDefault && goalDefault.entityId
+    ? [String(goalDefault.entityId)]
+    : undefined;
+
   const alertConfig: any = {
     type: "quest",
     cancel: true,
@@ -213,7 +218,7 @@ const GoalForm = ({ hasEdit, goalDefault }: GoalFormProps) => {
               items={entities ?? []}
               placeholder="Seleccionar entidad"
               label="Entidad"
-              // defaultSelectedKeys={defaultEntity ?? query.entity}
+              defaultSelectedKeys={defaultEntity}
               classNames={{
                 label: "group-data-[filled=true]:-translate-y-5",
                 trigger: "min-h-[70px]",

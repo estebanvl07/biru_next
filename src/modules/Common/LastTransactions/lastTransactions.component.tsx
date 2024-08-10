@@ -53,7 +53,7 @@ const LastTransactions: FC<LastTransactionsProps> = ({
       {isLoading ? (
         <LoaderSkeleton skeletonType="ListItem" />
       ) : (
-        <ListTransactions data={formatted} maxLength={6} />
+        <ListTransactions data={formatted} maxLength={transactionsMaxLength} />
       )}
     </Card>
   );

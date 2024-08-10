@@ -50,6 +50,9 @@ export const LoginForm = () => {
         label="Correo"
         placeholder="john@doe.com"
         autoComplete="email"
+        classNames={{
+          inputWrapper: "!bg-default-200/50",
+        }}
         startContent={<Icon icon="ic:outline-email" width={18} />}
         {...register("email")}
         isInvalid={Boolean(errors.email)}
@@ -60,6 +63,9 @@ export const LoginForm = () => {
       <InputPassword
         label="Contraseña"
         autoComplete="current-password"
+        classNames={{
+          inputWrapper: "!bg-default-200/50",
+        }}
         {...register("password")}
         isInvalid={Boolean(errors.password)}
         errorMessage={errors.password?.message}

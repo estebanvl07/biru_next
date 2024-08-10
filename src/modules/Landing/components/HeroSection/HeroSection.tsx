@@ -25,7 +25,7 @@ export const HeroSection = () => {
         aria-hidden="true"
         aria-label="background-grid"
       />
-      <div className=" flex h-full w-full flex-col items-center justify-center gap-8 px-4 md:flex-col md:gap-4">
+      <div className="flex h-full w-full flex-col items-center md:justify-center gap-8 px-4 md:flex-col md:gap-4">
         <motion.article
           initial={{
             scale: 0.6,
@@ -88,7 +88,7 @@ export const HeroSection = () => {
           transition={{
             duration: 0.5,
           }}
-          className="relative hidden h-44 w-full items-center justify-center overflow-hidden md:flex md:h-[20rem]"
+          className="relative h-44 w-full items-center justify-center overflow-hidden flex md:h-[20rem]"
         >
           <Image
             src={isDark ? "/dashboard-dark.png" : "/dashboard-light.png"}

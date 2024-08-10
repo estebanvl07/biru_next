@@ -4,6 +4,7 @@ import EntityForm from "~/modules/Entities/EntityForm";
 import DashboardLayout from "~/modules/Layouts/Dashboard";
 import { EntityIncludes } from "~/types/entities/entity.types";
 import { createServerSideCaller } from "~/utils/serverSideCaller/serverSideCaller";
+import { formatDatesOfTransactions } from "~/lib/resource/formatDatesOfTransactions";
 
 const UpdateEntityPage = ({ entity }: { entity: EntityIncludes }) => {
   return (
@@ -19,14 +20,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const helper = await createServerSideCaller(ctx);
   const [entity] = await helper.entity.getEntityById.fetch({ id: Number(id) });
 
-  const transactionSerialize = entity?.transactions.map((trans) => {
-    return {
-      ...trans,
-      date: trans?.date?.toISOString(),
-      createdAt: trans?.createdAt.toISOString(),
-      updatedAt: trans?.updatedAt.toISOString(),
-    };
-  });
+  const transactionSerialize = formatDatesOfTransactions(entity?.transactions as any)
 
   const entityData = {
     ...entity,

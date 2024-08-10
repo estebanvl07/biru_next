@@ -51,7 +51,7 @@ export default function HeaderMenu({
       ) : (
         <>
           <div
-            className="flex cursor-pointer items-center gap-2 rounded-full border p-1.5 shadow-md dark:border-none dark:border-white/10 dark:bg-default-50"
+            className="flex cursor-pointer items-center gap-2 rounded-full border p-1.5 shadow-md dark:border-none dark:border-white/10 bg-white dark:bg-default-50"
             onClick={() => setShowMenu(!showMenu)}
             ref={handlerRef}
           >

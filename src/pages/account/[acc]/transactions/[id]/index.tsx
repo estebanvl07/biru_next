@@ -1,12 +1,14 @@
 import clsx from "clsx";
+import Link from "next/link"
 import { format } from "date-fns";
+import { useRouter } from "next/router";
 import { capitalize } from "~/modules/components/molecules/Table/utils";
 import { redirect } from "next/navigation";
 import { DATE_FORMAT_TRANS } from "~/lib/constants/config";
 import { formatDatesOfTransactions } from "~/lib/resource/formatDatesOfTransactions";
 
 import { Icon } from "@iconify/react/dist/iconify.js";
-import { Accordion, AccordionItem, Avatar, Chip } from "@nextui-org/react";
+import { Accordion, AccordionItem, Avatar, Chip, Button } from "@nextui-org/react";
 import { User } from "@nextui-org/user";
 import DashboardLayout from "~/modules/Layouts/Dashboard";
 import { Card } from "~/modules/components";
@@ -36,6 +38,9 @@ const DetailTransactionPage = ({
     entity,
     goal,
   } = transaction;
+
+  const router = useRouter()
+  const params = router.query
 
   const getIcon = () => {
     if (category?.icon) {
@@ -119,7 +124,7 @@ const DetailTransactionPage = ({
             classNames={{
               title: "font-medium",
             }}
-            className="border-1 !bg-default-50 !shadow-none dark:border-white/5 dark:!bg-default-200"
+            className="border-1 !shadow-none dark:border-white/5 dark:!bg-default-200"
           >
             <ul className="flex flex-col gap-2 [&>li>p]:font-semibold [&>li>span]:opacity-70 [&>li]:flex [&>li]:flex-row [&>li]:items-center [&>li]:justify-between">
               <li>
@@ -201,7 +206,7 @@ const DetailTransactionPage = ({
             classNames={{
               title: "font-medium",
             }}
-            className="border-1 !bg-default-50 !shadow-none dark:border-white/5 dark:!bg-default-200"
+            className="border-1 !shadow-none dark:border-white/5 dark:!bg-default-200"
           >
             <ul className="flex flex-col gap-2 [&>li>p]:font-semibold [&>li>span]:opacity-70 [&>li]:flex [&>li]:flex-row [&>li]:items-center [&>li]:justify-between">
               <li>
@@ -222,11 +227,12 @@ const DetailTransactionPage = ({
               title: "font-medium",
             }}
             subtitle="Descripción de transacción"
-            className="border-1 !bg-default-50 !shadow-none dark:border-white/5 dark:!bg-default-200"
+            className="border-1 !shadow-none dark:border-white/5 dark:!bg-default-200"
           >
             <p>{description || "Sin descripción"}</p>
           </AccordionItem>
         </Accordion>
+        <Button color="primary" as={Link} href={`/account/${params?.acc}/transactions/${transaction.id}/edit`} className="w-full mt-2" >Editar Transacción</Button>
       </div>
     </DashboardLayout>
   );

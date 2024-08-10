@@ -10,7 +10,7 @@ const SignInOptions = ({ title }: { title?: string }) => {
       <span className="text-sm">{title ?? "Iniciar con"}</span>
       <ButtonGroup className="w-full">
         <Button
-          className="w-full bg-default-100"
+          className="w-full bg-default-200/50"
           onClick={() =>
             signIn("facebook", {
               callbackUrl: CALLBACK_SIGN_IN_URL,
@@ -21,7 +21,7 @@ const SignInOptions = ({ title }: { title?: string }) => {
           <Icon icon="logos:facebook" width={24} /> Facebook
         </Button>
         <Button
-          className="w-full bg-default-100"
+          className="w-full bg-default-200/50"
           onClick={() =>
             signIn("google", {
               callbackUrl: CALLBACK_SIGN_IN_URL,

@@ -119,6 +119,7 @@ const LineChart = ({
           },
         },
         xaxis: {
+          show: showXAxis,
           axisBorder: {
             show: bottomBorder,
           },
@@ -127,14 +128,15 @@ const LineChart = ({
           },
           categories: keys ?? [],
           labels: {
-            show: !keys ? false : showXAxis,
-            formatter: (val) => {
-              return val;
-            },
+            show: showXAxis,
             style: {
               colors: isDark ? "#64748b" : "#000",
               fontFamily: FONT_FAMILY,
               fontWeight: 600,
+              width: 10,
+              whitespace: "no-wrap",
+              overflow: "hidden",
+              text: "ellipsis",
             },
           },
         },

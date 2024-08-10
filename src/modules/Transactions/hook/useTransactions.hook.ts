@@ -29,8 +29,8 @@ export const useTransactions = (options: FilterOptions) => {
   const queryClient = useQueryClient();
   const accountId = params?.acc ? String(params?.acc) : undefined;
 
-  const hasTransactionsCached = useMemo(() => {
-    const transactionsKey = getQueryKey(
+  const transactionKey = useMemo(() => {
+    return getQueryKey(
       api.transaction.getTransactions,
       {
         accountId: Number(accountId),
@@ -40,11 +40,13 @@ export const useTransactions = (options: FilterOptions) => {
       },
       "query",
     );
+  }, [accountId, options])
 
-    const transactionCache = queryClient.getQueryData(transactionsKey);
+  const hasTransactionsCached = useMemo(() => {
+    const transactionCache = queryClient.getQueryData(transactionKey);
     return Boolean(transactionCache);
-  }, [options]);
-
+  }, [transactionKey, queryClient]);
+  
   const { data, isLoading } = api.transaction.getTransactions.useQuery(
     {
       accountId: Number(accountId) as any,
@@ -57,7 +59,18 @@ export const useTransactions = (options: FilterOptions) => {
     },
   );
 
-  return { transactions: data!, isLoading };
+  // newTransaction -> type TransactionIncludes[]
+  const addTransactionToCache = (newTransaction: any) => {
+    queryClient.setQueryData(transactionKey, (oldData) => {
+      return [...oldData, newTransaction]
+      // {
+      //   ...oldData,
+      //   transactions: [...(oldData?.transactions || []), newTransaction],
+      // };
+    });
+  };
+
+  return { transactions: data!, isLoading, addTransactionToCache };
 };
 
 export const useFilterByType = ({ type, options }: FilterByTypeProps) => {

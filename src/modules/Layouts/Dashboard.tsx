@@ -6,13 +6,16 @@ import { HeaderApp, SideBar } from "./templates/dashbaord";
 import { useResize } from "~/lib/hooks/useResize";
 import HeaderMobile from "./templates/dashbaord/Header/HeaderMobile";
 import BottomMobileNav from "./templates/dashbaord/BottomMobileNav";
-import { useCurrentAccount } from "~/modules/Account/hooks"
+import { useCurrentAccount } from "~/modules/Account/hooks";
 
 import { motion, AnimatePresence } from "framer-motion";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import MainLoader from "../Loaders/mainLoader.component";
 import { useEffect, useState } from "react";
+import Breadcrum from "./templates/Breadcrum";
 import { Button } from "@nextui-org/button";
+
+import Link from "next/link";
 
 const variants = {
   hidden: { opacity: 0, x: -200, y: 0 },
@@ -34,22 +37,23 @@ const DashboardLayout = ({
   hasFilter?: boolean;
 }) => {
   const [isClient, setIsClient] = useState(false);
-  const { account, isLoading } = useCurrentAccount()
-  const router = useRouter();
+  const { account, isLoading } = useCurrentAccount();
   const { isMobile } = useResize();
+
+  const router = useRouter();
 
   useEffect(() => {
     setIsClient(true);
   }, []);
 
-  useEffect(() => {
-    if (isLoading === false && !account) {
-      router.push("/account")
-    }
-  }, [isLoading])
+  // useEffect(() => {
+  //   if (isLoading === false && !account) {
+  //     router.push("/account")
+  //   }
+  // }, [isLoading])
 
   return (
-    <div className="flex overflow-hidden dark:bg-slate-950">
+    <div className="bg-zinc-100/50 flex overflow-hidden dark:bg-slate-950">
       <Head>
         <title>Biru - {title}</title>
         <meta name="description" content={headDescription} />
@@ -66,7 +70,7 @@ const DashboardLayout = ({
           )}
           <AnimatePresence>
             <motion.main
-              className={clsx("z-0 px-content md:px-0", {
+              className={clsx("z-0 mt-4 px-content md:px-0", {
                 "pb-16": isMobile,
               })}
               key={router.route}

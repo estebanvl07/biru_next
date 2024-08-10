@@ -30,7 +30,7 @@ import { useAlert } from "~/lib/hooks/useAlert";
 import { useEntity } from "~/modules/Entities/hook/entities.hook";
 import { useCategory } from "../Category/hook/category.hook";
 import { useGoals } from "../Goals/hook/goal.hook";
-
+import { useTransactions } from "./hook/useTransactions.hook"
 import { AnimatePresence, motion } from "framer-motion";
 import { capitalize } from "../components/molecules/Table/utils";
 import { format } from "date-fns";
@@ -55,6 +55,7 @@ const TransactionForm = ({
   const [goalSelected, setGoalSelected] = useState<Goals>();
 
   const { account } = useCurrentAccount();
+  const { addTransactionToCache } = useTransactions()
   const { entities } = useEntity();
   const { accounts } = useAccounts();
   const { categories } = useCategory();
@@ -102,8 +103,6 @@ const TransactionForm = ({
       ? [`${account.id}`]
       : undefined;
 
-  console.log(defaultAccountKey);
-
   const {
     register,
     formState: { errors },
@@ -135,7 +134,8 @@ const TransactionForm = ({
         createTransactionMutation(
           { ...payload, date: new Date() },
           {
-            onSuccess() {
+            onSuccess(data) {
+              addTransactionToCache(data)
               reset();
             },
           },
@@ -196,7 +196,7 @@ const TransactionForm = ({
   }, [account, query]);
 
   useEffect(() => {
-    if (query.goal) {
+    if (query.goal && type === "goal") {
       setGoalSelected(goals.find((goal) => goal.id === Number(query.goal)));
     }
   }, [goals]);
@@ -227,6 +227,12 @@ const TransactionForm = ({
       entityId && setValue("entityId", entityId);
     }
   }, [transactionDefault]);
+
+  useEffect(() => {
+    if (type === "goal" && goalSelected) {
+      setValue("type", goalSelected.type as any)
+    }
+  }, [goalSelected])
 
   return (
     <AnimatePresence>
@@ -347,11 +353,27 @@ const TransactionForm = ({
                   <SelectItem
                     color="primary"
                     variant="solid"
-                    onClick={(e) => {
+                    onClick={() => {
                       setGoalSelected((prev) =>
                         prev?.id === goal.id ? undefined : goal,
                       );
+                      setValue("type", goal.type as 1 | 2)
                       setValue("goalId", goal.id);
+                      goal?.entityId && setValue("entityId", goal?.entityId)
+                      console.log(goal)
+                      if (goal?.entityId) {
+                        const currentEntity = entities.find((entity) => entity.id === goal.entityId)
+                        console.log(currentEntity)
+                        if (currentEntity) {
+                          setValue("recipient", currentEntity.name || "")
+                          currentEntity?.reference && setValue("reference", currentEntity.reference || "")
+                          currentEntity?.description && setValue("description", currentEntity.description || "")
+                        }
+                      } else {
+                        setValue("recipient", undefined)
+                        setValue("reference", undefined)
+                        setValue("description", undefined)
+                      }
                     }}
                     key={goal.id}
                     className="font-montserrat dark:text-white"
@@ -423,13 +445,7 @@ const TransactionForm = ({
             </>
           )}
           <Accordion
-            defaultExpandedKeys={
-              type === "transfer"
-                ? ["1"]
-                : Boolean(goalSelected)
-                  ? ["2"]
-                  : undefined
-            }
+            defaultExpandedKeys={["1"]}
             motionProps={{
               variants: {
                 enter: {
@@ -467,177 +483,176 @@ const TransactionForm = ({
               },
             }}
           >
-            {type === "transfer" ? (
-              <AccordionItem
-                key="1"
-                aria-label="Accordion 1"
-                title="Información adicional"
-                subtitle="Agrega más información sobre tu transacción"
-              >
-                <div className="flex flex-col gap-2 pb-8">
-                  <InputDate
-                    label="Fecha de transacción"
-                    containerClassName="mt-4"
-                    changeValue={(newDate) => setValue("date", newDate)}
-                    value={watch("date")}
-                    defaultValue={defaultDate}
-                  />
-                  <section className="flex w-full flex-col gap-2 sm:flex-row">
-                    <Select
-                      items={categories ?? []}
-                      placeholder="Seleccione una categoría"
-                      label="Categoría"
-                      classNames={{
-                        label: "group-data-[filled=true]:-translate-y-5",
-                        trigger: "min-h-[70px]",
-                        listboxWrapper: "max-h-[200px]",
-                      }}
-                      renderValue={(items) => {
-                        return items.map(({ data }) => (
-                          <div
-                            key={data?.id}
-                            className="flex items-center gap-2"
-                          >
-                            <div className="grid h-8 w-8 place-items-center rounded-full bg-primary">
-                              {data?.icon ? (
-                                <Icon
-                                  icon={data?.icon}
-                                  className="text-white"
-                                />
-                              ) : (
-                                <Avatar name={data?.name} />
-                              )}
-                            </div>
-                            {data?.name}
+            <AccordionItem
+              key="1"
+              aria-label="Accordion 1"
+              title="Información Adicional"
+              subtitle="Agrega más información sobre tu transacción"
+            >
+              <div className="flex flex-col gap-2 pb-8">
+                <InputDate
+                  label="Fecha de transacción"
+                  containerClassName="mt-4"
+                  changeValue={(newDate) => setValue("date", newDate)}
+                  value={watch("date")}
+                  defaultValue={defaultDate}
+                />
+                <section className="flex w-full flex-col gap-2 sm:flex-row">
+                  <Select
+                    items={categories ?? []}
+                    placeholder="Seleccione una categoría"
+                    label="Categoría"
+                    classNames={{
+                      label: "group-data-[filled=true]:-translate-y-5",
+                      trigger: "min-h-[70px]",
+                      listboxWrapper: "max-h-[200px]",
+                    }}
+                    renderValue={(items) => {
+                      return items.map(({ data }) => (
+                        <div
+                          key={data?.id}
+                          className="flex items-center gap-2"
+                        >
+                          <div className="grid h-8 w-8 place-items-center rounded-full bg-primary">
+                            {data?.icon ? (
+                              <Icon
+                                icon={data?.icon}
+                                className="text-white"
+                              />
+                            ) : (
+                              <Avatar name={data?.name} />
+                            )}
                           </div>
-                        ));
-                      }}
-                      defaultSelectedKeys={defaultCategory || query?.category}
-                      isInvalid={Boolean(errors?.categoryId)}
-                      errorMessage={errors?.categoryId?.message ?? ""}
-                    >
-                      {(category) => (
+                          {data?.name}
+                        </div>
+                      ));
+                    }}
+                    defaultSelectedKeys={defaultCategory || query?.category}
+                    isInvalid={Boolean(errors?.categoryId)}
+                    errorMessage={errors?.categoryId?.message ?? ""}
+                  >
+                    {(category) => (
+                      <SelectItem
+                        color="primary"
+                        onClick={() => setValue("categoryId", category.id)}
+                        key={category.id}
+                        className="font-montserrat dark:text-white"
+                        textValue={category.name}
+                        value={category.id}
+                      >
+                        {category.name}
+                      </SelectItem>
+                    )}
+                  </Select>
+                  <Select
+                    items={entities ?? []}
+                    placeholder="Seleccionar entidad"
+                    label="Entidad"
+                    defaultSelectedKeys={defaultEntity ?? query.entity}
+                    classNames={{
+                      label: "group-data-[filled=true]:-translate-y-5",
+                      trigger: "min-h-[70px]",
+                      listboxWrapper: "max-h-[200px]",
+                    }}
+                    renderValue={(items) => {
+                      return items.map(({ data: entity }) => (
+                        <div
+                          key={entity?.id}
+                          className="py-1 font-montserrat dark:text-white"
+                        >
+                          <User
+                            name={entity?.name}
+                            description={
+                              entity?.description !== ""
+                                ? entity?.description
+                                : "N/A"
+                            }
+                            avatarProps={{
+                              src: entity?.avatar ?? undefined,
+                              size: "sm",
+                              name: entity?.name,
+                              color: "primary",
+                            }}
+                          />
+                        </div>
+                      ));
+                    }}
+                    isInvalid={Boolean(errors?.entityId)}
+                    errorMessage={errors?.entityId?.message ?? ""}
+                  >
+                    {(entity) => {
+                      return (
                         <SelectItem
                           color="primary"
-                          onClick={() => setValue("categoryId", category.id)}
-                          key={category.id}
-                          className="font-montserrat dark:text-white"
-                          textValue={category.name}
-                          value={category.id}
+                          variant="solid"
+                          onClick={() => {
+                            entity.id && setValue("entityId", entity.id);
+                            entity.reference &&
+                              setValue("reference", String(entity.reference));
+                            entity.name &&
+                              setValue("recipient", String(entity.name));
+                            entity.description &&
+                              setValue("description", entity.description);
+                          }}
+                          key={entity.id}
+                          className="py-1 font-montserrat dark:text-white"
+                          textValue={entity.name}
                         >
-                          {category.name}
+                          <p>{entity.name}</p>
+                          <span className="!text-xs opacity-60">
+                            {entity.description !== ""
+                              ? entity.description
+                              : "N/A"}
+                          </span>
                         </SelectItem>
-                      )}
-                    </Select>
-                    <Select
-                      items={entities ?? []}
-                      placeholder="Seleccionar entidad"
-                      label="Entidad"
-                      defaultSelectedKeys={defaultEntity ?? query.entity}
-                      classNames={{
-                        label: "group-data-[filled=true]:-translate-y-5",
-                        trigger: "min-h-[70px]",
-                        listboxWrapper: "max-h-[200px]",
-                      }}
-                      renderValue={(items) => {
-                        return items.map(({ data: entity }) => (
-                          <div
-                            key={entity?.id}
-                            className="py-1 font-montserrat dark:text-white"
-                          >
-                            <User
-                              name={entity?.name}
-                              description={
-                                entity?.description !== ""
-                                  ? entity?.description
-                                  : "N/A"
-                              }
-                              avatarProps={{
-                                src: entity?.avatar ?? undefined,
-                                size: "sm",
-                                name: entity?.name,
-                                color: "primary",
-                              }}
-                            />
-                          </div>
-                        ));
-                      }}
-                      isInvalid={Boolean(errors?.entityId)}
-                      errorMessage={errors?.entityId?.message ?? ""}
-                    >
-                      {(entity) => {
-                        return (
-                          <SelectItem
-                            color="primary"
-                            variant="solid"
-                            onClick={() => {
-                              entity.id && setValue("entityId", entity.id);
-                              entity.reference &&
-                                setValue("reference", String(entity.reference));
-                              entity.name &&
-                                setValue("recipient", String(entity.name));
-                              entity.description &&
-                                setValue("description", entity.description);
-                            }}
-                            key={entity.id}
-                            className="py-1 font-montserrat dark:text-white"
-                            textValue={entity.name}
-                          >
-                            <p>{entity.name}</p>
-                            <span className="!text-xs opacity-60">
-                              {entity.description !== ""
-                                ? entity.description
-                                : "N/A"}
-                            </span>
-                          </SelectItem>
-                        );
-                      }}
-                    </Select>
-                  </section>
-                  <Input
-                    startContent={
-                      <Icon
-                        icon="streamline:travel-map-triangle-flag-navigation-map-maps-flag-gps-location-destination-goal"
-                        className="dark:text-slate-200"
-                      />
-                    }
-                    label="Referencia"
-                    placeholder="000-000000-00"
-                    {...register("reference")}
-                    isInvalid={Boolean(errors?.reference)}
-                    errorMessage={errors.reference?.message as any}
-                  />
-                  <Input
-                    startContent={
-                      <Icon
-                        icon="streamline:travel-map-triangle-flag-navigation-map-maps-flag-gps-location-destination-goal"
-                        className="dark:text-slate-200"
-                      />
-                    }
-                    label="Destinatario"
-                    placeholder="Andres, Juan, Omar"
-                    {...register("recipient")}
-                    isInvalid={Boolean(errors?.recipient)}
-                    errorMessage={errors.recipient?.message as any}
-                  />
-                  <Input
-                    startContent={
-                      <Icon
-                        icon="fluent:text-description-24-filled"
-                        className="dark:text-slate-200"
-                        width={18}
-                      />
-                    }
-                    // iconPath="fluent:text-description-24-filled"
-                    label="Descripción"
-                    placeholder="Mercado del mes"
-                    {...register("description")}
-                    isInvalid={Boolean(errors?.description)}
-                    errorMessage={errors?.description?.message ?? ""}
-                  />
-                </div>
-              </AccordionItem>
-            ) : (
+                      );
+                    }}
+                  </Select>
+                </section>
+                <Input
+                  startContent={
+                    <Icon
+                      icon="streamline:travel-map-triangle-flag-navigation-map-maps-flag-gps-location-destination-goal"
+                      className="dark:text-slate-200"
+                    />
+                  }
+                  label="Referencia"
+                  placeholder="000-000000-00"
+                  {...register("reference")}
+                  isInvalid={Boolean(errors?.reference)}
+                  errorMessage={errors.reference?.message as any}
+                />
+                <Input
+                  startContent={
+                    <Icon
+                      icon="streamline:travel-map-triangle-flag-navigation-map-maps-flag-gps-location-destination-goal"
+                      className="dark:text-slate-200"
+                    />
+                  }
+                  label="Destinatario"
+                  placeholder="Andres, Juan, Omar"
+                  {...register("recipient")}
+                  isInvalid={Boolean(errors?.recipient)}
+                  errorMessage={errors.recipient?.message as any}
+                />
+                <Input
+                  startContent={
+                    <Icon
+                      icon="fluent:text-description-24-filled"
+                      className="dark:text-slate-200"
+                      width={18}
+                    />
+                  }
+                  // iconPath="fluent:text-description-24-filled"
+                  label="Descripción"
+                  placeholder="Mercado del mes"
+                  {...register("description")}
+                  isInvalid={Boolean(errors?.description)}
+                  errorMessage={errors?.description?.message ?? ""}
+                />
+              </div>
+            </AccordionItem>
+            {type === "goal" && (
               <AccordionItem
                 key="2"
                 aria-label="Accordion 2"
@@ -706,6 +721,7 @@ const TransactionForm = ({
                 )}
               </AccordionItem>
             )}
+            
           </Accordion>
           <div className="flex w-full flex-col gap-2 sm:flex-row">
             <Button

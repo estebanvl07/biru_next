@@ -1,20 +1,14 @@
 export const menuOptions = [
   {
-    id: 1,
-    title: "",
+    id: 2,
+    title: "Menú",
     menus: [
       {
-        id: 1,
+        id: 325,
         name: "Dashboard",
         icon: "akar-icons:dashboard",
         href: "/main",
       },
-    ],
-  },
-  {
-    id: 2,
-    title: "Servicios",
-    menus: [
       {
         id: 1,
         name: "Transacciones",

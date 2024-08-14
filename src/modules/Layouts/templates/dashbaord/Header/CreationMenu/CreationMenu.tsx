@@ -96,7 +96,7 @@ const CreationMenu = () => {
         {isDesktop && "Crear"}
       </Button>
       {showMenu && (
-        <div className="absolute right-0 top-12 w-[165px] rounded-small border-small border-default-200 backdrop-blur-xl  dark:border-default-100 dark:border-white/5">
+        <div className="absolute right-0 top-12 w-[165px] rounded-small border-small border-default-200 bg-default-100/50 backdrop-blur-xl  dark:border-default-100 dark:border-white/5">
           <Listbox
             variant="flat"
             aria-label="Creation menu"

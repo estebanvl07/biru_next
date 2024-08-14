@@ -16,7 +16,7 @@ export const useTransactionSeries = (transactions: Transaction[]) => {
   const [months, setMonths] = useState<string[]>([]);
   const [series, setSeries] = useState<Series[]>([]);
   const [date, setDate] = useState<{ from: string; to: string }>();
-  const [balance, setBalance] = useState<number>()
+  const [balance, setBalance] = useState<number>();
 
   useEffect(() => {
     if (!transactions || transactions.length === 0) return setSeries([]);
@@ -110,7 +110,7 @@ export const useTransactionSeries = (transactions: Transaction[]) => {
       amountBalanceIterator += groupSum;
       history.push(amountBalanceIterator);
     }
-    setBalance(amountBalanceIterator)
+    setBalance(amountBalanceIterator);
 
     let formattedGroups: string[] = [];
 

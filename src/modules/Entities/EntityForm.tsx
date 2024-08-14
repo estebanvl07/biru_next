@@ -12,8 +12,6 @@ import { useAlert } from "~/lib/hooks/useAlert";
 import { ButtonGroup } from "~/modules/components";
 import { EntityIncludes } from "~/types/entities/entity.types";
 import { useEffect } from "react";
-import { error } from "console";
-import { messages } from "./../../lib/resolver/zod";
 import { toast } from "sonner";
 
 interface EntityFormProps {
@@ -61,7 +59,6 @@ const EntityForm = ({ hasEdit, entityDefault }: EntityFormProps) => {
             onSuccess() {
               reset();
             },
-           
           },
         ),
         {
@@ -99,7 +96,7 @@ const EntityForm = ({ hasEdit, entityDefault }: EntityFormProps) => {
     <>
       <Alert isOpen={isOpen} onClose={onClose} {...props} />
       <form
-        className="flex max-w-[32rem] flex-col gap-2"
+        className="flex w-full max-w-[32rem] flex-col gap-2"
         onSubmit={(event) => {
           event.preventDefault();
           setProps(alertConfig);

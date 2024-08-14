@@ -8,7 +8,6 @@ import { useResize } from "~/lib/hooks/useResize";
 import { Series } from "~/types/chart.types";
 import { Spinner, Tooltip, Chip } from "@nextui-org/react";
 import { parseAmount } from "~/lib/helpers";
-import { FILTERS } from "~/types/transactions";
 
 type Props = {
   cardClassName?: string;
@@ -25,52 +24,59 @@ type Props = {
   badgeColor?: string;
 };
 
-const CardDetailAmount = React.memo(({
-  title,
-  amount,
-  color,
-  percent,
-  isLoading,
-  series,
-  noData,
-  cardClassName,
-}: Props) => {
-  const { isMobile } = useResize();
-  return (
-    <Card
-      className={clsx(
-        "flex flex-grow overflow-hidden !h-full flex-row",
-        cardClassName,
-      )}
-    >
-      <header className="relative flex justify-between flex-col">
-        <h4 className="font-medium md:mb-4">{title}</h4>
-        <aside>
-          <Tooltip
-            content={`$ ${amount.toLocaleString()}`}
-            className="font-montserrat font-medium"
-          >
-            <span className="text-nowrap text-2xl font-semibold">
-              $ {parseAmount(amount)}
-            </span>
-          </Tooltip>
-          {percent && (
-            <p className="text-nowrap !text-xs md:mt-2">
-              <Chip size="sm" variant="flat" className={color} >{percent}</Chip> De{" "}
-              {title}
-            </p>
-          )}
-        </aside>
-      </header>
-      {
-        isLoading ? <div className="w-full grid place-content-center h-full"><Spinner /></div> :
+const CardDetailAmount = React.memo(
+  ({
+    title,
+    amount,
+    color,
+    percent,
+    isLoading,
+    series,
+    noData,
+    cardClassName,
+  }: Props) => {
+    const { isMobile } = useResize();
+    return (
+      <Card
+        className={clsx(
+          "flex !h-full flex-grow flex-row overflow-hidden",
+          cardClassName,
+        )}
+      >
+        <header className="relative flex flex-col justify-between">
+          <h4 className="font-medium md:mb-4">{title}</h4>
+          <aside>
+            <Tooltip
+              content={`$ ${amount.toLocaleString()}`}
+              className="font-montserrat font-medium"
+            >
+              <span className="text-nowrap text-2xl font-semibold">
+                $ {parseAmount(amount)}
+              </span>
+            </Tooltip>
+            {percent && (
+              <p className="text-nowrap !text-xs md:mt-2">
+                <Chip size="sm" variant="flat" className={color}>
+                  {percent}
+                </Chip>{" "}
+                De {title}
+              </p>
+            )}
+          </aside>
+        </header>
+        {isLoading ? (
+          <div className="grid h-full w-full place-content-center">
+            <Spinner />
+          </div>
+        ) : (
           <>
             {noData && series && !isLoading ? (
               <main className="relative flex-grow">
-                <section className="absolute -bottom-4 -right-3">
+                <section className=" -bottom-4 -right-3">
                   <LineChart
                     series={series}
-                    heightChart={isMobile ? "80%" : "100%"}
+                    widthChart="100%"
+                    heightChart={isMobile ? "80%" : "100px"}
                     hasZoom={false}
                     showLegend={false}
                     showToolBar={false}
@@ -95,10 +101,10 @@ const CardDetailAmount = React.memo(({
               </div>
             )}
           </>
-      }
-
-    </Card>
-  );
-});
+        )}
+      </Card>
+    );
+  },
+);
 
 export default CardDetailAmount;

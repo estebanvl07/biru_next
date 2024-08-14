@@ -79,11 +79,12 @@ const LineChart = ({
           custom: function ({ series, seriesIndex, dataPointIndex, w }: any) {
             return `
                 <div class="bg-white px-6 py-2 flex flex-col justify-center border-[1px] dark:border-white/10 items-center dark:bg-slate-900">
-                  <span class="text-xs">${w.globals.initialSeries[seriesIndex].name
-              }</span>
+                  <span class="text-xs">${
+                    w.globals.initialSeries[seriesIndex].name
+                  }</span>
                   <span class="font-semibold text-base">$ ${series[seriesIndex][
-                dataPointIndex
-              ]?.toLocaleString()}</span>
+                    dataPointIndex
+                  ]?.toLocaleString()}</span>
                   
                 </div>
               `;
@@ -111,7 +112,7 @@ const LineChart = ({
               return parseAmount(val) ?? val;
             },
             style: {
-              colors: isDark ? "#64748b" : "#000",
+              colors: isDark ? "#a1a1aa" : "#000",
               fontFamily: FONT_FAMILY,
               fontWeight: 600,
               fontSize: "13",
@@ -119,7 +120,6 @@ const LineChart = ({
           },
         },
         xaxis: {
-          show: showXAxis,
           axisBorder: {
             show: bottomBorder,
           },
@@ -130,13 +130,9 @@ const LineChart = ({
           labels: {
             show: showXAxis,
             style: {
-              colors: isDark ? "#64748b" : "#000",
+              colors: isDark ? "#a1a1aa" : "#000",
               fontFamily: FONT_FAMILY,
               fontWeight: 600,
-              width: 10,
-              whitespace: "no-wrap",
-              overflow: "hidden",
-              text: "ellipsis",
             },
           },
         },

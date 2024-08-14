@@ -15,7 +15,6 @@ import { capitalize } from "~/modules/components/molecules/Table/utils";
 import { TransactionIncludes } from "~/types/transactions";
 
 import { useResize } from "~/lib/hooks/useResize";
-import { useTransactions } from "~/modules/Transactions/hook/useTransactions.hook"
 import MobileTransactionPage from "~/modules/Transactions/MobileTransactionPage";
 import Actions from "~/modules/components/molecules/Table/Actions";
 import { useRouter } from "next/router";
@@ -25,14 +24,14 @@ const TransactionPage = () => {
   const [isClient, setIsClient] = useState(false);
   const router = useRouter();
   const params = useParams<{ acc: string }>();
-  
+
   const { size } = useResize();
   const isMobile = Boolean(size && size <= 768);
-  const { transactions, isLoading } = useTransactions({
-    accountId: Number(params?.acc),
-    filter: 0,
-  },)
-
+  const { data: transactions, isLoading } =
+    api.transaction.getTransactions.useQuery({
+      accountId: Number(params?.acc),
+      filter: 0,
+    });
 
   const renderCell = useCallback(
     (transaction: TransactionIncludes, columnKey: React.Key) => {

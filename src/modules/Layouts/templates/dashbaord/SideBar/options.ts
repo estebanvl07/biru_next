@@ -1,8 +1,4 @@
 export const menuOptions = [
-  {
-    id: 2,
-    title: "Menú",
-    menus: [
       {
         id: 325,
         name: "Dashboard",
@@ -70,28 +66,14 @@ export const menuOptions = [
       //   icon: "mdi:report-box-outline",
       //   href: "/reports",
       // },
-    ],
-  },
-  {
-    id: 3,
-    title: "Configuración",
-    menus: [
-      // {
-      //   id: 1,
-      //   name: "Ayuda",
-      //   disabled: true,
-      //   icon: "material-symbols:help-outline",
-      //   href: "/help",
-      // },
 
       {
-        id: 3,
+        id: 7,
         name: "Configuración",
         icon: "ep:setting",
         href: "/setting",
       },
-    ],
-  },
+    
 ];
 
 export const mobileOptions = [

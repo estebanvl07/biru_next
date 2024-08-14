@@ -12,8 +12,8 @@ const config = {
   theme: {
     extend: {
       gridTemplateColumns: {
-        '128-auto': 'repeat(auto-fit, minmax(128px, 1fr))',
-        '300-auto': 'repeat(auto-fit, minmax(300px, 1fr))',
+        "128-auto": "repeat(auto-fit, minmax(128px, 1fr))",
+        "300-auto": "repeat(auto-fit, minmax(300px, 1fr))",
       },
       padding: {
         content: "14px",
@@ -44,11 +44,11 @@ const config = {
         light: {
           colors: {
             default: {
-              DEFAULT: "#e2e8f0",
-              50: "#f8fafc",
+              DEFAULT: "#f3f4f6",
+              50: "#fafafa",
               100: "#fff",
-              200: "#e2e8f0",
-              300: "#cbd5e1",
+              200: "#e5e5e5",
+              300: "#d4d4d4",
             },
           },
         },
@@ -56,11 +56,11 @@ const config = {
           colors: {
             content1: "#0f172a",
             default: {
-              DEFAULT: "#1e293b",
-              50: "#1e293b",
-              100: "#1e293b",
-              200: "#0f172a",
-              300: "#020617",
+              DEFAULT: "#18181b",
+              50: "#020617",
+              100: "#0f172a",
+              200: "#1e293b",
+              300: "#334155",
             },
           },
         },

@@ -1,7 +1,7 @@
 import { useRouter } from "next/router";
 import { useParams } from "next/navigation";
 import { useCallback } from "react";
-import { Table } from "~/modules/components";
+import { Card, Table } from "~/modules/components";
 import { format } from "date-fns";
 
 import MobileEntityPage from "~/modules/Entities/MobileEntityContent";

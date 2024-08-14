@@ -7,7 +7,6 @@ import { CALLBACK_SIGN_OUT_URL } from "~/lib/constants/config";
 const ButtonSignOut = () => {
   return (
     <Button
-      variant="flat"
       className="mx-4 mb-2 items-center !justify-start !px-6 !py-3 text-sm hover:bg-slate-100 hover:transition-all dark:!bg-slate-900 hover:dark:bg-indigo-950"
       onClick={() => {
         signOut({

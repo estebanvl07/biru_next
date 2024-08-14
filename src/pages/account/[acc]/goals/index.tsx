@@ -1,90 +1,43 @@
-import { useParams } from "next/navigation";
+import { useState } from "react";
+
 import { motion } from "framer-motion";
-import Link from "next/link";
 
-import { Icon } from "@iconify/react/dist/iconify.js";
-import { Button, Input } from "@nextui-org/react";
-import { Empty } from "~/modules/components";
+import { ButtonGroup } from "~/modules/components";
 import DashboardLayout from "~/modules/Layouts/Dashboard";
-import { LoaderSkeleton } from "~/modules/Loaders";
-import GoalCard from "~/modules/Goals/GoalCard";
-
-import { useSearch } from "~/lib/hooks";
-import { Goals } from "@prisma/client";
-import { groupedAnimation } from "~/modules/animations";
-import { useGoals } from "~/modules/Goals/hook/goal.hook";
-import { useResize } from "~/lib/hooks/useResize";
-import { api } from "~/utils/api";
+import CardsView from "~/modules/Goals/Views/Cards/CardsView";
+import TableGoals from "~/modules/Goals/Views/Table/TableGoals";
 
 export default function GoalPage() {
-  const params = useParams();
-
-  const { isMobile } = useResize();
-
-  const { data: goals, isLoading } = api.goals.getGoals.useQuery(undefined, {
-    enabled: Boolean(params?.acc),
-  });
-
-  const { newList, onSearch, query } = useSearch<Goals>({
-    data: goals ?? [],
-    keys: ["name", "saved"],
-  });
+  const [mode, setMode] = useState(1);
 
   return (
     <DashboardLayout
       title="Metas"
       headDescription="Listado de metas del usuario"
     >
-      <header className="mb-2 flex items-center gap-2">
-        <Input
-          placeholder="Buscar"
-          className="w-full sm:max-w-[40%]"
-          onChange={(e) => onSearch(e.target.value)}
-          startContent={
-            <Icon icon="iconoir:search" className="dark:text-slate-200" />
-          }
+      <div className="mb-4 w-fit">
+        <ButtonGroup
+          defaultSelected={1}
+          buttonClass="py-2 text-sm"
+          options={[
+            {
+              id: 1,
+              label: "",
+              onClick: () => setMode(1),
+              icon: "ph:table-fill",
+            },
+            {
+              id: 2,
+              label: "",
+              onClick: () => setMode(2),
+              icon: "mingcute:grid-line",
+            },
+          ]}
         />
-        <nav className="my-2 flex gap-2">
-          <Button
-            as={Link}
-            isIconOnly={isMobile}
-            href={`/account/${params?.acc}/goals/new`}
-            color="primary"
-            className="flex gap-1"
-          >
-            <Icon icon="ph:plus" width={16} />
-            {!isMobile && "Crear Meta"}
-          </Button>
-        </nav>
-      </header>
-      {isLoading ? (
-        <LoaderSkeleton skeletonType="Saving" />
-      ) : (
-        <motion.section
-          variants={groupedAnimation.container}
-          className="mt-4 grid grid-cols-2 gap-2 md:grid-cols-300-auto"
-          initial="hidden"
-          animate="visible"
-        >
-          {query && newList.length === 0 ? (
-            <p>No encontramos resultados con "{query}"</p>
-          ) : (
-            <>
-              {newList.length === 0 ? (
-                <Empty
-                  className="py-10"
-                  description="Aún no tienes metas creadas"
-                  icon="tabler:target-off"
-                />
-              ) : (
-                newList?.map((props) => (
-                  <GoalCard key={props.id} goalInfo={props} />
-                ))
-              )}
-            </>
-          )}
-        </motion.section>
-      )}
+      </div>
+      <motion.div className="w-full py-2" layout>
+        {mode === 1 ? <TableGoals /> : <CardsView />}
+      </motion.div>
     </DashboardLayout>
   );
 }

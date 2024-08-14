@@ -2,6 +2,7 @@ import { GetServerSideProps } from "next";
 import { useRouter } from "next/router";
 import React from "react";
 import { formatDatesOfTransactions } from "~/lib/resource/formatDatesOfTransactions";
+import { Card } from "~/modules/components";
 
 import DashboardLayout from "~/modules/Layouts/Dashboard";
 import TransactionForm from "~/modules/Transactions/TransactionForm";
@@ -34,7 +35,7 @@ const EditTransactionPage = ({
 
   return (
     <DashboardLayout
-      title="Detalle de transacción"
+      title="Editar transacción"
       headDescription="Editar una transacción"
     >
       <TransactionForm

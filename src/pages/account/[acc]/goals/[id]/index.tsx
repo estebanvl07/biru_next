@@ -15,7 +15,7 @@ import { columns } from "~/modules/Goals/table";
 import { Card, Table } from "~/modules/components";
 import DashboardLayout from "~/modules/Layouts/Dashboard";
 import { GoalsIncludes } from "~/types/goal/goal.types";
-import { Button, Chip, Link, User } from "@nextui-org/react";
+import { Button, Chip, Link } from "@nextui-org/react";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import { useResize } from "~/lib/hooks/useResize";
 import { ListTransactions } from "~/modules/Common";
@@ -33,7 +33,8 @@ const DetailGoalPage = ({
   const params = useParams();
   const { isMobile } = useResize();
   const [isClient, setIsClient] = useState(false);
-  const { goal, saved, name, goalDate, description, state, id, entity } = goalData;
+  const { goal, saved, name, goalDate, description, state, id, entity } =
+    goalData;
 
   const renderCell = useCallback(
     (transaction: Transaction, columnKey: React.Key) => {
@@ -64,7 +65,7 @@ const DetailGoalPage = ({
           return (
             <span>
               {capitalize(
-                format(transaction.createdAt, "PPPP", { locale: es })
+                format(transaction.createdAt, "PPPP", { locale: es }),
               )}
             </span>
           );
@@ -99,7 +100,7 @@ const DetailGoalPage = ({
           return cellValue;
       }
     },
-    [params, isClient]
+    [params, isClient],
   );
 
   useEffect(() => {
@@ -108,48 +109,51 @@ const DetailGoalPage = ({
 
   return (
     <DashboardLayout title="Detalle de Meta" headDescription="Detalles de Meta">
-      <div className="flex w-full flex-col">
-        <div className="flex flex-col">
-          <header className="mb-4 flex flex-row items-center justify-between">
-            <div className="flex items-center gap-3">
-              <h2>{name}</h2>
-              <div>
-                <Chip
-                  color={
-                    state === 1 ? "primary" : state === 2 ? "success" : "danger"
-                  }
-                  size="sm"
-                  className="h-4 text-[10px] text-white"
-                >
-                  {state === 1
-                    ? "Progreso"
-                    : state === 2
-                    ? "Terminado"
-                    : "Cancelado"}
-                </Chip>
+      <Card>
+        <div className="flex w-full flex-col py-3">
+          <div className="flex flex-col">
+            <header className="mb-4 flex flex-row items-center justify-between">
+              <div className="flex items-center gap-3">
+                <h2 className="font-normal">{name}</h2>
+                <div>
+                  <Chip
+                    color={
+                      state === 1
+                        ? "primary"
+                        : state === 2
+                          ? "success"
+                          : "danger"
+                    }
+                    size="md"
+                    className="h-5 text-[12px] text-white"
+                  >
+                    {state === 1
+                      ? "Progreso"
+                      : state === 2
+                        ? "Terminado"
+                        : "Cancelado"}
+                  </Chip>
+                </div>
               </div>
-            </div>
-            <Button
-              as={Link}
-              href={`/account/${params?.acc}/goals/${id}/edit`}
-              color="primary"
-              size="sm"
-              isIconOnly={isMobile}
-              className="sm:w-fit"
-            >
-              <Icon icon="akar-icons:edit" width={18} />
-              {!isMobile && "Editar Meta"}
-            </Button>
-          </header>
+              <Button
+                as={Link}
+                href={`/account/${params?.acc}/goals/${id}/edit`}
+                color="primary"
+                isIconOnly={isMobile}
+                className="sm:w-fit"
+              >
+                <Icon icon="akar-icons:edit" width={18} />
+                {!isMobile && "Editar Meta"}
+              </Button>
+            </header>
             <hr className="dark:border-white/10" />
-            <ul className="mt-4 grid w-full grid-cols-2 gap-2 sm:grid-cols-2 [&>li>p]:font-semibold [&>li]:gap-2 [&>li]:flex [$>li]:items-center [&>li]:text-sm">
-              {
-                entity && 
+            <ul className="[$>li]:items-center mt-4 grid w-full grid-cols-2 gap-2 sm:grid-cols-2 [&>li>p]:font-semibold [&>li]:flex [&>li]:gap-2 [&>li]:text-sm">
+              {entity && (
                 <li>
                   <span>Destinatario:</span>
                   <p>{capitalize(entity.name)}</p>
                 </li>
-              }
+              )}
               <li>
                 <span>Descripción:</span>
                 <p>{description || "N/A"}</p>
@@ -175,28 +179,31 @@ const DetailGoalPage = ({
                 <p>
                   {goalDate
                     ? capitalize(
-                        format(new Date(String(goalDate)), "PPP", { locale: es })
+                        format(new Date(String(goalDate)), "PPP", {
+                          locale: es,
+                        }),
                       )
                     : "N/A"}
                 </p>
               </li>
             </ul>
           </div>
-          <h2 className="my-4 font-normal">Movimientos de Meta</h2>
-        {!isMobile ? (
-          <Table
-            columns={columns}
-            data={goalData.transactions ?? []}
-            renderCell={renderCell}
-            filterKeys={["amount"]}
-            headerConfig={{
-              redirectTo: `/account/${acc}/transactions/new?transferType=2&goal=${goalData.id}&entity=${goalData.entityId}`,
-            }}
-          />
-        ) : (
-          <ListTransactions data={goalData.transactions as any} />
-        )}
-      </div>
+          <h3 className="my-4 font-normal">Movimientos de Meta</h3>
+          {!isMobile ? (
+            <Table
+              columns={columns}
+              data={goalData.transactions ?? []}
+              renderCell={renderCell}
+              filterKeys={["amount"]}
+              headerConfig={{
+                redirectTo: `/account/${acc}/transactions/new?transferType=2&goal=${goalData.id}&entity=${goalData.entityId}`,
+              }}
+            />
+          ) : (
+            <ListTransactions data={goalData.transactions as any} />
+          )}
+        </div>
+      </Card>
     </DashboardLayout>
   );
 };
@@ -207,7 +214,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const helper = await createServerSideCaller(ctx);
   const goal = await helper.goals.getGoalById.fetch({ id: Number(id) });
 
-  const [goalData] = formatDatesOfGoals(goal)
+  const [goalData] = formatDatesOfGoals(goal as any);
 
   return {
     props:

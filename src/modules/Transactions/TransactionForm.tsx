@@ -14,7 +14,7 @@ import {
   SelectItem,
   User,
 } from "@nextui-org/react";
-import { ButtonGroup, InputDate } from "~/modules/components";
+import { ButtonGroup, Card, InputDate } from "~/modules/components";
 
 import { api } from "~/utils/api";
 import { Icon } from "@iconify/react/dist/iconify.js";
@@ -30,7 +30,7 @@ import { useAlert } from "~/lib/hooks/useAlert";
 import { useEntity } from "~/modules/Entities/hook/entities.hook";
 import { useCategory } from "../Category/hook/category.hook";
 import { useGoals } from "../Goals/hook/goal.hook";
-import { useTransactions } from "./hook/useTransactions.hook"
+import { useTransactions } from "./hook/useTransactions.hook";
 import { AnimatePresence, motion } from "framer-motion";
 import { capitalize } from "../components/molecules/Table/utils";
 import { format } from "date-fns";
@@ -55,7 +55,7 @@ const TransactionForm = ({
   const [goalSelected, setGoalSelected] = useState<Goals>();
 
   const { account } = useCurrentAccount();
-  const { addTransactionToCache } = useTransactions()
+  const { addTransactionToCache } = useTransactions({});
   const { entities } = useEntity();
   const { accounts } = useAccounts();
   const { categories } = useCategory();
@@ -135,7 +135,7 @@ const TransactionForm = ({
           { ...payload, date: new Date() },
           {
             onSuccess(data) {
-              addTransactionToCache(data)
+              addTransactionToCache(data);
               reset();
             },
           },
@@ -230,9 +230,9 @@ const TransactionForm = ({
 
   useEffect(() => {
     if (type === "goal" && goalSelected) {
-      setValue("type", goalSelected.type as any)
+      setValue("type", goalSelected.type as any);
     }
-  }, [goalSelected])
+  }, [goalSelected]);
 
   return (
     <AnimatePresence>
@@ -352,27 +352,35 @@ const TransactionForm = ({
                 {(goal) => (
                   <SelectItem
                     color="primary"
-                    variant="solid"
+                    variant="flat"
                     onClick={() => {
                       setGoalSelected((prev) =>
                         prev?.id === goal.id ? undefined : goal,
                       );
-                      setValue("type", goal.type as 1 | 2)
+                      setValue("type", goal.type as 1 | 2);
                       setValue("goalId", goal.id);
-                      goal?.entityId && setValue("entityId", goal?.entityId)
-                      console.log(goal)
+                      goal?.entityId && setValue("entityId", goal?.entityId);
                       if (goal?.entityId) {
-                        const currentEntity = entities.find((entity) => entity.id === goal.entityId)
-                        console.log(currentEntity)
+                        const currentEntity = entities.find(
+                          (entity) => entity.id === goal.entityId,
+                        );
                         if (currentEntity) {
-                          setValue("recipient", currentEntity.name || "")
-                          currentEntity?.reference && setValue("reference", currentEntity.reference || "")
-                          currentEntity?.description && setValue("description", currentEntity.description || "")
+                          setValue("recipient", currentEntity.name || "");
+                          currentEntity?.reference &&
+                            setValue(
+                              "reference",
+                              currentEntity.reference || "",
+                            );
+                          currentEntity?.description &&
+                            setValue(
+                              "description",
+                              currentEntity.description || "",
+                            );
                         }
                       } else {
-                        setValue("recipient", undefined)
-                        setValue("reference", undefined)
-                        setValue("description", undefined)
+                        setValue("recipient", undefined);
+                        setValue("reference", undefined);
+                        setValue("description", undefined);
                       }
                     }}
                     key={goal.id}
@@ -509,16 +517,10 @@ const TransactionForm = ({
                     }}
                     renderValue={(items) => {
                       return items.map(({ data }) => (
-                        <div
-                          key={data?.id}
-                          className="flex items-center gap-2"
-                        >
+                        <div key={data?.id} className="flex items-center gap-2">
                           <div className="grid h-8 w-8 place-items-center rounded-full bg-primary">
                             {data?.icon ? (
-                              <Icon
-                                icon={data?.icon}
-                                className="text-white"
-                              />
+                              <Icon icon={data?.icon} className="text-white" />
                             ) : (
                               <Avatar name={data?.name} />
                             )}
@@ -721,7 +723,6 @@ const TransactionForm = ({
                 )}
               </AccordionItem>
             )}
-            
           </Accordion>
           <div className="flex w-full flex-col gap-2 sm:flex-row">
             <Button

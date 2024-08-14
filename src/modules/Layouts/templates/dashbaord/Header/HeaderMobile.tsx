@@ -10,12 +10,12 @@ import Link from "next/link";
 
 const HeaderMobile = ({ title = "Dashboard" }: { title?: string }) => {
   const pathname = usePathname();
-  const params = useParams()
+  const params = useParams();
   const { data } = useSession();
   const { account } = useCurrentAccount();
 
   return (
-    <header className="px-content z-10 flex w-full items-center justify-between mb-6 py-2">
+    <header className="z-10 flex w-full items-center justify-between px-content py-2">
       <aside className="flex items-center gap-3">
         {pathname?.includes("main") || pathname === "/account" ? (
           <aside className="flex items-center gap-3">

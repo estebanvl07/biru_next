@@ -5,13 +5,10 @@ import { RangeCalendar, Select, SelectItem } from "@nextui-org/react";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import { AnimatePresence, motion } from "framer-motion";
 import { useOutsideClick } from "~/lib/hooks";
-import { useParams } from "next/navigation";
 import { FILTERS } from "~/types/transactions";
 import { useFilterContext } from "~/lib/context/Filter.context";
 
 const FilterTemplates = () => {
-  const params = useParams();
-
   const [hasCalendar, setHasCalendar] = useState(false);
   const [showCalendar, setShowCalendar] = useState(false);
   const divRef = useOutsideClick<HTMLDivElement>(() => setShowCalendar(false));
@@ -88,6 +85,9 @@ const FilterTemplates = () => {
       )}
       <Select
         className="w-32 lg:w-48"
+        classNames={{
+          trigger: "bg-white dark:bg-default-100",
+        }}
         defaultSelectedKeys={[0]}
         aria-label="Select filter templates"
         placeholder="Filtrar"

@@ -40,7 +40,7 @@ const DataTable = <T,>({
     direction: "ascending",
   });
 
-  const { isDark } = useTheme()
+  const { isDark } = useTheme();
   const { onSearch, newList } = useSearch({
     data,
     keys: filterKeys ?? "",
@@ -53,7 +53,7 @@ const DataTable = <T,>({
   const items = useMemo(() => {
     const start = (page - 1) * rowsPerPage;
     const end = start + rowsPerPage;
-    return newList.slice(start, end)
+    return newList.slice(start, end);
   }, [page, newList, rowsPerPage]);
 
   // TODO: sorted columns
@@ -87,8 +87,10 @@ const DataTable = <T,>({
         <LoaderSkeleton skeletonType="Table" />
       ) : (
         <Table
-          removeWrapper
           className="dark:text-white"
+          classNames={{
+            wrapper: "dark:bg-default-200/80",
+          }}
           color="primary"
           isHeaderSticky
           aria-label="Data table"
@@ -121,10 +123,7 @@ const DataTable = <T,>({
           }
           bottomContentPlacement="outside"
         >
-          <TableHeader
-            className="dark:shadow-none"
-            columns={columns}
-          >
+          <TableHeader className="dark:shadow-none" columns={columns}>
             {({ uid, align, sorting, name }) => (
               <TableColumn
                 key={uid}
@@ -151,6 +150,8 @@ const DataTable = <T,>({
             )}
           </TableBody>
         </Table>
+        // <Card className="py-5 dark:bg-default-200">
+        // </Card>
       )}
     </>
   );

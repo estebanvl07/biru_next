@@ -1,12 +1,11 @@
 import Image from "next/image";
 import Link from "next/link";
-import React, { useEffect, useState } from "react";
 
 import { useParams } from "next/navigation";
 
 import { useThemeContext } from "~/lib/context/Theme.context";
 
-const NavigationLogo = ({ className }: { className?: string }) => {
+const NavigationLogo = ({ className, isExpanded }: { className?: string, isExpanded: boolean }) => {
   const { theme } = useThemeContext();
   const params = useParams();
 
@@ -15,9 +14,14 @@ const NavigationLogo = ({ className }: { className?: string }) => {
     dark: "/logo-dark.svg",
   }[theme];
 
+  const srcminimal = {
+    light: "/minimal-logo.svg",
+    dark: "/minimal-logo-dark.svg",
+  }[theme]
+
   return (
     <Link href={params?.acc ? `/account/${params?.acc}/main` : "/account"} className={className}>
-      <Image src={src} alt="Logo de Biru" width={100} height={60} />
+      <Image src={isExpanded ? src : srcminimal} alt="Logo de Biru" width={isExpanded ? 110 : 40} height={60} />
     </Link>
   );
 };

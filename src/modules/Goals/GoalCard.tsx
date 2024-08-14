@@ -24,7 +24,7 @@ const GoalCard = ({ goalInfo }: { goalInfo: Goals }) => {
         ...groupedAnimation.item,
       }}
       onClick={() => router.push(`/account/${params?.acc}/goals/${id}`)}
-      className="col-span-2 rounded-xl border cursor-pointer bg-default-50 transition-all duration-300 sm:col-span-1 dark:border-white/10 dark:bg-default-200 dark:shadow-md"
+      className="col-span-2 cursor-pointer rounded-xl border bg-default-100 transition-all duration-300 sm:col-span-1 dark:border-white/10 dark:bg-slate-800 dark:shadow-md"
     >
       <div className=" flex flex-col px-6 py-4">
         <header className="flex items-center justify-between">
@@ -54,7 +54,7 @@ const GoalCard = ({ goalInfo }: { goalInfo: Goals }) => {
           value={saved}
           maxValue={goal}
           classNames={{
-            indicator: "dark:bg-indigo-400"
+            indicator: "dark:bg-indigo-400",
           }}
           className="mb-2 mt-3 w-full rounded-full border bg-gray-200 dark:border-none dark:bg-slate-700"
         />

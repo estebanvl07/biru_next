@@ -26,7 +26,7 @@ import { amountFormatter } from "~/utils/formatters";
 import { GoalsIncludes } from "~/types/goal/goal.types";
 import { useEntity } from "../Entities/hook/entities.hook";
 import { accordionItemAnimate } from "../animations";
-import { Toaster, toast } from "sonner";
+import { toast } from "sonner";
 
 interface GoalFormProps {
   hasEdit?: boolean;
@@ -56,9 +56,9 @@ const GoalForm = ({ hasEdit, goalDefault }: GoalFormProps) => {
   });
 
   const defaultEntity =
-  entities && goalDefault && goalDefault.entityId
-    ? [String(goalDefault.entityId)]
-    : undefined;
+    entities && goalDefault && goalDefault.entityId
+      ? [String(goalDefault.entityId)]
+      : undefined;
 
   const alertConfig: any = {
     type: "quest",
@@ -137,7 +137,7 @@ const GoalForm = ({ hasEdit, goalDefault }: GoalFormProps) => {
     <>
       <Alert isOpen={isOpen} onClose={onClose} {...props} />
       <form
-        className="flex max-w-[32rem] flex-col gap-2"
+        className="flex w-full flex-col gap-2 py-3 md:max-w-[32rem]"
         onSubmit={(event) => {
           event.preventDefault();
           setProps(alertConfig);
@@ -204,7 +204,7 @@ const GoalForm = ({ hasEdit, goalDefault }: GoalFormProps) => {
           isInvalid={Boolean(errors?.goal)}
           errorMessage={errors?.goal?.message}
         />
-        <Accordion defaultExpandedKeys="1" motionProps={accordionItemAnimate}>
+        <Accordion motionProps={accordionItemAnimate}>
           <AccordionItem
             key="1"
             title="Información Adicional"

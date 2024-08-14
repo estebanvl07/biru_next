@@ -49,7 +49,7 @@ const TopContent = React.memo(
               startContent={<Icon icon="iconoir:search" width={18} />}
               className="!w-[40%]"
               classNames={{
-                inputWrapper: "border dark:border-white/10"
+                inputWrapper: "border dark:border-white/10",
               }}
               value={filterValue}
               onChange={onSearchChange}
@@ -66,7 +66,7 @@ const TopContent = React.memo(
               <Button
                 color="primary"
                 as={Link}
-                size="sm"
+                size="md"
                 href={redirectTo ?? "new"}
                 className="flex items-center gap-2"
               >

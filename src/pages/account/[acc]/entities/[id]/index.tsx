@@ -102,15 +102,14 @@ const DetailEntityPage = ({ entity }: { entity: EntityIncludes }) => {
   return (
     <div>
       <DashboardLayout title="Detalle de Entidad">
-        <div className="flex flex-col gap-6">
-          <Card className="flex flex-col">
-            <header className="mb-4 flex flex-row items-center justify-between">
-              <h3>Información de Entidad</h3>
+        <Card className="flex flex-col py-6">
+          <div className="flex flex-col">
+            <header className="flex flex-row items-center justify-between">
+              <h2>{entity.name}</h2>
               <Button
                 as={Link}
                 href={`/account/${params?.acc}/entities/${entity.id}/edit`}
                 color="primary"
-                size="sm"
                 isIconOnly={isMobile}
                 className="sm:w-fit"
               >
@@ -118,48 +117,46 @@ const DetailEntityPage = ({ entity }: { entity: EntityIncludes }) => {
                 {!isMobile && "Editar Entidad"}
               </Button>
             </header>
-            <ul className="grid w-full grid-cols-2 md:grid-cols-4 gap-2 text-xs [&>li>p]:text-default-500 [&>li>span]:font-medium [&>li]:flex [&>li]:flex-col [&>li]:items-start">
+            <hr className="my-4" />
+            <ul className=" mb-4 grid w-full grid-cols-2 gap-2 sm:grid-cols-2 [&>li>p]:font-medium [&>li]:flex [&>li]:items-start [&>li]:gap-2 [&>li]:text-sm">
               <li>
-                <span>Nombre</span>
-                <p>{entity.name}</p>
-              </li>
-              <li>
-                <span>Referencia</span>
+                <span>Referencia: </span>
                 <p>{entity.reference || "N/A"}</p>
               </li>
               <li>
-                <span>Descripción</span>
+                <span>Descripción: </span>
                 <p>{entity.description || "N/A"}</p>
               </li>
               <li>
-                <span>Tipo</span>
+                <span>Tipo: </span>
                 <p>{entity.type === 1 ? "Ingreso" : "Egreso"}</p>
               </li>
             </ul>
-          </Card>
-          <div className="w-full md:min-w-[32rem]">
-              {
-                isMobile ?
-                    <ListTransactions data={entity.transactions as any} />
-                :
-              <Table
-                headerConfig={{
-                  hasNew: true,
-                  newButtonText: "Nueva Transacción",
-                  redirectTo: `/account/${params?.acc}/transactions/new?entity=${params?.id}`,
-                }}
-                footerConfig={{
-                  navButtons: false,
-                }}
-                filterKeys={["amount", "description", "reference"]}
-                columns={detailColumns}
-                data={entity.transactions}
-                renderCell={renderCell}
-              />
-              }
-         
+
+            <h3 className="mb-4 font-normal">Movimientos de Entidad</h3>
+
+            <div className="w-full md:min-w-[32rem]">
+              {isMobile ? (
+                <ListTransactions data={entity.transactions as any} />
+              ) : (
+                <Table
+                  headerConfig={{
+                    hasNew: true,
+                    newButtonText: "Nueva Transacción",
+                    redirectTo: `/account/${params?.acc}/transactions/new?entity=${params?.id}`,
+                  }}
+                  footerConfig={{
+                    navButtons: false,
+                  }}
+                  filterKeys={["amount", "description", "reference"]}
+                  columns={detailColumns}
+                  data={entity.transactions}
+                  renderCell={renderCell}
+                />
+              )}
+            </div>
           </div>
-        </div>
+        </Card>
       </DashboardLayout>
     </div>
   );
@@ -171,13 +168,15 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const helper = await createServerSideCaller(ctx);
   const [entity] = await helper.entity.getEntityById.fetch({ id: Number(id) });
 
-  const transactionSerialize = formatDatesOfTransactions(entity?.transactions as any)
- 
+  const transactionSerialize = formatDatesOfTransactions(
+    entity?.transactions as any,
+  );
+
   const entityData = {
     ...entity,
     createdAt: entity?.createdAt.toISOString(),
     updateAt: entity?.updateAt.toISOString(),
-    transactions: transactionSerialize
+    transactions: transactionSerialize,
   };
 
   return {

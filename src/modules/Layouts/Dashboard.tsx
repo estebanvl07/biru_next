@@ -12,10 +12,6 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import MainLoader from "../Loaders/mainLoader.component";
 import { useEffect, useState } from "react";
-import Breadcrum from "./templates/Breadcrum";
-import { Button } from "@nextui-org/button";
-
-import Link from "next/link";
 
 const variants = {
   hidden: { opacity: 0, x: -200, y: 0 },
@@ -37,7 +33,6 @@ const DashboardLayout = ({
   hasFilter?: boolean;
 }) => {
   const [isClient, setIsClient] = useState(false);
-  const { account, isLoading } = useCurrentAccount();
   const { isMobile } = useResize();
 
   const router = useRouter();
@@ -46,29 +41,23 @@ const DashboardLayout = ({
     setIsClient(true);
   }, []);
 
-  // useEffect(() => {
-  //   if (isLoading === false && !account) {
-  //     router.push("/account")
-  //   }
-  // }, [isLoading])
-
   return (
-    <div className="bg-zinc-100/50 flex overflow-hidden dark:bg-slate-950">
-      <Head>
-        <title>Biru - {title}</title>
-        <meta name="description" content={headDescription} />
-      </Head>
-      {<SideBar serviceOptions={serviceOptions} />}
-      {isMobile && <BottomMobileNav />}
+    <div className=" flex flex-row overflow-hidden md:p-1.5 md:pl-0 dark:bg-default-100">
+      <AnimatePresence>
+        <Head>
+          <title>Biru - {title}</title>
+          <meta name="description" content={headDescription} />
+        </Head>
+        {<SideBar serviceOptions={serviceOptions} />}
+        {isMobile && <BottomMobileNav />}
 
-      <section className="z-0 h-full min-h-screen w-full flex-grow py-3 md:pl-60">
-        <div className="flex flex-col md:px-8">
-          {!isMobile ? (
-            <HeaderApp title={title} hasFilter={hasFilter} />
-          ) : (
-            <HeaderMobile title={title} />
-          )}
-          <AnimatePresence>
+        <section className="z-0 h-full min-h-screen w-full flex-grow rounded-md rounded-tl-2xl border bg-stone-200/50 py-3 dark:border-white/10 dark:bg-default-50">
+          <div className="flex flex-col md:px-8">
+            {!isMobile ? (
+              <HeaderApp title={title} hasFilter={hasFilter} />
+            ) : (
+              <HeaderMobile title={title} />
+            )}
             <motion.main
               className={clsx("z-0 mt-4 px-content md:px-0", {
                 "pb-16": isMobile,
@@ -81,7 +70,7 @@ const DashboardLayout = ({
             >
               {isClient ? <>{children}</> : <MainLoader />}
               {!isMobile && (
-                <footer className="mt-4 flex w-full items-center justify-between text-xs">
+                <footer className="z-0 mt-4 flex w-full items-center justify-between text-xs">
                   <p>Desarrollado por Esteban vl & Pedro Va</p>
                   <span className="flex items-center gap-1">
                     Hecho con
@@ -94,9 +83,9 @@ const DashboardLayout = ({
                 </footer>
               )}
             </motion.main>
-          </AnimatePresence>
-        </div>
-      </section>
+          </div>
+        </section>
+      </AnimatePresence>
     </div>
   );
 };

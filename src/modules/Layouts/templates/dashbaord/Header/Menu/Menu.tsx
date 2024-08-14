@@ -53,7 +53,7 @@ const Menu = ({ onHide }: { onHide: () => void }) => {
       transition={{
         duration: 0.4,
       }}
-      className="absolute right-2 top-16 flex w-52 flex-col rounded-md border bg-white/80 pb-1 pt-2 shadow-xl backdrop-blur-sm md:right-0 dark:border-white/10 dark:bg-slate-900/70"
+      className="flex w-full flex-col rounded-md pb-1 pt-2 backdrop-blur-sm md:right-0 dark:border-white/10"
     >
       <AccountsOptions />
       <ul className="flex w-full flex-col">

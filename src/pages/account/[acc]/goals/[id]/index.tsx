@@ -112,7 +112,7 @@ const DetailGoalPage = ({
       <Card>
         <div className="flex w-full flex-col py-3">
           <div className="flex flex-col">
-            <header className="mb-4 flex flex-row items-center justify-between">
+            <header className="mb-4 flex flex-col items-center justify-between md:flex-row">
               <div className="flex items-center gap-3">
                 <h2 className="font-normal">{name}</h2>
                 <div>
@@ -147,7 +147,7 @@ const DetailGoalPage = ({
               </Button>
             </header>
             <hr className="dark:border-white/10" />
-            <ul className="[$>li]:items-center mt-4 grid w-full grid-cols-2 gap-2 sm:grid-cols-2 [&>li>p]:font-semibold [&>li]:flex [&>li]:gap-2 [&>li]:text-sm">
+            <ul className="[$>li]:items-center mt-4 grid w-full grid-cols-1 gap-2 sm:grid-cols-2 [&>li>p]:font-semibold [&>li]:flex [&>li]:gap-2 [&>li]:text-sm">
               {entity && (
                 <li>
                   <span>Destinatario:</span>

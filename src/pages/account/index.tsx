@@ -10,7 +10,13 @@ import { useAccounts } from "~/modules/Account/hooks";
 import { createServerSideCaller } from "~/utils/serverSideCaller/serverSideCaller";
 import { useResize } from "~/lib/hooks/useResize";
 import WithoutSideBar from "~/modules/Layouts/templates/dashbaord/without-sidebar";
-import { RadioGroup, RadioProps, VisuallyHidden, cn, useRadio } from "@nextui-org/react";
+import {
+  RadioGroup,
+  RadioProps,
+  VisuallyHidden,
+  cn,
+  useRadio,
+} from "@nextui-org/react";
 import { optionsTypeAccount } from "~/pages/account/new";
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
@@ -37,15 +43,15 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
 };
 
 const AccountPage = () => {
-  const [accountSelected, setAccountSelected] = useState<number>()
+  const [accountSelected, setAccountSelected] = useState<number>();
   const { accounts } = useAccounts();
   const { isMobile } = useResize();
 
   return (
     <>
       <WithoutSideBar title="Centro de Cuentas" hasFilter={false}>
-        <div className="flex flex-col m-auto w-full max-w-[38rem]">
-          <header className="flex justify-between gap-4 items-center">
+        <div className="m-auto flex w-full max-w-[38rem] flex-col">
+          <header className="flex items-center justify-between gap-4">
             <aside>
               <h2>Mis cuentas</h2>
               <p>Selecciona una de tus cuentas</p>
@@ -60,29 +66,48 @@ const AccountPage = () => {
               <Icon icon="ph:plus" width={18} /> {!isMobile && "Crear Cuenta"}
             </Button>
           </header>
-          <RadioGroup
-            className="flex flex-col gap-6 my-4"
-            >
-              {accounts.map((account) => {
-                  const [typeAcc] = optionsTypeAccount.filter((acc) => acc.value === account.type)
-                  return (
-                    <CustomRadio value={`${account.id}`} onClick={() => setAccountSelected(account.id)}>
-                      <div className="flex justify-between items-center w-full px-2">
-                        <aside className="flex flex-col">
-                          <h4 className="w-48 font-medium overflow-hidden text-ellipsis whitespace-nowrap">{account.name}</h4>
-                          <span className="text-xs">{account.reference ?? "Sin referencia"}</span>
-                        </aside>
-                        <aside className="flex flex-col items-end">
-                          <span className="text-xs">{typeAcc?.name}</span>
-                          <span className="font-semibold text-lg"> <span className="text-base font-semibold">$</span> {account?.balance?.toLocaleString()}</span>
-                        </aside>
-                      </div>
-                    </CustomRadio>
-                  );
-              })}
+          <RadioGroup className="my-4 flex flex-col gap-6">
+            {accounts.map((account) => {
+              const [typeAcc] = optionsTypeAccount.filter(
+                (acc) => acc.value === account.type,
+              );
+              return (
+                <CustomRadio
+                  value={`${account.id}`}
+                  key={account.id}
+                  onClick={() => setAccountSelected(account.id)}
+                >
+                  <div className="flex w-full items-center justify-between px-2">
+                    <aside className="flex flex-col">
+                      <h4 className="w-48 overflow-hidden text-ellipsis whitespace-nowrap font-medium">
+                        {account.name}
+                      </h4>
+                      <span className="text-xs">
+                        {account.reference ?? "Sin referencia"}
+                      </span>
+                    </aside>
+                    <aside className="flex flex-col items-end">
+                      <span className="text-xs">{typeAcc?.name}</span>
+                      <span className="text-lg font-semibold">
+                        {" "}
+                        <span className="text-base font-semibold">$</span>{" "}
+                        {account?.balance?.toLocaleString()}
+                      </span>
+                    </aside>
+                  </div>
+                </CustomRadio>
+              );
+            })}
           </RadioGroup>
           <div className="flex gap-2">
-            <Button as={Link} href={`/account/${accountSelected}/main`} color="primary" isDisabled={Boolean(!accountSelected)}>Ir al Dashboard</Button>
+            <Button
+              as={Link}
+              href={`/account/${accountSelected}/main`}
+              color="primary"
+              isDisabled={Boolean(!accountSelected)}
+            >
+              Ir al Dashboard
+            </Button>
             <Button isDisabled>Editar cuenta</Button>
           </div>
         </div>
@@ -105,9 +130,9 @@ export const CustomRadio = (props: RadioProps) => {
     <Component
       {...getBaseProps()}
       className={cn(
-        "group inline-flex items-center justify-between hover:bg-default-50/30 flex-row-reverse",
-        "max-w-full cursor-pointer border border-default rounded-lg gap-4 p-3",
-        "data-[selected=true]:border-primary/40 data-[selected=true]:bg-default-50 dark:data-[selected=true]:bg-default-200 dark:data-[selected=true]:border-primary-light/40",
+        "group inline-flex flex-row-reverse items-center justify-between hover:bg-default-50/30",
+        "max-w-full cursor-pointer gap-4 rounded-lg border border-default p-3",
+        "data-[selected=true]:border-primary/40 data-[selected=true]:bg-default-50 dark:data-[selected=true]:border-primary-light/40 dark:data-[selected=true]:bg-default-200",
       )}
     >
       <VisuallyHidden>

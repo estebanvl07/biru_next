@@ -95,7 +95,11 @@ const SideBar = React.memo(
             )}
           >
             {menuOptions.map((option) => (
-              <OptionItem isExpanded={isExpanded} item={option} />
+              <OptionItem
+                isExpanded={isExpanded}
+                key={option.id}
+                item={option}
+              />
             ))}
           </nav>
           {status === "loading" ? (

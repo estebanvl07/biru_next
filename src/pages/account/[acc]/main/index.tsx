@@ -76,13 +76,17 @@ const HomePage = () => {
                 <Link href={`/account/${params?.acc}/goals`}>Ver todas</Link>
               </header>
               <ul className="flex flex-col gap-2">
-                {
-                  goals.length === 0 && <Empty />
-                }
+                {goals.length === 0 && <Empty />}
                 {goals.map((goal) => {
                   return (
-                    <li className="w-full cursor-pointer flex-row hover:bg-default-200 border border-transparent dark:hover:border-white/10 transition-all rounded-xl bg-default-200/50 dark:bg-default-100">
-                      <Link className="w-full flex items-center px-4 py-3" href={`/account/${params?.id}/goals/${goal.id}`}>
+                    <li
+                      key={goal.id}
+                      className="w-full cursor-pointer flex-row rounded-xl border border-transparent bg-default-200/50 transition-all hover:bg-default-200 dark:bg-default-100 dark:hover:border-white/10"
+                    >
+                      <Link
+                        className="flex w-full items-center px-4 py-3"
+                        href={`/account/${params?.id}/goals/${goal.id}`}
+                      >
                         <User
                           avatarProps={{
                             name: goal.name,

@@ -383,10 +383,10 @@ const TransactionForm = ({
                         setValue("description", undefined);
                       }
                     }}
-                    key={goal.id}
                     className="font-montserrat dark:text-white"
                     textValue={goal.name}
                     value={goal.id}
+                    key={goal.id}
                   >
                     <div className="flex items-center gap-2">
                       <div className="grid h-8 w-8 place-items-center rounded-full bg-primary">
@@ -454,6 +454,7 @@ const TransactionForm = ({
           )}
           <Accordion
             defaultExpandedKeys={["1"]}
+            showDivider={type === "goal"}
             motionProps={{
               variants: {
                 enter: {
@@ -494,6 +495,9 @@ const TransactionForm = ({
             <AccordionItem
               key="1"
               aria-label="Accordion 1"
+              classNames={{
+                base: "border-red-600",
+              }}
               title="Información Adicional"
               subtitle="Agrega más información sobre tu transacción"
             >
@@ -654,75 +658,74 @@ const TransactionForm = ({
                 />
               </div>
             </AccordionItem>
-            {type === "goal" && (
-              <AccordionItem
-                key="2"
-                aria-label="Accordion 2"
-                title="Información de Meta"
-                subtitle="Aquí podrás ver el avance de tu meta"
-              >
-                {Boolean(goalSelected) ? (
-                  <ul className="grid grid-cols-1 gap-2 md:flex-grow md:grid-cols-2 [&>li>span]:font-semibold [&>li]:text-xs">
-                    <li>
-                      <span>Nombre:</span>
-                      <p>{goalSelected?.name}</p>
-                    </li>
-                    <li>
-                      <span>Monto de Meta:</span>
-                      <p>$ {goalSelected?.goal.toLocaleString()}</p>
-                    </li>
-                    <li>
-                      <span>Total Ahorrado:</span>
-                      <p>$ {goalSelected?.saved.toLocaleString()}</p>
-                    </li>
-                    <li>
-                      <span>Estado:</span>
-                      <p>
-                        <Chip
-                          color={
-                            goalSelected?.state === 1
-                              ? "primary"
-                              : goalSelected?.state === 2
-                                ? "success"
-                                : "danger"
-                          }
-                          size="sm"
-                          className="text-white"
-                        >
-                          {goalSelected?.state === 1
-                            ? "Progreso"
+            <AccordionItem
+              key="2"
+              aria-label="Accordion 2"
+              hidden={type !== "goal"}
+              title="Información de Meta"
+              subtitle="Aquí podrás ver el avance de tu meta"
+            >
+              {Boolean(goalSelected) ? (
+                <ul className="grid grid-cols-1 gap-2 md:flex-grow md:grid-cols-2 [&>li>span]:font-semibold [&>li]:text-xs">
+                  <li>
+                    <span>Nombre:</span>
+                    <p>{goalSelected?.name}</p>
+                  </li>
+                  <li>
+                    <span>Monto de Meta:</span>
+                    <p>$ {goalSelected?.goal.toLocaleString()}</p>
+                  </li>
+                  <li>
+                    <span>Total Ahorrado:</span>
+                    <p>$ {goalSelected?.saved.toLocaleString()}</p>
+                  </li>
+                  <li>
+                    <span>Estado:</span>
+                    <p>
+                      <Chip
+                        color={
+                          goalSelected?.state === 1
+                            ? "primary"
                             : goalSelected?.state === 2
-                              ? "Terminado"
-                              : "Cancelado"}
-                        </Chip>
-                      </p>
-                    </li>
-                    <li>
-                      <span>Descripción:</span>
-                      <p>{goalSelected?.description}</p>
-                    </li>
-                    <li>
-                      <span>Fecha limite:</span>
-                      <p>
-                        {goalSelected?.goalDate
-                          ? capitalize(
-                              format(
-                                new Date(String(goalSelected?.goalDate)),
-                                "PPP",
-                                {
-                                  locale: es,
-                                },
-                              ),
-                            )
-                          : "N/A"}
-                      </p>
-                    </li>
-                  </ul>
-                ) : (
-                  "Debe seleccionar una meta"
-                )}
-              </AccordionItem>
-            )}
+                              ? "success"
+                              : "danger"
+                        }
+                        size="sm"
+                        className="text-white"
+                      >
+                        {goalSelected?.state === 1
+                          ? "Progreso"
+                          : goalSelected?.state === 2
+                            ? "Terminado"
+                            : "Cancelado"}
+                      </Chip>
+                    </p>
+                  </li>
+                  <li>
+                    <span>Descripción:</span>
+                    <p>{goalSelected?.description}</p>
+                  </li>
+                  <li>
+                    <span>Fecha limite:</span>
+                    <p>
+                      {goalSelected?.goalDate
+                        ? capitalize(
+                            format(
+                              new Date(String(goalSelected?.goalDate)),
+                              "PPP",
+                              {
+                                locale: es,
+                              },
+                            ),
+                          )
+                        : "N/A"}
+                    </p>
+                  </li>
+                </ul>
+              ) : (
+                "Debe seleccionar una meta"
+              )}
+            </AccordionItem>
           </Accordion>
           <div className="flex w-full flex-col gap-2 sm:flex-row">
             <Button

@@ -3,9 +3,7 @@ import { Z_DATE, Z_NUMBER, updateSchema, z } from "~/lib/resolver/zod";
 export const input = {
   amount: Z_NUMBER,
   accountId: Z_NUMBER,
-  type: z.union([z.literal(1), z.literal(2)], {
-    required_error: "Campo Requerido",
-  }),
+  type: Z_NUMBER,
   date: z.optional(Z_DATE),
   reference: z.optional(z.string()),
   recipient: z.optional(z.string()),

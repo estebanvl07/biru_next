@@ -30,7 +30,6 @@ import { useAlert } from "~/lib/hooks/useAlert";
 import { useEntity } from "~/modules/Entities/hook/entities.hook";
 import { useCategory } from "../Category/hook/category.hook";
 import { useGoals } from "../Goals/hook/goal.hook";
-import { useTransactions } from "./hook/useTransactions.hook";
 import { AnimatePresence, motion } from "framer-motion";
 import { capitalize } from "../components/molecules/Table/utils";
 import { format } from "date-fns";
@@ -55,7 +54,6 @@ const TransactionForm = ({
   const [goalSelected, setGoalSelected] = useState<Goals>();
 
   const { account } = useCurrentAccount();
-  const { addTransactionToCache } = useTransactions({});
   const { entities } = useEntity();
   const { accounts } = useAccounts();
   const { categories } = useCategory();
@@ -135,7 +133,6 @@ const TransactionForm = ({
           { ...payload, date: new Date() },
           {
             onSuccess(data) {
-              addTransactionToCache(data);
               reset();
             },
           },

@@ -1,98 +1,54 @@
-import Link from "next/link";
-import { useParams } from "next/navigation";
-import React from "react";
-
-import { Button, Input } from "@nextui-org/react";
-import { Icon } from "@iconify/react/dist/iconify.js";
+import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 
+import { ButtonGroup } from "~/modules/components";
+
 import DashboardLayout from "~/modules/Layouts/Dashboard";
-import CategoryCard from "~/modules/Category/CategoryCard";
-
-import { useSearch } from "~/lib/hooks";
-
-import type { Category } from "@prisma/client";
-import { groupedAnimation } from "~/modules/animations";
+import CategoryCardsView from "~/modules/Category/Views/Cards/CardsView";
+import TableCategories from "~/modules/Category/Views/Table/TableCategories";
 import { useResize } from "~/lib/hooks/useResize";
-import { LoaderSkeleton } from "~/modules/Loaders";
-import { useRouter } from "next/router";
-import { api } from "~/utils/api";
+import clsx from "clsx";
 
 // TODO: detail category
 const CategoryPage = () => {
-  const params = useParams();
-  const router = useRouter();
+  const [mode, setMode] = useState(1);
   const { isMobile } = useResize();
 
-  const { data: categories, isLoading } = api.category.getAll.useQuery(
-    undefined,
-    { enabled: Boolean(params?.acc) },
-  );
-
-  const { newList, onSearch, query } = useSearch<Category>({
-    data: categories ?? [],
-    keys: "name",
-  });
+  useEffect(() => {
+    if (isMobile) {
+      setMode(2);
+    }
+  }, [isMobile]);
 
   return (
     <DashboardLayout title="Categorías">
-      <nav className="mb-4 flex items-center gap-2">
-        <Input
-          placeholder="Buscar"
-          startContent={
-            <Icon icon="iconoir:search" className="dark:text-slate-200" />
-          }
-          className="w-full sm:max-w-[40%]"
-          onChange={(e) => onSearch(e.target.value)}
+      <div
+        className={clsx("mb-4 w-fit", {
+          hidden: isMobile,
+        })}
+      >
+        <ButtonGroup
+          defaultSelected={1}
+          buttonClass="py-2 text-sm"
+          options={[
+            {
+              id: 1,
+              label: "",
+              onClick: () => setMode(1),
+              icon: "ph:table-fill",
+            },
+            {
+              id: 2,
+              label: "",
+              onClick: () => setMode(2),
+              icon: "mingcute:grid-line",
+            },
+          ]}
         />
-        <Button
-          as={Link}
-          href={`/account/${params?.acc}/category/new`}
-          radius="lg"
-          color="primary"
-          isIconOnly={isMobile as any}
-        >
-          <Icon icon="ph:plus" width={18} /> {!isMobile && "Crear Categoría"}
-        </Button>
-      </nav>
-      {isLoading ? (
-        <LoaderSkeleton skeletonType="Category" />
-      ) : (
-        <>
-          {categories?.length === 0 ? (
-            <span>No tienes categorías creadas</span>
-          ) : (
-            <motion.div
-              className="grid grid-cols-2 gap-2 md:grid-cols-128-auto"
-              variants={groupedAnimation.container}
-              initial="hidden"
-              animate="visible"
-            >
-              {newList.length === 0 ? (
-                <span>No se encontraron resultados con "{query}"</span>
-              ) : (
-                newList?.map((category) => {
-                  return (
-                    <CategoryCard
-                      key={category.id}
-                      category={category}
-                      onClick={() => {
-                        router.push({
-                          pathname: "/account/[acc]/category/[id]",
-                          query: {
-                            acc: params?.acc,
-                            id: category.id,
-                          },
-                        });
-                      }}
-                    />
-                  );
-                })
-              )}
-            </motion.div>
-          )}
-        </>
-      )}
+      </div>
+      <motion.div className="w-full py-2" layout>
+        {mode === 1 ? <TableCategories /> : <CategoryCardsView />}
+      </motion.div>
     </DashboardLayout>
   );
 };

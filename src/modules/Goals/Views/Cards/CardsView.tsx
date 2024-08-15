@@ -60,11 +60,11 @@ const CardsView = () => {
         <LoaderSkeleton skeletonType="Saving" />
       ) : (
         <motion.section
-          variants={groupedAnimation.container}
           className={clsx("mt-4 grid grid-cols-2 gap-2", {
             "md:grid-cols-300-auto": newList.length >= 3,
             "md:grid-cols-3": newList.length < 3,
           })}
+          variants={groupedAnimation.container}
           initial="hidden"
           animate="visible"
         >

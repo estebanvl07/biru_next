@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { motion } from "framer-motion";
 
@@ -6,16 +6,29 @@ import { ButtonGroup } from "~/modules/components";
 import DashboardLayout from "~/modules/Layouts/Dashboard";
 import CardsView from "~/modules/Goals/Views/Cards/CardsView";
 import TableGoals from "~/modules/Goals/Views/Table/TableGoals";
+import clsx from "clsx";
+import { useResize } from "~/lib/hooks/useResize";
 
 export default function GoalPage() {
   const [mode, setMode] = useState(1);
+  const { isMobile } = useResize();
+
+  useEffect(() => {
+    if (isMobile) {
+      setMode(2);
+    }
+  }, [isMobile]);
 
   return (
     <DashboardLayout
       title="Metas"
       headDescription="Listado de metas del usuario"
     >
-      <div className="mb-4 w-fit">
+      <div
+        className={clsx("mb-4 w-fit", {
+          hidden: isMobile,
+        })}
+      >
         <ButtonGroup
           defaultSelected={1}
           buttonClass="py-2 text-sm"

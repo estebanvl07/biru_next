@@ -7,7 +7,7 @@ import { Icon } from "@iconify/react/dist/iconify.js";
 import { Button, Chip } from "@nextui-org/react";
 import { User } from "@nextui-org/user";
 import { detailColumns } from "~/modules/Entities/table";
-import { Card, Table } from "~/modules/components";
+import { Table } from "~/modules/components";
 import Actions from "~/modules/components/molecules/Table/Actions";
 import DashboardLayout from "~/modules/Layouts/Dashboard";
 
@@ -21,6 +21,7 @@ import { useResize } from "~/lib/hooks/useResize";
 import { formatDatesOfTransactions } from "~/lib/resource/formatDatesOfTransactions";
 import Link from "next/link";
 import { ListTransactions } from "~/modules/Common";
+import DetailView from "~/modules/components/molecules/DetailView";
 
 const DetailEntityPage = ({ entity }: { entity: EntityIncludes }) => {
   const router = useRouter();
@@ -100,65 +101,81 @@ const DetailEntityPage = ({ entity }: { entity: EntityIncludes }) => {
   );
 
   return (
-    <div>
-      <DashboardLayout title="Detalle de Entidad">
-        <Card className="flex flex-col py-6">
-          <div className="flex flex-col">
-            <header className="flex flex-row items-center justify-between">
-              <h2>{entity.name}</h2>
-              <Button
-                as={Link}
-                href={`/account/${params?.acc}/entities/${entity.id}/edit`}
-                color="primary"
-                isIconOnly={isMobile}
-                className="sm:w-fit"
-              >
-                <Icon icon="akar-icons:edit" width={18} />
-                {!isMobile && "Editar Entidad"}
-              </Button>
-            </header>
-            <hr className="my-4" />
-            <ul className=" mb-4 grid w-full grid-cols-2 gap-2 sm:grid-cols-2 [&>li>p]:font-medium [&>li]:flex [&>li]:items-start [&>li]:gap-2 [&>li]:text-sm">
-              <li>
-                <span>Referencia: </span>
-                <p>{entity.reference || "N/A"}</p>
-              </li>
-              <li>
-                <span>Descripción: </span>
-                <p>{entity.description || "N/A"}</p>
-              </li>
-              <li>
-                <span>Tipo: </span>
-                <p>{entity.type === 1 ? "Ingreso" : "Egreso"}</p>
-              </li>
-            </ul>
-
-            <h3 className="mb-4 font-normal">Movimientos de Entidad</h3>
-
-            <div className="w-full md:min-w-[32rem]">
-              {isMobile ? (
-                <ListTransactions data={entity.transactions as any} />
-              ) : (
-                <Table
-                  headerConfig={{
-                    hasNew: true,
-                    newButtonText: "Nueva Transacción",
-                    redirectTo: `/account/${params?.acc}/transactions/new?entity=${params?.id}`,
-                  }}
-                  footerConfig={{
-                    navButtons: false,
-                  }}
-                  filterKeys={["amount", "description", "reference"]}
-                  columns={detailColumns}
-                  data={entity.transactions}
-                  renderCell={renderCell}
-                />
-              )}
-            </div>
-          </div>
-        </Card>
-      </DashboardLayout>
-    </div>
+    <DashboardLayout title="Detalle de Entidad">
+      <DetailView
+        topContent={
+          <header className="flex flex-row items-center justify-between">
+            <User
+              name={entity.name}
+              classNames={{
+                name: "text-xl font-semibold",
+              }}
+              description={entity.description || "Sin descripción"}
+              avatarProps={{
+                size: "lg",
+                color: "primary",
+              }}
+            />
+            <Button
+              as={Link}
+              href={`/account/${params?.acc}/entities/${entity.id}/edit`}
+              color="primary"
+              isIconOnly={isMobile}
+              className="sm:w-fit"
+            >
+              <Icon icon="akar-icons:edit" width={18} />
+              {!isMobile && "Editar Entidad"}
+            </Button>
+          </header>
+        }
+        tabs={[
+          {
+            title: "Transacciones Relacionadas",
+            children: (
+              <div className="w-full md:min-w-[32rem]">
+                {isMobile ? (
+                  <ListTransactions data={entity.transactions as any} />
+                ) : (
+                  <Table
+                    headerConfig={{
+                      hasNew: true,
+                      newButtonText: "Nueva Transacción",
+                      redirectTo: `/account/${params?.acc}/transactions/new?entity=${params?.id}`,
+                    }}
+                    footerConfig={{
+                      navButtons: false,
+                    }}
+                    filterKeys={["amount", "description", "reference"]}
+                    columns={detailColumns}
+                    data={entity.transactions}
+                    renderCell={renderCell}
+                  />
+                )}
+              </div>
+            ),
+          },
+          {
+            title: "Detalle",
+            children: (
+              <ul className=" [&>li]:gap-2p mb-4 grid w-full grid-cols-1 gap-2 sm:grid-cols-2 [&>li>p]:font-medium [&>li]:flex [&>li]:items-start [&>li]:gap-2 [&>li]:text-sm">
+                <li>
+                  <span>Referencia: </span>
+                  <p>{entity.reference || "N/A"}</p>
+                </li>
+                <li>
+                  <span>Descripción: </span>
+                  <p>{entity.description || "N/A"}</p>
+                </li>
+                <li>
+                  <span>Tipo: </span>
+                  <p>{entity.type === 1 ? "Ingreso" : "Egreso"}</p>
+                </li>
+              </ul>
+            ),
+          },
+        ]}
+      />
+    </DashboardLayout>
   );
 };
 

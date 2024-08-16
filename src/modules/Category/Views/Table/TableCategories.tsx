@@ -87,7 +87,7 @@ const TableCategories = () => {
       headerConfig={{
         newButtonText: "Crear Categoría",
         hasNew: true,
-        redirectTo: `/account/${params?.acc}/goals/new`,
+        redirectTo: `/account/${params?.acc}/category/new`,
       }}
       columns={columns}
       data={categories}

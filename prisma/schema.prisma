@@ -61,6 +61,7 @@ model Entities {
   user         User          @relation(fields: [userId], references: [id], onDelete: Cascade)
   transactions Transaction[]
   goals        Goals[]
+  movements     FixedMovements[]
 }
 
 model Category {
@@ -72,33 +73,36 @@ model Category {
   state        Int           @default(1) // 1: activo, 0: inactivo
   createdAt    DateTime      @default(now())
   updatedAt    DateTime      @updatedAt
+  userId       String
   user         User          @relation(fields: [userId], references: [id], onDelete: Cascade)
   transactions Transaction[]
-  userId       String
+  movements   FixedMovements[]
 }
 
 model Transaction {
-  id           Int         @id @default(autoincrement())
+  id           Int             @id @default(autoincrement())
   accountId    Int
   userId       String
   amount       Int
   type         Int
-  transferType Int?        @default(1) // 1: normal, 2: ahorro
+  transferType Int?            @default(1) // 1: normal, 2: ahorro
   date         DateTime?
   recipient    String?
   description  String?
   entityId     Int?
+  fiexedId     Int?
   goalId       Int?
   reference    String?
   categoryId   Int?
-  state        Int?        @default(1) // 1: activo, 0: inactivo
-  createdAt    DateTime    @default(now())
-  updatedAt    DateTime    @updatedAt
-  user         User        @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userAccount  UserAccount @relation(fields: [accountId], references: [id], onDelete: Cascade)
-  category     Category?   @relation(fields: [categoryId], references: [id], onDelete: Cascade)
-  entity       Entities?   @relation(fields: [entityId], references: [id], onDelete: Cascade)
-  goal         Goals?      @relation(fields: [goalId], references: [id], onDelete: Cascade)
+  state        Int?            @default(1) // 1: activo, 0: inactivo
+  createdAt    DateTime        @default(now())
+  updatedAt    DateTime        @updatedAt
+  user         User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userAccount  UserAccount     @relation(fields: [accountId], references: [id], onDelete: Cascade)
+  category     Category?       @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  entity       Entities?       @relation(fields: [entityId], references: [id], onDelete: Cascade)
+  movent       FixedMovements? @relation(fields: [fiexedId], references: [id], onDelete: Cascade)
+  goal         Goals?          @relation(fields: [goalId], references: [id], onDelete: Cascade)
 }
 
 model UserPassword {
@@ -113,15 +117,38 @@ model UserPassword {
 }
 
 model UserVerificationCode {
-  id            Int       @id @default(autoincrement())
-  token         String
-  type          Int // 1: activation, 2: recovery
-  userId        String
-  usedAt        DateTime?
-  expireAt      DateTime
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
-  user          User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id        Int       @id @default(autoincrement())
+  token     String
+  type      Int // 1: activation, 2: recovery
+  userId    String
+  usedAt    DateTime?
+  expireAt  DateTime
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model FixedMovements {
+  id             Int      @id @default(autoincrement())
+  userId         String
+  name           String
+  type           Int @default(1)
+  amount         Int
+  status         Boolean @default(true)
+  reminder_date  DateTime // fecha para enviar recordatorio
+  reminder_sent  Boolean?  @default(true) // recordatorio enviado
+  next_ocurrence DateTime
+  entityId        Int?
+  categoryId      Int?
+  last_ocurrence DateTime?
+  frecuency      Int   @default(30) // in days
+  description    String?
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  transactions Transaction[]
+  entity      Entities? @relation(fields: [entityId], references: [id], onDelete: Cascade)
+  category    Category? @relation(fields: [categoryId], references: [id], onDelete: Cascade)
 }
 
 // Necessary for Next auth

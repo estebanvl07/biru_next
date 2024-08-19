@@ -23,6 +23,7 @@ interface InputDateProps extends Omit<InputProps, "value" | "defaultValue"> {
   minValueToday?: boolean;
   showAbsoluteCalendar?: boolean;
   defaultValue?: Date | null;
+  endContent?: React.ReactNode;
   currentDate?: boolean;
   contentClassName?: string;
 }
@@ -38,6 +39,7 @@ const InputDate: FC<InputDateProps> = ({
   interval = false,
   contentInputClassName,
   minValueToday = false,
+  endContent,
   defaultValue,
   currentDate = false,
   showAbsoluteCalendar = true,
@@ -89,6 +91,7 @@ const InputDate: FC<InputDateProps> = ({
         }
         className={className}
         value={inputValue}
+        endContent={endContent || null}
         onClick={onActive}
       />
       {isActive && (

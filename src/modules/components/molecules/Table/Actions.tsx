@@ -7,6 +7,7 @@ interface ActionsProps {
   deleteText?: string;
   hasEdit?: boolean;
   hasDelete?: boolean;
+  children?: React.ReactNode;
   hasView?: boolean;
   onClickView?: () => void;
   onClickEdit?: () => void;
@@ -20,12 +21,14 @@ const Actions = ({
   hasEdit = true,
   hasDelete = true,
   hasView = true,
+  children,
   onClickView,
   onClickEdit,
   onClickDelete,
 }: ActionsProps) => {
   return (
     <div className="relative flex items-center gap-2">
+      {children}
       {hasView && (
         <Tooltip content={detailText} className="font-montserrat">
           <span

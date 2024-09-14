@@ -10,6 +10,7 @@ export interface TopContentProps {
   inputPlaceholder?: string;
   filterValue?: string;
   setFilterValue?: Dispatch<SetStateAction<string>>;
+  onNew?: () => void;
   setPage?: Dispatch<SetStateAction<number>>;
   setRowsPerPage?: Dispatch<SetStateAction<number>>;
   newButtonText?: string;
@@ -36,7 +37,7 @@ export interface TableProps<T> {
   filterKeys?: string | string[];
   renderCell?: (item: any, columnKey: any) => void;
   isLoading?: boolean;
-  removeWrapper?: boolean
+  removeWrapper?: boolean;
   data: T[];
 }
 

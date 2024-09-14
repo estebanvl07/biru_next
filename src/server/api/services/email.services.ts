@@ -1,4 +1,4 @@
-import type { PrismaClient, User } from "@prisma/client";
+import { PrismaClient, User } from "@prisma/client";
 import { mailer } from "~/utils/mailer";
 import { generateRandomString } from "~/utils/crypto";
 import type { PrismaTransaction } from "~/server/db";
@@ -65,4 +65,22 @@ export async function recoverUserEmail(
   });
 
   return code;
+}
+
+export async function reminderMovement(db: PrismaClient) {
+  const movements = await db.fixedMovements.findMany({
+    where: {},
+    include: {
+      user: true,
+    },
+  });
+
+  console.log(movements);
+
+  movements.map(({ user }) => {
+    mailer.remiderMovement({
+      name: user.name || "",
+      to: user.email,
+    });
+  });
 }

@@ -27,8 +27,6 @@ interface MovementDetailProps {
 }
 
 const MovementDetail = ({ movement, acc }: MovementDetailProps) => {
-  console.log(movement, acc);
-
   const {
     transactions,
     amount,
@@ -224,8 +222,8 @@ const MovementDetail = ({ movement, acc }: MovementDetailProps) => {
                   <Table
                     headerConfig={{
                       hasNew: true,
-                      newButtonText: "Crear Transacción",
-                      redirectTo: `/account/${params?.acc}/transactions/new`,
+                      newButtonText: "Crear Ocurrencia",
+                      redirectTo: `/account/${params?.acc}/movements/new/ocurrence/${movement.id}`,
                     }}
                     filterKeys={["name", "amount"]}
                     columns={detailColumns}

@@ -50,4 +50,16 @@ export const mailer = {
     };
     return transporter.sendMail(recoverOptions, handleMailerError);
   },
+  remiderMovement({ to, name }: { to: string; name: string }) {
+    const remiderOptions = {
+      from: FROM_NO_REPLAY,
+      to,
+      subject: "RECORDATORIO",
+      html: `<p>Hola ${name}, Este correo es para recordarte que tienes uno de tus movimientos fijo está a punto de vencer</p>`,
+    };
+    console.log(remiderOptions);
+    const result = transporter.sendMail(remiderOptions, handleMailerError);
+
+    return result;
+  },
 };

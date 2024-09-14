@@ -16,6 +16,7 @@ const TopContent = React.memo(
     hasSearch = true,
     newButtonText,
     filterValue,
+    onNew,
     inputPlaceholder = "Buscar",
     setFilterValue,
     setPage,
@@ -62,12 +63,13 @@ const TopContent = React.memo(
                 Exportar
               </Button>
             )} */}
-            {hasNew && redirectTo && (
+            {hasNew && (
               <Button
+                onClick={onNew}
                 color="primary"
                 as={Link}
                 size="md"
-                href={redirectTo ?? "new"}
+                href={redirectTo ?? "#"}
                 className="flex items-center gap-2"
               >
                 <Icon icon="ic:round-plus" width={18} />

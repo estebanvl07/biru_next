@@ -4,7 +4,7 @@ import { columns } from "./table";
 import { api } from "~/utils/api";
 import { useParams } from "next/navigation";
 import { MovementsIncludes } from "~/types/movements";
-import { Avatar, Chip } from "@nextui-org/react";
+import { Avatar, Chip, Tooltip } from "@nextui-org/react";
 import clsx from "clsx";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import Actions from "~/modules/components/molecules/Table/Actions";
@@ -12,6 +12,7 @@ import { capitalize } from "lodash";
 import { format } from "date-fns";
 import { es } from "date-fns/locale";
 import { useRouter } from "next/router";
+import Link from "next/link";
 
 const MovementsTable = () => {
   const params = useParams();
@@ -104,6 +105,19 @@ const MovementsTable = () => {
         case "actions":
           return (
             <Actions
+              children={
+                <Tooltip
+                  content={"Crear Ocurrencia"}
+                  className="font-montserrat"
+                >
+                  <Link
+                    href={`/account/${params?.acc}/movements/new/ocurrence/${movement.id}`}
+                    className="cursor-pointer text-lg text-default-400 active:opacity-50"
+                  >
+                    <Icon icon="ic:round-plus" width={24} />
+                  </Link>
+                </Tooltip>
+              }
               onClickView={() =>
                 router.push({
                   pathname: "/account/[acc]/movements/[id]",

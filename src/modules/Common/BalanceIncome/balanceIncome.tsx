@@ -25,11 +25,19 @@ const BalanceIncome = ({ className }: { className?: string }) => {
 
   useEffect(() => {
     if (!amounts) return;
+
+    console.log(amounts);
+
     setSeries([
       {
         color: "#22c55e",
         name: "Ingresos",
-        data: amounts.length === 0 ? [0,0] : amounts.length ? [0, ...amounts] : [...amounts],
+        data:
+          amounts.length === 0
+            ? [0, 0]
+            : amounts.length
+              ? [0, ...amounts]
+              : [...amounts],
       },
     ]);
   }, [amounts]);

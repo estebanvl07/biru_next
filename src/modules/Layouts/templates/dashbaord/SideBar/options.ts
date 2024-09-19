@@ -18,6 +18,12 @@ export const menuOptions = [
     href: "/movements",
   },
   {
+    id: 8,
+    name: "Presupuesto Mensual",
+    icon: "ic:outline-calculate",
+    href: "/monthlyBudget",
+  },
+  {
     id: 2,
     name: "Entidades",
     icon: "ph:users-bold",

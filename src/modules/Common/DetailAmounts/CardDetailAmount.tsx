@@ -5,7 +5,7 @@ import { Card, Empty } from "~/modules/components";
 import { LineChart } from "~/modules/Charts";
 
 import { useResize } from "~/lib/hooks/useResize";
-import { Series } from "~/types/chart.types";
+import { ChartProps, Series } from "~/types/chart.types";
 import { Spinner, Tooltip, Chip } from "@nextui-org/react";
 import { parseAmount } from "~/lib/helpers";
 
@@ -22,6 +22,7 @@ type Props = {
   color?: string;
   noData?: boolean;
   badgeColor?: string;
+  chartProps?: Omit<ChartProps, "series">;
 };
 
 const CardDetailAmount = React.memo(
@@ -34,8 +35,27 @@ const CardDetailAmount = React.memo(
     series,
     noData,
     cardClassName,
+    chartProps,
   }: Props) => {
     const { isMobile } = useResize();
+
+    const initialChartProps = {
+      series,
+      widthChart: "100%",
+      heightChart: isMobile ? "80%" : "100px",
+      hasZoom: chartProps?.hasZoom || false,
+      showLegend: chartProps?.showLegend || false,
+      showToolBar: chartProps?.showToolBar || false,
+      showGrid: chartProps?.showGrid || false,
+      showToolTip: chartProps?.showToolTip || false,
+      bottomBorder: chartProps?.bottomBorder || false,
+      showYAxis: chartProps?.showYAxis || false,
+      offsetX: chartProps?.offsetX || 0,
+      offsetY: chartProps?.offsetY || 0,
+      showXAxis: chartProps?.showXAxis || false,
+      hasformatNumber: chartProps?.hasformatNumber || false,
+    };
+
     return (
       <Card
         className={clsx(
@@ -73,22 +93,7 @@ const CardDetailAmount = React.memo(
             {noData && series && !isLoading ? (
               <main className="relative flex-grow">
                 <section className=" -bottom-4 -right-3">
-                  <LineChart
-                    series={series}
-                    widthChart="100%"
-                    heightChart={isMobile ? "80%" : "100px"}
-                    hasZoom={false}
-                    showLegend={false}
-                    showToolBar={false}
-                    showGrid={false}
-                    showToolTip={false}
-                    bottomBorder={false}
-                    showYAxis={false}
-                    offsetX={0}
-                    offsetY={0}
-                    showXAxis={false}
-                    hasformatNumber={false}
-                  />
+                  <LineChart {...initialChartProps} />
                 </section>
               </main>
             ) : (

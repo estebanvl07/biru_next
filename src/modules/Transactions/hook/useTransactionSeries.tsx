@@ -1,5 +1,5 @@
 import { format, getMonth, getYear, getDay, getWeek, getDate } from "date-fns";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import _ from "lodash";
 
 import type { TransactionIncludes as Transaction } from "~/types/transactions";

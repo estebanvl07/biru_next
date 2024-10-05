@@ -14,7 +14,7 @@ export const CardInfo: FC<CardInfoProps> = ({
   return (
     <div
       className={clsx(
-        "mb-12 w-full h-full my-auto rounded-2xl border bg-white px-8 py-6 shadow-lg shadow-gray-400/50 dark:border-white/5 dark:bg-default-200 dark:shadow-slate-950",
+        "mb-12 h-fit w-full rounded-2xl border bg-white px-8 py-6 shadow-lg shadow-gray-400/50 dark:border-white/5 dark:bg-default-200 dark:shadow-slate-950",
         className,
         { "!bg-primary text-white": color === "primary" },
       )}

@@ -52,7 +52,7 @@ export const Advantages = () => {
   const { isMobile } = useResize();
 
   return (
-    <section className="mx-auto mt-8 flex w-full flex-col px-4 sm:mt-14 md:max-w-[72rem] md:items-center lg:mt-16">
+    <section className="mx-auto mt-8 flex w-full px-4 sm:mt-14 md:max-w-[72rem] md:items-start lg:mt-16">
       <motion.aside
         initial={{
           opacity: 0.5,
@@ -65,7 +65,7 @@ export const Advantages = () => {
         }}
         className="flex-grow"
       >
-        <h2 className="font-encode text-3xl font-bold tracking-tight md:text-center md:text-4xl">
+        <h2 className="flex-1 font-encode text-3xl font-bold tracking-tight md:text-center md:text-4xl">
           Conoce las ventajas de
           <br /> usar{" "}
           <span className="font-encode text-primary dark:text-indigo-400">
@@ -87,24 +87,28 @@ export const Advantages = () => {
         transition={{
           duration: 1,
         }}
-        className="mt-8 flex h-full w-full items-center justify-center overflow-auto"
+        className="mt-8 flex h-fit w-full flex-1 flex-col items-center justify-center overflow-auto"
       >
         <Swiper
           pagination={{
             clickable: true,
           }}
+          direction="vertical"
           modules={[Pagination]}
-          slidesPerView={isMobile ? 1 : 3}
-          spaceBetween={isMobile ? 10 : 30}
+          // slidesPerView={isMobile ? 1 : 3}
+          // spaceBetween={isMobile ? 10 : 30}
           className="mySwipper"
         >
-          {cards.map((card) => {
-            return (
-              <SwiperSlide key={card.id}>
-                <CardInfo {...(card as any)} />
-              </SwiperSlide>
-            );
-          })}
+          <SwiperSlide>Slide 1</SwiperSlide>
+          <SwiperSlide>Slide 2</SwiperSlide>
+          {/* {cards.map((card) => {
+        return (
+          
+          <SwiperSlide key={card.id}>
+            <CardInfo {...(card as any)} />
+          </SwiperSlide>
+        );
+      })} */}
         </Swiper>
       </motion.div>
     </section>

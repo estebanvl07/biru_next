@@ -1,6 +1,7 @@
 import { createTRPCRouter, protectedProcedure } from "~/server/api/trpc";
 import { createUserAccount } from "~/modules/Account/schema";
 import * as userAccount from "~/server/api/services/userAccount.services";
+import * as transactionServices from "~/server/api/services/transactions.services";
 import { z } from "zod";
 
 export const userAccountRouter = createTRPCRouter({
@@ -33,4 +34,8 @@ export const userAccountRouter = createTRPCRouter({
       const { id } = input;
       return userAccount.setLastAccess(ctx.db, id);
     }),
+  getBalance: protectedProcedure.query(async ({ ctx }) => {
+    const userId = ctx.session.user.id;
+    return userAccount.getBalanceAccount(ctx.db, userId);
+  }),
 });

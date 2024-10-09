@@ -8,17 +8,20 @@ import { ChartProps } from "~/types/chart.types";
 
 import { FONT_FAMILY } from "~/lib/constants/config";
 import { useResize } from "~/lib/hooks/useResize";
+import { color } from "framer-motion";
 
 const PieChart = ({
   series,
   keys,
   heightChart = "600",
+  position,
   offsetX,
   offsetY,
   showToolBar = true,
 }: ChartProps) => {
   const { theme } = useThemeContext();
   const isDark = theme === "dark";
+
   const { isMobile } = useResize();
 
   if (Array.isArray(series) && series?.length === 0) return;
@@ -84,7 +87,10 @@ const PieChart = ({
         },
         legend: {
           fontFamily: FONT_FAMILY,
-          position: isMobile ? "bottom" : "right",
+          position: position || isMobile ? "bottom" : "right",
+          labels: {
+            colors: !isDark ? "#1e293b" : "#e5e7eb",
+          },
         },
         labels: keys as string[],
       }}

@@ -7,6 +7,7 @@ import { parseAmount } from "~/lib/helpers";
 import { FONT_FAMILY } from "~/lib/constants/config";
 import { useTheme } from "~/lib/hooks";
 import { ChartProps } from "~/types/chart.types";
+import { useThemeContext } from "~/lib/context/Theme.context";
 
 // TODO: refactorize component
 const BarChart = ({
@@ -24,8 +25,8 @@ const BarChart = ({
   offsetY,
   bottomBorder = true,
 }: ChartProps) => {
-  // TODO: darkmdoe pending
-  const { isDark } = useTheme();
+  const { theme } = useThemeContext();
+  const isDark = theme === "dark";
 
   if (!series) return;
 

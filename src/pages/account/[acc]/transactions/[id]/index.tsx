@@ -1,5 +1,5 @@
 import clsx from "clsx";
-import Link from "next/link"
+import Link from "next/link";
 import { format } from "date-fns";
 import { useRouter } from "next/router";
 import { capitalize } from "~/modules/components/molecules/Table/utils";
@@ -8,7 +8,13 @@ import { DATE_FORMAT_TRANS } from "~/lib/constants/config";
 import { formatDatesOfTransactions } from "~/lib/resource/formatDatesOfTransactions";
 
 import { Icon } from "@iconify/react/dist/iconify.js";
-import { Accordion, AccordionItem, Avatar, Chip, Button } from "@nextui-org/react";
+import {
+  Accordion,
+  AccordionItem,
+  Avatar,
+  Chip,
+  Button,
+} from "@nextui-org/react";
 import { User } from "@nextui-org/user";
 import DashboardLayout from "~/modules/Layouts/Dashboard";
 import { Card } from "~/modules/components";
@@ -39,8 +45,8 @@ const DetailTransactionPage = ({
     goal,
   } = transaction;
 
-  const router = useRouter()
-  const params = router.query
+  const router = useRouter();
+  const params = router.query;
 
   const getIcon = () => {
     if (category?.icon) {
@@ -232,7 +238,14 @@ const DetailTransactionPage = ({
             <p>{description || "Sin descripción"}</p>
           </AccordionItem>
         </Accordion>
-        <Button color="primary" as={Link} href={`/account/${params?.acc}/transactions/${transaction.id}/edit`} className="w-full mt-2" >Editar Transacción</Button>
+        <Button
+          color="primary"
+          as={Link}
+          href={`/account/${params?.acc}/transactions/${transaction.id}/edit`}
+          className="mt-2 w-full"
+        >
+          Editar Transacción
+        </Button>
       </div>
     </DashboardLayout>
   );

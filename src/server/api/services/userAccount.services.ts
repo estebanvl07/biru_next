@@ -107,3 +107,44 @@ export function setLastAccess(db: PrismaClient, id: number) {
     },
   });
 }
+
+export async function getBalanceAccount(db: PrismaClient, userId: string) {
+  return db.$transaction(async (db) => {
+    const transactionIncomes = await db.transaction.findMany({
+      where: { type: 1, state: 1, transferType: 1, userId },
+    });
+    const transactionEgress = await db.transaction.findMany({
+      where: { type: 2, state: 1, transferType: 1, userId },
+    });
+    const transactionSavings = await db.transaction.findMany({
+      where: { type: 2, state: 1, transferType: 2, userId },
+    });
+    const transactions = await db.transaction.findMany({
+      where: { state: 1, userId },
+    });
+
+    const incomes = transactionIncomes.reduce(
+      (acc, { amount }) => acc + amount,
+      0,
+    );
+    const egress = transactionEgress.reduce(
+      (acc, { amount }) => acc + amount,
+      0,
+    );
+    const savings = transactionSavings.reduce(
+      (acc, { amount }) => acc + amount,
+      0,
+    );
+    const transactonTotal = transactions.reduce(
+      (acc, { amount }) => acc + amount,
+      0,
+    );
+
+    return {
+      incomes,
+      egress,
+      savings,
+      transactonTotal,
+    };
+  });
+}

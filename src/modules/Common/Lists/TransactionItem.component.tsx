@@ -53,7 +53,7 @@ const TransactionItem: FC<TransactionItemProps> = ({ item, index, length }) => {
   return (
     <li
       className={clsx(
-        "px-content flex flex-col border-gray-100 hover:bg-slate-100 md:px-6 dark:border-white/10 dark:hover:bg-slate-800/40",
+        "flex flex-col border-gray-100 px-content hover:bg-slate-100 md:px-6 dark:border-white/10 dark:hover:bg-slate-800/40",
       )}
     >
       <Link
@@ -78,7 +78,7 @@ const TransactionItem: FC<TransactionItemProps> = ({ item, index, length }) => {
             </span>
           )}
           <div className="flex flex-col">
-            <h6 className="mb-1 overflow-hidden w-24 text-ellipsis text-nowrap font-semibold xl:w-32 dark:font-normal">
+            <h6 className="mb-1 w-24 overflow-hidden text-ellipsis text-nowrap font-semibold xl:w-32 dark:font-normal">
               {getName()}
             </h6>
             <span className="overflow-hidden text-ellipsis text-nowrap text-xs text-slate-500 xl:w-32 dark:text-slate-400">

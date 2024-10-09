@@ -1,6 +1,4 @@
 import {
-  BalanceIncome,
-  BalanceEgress,
   BalanceAccount,
   LastTransactions,
   AnnualBalance,
@@ -26,8 +24,8 @@ const AnalyticsPage = () => {
           <BalanceAccount />
         </article>
         <article className="col-span-12 flex flex-col gap-2 lg:col-span-5">
-          <BalanceIncome />
-          <BalanceEgress />
+          {/* <BalanceIncome />
+          <BalanceEgress /> */}
         </article>
         <article className="col-span-12 xl:col-span-7">
           <AnnualBalance />

@@ -33,7 +33,6 @@ const LastTransactions: FC<LastTransactionsProps> = ({
   const { transactions, isLoading } = useTransactions({});
   const formatted = formatterTransactions(transactions as any);
 
-
   return (
     <Card className={clsx("flex flex-col !px-0 py-4", cardClassName)}>
       {showHeader && (

@@ -54,7 +54,7 @@ const QuickTransaction = () => {
   };
 
   return (
-    <Card className="flex h-full flex-col">
+    <Card className="flex h-full w-full flex-col">
       <h3>Transferencia Rápida</h3>
       <nav className="scrollbar-customize flex w-full gap-x-2 overflow-auto py-4">
         <div className="flex flex-col items-center justify-center">

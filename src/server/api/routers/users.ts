@@ -1,7 +1,14 @@
-import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
+import {
+  createTRPCRouter,
+  protectedProcedure,
+  publicProcedure,
+} from "~/server/api/trpc";
 import * as usersServices from "~/server/api/services/users.services";
+import * as settingServices from "~/server/api/services/setting.services";
+
 import { registerUserInput } from "~/modules/Register/resolver";
 import { Z_STRING } from "~/lib/resolver/zod";
+import z from "zod";
 import {
   recoverUserInput,
   verifyCodeInput,
@@ -33,4 +40,17 @@ export const usersRouter = createTRPCRouter({
     .mutation(({ ctx, input }) => {
       return usersServices.recoverChangePassword(ctx.db, input);
     }),
+  setSetting: protectedProcedure
+    .input(z.string())
+    .mutation(async ({ ctx, input }) => {
+      const userId = ctx.session.user.id;
+      return settingServices.setUiSetting(ctx.db, {
+        widgetOrder: input,
+        userId,
+      });
+    }),
+  getUiSetting: protectedProcedure.query(({ ctx }) => {
+    const userId = ctx.session.user.id;
+    return settingServices.getUiSetting(ctx.db, userId);
+  }),
 });

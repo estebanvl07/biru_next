@@ -21,7 +21,7 @@ export const HeroSection = () => {
         aria-hidden="true"
         aria-label="background-grid"
       />
-      <div className="mx-auto flex h-full w-full flex-col items-center gap-8 px-4 pl-4 md:max-w-[76rem] md:flex-row md:justify-center md:gap-4">
+      <div className="flex h-full w-full flex-col items-center gap-8 px-4 md:flex-col md:justify-center md:gap-4">
         <motion.article
           initial={{
             scale: 0.6,
@@ -32,9 +32,9 @@ export const HeroSection = () => {
           transition={{
             duration: 0.4,
           }}
-          className="z-10  flex w-full flex-col items-start justify-center gap-4 border py-8"
+          className="relative z-10 flex w-full flex-col items-center justify-center gap-4 py-8"
         >
-          <h1 className="font-poppins z-10 my-2 text-4xl font-semibold !leading-none -tracking-wider sm:text-[62px] ">
+          <h1 className="z-10 my-2 text-center font-encode text-4xl font-bold !leading-none tracking-tight sm:text-5xl ">
             Domina tu{" "}
             <span className="highlight font-encode text-primary dark:text-primary-light ">
               futuro financiero
@@ -48,8 +48,9 @@ export const HeroSection = () => {
             la forma más fácil.
           </p>
 
-          <nav className="order-2 mt-2 flex w-full flex-col justify-start gap-4 sm:max-w-md sm:flex-row md:order-1">
+          <nav className="order-2 mt-2 flex w-full flex-col justify-center gap-4 sm:max-w-md sm:flex-row md:order-1">
             <Button
+              radius="full"
               color="primary"
               href="/login"
               as={Link}
@@ -60,6 +61,7 @@ export const HeroSection = () => {
               <Icon icon="material-symbols:login" width={24} />
             </Button>
             <Button
+              radius="full"
               size="md"
               as={Link}
               href="#"
@@ -81,7 +83,7 @@ export const HeroSection = () => {
           transition={{
             duration: 0.5,
           }}
-          className="relative right-0 z-10 flex h-full w-full rotate-45 items-center justify-center "
+          className="relative flex h-44 w-full items-center justify-center overflow-hidden md:h-[20rem]"
         >
           <Image
             src={"/mobile-das-re.png"}

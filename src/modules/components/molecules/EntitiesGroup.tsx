@@ -10,7 +10,7 @@ const EntitiesGroup = () => {
   const params = useParams();
   const { entities } = useEntity();
 
-  if (entities.length === 0) return null
+  if (entities.length === 0) return null;
 
   return (
     <div className="flex gap-2">

@@ -14,7 +14,7 @@ const LineChart = ({
   series,
   titleChart,
   keys,
-  heightChart = "120",
+  heightChart = "120px",
   showLegend = true,
   showXAxis = true,
   showYAxis = true,

@@ -116,6 +116,14 @@ model UserPassword {
   updatedAt DateTime @updatedAt
 }
 
+model UserSetting {
+  id            Int     @id @default(autoincrement())
+  userId        String  @unique
+  widgetOrder   String
+
+  user    User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
 model UserVerificationCode {
   id        Int       @id @default(autoincrement())
   token     String
@@ -194,6 +202,7 @@ model User {
   transaction          Transaction[]
   contacts             Entities[]
   userPassword         UserPassword?
+  setting              UserSetting?
   userVerificationCode UserVerificationCode[]
-  movements             FixedMovements[]
+  movements            FixedMovements[]
 }

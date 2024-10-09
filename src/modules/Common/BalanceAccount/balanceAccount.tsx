@@ -30,7 +30,7 @@ interface Props {
 }
 
 const defaultChartProps = {
-  heightChart: "250",
+  heightChart: "100%",
   // showToolTip: transactions?.length === 0 ? false : true,
   offsetX: -10,
   showLegend: true,

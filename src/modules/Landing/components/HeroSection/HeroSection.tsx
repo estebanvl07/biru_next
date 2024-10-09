@@ -25,7 +25,7 @@ export const HeroSection = () => {
         aria-hidden="true"
         aria-label="background-grid"
       />
-      <div className="flex h-full w-full flex-col items-center md:justify-center gap-8 px-4 md:flex-col md:gap-4">
+      <div className="flex h-full w-full flex-col items-center gap-8 px-4 md:flex-col md:justify-center md:gap-4">
         <motion.article
           initial={{
             scale: 0.6,
@@ -36,15 +36,14 @@ export const HeroSection = () => {
           transition={{
             duration: 0.4,
           }}
-          className="relative z-10 flex w-full flex-col items-center justify-center py-8 gap-4"
+          className="relative z-10 flex w-full flex-col items-center justify-center gap-4 py-8"
         >
-        
           <h1 className="z-10 my-2 text-center font-encode text-4xl font-bold !leading-none tracking-tight sm:text-5xl ">
             Domina tu{" "}
             <span className="highlight font-encode text-primary dark:text-primary-light ">
               futuro financiero
             </span>
-            <br/>
+            <br />
             con facilidad
           </h1>
 
@@ -53,29 +52,29 @@ export const HeroSection = () => {
             la forma más fácil.
           </p>
 
-          <nav className="order-2 mt-2 flex w-full flex-col gap-4 sm:max-w-md sm:flex-row md:order-1 justify-center">
-              <Button
-                radius="full"
-                color="primary"
-                href="/login"
-                as={Link}
-                size="md"
-                className="w-full !py-4 lg:w-auto px-6"
-              >
-                <span className="whitespace-nowrap">Iniciar ahora</span>
-                <Icon icon="material-symbols:login" width={24} />
-              </Button>
-              <Button
-                radius="full"
-                size="md"
-                as={Link}
-                href="#"
-                // variant="flat"
-                className="w-full py-4 lg:w-auto dark:bg-indigo-800/20 dark:text-primary-light bg-primary/20 text-primary px-6 backdrop-blur-xl"
-              >
-                <span className="whitespace-nowrap">Como funciona</span>
-                <Icon icon="solar:play-circle-bold" width={24} />
-              </Button>
+          <nav className="order-2 mt-2 flex w-full flex-col justify-center gap-4 sm:max-w-md sm:flex-row md:order-1">
+            <Button
+              radius="full"
+              color="primary"
+              href="/login"
+              as={Link}
+              size="md"
+              className="w-full !py-4 px-6 lg:w-auto"
+            >
+              <span className="whitespace-nowrap">Iniciar ahora</span>
+              <Icon icon="material-symbols:login" width={24} />
+            </Button>
+            <Button
+              radius="full"
+              size="md"
+              as={Link}
+              href="#"
+              // variant="flat"
+              className="w-full bg-primary/20 px-6 py-4 text-primary backdrop-blur-xl lg:w-auto dark:bg-indigo-800/20 dark:text-primary-light"
+            >
+              <span className="whitespace-nowrap">Como funciona</span>
+              <Icon icon="solar:play-circle-bold" width={24} />
+            </Button>
           </nav>
         </motion.article>
         <motion.div
@@ -88,7 +87,7 @@ export const HeroSection = () => {
           transition={{
             duration: 0.5,
           }}
-          className="relative h-44 w-full items-center justify-center overflow-hidden flex md:h-[20rem]"
+          className="relative flex h-44 w-full items-center justify-center overflow-hidden md:h-[20rem]"
         >
           <Image
             src={isDark ? "/dashboard-dark.png" : "/dashboard-light.png"}

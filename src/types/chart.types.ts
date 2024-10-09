@@ -10,6 +10,7 @@ export interface ChartProps {
   titleChart?: string;
   heightChart?: string;
   widthChart?: string;
+  position?: string;
   showToolBar?: boolean;
   bottomBorder?: boolean;
   curve?: Curve;

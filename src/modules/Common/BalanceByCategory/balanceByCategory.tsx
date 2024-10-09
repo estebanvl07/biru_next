@@ -96,6 +96,7 @@ const PieChartAmountByCategoires = () => {
               <PieChart
                 series={chartSeries}
                 keys={chartLabels}
+                position="bottom"
                 heightChart="230"
                 showToolBar={false}
               />

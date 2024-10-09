@@ -15,9 +15,9 @@ export const Header = () => {
   const { size } = useResize();
 
   return (
-    <header className="z-20 w-full px-4 sm:px-0">
-      <div className="relative mx-auto flex max-w-[72rem] items-center justify-between gap-2 py-4 md:px-8">
-        <div className="flex-grow basis-0">
+    <header className="z-20 w-full bg-white text-gray-600 sm:px-0 dark:bg-default-200">
+      <div className="relative mx-auto flex max-w-[76rem] items-center justify-between gap-2 px-4 py-3">
+        <aside className="flex items-center gap-16">
           <Link href="/">
             <Image
               src={theme === "dark" ? "/logo-dark.svg" : "/logo.svg"}
@@ -26,10 +26,20 @@ export const Header = () => {
               height={60}
             />
           </Link>
-        </div>
-        {size && size >= 590 && <Navigator />}
+          {size && size >= 590 && <Navigator />}
+        </aside>
         <div className="flex flex-grow basis-0 justify-end gap-2">
-          <HandlerTheme />
+          <Button
+            variant="ghost"
+            className="border-none"
+            as={Link}
+            href="/login"
+          >
+            Iniciar sesión
+          </Button>
+          <Button color="primary" as={Link} href="/login">
+            Registrarme
+          </Button>
           <Button
             isIconOnly
             radius="full"
@@ -57,11 +67,19 @@ const NAVIGATOR_LINKS = [
   },
   {
     href: "/login",
-    text: "Iniciar Sesión",
+    text: "Ventajas",
   },
   {
     href: "/register",
-    text: "¡Quiero Registarme!",
+    text: "¿Como Inicio?",
+  },
+  {
+    href: "/register",
+    text: "Guia",
+  },
+  {
+    href: "/register",
+    text: "Sopórte",
   },
 ];
 
@@ -72,7 +90,7 @@ const Navigator = () => {
   return (
     <nav
       className={clsx(
-        "relative mx-auto flex w-fit items-center justify-center gap-6 rounded-full bg-primary/10 px-6 py-1 text-primary dark:bg-slate-950/60 dark:text-primary-light [&>a]:transition-all hover:[&>a]:scale-105",
+        "relative mx-auto flex w-fit items-center justify-center gap-4 rounded-full px-6 [&>a]:transition-all hover:[&>a]:scale-105",
         {
           " !gap-3 [&>a]:!text-xs": isMobile,
         },
@@ -92,9 +110,6 @@ const Navigator = () => {
             >
               {text}
             </Link>
-            {pathname === href && (
-              <span className="absolute -bottom-1 h-[2px] w-3/6 rounded-full bg-primary light dark:bg-primary-light"></span>
-            )}
           </div>
         );
       })}

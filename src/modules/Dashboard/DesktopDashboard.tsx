@@ -39,7 +39,10 @@ const DesktopDashboard = () => {
         amount={balance?.incomes || 0}
         isLoading={isLoading}
         color="bg-green-500/30 text-green-600"
-        percent={getPercent(balance?.incomes || 0, account.balance || 0)}
+        percent={getPercent(
+          balance?.incomes || 0,
+          balance?.transactonTotal || 0,
+        )}
         titlePercent="De Ingresos"
       />
     ),
@@ -48,7 +51,10 @@ const DesktopDashboard = () => {
         title="Total de Engresos"
         amount={balance?.egress || 0}
         color="bg-red-500/30 text-red-600"
-        percent={getPercent(balance?.egress || 0, account.balance || 0)}
+        percent={getPercent(
+          balance?.egress || 0,
+          balance?.transactonTotal || 0,
+        )}
         titlePercent="De Egresos"
       />
     ),
@@ -57,7 +63,10 @@ const DesktopDashboard = () => {
         title="Total de Ahorros"
         amount={balance?.savings || 0}
         color="bg-default-300/30 text-default-500"
-        percent={getPercent(balance?.savings || 0, account.balance || 0)}
+        percent={getPercent(
+          balance?.savings || 0,
+          balance?.transactonTotal || 0,
+        )}
         titlePercent="De Egresos"
       />
     ),

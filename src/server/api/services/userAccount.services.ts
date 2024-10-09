@@ -119,6 +119,9 @@ export async function getBalanceAccount(db: PrismaClient, userId: string) {
     const transactionSavings = await db.transaction.findMany({
       where: { type: 2, state: 1, transferType: 2, userId },
     });
+    const transactions = await db.transaction.findMany({
+      where: { state: 1, userId },
+    });
 
     const incomes = transactionIncomes.reduce(
       (acc, { amount }) => acc + amount,
@@ -132,11 +135,16 @@ export async function getBalanceAccount(db: PrismaClient, userId: string) {
       (acc, { amount }) => acc + amount,
       0,
     );
+    const transactonTotal = transactions.reduce(
+      (acc, { amount }) => acc + amount,
+      0,
+    );
 
     return {
       incomes,
       egress,
       savings,
+      transactonTotal,
     };
   });
 }

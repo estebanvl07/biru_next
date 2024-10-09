@@ -14,7 +14,7 @@ import { ReactSortable } from "react-sortablejs";
 import clsx from "clsx";
 import { api } from "~/utils/api";
 import { getPercent } from "~/lib/helpers";
-import { OrderComponent, UI_ORDER, Widget } from "~/lib/constants/ui";
+import { OrderComponent, UI_ORDER } from "~/lib/constants/ui";
 
 const DesktopDashboard = () => {
   const { account, isLoading } = useCurrentAccount();
@@ -26,7 +26,7 @@ const DesktopDashboard = () => {
     total_balance: (
       <Balance
         title="Total de Cuenta"
-        amount={account.balance || 0}
+        amount={account?.balance || 0}
         isLoading={isLoading}
         color="bg-green-500/30 text-green-600"
         percent="10%"
@@ -74,9 +74,14 @@ const DesktopDashboard = () => {
 
   const [list, setList] = useState<OrderComponent[]>();
 
+  const onSetList = (newList: OrderComponent[]) => {
+    JSON.stringify(newList) !== JSON.stringify(defaultSetting?.widgetOrder) &&
+      mutate(JSON.stringify(newList));
+  };
+
   useEffect(() => {
     if (!balance) return;
-    if (defaultSetting) {
+    if (defaultSetting?.widgetOrder) {
       return setList(JSON.parse(defaultSetting.widgetOrder));
     }
     setList(UI_ORDER);
@@ -84,26 +89,27 @@ const DesktopDashboard = () => {
 
   useEffect(() => {
     if (list) {
-      mutate(JSON.stringify(list));
+      onSetList(list);
     }
   }, [list]);
 
   return (
-    <div>
-      <ReactSortable
-        list={list || []}
-        setList={setList}
-        animation={600}
-        className="grid grid-cols-4 grid-rows-[130px] gap-2"
-      >
-        {list &&
-          list?.map((item) => (
-            <div key={item.id} className={clsx(item.className)}>
-              {widgets[item.name]}
+    <>
+      {list && (
+        <ReactSortable
+          list={list || []}
+          setList={setList}
+          animation={600}
+          className="grid grid-cols-4 grid-rows-[130px] gap-2"
+        >
+          {list?.map((option) => (
+            <div key={option.id} className={clsx(option.className)}>
+              {widgets[option.name]}
             </div>
           ))}
-      </ReactSortable>
-    </div>
+        </ReactSortable>
+      )}
+    </>
   );
 };
 

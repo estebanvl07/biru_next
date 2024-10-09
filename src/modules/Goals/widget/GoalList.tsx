@@ -19,11 +19,24 @@ const GoalList = ({ maxOptions = 3 }: GoalListProps) => {
 
   return (
     <Card className="flex h-full w-full flex-col">
-      <header>
-        <h4 className="text-lg font-medium">Metas</h4>
-        <p>Listado de tus metas mas activas</p>
+      <header className="flex items-center justify-between gap-4">
+        <aside>
+          <h4 className="text-lg font-medium">Metas</h4>
+          <p>Listado de tus metas</p>
+        </aside>
+        <Link
+          href={{
+            pathname: "goals",
+            query: {
+              acc: params?.acc,
+            },
+          }}
+          className="whitespace-nowrap text-default-600"
+        >
+          Ver todo
+        </Link>
       </header>
-      <ul className="mb-2 mt-4 flex w-full flex-col gap-4">
+      <ul className="mb-2 mt-4 flex h-full w-full flex-col justify-center gap-4">
         {goals.length === 0 && <Empty />}
         {goals.map((goal, index) => {
           if (index + 1 > maxOptions) return;

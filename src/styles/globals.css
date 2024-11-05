@@ -22,23 +22,57 @@ h3 {
 
 /* width */
 .scrollbar-customize::-webkit-scrollbar {
-  @apply h-[5px] w-1.5 bg-gray-300 dark:bg-slate-800;
+  @apply h-[5px] w-1.5 bg-default-300/40 dark:bg-slate-800;
 }
 
 .scrollbar-y-customize::-webkit-scrollbar {
-  @apply h-[5px] w-1 bg-indigo-300 dark:bg-slate-800/80;
+  @apply h-[5px] w-1 bg-default-300 dark:bg-slate-800/80;
 }
 
 /* Track */
 .scrollbar-customize .scrollbar-y-customize::-webkit-scrollbar-track {
-  @apply rounded-full bg-slate-100 dark:bg-gray-900;
+  @apply rounded-full bg-indigo-400 dark:bg-gray-900;
 }
 
 /* Handle */
 .scrollbar-customize::-webkit-scrollbar-thumb {
-  @apply rounded-full bg-indigo-400 dark:!bg-slate-300;
+  @apply rounded-full bg-default-300 dark:!bg-slate-300;
 }
 
 .fade-bottom {
   mask-image: linear-gradient(black 80%, transparent);
+}
+
+.fade-bottom-sm {
+  mask-image: linear-gradient(black 90%, transparent);
+}
+
+.fade-top-sm {
+  mask-image: linear-gradient(transparent, black 90%);
+}
+
+.fade-top-sm {
+  mask-image: linear-gradient(transparent, black 90%);
+}
+
+.floating-animation {
+  animation: floating 3.8s 2.5s ease-in-out infinite;
+  rotate: -10deg;
+}
+
+.floating-animation-2 {
+  animation: floating 3.8s ease-in-out infinite;
+  rotate: 12deg;
+}
+
+@keyframes floating {
+  0% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+  100% {
+    transform: translateY(0);
+  }
 }

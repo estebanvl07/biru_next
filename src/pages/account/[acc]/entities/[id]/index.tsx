@@ -1,4 +1,4 @@
-import React, { useCallback } from "react";
+import React, { useCallback, useState } from "react";
 import { GetServerSideProps } from "next";
 import { useParams } from "next/navigation";
 import { useRouter } from "next/router";
@@ -22,16 +22,38 @@ import { formatDatesOfTransactions } from "~/lib/resource/formatDatesOfTransacti
 import Link from "next/link";
 import { ListTransactions } from "~/modules/Common";
 import DetailView from "~/modules/components/molecules/DetailView";
+import { TransactionIncludes } from "~/types/transactions";
+import useShowForm from "~/lib/hooks/useShowForm";
+import CreateTransaction from "~/modules/Transactions/CreateTransaction";
+import EditTransaction from "~/modules/Transactions/EditTransaction";
+import EditEntity from "~/modules/Entities/EditEntity";
 
 const DetailEntityPage = ({ entity }: { entity: EntityIncludes }) => {
   const router = useRouter();
   const params = useParams();
+  const {
+    onShowCreate,
+    onShowEdit,
+    showCreate,
+    onCloseCreate,
+    onCloseEdit,
+    showEdit,
+    onChageData,
+    data,
+  } = useShowForm<TransactionIncludes>({});
+
+  const {
+    showEdit: EntityFormShow,
+    onShowEdit: onEntityFormShow,
+    onCloseEdit: onEntityFormClose,
+    data: defaultEntity,
+  } = useShowForm<EntityIncludes>({ defaultData: entity });
 
   const { isMobile } = useResize();
 
   const renderCell = useCallback(
-    (transaction: Transaction, columnKey: React.Key) => {
-      const cellValue = transaction[columnKey as keyof Transaction];
+    (transaction: TransactionIncludes, columnKey: React.Key) => {
+      const cellValue = transaction[columnKey as keyof TransactionIncludes];
       switch (columnKey) {
         case "amount":
           return (
@@ -74,16 +96,14 @@ const DetailEntityPage = ({ entity }: { entity: EntityIncludes }) => {
         case "actions":
           return (
             <Actions
-              onClickView={() =>
-                router.push(
-                  `/account/${params?.acc}/transactions/${transaction.id}`,
-                )
-              }
-              onClickEdit={() =>
-                router.push(
-                  `/account/${params?.acc}/transactions/${transaction.id}/edit`,
-                )
-              }
+              onClickView={() => {
+                onChageData(transaction);
+                onShowCreate();
+              }}
+              onClickEdit={() => {
+                onChageData(transaction);
+                onShowEdit();
+              }}
               onClickDelete={() => console.log("delete")}
             />
           );
@@ -117,10 +137,11 @@ const DetailEntityPage = ({ entity }: { entity: EntityIncludes }) => {
               }}
             />
             <Button
-              as={Link}
-              href={`/account/${params?.acc}/entities/${entity.id}/edit`}
               color="primary"
               isIconOnly={isMobile}
+              onClick={() => {
+                onEntityFormShow();
+              }}
               className="sm:w-fit"
             >
               <Icon icon="akar-icons:edit" width={18} />
@@ -140,7 +161,9 @@ const DetailEntityPage = ({ entity }: { entity: EntityIncludes }) => {
                     headerConfig={{
                       hasNew: true,
                       newButtonText: "Nueva Transacción",
-                      redirectTo: `/account/${params?.acc}/transactions/new?entity=${params?.id}`,
+                      onNew() {
+                        onShowCreate();
+                      },
                     }}
                     footerConfig={{
                       navButtons: false,
@@ -175,6 +198,27 @@ const DetailEntityPage = ({ entity }: { entity: EntityIncludes }) => {
           },
         ]}
       />
+      <CreateTransaction
+        isOpen={showCreate}
+        onClose={() => onCloseCreate()}
+        options={{
+          defaultEntity: entity,
+        }}
+      />
+      {data && (
+        <EditTransaction
+          transaction={data}
+          isOpen={showEdit}
+          onClose={onCloseEdit}
+        />
+      )}
+      {defaultEntity && (
+        <EditEntity
+          isOpen={EntityFormShow}
+          onClose={onEntityFormClose}
+          entity={defaultEntity}
+        />
+      )}
     </DashboardLayout>
   );
 };

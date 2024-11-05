@@ -73,7 +73,7 @@ const TransactionItem: FC<TransactionItemProps> = ({ item, index, length }) => {
           {item.entityId ? (
             <Avatar color="primary" name={item.entity?.name} />
           ) : (
-            <span className="flex h-10 w-10 items-center justify-center rounded-full bg-primary text-white shadow-lg">
+            <span className="flex h-10 w-10 items-center justify-center rounded-full bg-primary text-white shadow-lg dark:text-primary-foreground">
               <Icon icon={getIcon() ?? icon} width={22} />
             </span>
           )}

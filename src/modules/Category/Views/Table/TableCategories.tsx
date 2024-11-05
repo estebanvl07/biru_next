@@ -8,11 +8,25 @@ import Actions from "~/modules/components/molecules/Table/Actions";
 import { Chip } from "@nextui-org/react";
 import { Table } from "~/modules/components";
 import { columns } from "./table";
+import CreateCategory from "../../CreateCategory";
+import useShowForm from "~/lib/hooks/useShowForm";
+import EditCategory from "../../EditCategory";
 
 const TableCategories = () => {
   const { categories, isLoading } = useCategory();
   const params = useParams();
   const router = useRouter();
+
+  const {
+    showEdit,
+    showCreate,
+    onShowEdit,
+    onShowCreate,
+    data,
+    onChageData,
+    onCloseCreate,
+    onCloseEdit,
+  } = useShowForm<CategoryIncludes>({});
 
   const renderCell = useCallback(
     (category: CategoryIncludes, columnKey: React.Key) => {
@@ -63,15 +77,10 @@ const TableCategories = () => {
                   },
                 })
               }
-              onClickEdit={() =>
-                router.push({
-                  pathname: "/account/[acc]/category/[id]/edit",
-                  query: {
-                    acc: String(params?.acc),
-                    id: String(category.id),
-                  },
-                })
-              }
+              onClickEdit={() => {
+                onChageData(category);
+                onShowEdit();
+              }}
               hasDelete={false}
             />
           );
@@ -83,17 +92,25 @@ const TableCategories = () => {
   );
 
   return (
-    <Table
-      headerConfig={{
-        newButtonText: "Crear Categoría",
-        hasNew: true,
-        redirectTo: `/account/${params?.acc}/category/new`,
-      }}
-      columns={columns}
-      data={categories}
-      isLoading={isLoading}
-      renderCell={renderCell}
-    />
+    <>
+      <Table
+        headerConfig={{
+          newButtonText: "Crear Categoría",
+          hasNew: true,
+          onNew() {
+            onShowCreate();
+          },
+        }}
+        columns={columns}
+        data={categories}
+        isLoading={isLoading}
+        renderCell={renderCell}
+      />
+      <CreateCategory isOpen={showCreate} onClose={onCloseCreate} />
+      {data && (
+        <EditCategory data={data} isOpen={showEdit} onClose={onCloseEdit} />
+      )}
+    </>
   );
 };
 

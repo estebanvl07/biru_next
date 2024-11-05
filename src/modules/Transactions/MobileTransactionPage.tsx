@@ -8,6 +8,8 @@ import { ListTransactions } from "../Common";
 import { useSearch } from "~/lib/hooks";
 
 import { TransactionIncludes } from "~/types/transactions";
+import useShowForm from "~/lib/hooks/useShowForm";
+import CreateTransaction from "./CreateTransaction";
 
 const MobileTransactionPage = ({
   transactions,
@@ -19,6 +21,8 @@ const MobileTransactionPage = ({
     data: transactions,
     keys: ["description", "amount", "recipient"],
   });
+
+  const { showCreate, onShowCreate, onCloseCreate } = useShowForm<TransactionIncludes>({})
 
   return (
     <div className="flex w-full flex-col gap-4">
@@ -32,9 +36,10 @@ const MobileTransactionPage = ({
         />
         <Button
           color="primary"
-          as={Link}
-          href={`/account/${params?.acc}/transactions/new`}
           isIconOnly
+          onClick={() => {
+            onShowCreate()
+          }}
         >
           <Icon
             icon="ph:plus"
@@ -44,6 +49,7 @@ const MobileTransactionPage = ({
         </Button>
       </section>
       <ListTransactions data={newList} />
+      <CreateTransaction isOpen={showCreate} onClose={onCloseCreate} />
     </div>
   );
 };

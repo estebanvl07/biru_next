@@ -7,6 +7,7 @@ import { Icon } from "@iconify/react/dist/iconify.js";
 
 import { Category } from "@prisma/client";
 import { useResize } from "~/lib/hooks/useResize";
+import { useThemeContext } from "~/lib/context/Theme.context";
 
 interface SpendingParamsProps {
   category?: Category;
@@ -21,6 +22,9 @@ const SpendingParams = ({
 }: SpendingParamsProps) => {
   const percentValue = Number(percent.split("%")[0]);
   const { size } = useResize();
+  const { theme } = useThemeContext();
+
+  const isDark = theme === "dark";
 
   return (
     <div className="flex flex-col items-center pb-8" title={category?.name}>
@@ -32,14 +36,14 @@ const SpendingParams = ({
               foreColor: "#a21caf",
               selection: {
                 stroke: {
-                  color: "#a21caf",
+                  color: "#2727527",
                 },
               },
             },
             plotOptions: {
               radialBar: {
                 track: {
-  
+                  background: isDark ? "#2c2c2c" : "#e4e4e7",
                 },
                 hollow: {
                   margin: 0,

@@ -43,7 +43,7 @@ export const LoginForm = () => {
 
   return (
     <form
-      className="mt-4 flex w-full flex-col gap-2"
+      className="mt-2 flex w-full flex-col gap-2"
       onSubmit={handleSubmit(onSubmit)}
     >
       <Input

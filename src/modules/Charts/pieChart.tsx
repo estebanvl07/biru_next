@@ -14,10 +14,13 @@ const PieChart = ({
   series,
   keys,
   heightChart = "600",
+  widthChart = "100%",
   position,
   offsetX,
+  plotTextSize = "16px",
   offsetY,
   showToolBar = true,
+  showLegend = true,
 }: ChartProps) => {
   const { theme } = useThemeContext();
   const isDark = theme === "dark";
@@ -47,6 +50,7 @@ const PieChart = ({
                 },
                 value: {
                   fontFamily: "Montserrat",
+                  fontSize: plotTextSize,
                   formatter(val: string) {
                     const valInt = parseInt(val);
                     return `$ ${valInt.toLocaleString()}`;
@@ -62,7 +66,7 @@ const PieChart = ({
           custom: (props) => {
             const currentValue = `${props.series[props.seriesIndex]}`;
             return `
-                <div  class="arrow_box bg-white px-6 py-2 flex flex-col justify-center items-center dark:bg-slate-950 border dark:border-white/10">
+                <div  class=" bg-white px-6 py-2 flex flex-col justify-center items-center dark:bg-default-300/30 backdrop-blur-lg border dark:border-white/10">
                 <span class="text-black dark:text-white/60">${
                   keys ? keys[props.seriesIndex] : ""
                 }</span>
@@ -76,7 +80,7 @@ const PieChart = ({
         },
         stroke: {
           width: 4,
-          colors: [isDark ? "#0f172a" : "#f8fafc"],
+          colors: [isDark ? "#262626" : "#f5f5f4"],
           curve: "straight",
           lineCap: "square",
         },
@@ -86,6 +90,7 @@ const PieChart = ({
           },
         },
         legend: {
+          show: showLegend,
           fontFamily: FONT_FAMILY,
           position: position || isMobile ? "bottom" : "right",
           labels: {
@@ -96,8 +101,8 @@ const PieChart = ({
       }}
       series={series}
       type="donut"
-      width="100%"
-      height={isMobile ? "350" : heightChart}
+      width={widthChart}
+      height={heightChart}
     />
   );
 };

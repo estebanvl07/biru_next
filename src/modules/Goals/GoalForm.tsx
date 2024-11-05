@@ -27,13 +27,15 @@ import { GoalsIncludes } from "~/types/goal/goal.types";
 import { useEntity } from "../Entities/hook/entities.hook";
 import { accordionItemAnimate } from "../animations";
 import { toast } from "sonner";
+import { Goals } from "@prisma/client";
 
 interface GoalFormProps {
   hasEdit?: boolean;
   goalDefault?: GoalsIncludes;
+  onSuccess?: (goal: Goals) => void;
 }
 
-const GoalForm = ({ hasEdit, goalDefault }: GoalFormProps) => {
+const GoalForm = ({ hasEdit, goalDefault, onSuccess }: GoalFormProps) => {
   const [goalAmount, setGoalAmount] = useState("");
 
   const router = useRouter();
@@ -78,7 +80,14 @@ const GoalForm = ({ hasEdit, goalDefault }: GoalFormProps) => {
     const payload = getValues();
     if (hasEdit) {
       toast.promise(
-        updateGoalMutation({ ...payload, id: String(goalDefault!.id) }),
+        updateGoalMutation(
+          { ...payload, id: String(goalDefault!.id) },
+          {
+            onSuccess(data) {
+              onSuccess && onSuccess(data);
+            },
+          },
+        ),
         {
           loading: "Editando Meta...",
           success: "La meta se ha editado con éxito.",
@@ -94,7 +103,8 @@ const GoalForm = ({ hasEdit, goalDefault }: GoalFormProps) => {
           goal: Number(payload.goal),
         },
         {
-          onSuccess() {
+          onSuccess(data) {
+            onSuccess && onSuccess(data);
             reset();
             setInitialValues();
           },

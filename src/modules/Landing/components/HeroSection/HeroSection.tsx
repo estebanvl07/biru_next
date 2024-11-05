@@ -3,9 +3,10 @@ import Image from "next/image";
 import Link from "next/link";
 import { motion } from "framer-motion";
 
-import { Button } from "@nextui-org/button";
 import { Header } from "~/modules/components/Header";
 import { useThemeContext } from "~/lib/context/Theme.context";
+import { Avatar, Button, Chip } from "@nextui-org/react";
+import TypewriterComponent from "typewriter-effect";
 
 export const HeroSection = () => {
   const { theme } = useThemeContext();
@@ -13,15 +14,13 @@ export const HeroSection = () => {
   const isDark = theme === "dark";
 
   return (
-    <div className="fade-bottom relative z-10 flex h-screen max-h-[56rem] w-full flex-col items-center bg-gradient-to-r from-fuchsia-100 to-indigo-100 md:overflow-hidden">
-      <Header />
-
-      <div
-        className="absolute -top-12 h-[32rem] w-4/5 bg-opacity-10 bg-[url('/grid.svg')] bg-cover bg-center bg-no-repeat opacity-5 dark:opacity-20"
+    <div className="relative z-10 flex h-full max-h-[32rem] w-full items-center  md:overflow-hidden">
+      {/* <div
+        className="absolute top-4 h-[32rem] w-11/12 bg-opacity-10 bg-[url('/grid.svg')] bg-cover bg-center bg-no-repeat opacity-15 md:top-24 dark:opacity-20"
         aria-hidden="true"
         aria-label="background-grid"
-      />
-      <div className="flex h-full w-full flex-col items-center gap-8 px-4 md:flex-col md:justify-center md:gap-4">
+      /> */}
+      <div className="flex h-full w-full flex-col items-center justify-center gap-8 px-4 md:flex-col md:gap-4">
         <motion.article
           initial={{
             scale: 0.6,
@@ -32,48 +31,73 @@ export const HeroSection = () => {
           transition={{
             duration: 0.4,
           }}
-          className="relative z-10 flex w-full flex-col items-center justify-center gap-4 py-8"
+          className="relative z-10 flex w-full flex-col items-center justify-center py-16 md:py-32"
         >
-          <h1 className="z-10 my-2 text-center font-encode text-4xl font-bold !leading-none tracking-tight sm:text-5xl ">
-            Domina tu{" "}
-            <span className="highlight font-encode text-primary dark:text-primary-light ">
-              futuro financiero
-            </span>
-            <br />
-            con facilidad
-          </h1>
+          <Chip
+            avatar={<Avatar name="B" color="primary" />}
+            color="primary"
+            variant="bordered"
+            className="border-1 border-primary bg-primary/5 dark:border-white/10"
+          >
+            <TypewriterComponent
+              options={{
+                strings: [
+                  "Cuida tu dinero de froma inteligente",
+                  "Haz parte de nuestro",
+                  "Te ayudamos a controlar tus ingresos de forma fácil",
+                  "¡Empieza Ya!",
+                ],
+                autoStart: true,
+                loop: true,
+              }}
+            />
+          </Chip>
+          <motion.h1
+            initial={{
+              height: 0,
+              opacity: 0.6,
+            }}
+            whileInView={{
+              opacity: 1,
+              height: "auto",
+            }}
+            transition={{
+              duration: 0.3,
+            }}
+            className="z-10 mb-6 mt-4 overflow-hidden text-center text-4xl font-medium !leading-none -tracking-wider sm:text-6xl "
+          >
+            Construye un futuro <br /> financiero sin esfuerzo.
+          </motion.h1>
 
-          <p className=" text-pretty text-start text-sm opacity-90 md:max-w-md">
-            Crea hábitos financieros con Biru, conoce como se mueve tu dinero de
-            la forma más fácil.
+          <p className="text-pretty text-center text-sm opacity-90 md:max-w-xl">
+            Con Biru, crea hábitos financieros y controla tu dinero de manera
+            fácil y eficiente. Organiza y optimiza cada movimiento para alcanzar
+            tus metas sin complicaciones.
           </p>
 
-          <nav className="order-2 mt-2 flex w-full flex-col justify-center gap-4 sm:max-w-md sm:flex-row md:order-1">
+          <nav className="order-2 mt-4 flex w-full  flex-row justify-center gap-4 sm:max-w-md md:order-1">
             <Button
-              radius="full"
               color="primary"
               href="/login"
               as={Link}
-              size="md"
               className="w-full !py-4 px-6 lg:w-auto"
             >
               <span className="whitespace-nowrap">Iniciar ahora</span>
               <Icon icon="material-symbols:login" width={24} />
             </Button>
             <Button
-              radius="full"
-              size="md"
+              variant="bordered"
+              color="primary"
+              href="/login"
               as={Link}
-              href="#"
-              // variant="flat"
-              className="w-full bg-primary/20 px-6 py-4 text-primary backdrop-blur-xl lg:w-auto dark:bg-indigo-800/20 dark:text-primary-light"
+              className="w-full !py-4 px-6 lg:w-auto"
             >
-              <span className="whitespace-nowrap">Como funciona</span>
-              <Icon icon="solar:play-circle-bold" width={24} />
+              <span className="whitespace-nowrap">Iniciar ahora</span>
+              <Icon icon="material-symbols:login" width={24} />
             </Button>
           </nav>
         </motion.article>
-        <motion.div
+        {/* <motion.div
           initial={{
             y: 40,
           }}
@@ -94,8 +118,8 @@ export const HeroSection = () => {
             data-todo="set size"
             loading="lazy"
           />
-        </motion.div>
-        <Image
+        </motion.div> */}
+        {/* <Image
           src={"/dashboard-re.png"}
           width={1200}
           height={650}
@@ -103,7 +127,7 @@ export const HeroSection = () => {
           alt="Dashboard"
           data-todo="set size"
           loading="lazy"
-        />
+        /> */}
       </div>
     </div>
   );

@@ -85,9 +85,6 @@ const FilterTemplates = () => {
       )}
       <Select
         className="w-32 lg:w-48"
-        classNames={{
-          trigger: "bg-white dark:bg-default-100",
-        }}
         defaultSelectedKeys={[0]}
         aria-label="Select filter templates"
         placeholder="Filtrar"

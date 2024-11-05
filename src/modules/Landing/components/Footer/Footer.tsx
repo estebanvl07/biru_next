@@ -6,7 +6,7 @@ import type { LinkListProps } from "./Footer.types";
 
 export const Footer = () => {
   return (
-    <footer className="flex min-h-80 w-full justify-center bg-slate-100 dark:bg-slate-900">
+    <footer className="flex min-h-80 w-full justify-center bg-slate-100 dark:bg-black">
       <div className="flex w-full flex-col px-8 md:max-w-[72rem]">
         <section className="flex flex-grow flex-col items-center gap-16 py-8 sm:flex-row sm:py-0">
           <aside className="w-full flex-grow sm:w-auto">

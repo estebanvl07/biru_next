@@ -13,9 +13,6 @@ export const CardInfo: FC<CardInfoProps> = ({
   className,
 }) => {
   return (
-<<<<<<< HEAD
-    <div className="relative h-fit w-fit">
-=======
     <div
       className={clsx(
         "mb-12 h-fit w-full rounded-2xl border bg-white px-8 py-6 shadow-lg shadow-gray-400/50 dark:border-white/5 dark:bg-default-200 dark:shadow-slate-950",
@@ -23,7 +20,6 @@ export const CardInfo: FC<CardInfoProps> = ({
         { "!bg-primary text-white": color === "primary" },
       )}
     >
->>>>>>> landing-remake
       <div
         className={clsx(
           "absolute -top-5 z-10 flex h-10 w-10 items-center justify-center rounded-full border dark:border-none dark:bg-slate-800",

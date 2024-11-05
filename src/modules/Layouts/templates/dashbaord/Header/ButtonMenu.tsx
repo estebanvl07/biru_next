@@ -9,19 +9,24 @@ const ButtonMenu = () => {
   const menuRef = useOutsideClick<HTMLDivElement>(() => setShowSideBar(false));
 
   return (
-    <div ref={menuRef}>
+    <div ref={menuRef} className="relative">
       <Button
         variant="bordered"
         isIconOnly
         radius="full"
-        className="bg-default-100 border-none"
+        className="border-none bg-default-100"
         onClick={() => {
           setShowSideBar(!showSideBar);
         }}
       >
         <Icon icon="iconamoon:menu-burger-horizontal-bold" width={20} />
       </Button>
-      {showSideBar && <Menu onHide={() => setShowSideBar(false)} />}
+      {showSideBar && (
+        <Menu
+          className="absolute right-0 top-12 !w-44 border bg-white shadow-xl dark:border-white"
+          onHide={() => setShowSideBar(false)}
+        />
+      )}
     </div>
   );
 };

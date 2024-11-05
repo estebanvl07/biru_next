@@ -14,9 +14,15 @@ import { groupedAnimation } from "~/modules/animations";
 import { useResize } from "~/lib/hooks/useResize";
 import { api } from "~/utils/api";
 import clsx from "clsx";
+import useShowForm from "~/lib/hooks/useShowForm";
+import { GoalsIncludes } from "~/types/goal/goal.types";
+import CreateGoal from "../../CreateGoal";
 
 const CardsView = () => {
   const params = useParams();
+
+  const { onCloseCreate, onShowCreate, showCreate } =
+    useShowForm<GoalsIncludes>({});
 
   const { isMobile } = useResize();
 
@@ -45,11 +51,12 @@ const CardsView = () => {
         />
         <nav className="flex gap-2">
           <Button
-            as={Link}
             isIconOnly={isMobile}
-            href={`/account/${params?.acc}/goals/new`}
             color="primary"
             className="flex gap-1"
+            onClick={() => {
+              onShowCreate();
+            }}
           >
             <Icon icon="ph:plus" width={16} />
             {!isMobile && "Crear Meta"}
@@ -87,6 +94,7 @@ const CardsView = () => {
           )}
         </motion.section>
       )}
+      <CreateGoal isOpen={showCreate} onClose={onCloseCreate} />
     </>
   );
 };

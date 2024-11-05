@@ -22,9 +22,12 @@ const HeaderMobile = ({ title = "Dashboard" }: { title?: string }) => {
             <Avatar
               isBordered
               aria-label="User logged"
-              color={Boolean(data?.user.image) ? "default" : "primary"}
-              src={data?.user.image ?? undefined}
-              name={data?.user.name ?? ""}
+              classNames={{
+                name: "text-primary-foreground",
+              }}
+              color={Boolean(data?.user.image) ? "primary" : "default"}
+              src={data?.user.image || undefined}
+              name={data?.user.name || ""}
               as={Link}
               href={`/account/${params?.acc}/setting`}
             />

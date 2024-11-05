@@ -49,7 +49,7 @@ const AccountPage = () => {
 
   return (
     <>
-      <WithoutSideBar title="Centro de Cuentas" hasFilter={false}>
+      <WithoutSideBar hasLogout title="Centro de Cuentas" hasFilter={false}>
         <div className="m-auto flex w-full max-w-[38rem] flex-col">
           <header className="flex items-center justify-between gap-4">
             <aside>
@@ -75,6 +75,9 @@ const AccountPage = () => {
                 <CustomRadio
                   value={`${account.id}`}
                   key={account.id}
+                  classNames={{
+                    base: "border-2 !border-red-600",
+                  }}
                   onClick={() => setAccountSelected(account.id)}
                 >
                   <div className="flex w-full items-center justify-between px-2">
@@ -108,7 +111,9 @@ const AccountPage = () => {
             >
               Ir al Dashboard
             </Button>
-            <Button isDisabled>Editar cuenta</Button>
+            <Button as={Link} href={`/account/${accountSelected}/edit`}>
+              Editar cuenta
+            </Button>
           </div>
         </div>
       </WithoutSideBar>
@@ -132,7 +137,7 @@ export const CustomRadio = (props: RadioProps) => {
       className={cn(
         "group inline-flex flex-row-reverse items-center justify-between hover:bg-default-50/30",
         "max-w-full cursor-pointer gap-4 rounded-lg border border-default p-3",
-        "data-[selected=true]:border-primary/40 data-[selected=true]:bg-default-50 dark:data-[selected=true]:border-primary-light/40 dark:data-[selected=true]:bg-default-200",
+        "dark:data-[selected=true]:border-primary-light/40 data-[selected=true]:border-primary/40 data-[selected=true]:bg-default-50 dark:data-[selected=true]:bg-default-200",
       )}
     >
       <VisuallyHidden>

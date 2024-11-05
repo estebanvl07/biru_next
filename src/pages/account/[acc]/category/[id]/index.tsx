@@ -23,9 +23,33 @@ import { GetServerSideProps } from "next";
 import { useResize } from "~/lib/hooks/useResize";
 import { ListTransactions } from "~/modules/Common";
 import DetailView from "~/modules/components/molecules/DetailView";
+import useShowForm from "~/lib/hooks/useShowForm";
+import EditCategory from "~/modules/Category/EditCategory";
+import CreateCategory from "~/modules/Category/CreateCategory";
+import CreateTransaction from "~/modules/Transactions/CreateTransaction";
+import EditTransaction from "~/modules/Transactions/EditTransaction";
+import { TransactionIncludes } from "~/types/transactions";
 
 const DetailCategory = ({ category }: { category: CategoryIncludes }) => {
   const { name, description, type, icon, transactions } = category;
+
+  const {
+    data: defaultCategory,
+    onCloseEdit: onCloseEditCategory,
+    showEdit: showEditCategory,
+    onShowEdit: onShowEditCategory,
+  } = useShowForm<CategoryIncludes>({ defaultData: category });
+
+  const {
+    data,
+    onChageData,
+    onCloseCreate,
+    onCloseEdit,
+    onShowCreate,
+    onShowEdit,
+    showCreate,
+    showEdit,
+  } = useShowForm<TransactionIncludes>({});
 
   const { isMobile } = useResize();
 
@@ -33,8 +57,8 @@ const DetailCategory = ({ category }: { category: CategoryIncludes }) => {
   const router = useRouter();
 
   const renderCell = useCallback(
-    (transaction: Transaction, columnKey: React.Key) => {
-      const cellValue = transaction[columnKey as keyof Transaction];
+    (transaction: TransactionIncludes, columnKey: React.Key) => {
+      const cellValue = transaction[columnKey as keyof TransactionIncludes];
       switch (columnKey) {
         case "amount":
           return (
@@ -81,16 +105,10 @@ const DetailCategory = ({ category }: { category: CategoryIncludes }) => {
                   },
                 })
               }
-              onClickEdit={() =>
-                router.push({
-                  pathname: "/account/[acc]/transactions/[id]/edit",
-                  query: {
-                    acc: String(params?.acc),
-                    id: String(transaction?.id),
-                    category: transaction.categoryId,
-                  },
-                })
-              }
+              onClickEdit={() => {
+                onChageData(transaction);
+                onShowEdit();
+              }}
               onClickDelete={() => {}}
             />
           );
@@ -119,10 +137,9 @@ const DetailCategory = ({ category }: { category: CategoryIncludes }) => {
               </div>
             </aside>
             <Button
-              as={Link}
-              href={`/account/${params?.acc}/category/${category.id}/edit`}
               color="primary"
               isIconOnly={isMobile}
+              onClick={onShowEditCategory}
               className="sm:w-fit"
             >
               <Icon icon="akar-icons:edit" width={18} />
@@ -140,7 +157,9 @@ const DetailCategory = ({ category }: { category: CategoryIncludes }) => {
                     headerConfig={{
                       hasNew: true,
                       newButtonText: "Nueva Transacción",
-                      redirectTo: `/account/${params?.id}/transactions/new?category=${category.id}`,
+                      onNew() {
+                        onShowCreate();
+                      },
                     }}
                     renderCell={renderCell}
                     columns={basicColumns}
@@ -195,6 +214,27 @@ const DetailCategory = ({ category }: { category: CategoryIncludes }) => {
             ),
           },
         ]}
+      />
+      {defaultCategory && (
+        <EditCategory
+          data={defaultCategory}
+          isOpen={showEditCategory}
+          onClose={onCloseEditCategory}
+        />
+      )}
+      {data && (
+        <EditTransaction
+          isOpen={showEdit}
+          onClose={onCloseEdit}
+          transaction={data}
+        />
+      )}
+      <CreateTransaction
+        isOpen={showCreate}
+        onClose={onCloseCreate}
+        options={{
+          defaultCategory: defaultCategory,
+        }}
       />
     </DashboardLayout>
   );

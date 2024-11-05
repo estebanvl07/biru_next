@@ -9,6 +9,7 @@ import type { ListMenu } from "~/types/root.types";
 import { Listbox, ListboxItem } from "@nextui-org/react";
 import { useRouter } from "next/router";
 import { useParams } from "next/navigation";
+import clsx from "clsx";
 
 const OPTIONS: ListMenu[] = [
   // {
@@ -38,7 +39,13 @@ const OPTIONS: ListMenu[] = [
   },
 ];
 
-const Menu = ({ onHide }: { onHide: () => void }) => {
+const Menu = ({
+  onHide,
+  className,
+}: {
+  className?: string;
+  onHide: () => void;
+}) => {
   const router = useRouter();
   const params = useParams();
 
@@ -53,7 +60,10 @@ const Menu = ({ onHide }: { onHide: () => void }) => {
       transition={{
         duration: 0.4,
       }}
-      className="flex w-full flex-col rounded-md pb-1 pt-2 backdrop-blur-sm md:right-0 dark:border-white/10"
+      className={clsx(
+        "flex w-full flex-col rounded-md bg-white pb-1 pt-2 backdrop-blur-sm md:right-0 dark:border-white/10 dark:bg-default-100",
+        className,
+      )}
     >
       <AccountsOptions />
       <ul className="flex w-full flex-col">

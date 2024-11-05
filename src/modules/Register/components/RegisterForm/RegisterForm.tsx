@@ -23,7 +23,7 @@ export const RegisterForm = ({ onSubmit }: RegisterFormProps) => {
   return (
     <form
       className={clsx(
-        "flex w-full flex-col items-center justify-center gap-2",
+        "mt-2 flex w-full flex-col items-center justify-center gap-2",
         { "pointer-events-none animate-pulse": isSubmitting },
       )}
       onSubmit={handleSubmit(onSubmit)}
@@ -36,6 +36,9 @@ export const RegisterForm = ({ onSubmit }: RegisterFormProps) => {
         {...register("name")}
         isInvalid={Boolean(errors.name)}
         errorMessage={errors.name?.message}
+        classNames={{
+          inputWrapper: "!bg-default-200/50",
+        }}
         startContent={<Icon icon="basil:user-outline" width={18} />}
       />
       <Input
@@ -47,28 +50,36 @@ export const RegisterForm = ({ onSubmit }: RegisterFormProps) => {
         {...register("email")}
         isInvalid={Boolean(errors.email)}
         errorMessage={errors.email?.message}
+        classNames={{
+          inputWrapper: "!bg-default-200/50",
+        }}
         startContent={<Icon icon="ic:outline-email" width={18} />}
       />
       <InputPassword
         label="Contraseña"
         autoComplete="current-password"
         {...register("password")}
+        classNames={{
+          inputWrapper: "!bg-default-200/50",
+        }}
         isInvalid={Boolean(errors.password)}
         errorMessage={errors.password?.message}
         required
         isRequired
       />
 
-      <Button color="primary" className="mt-2" type="submit">
+      <Button color="primary" className="mt-2" fullWidth type="submit">
         Registrarme
-        <Spinner
-          color="current"
-          className={clsx("-mr-4 stroke-[3] opacity-0", {
-            "animate-spin opacity-100 transition-opacity delay-100":
-              isSubmitting,
-          })}
-          size="sm"
-        />
+        {isSubmitting && (
+          <Spinner
+            color="current"
+            className={clsx("-mr-4 stroke-[3] opacity-0", {
+              "animate-spin opacity-100 transition-opacity delay-100":
+                isSubmitting,
+            })}
+            size="sm"
+          />
+        )}
       </Button>
     </form>
   );

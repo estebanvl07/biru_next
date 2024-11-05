@@ -5,9 +5,10 @@ import clsx from "clsx";
 import Link from "next/link";
 import { DATE_FORMAT_TRANS } from "~/lib/constants/config";
 import { format } from "date-fns";
-import { Avatar, Chip } from "@nextui-org/react";
+import { Avatar, Chip, Tooltip } from "@nextui-org/react";
 
 import { Entities } from "@prisma/client";
+import { Icon } from "@iconify/react/dist/iconify.js";
 
 interface EntityItemProps {
   entity: Entities;
@@ -42,9 +43,12 @@ const EntityItem: FC<EntityItemProps> = ({ entity, index }) => {
             </span>
           </div>
         </div>
-        <Chip variant="flat" color={type === 1 ? "success" : "danger"}>
+        <Tooltip content={entity.description} className="font-montserrat">
+          <Icon icon="material-symbols:info-outline" width={20} />
+        </Tooltip>
+        {/* <Chip variant="flat" color={type === 1 ? "success" : "danger"}>
           {type === 1 ? "Ingreso" : "Egreso"}
-        </Chip>
+        </Chip> */}
       </Link>
     </li>
   );

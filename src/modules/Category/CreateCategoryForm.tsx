@@ -18,15 +18,18 @@ import { api } from "~/utils/api";
 import { Alert } from "../components/molecules/Alert.component";
 import { useAlert } from "~/lib/hooks/useAlert";
 import { CategoryIncludes } from "~/types/category/category.types";
+import { toast } from "sonner";
 
 interface CategoryFormProps {
   hasEdit?: boolean;
   categoryDefault?: CategoryIncludes;
+  onSuccess?: () => void;
 }
 
 const CreateCategoryForm = ({
   hasEdit = false,
   categoryDefault,
+  onSuccess,
 }: CategoryFormProps) => {
   const router = useRouter();
   const [modalActive, setModalActive] = useState(false);
@@ -58,80 +61,56 @@ const CreateCategoryForm = ({
   const { isOpen, onClose, onOpen, props, setProps } = useAlert(alertConfig);
   const category = api.category.create.useMutation();
 
-  const { mutate: CategoryUpdateMutation } = api.category.update.useMutation();
+  const { mutateAsync: CategoryUpdateMutation } =
+    api.category.update.useMutation();
 
   const onSubmit = () => {
     onClose();
     const data = getValues();
 
     if (hasEdit) {
-      CategoryUpdateMutation(
-        { ...data, id: String(categoryDefault?.id) },
+      toast.promise(
+        CategoryUpdateMutation(
+          { ...data, id: String(categoryDefault?.id) },
+          {
+            onSuccess(data) {
+              onSuccess && onSuccess();
+              reset();
+            },
+          },
+        ),
         {
-          onSuccess() {
-            setProps({
-              ...props,
-              type: "success",
-              cancel: false,
-              confirm: true,
-              confirmProps: {
-                onClick: () => {
-                  router.push(`/account/${params?.acc}/category`);
-                },
-              },
-            });
-            reset();
-            onOpen();
-          },
-          onError() {
-            setProps({
-              ...props,
-              type: "error",
-              cancel: true,
-              confirm: false,
-            });
-            onOpen();
-          },
+          loading: "Actualizando Categoría...",
+          success: "La categoría se ha actualizado con éxito.",
+          error: "Hubo un error, intente de nuevo",
         },
       );
-      return;
     }
 
-    return category.mutateAsync(
-      {
-        ...data,
-        type: Number(data.type),
-      },
-      {
-        onSuccess() {
-          setProps({
-            ...props,
-            type: "success",
-            cancel: false,
-            confirm: true,
-            confirmProps: {
-              onClick: () => {
-                router.push(`/account/${params?.acc}/category`);
-              },
-            },
-          });
-          reset();
-          onOpen();
+    return toast.promise(
+      category.mutateAsync(
+        {
+          ...data,
+          type: Number(data.type),
         },
-        onError() {
-          setProps({
-            ...props,
-            type: "error",
-            cancel: true,
-            confirm: false,
-          });
-          onOpen();
+        {
+          onSuccess() {
+            onSuccess && onSuccess();
+            reset();
+          },
         },
+      ),
+      {
+        loading: "Creando Categoría...",
+        success: "La categoría se ha creado con éxito.",
+        error: "Hubo un error, intente de nuevo",
       },
     );
   };
 
   useEffect(() => {
+    setValue("type", 1);
+
     if (categoryDefault) {
       setValue("type", Number(categoryDefault.type));
       setValue("name", categoryDefault.name || "");
@@ -244,7 +223,10 @@ const CreateCategoryForm = ({
             />
             {hasEdit ? "Actualizar Categoría" : "Crear Categoría"}
           </Button>
-          <Button className="w-full bg-default-100 py-1 text-sm sm:w-fit">
+          <Button
+            onClick={() => onSuccess && onSuccess()}
+            className="w-full bg-default-100 py-1 text-sm sm:w-fit"
+          >
             Cancelar
           </Button>
         </div>

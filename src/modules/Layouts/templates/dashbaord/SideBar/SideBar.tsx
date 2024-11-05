@@ -46,7 +46,7 @@ const SideBar = React.memo(
       <motion.aside
         layout
         className={clsx(
-          "relative z-20 hidden min-h-screen bg-white duration-700 transition-width md:block dark:bg-default-100",
+          "relative z-20 hidden min-h-screen bg-default-100 duration-700 transition-width md:block dark:bg-default-100",
           {
             "w-[90px]": !isExpanded,
             "!w-[300px]": isExpanded,
@@ -66,7 +66,8 @@ const SideBar = React.memo(
           <motion.aside
             layout
             className={clsx("mt-2 h-16 pt-2", {
-              "flex flex-col items-center justify-center gap-2": !isExpanded,
+              "mt-6 flex flex-col items-center justify-center gap-6":
+                !isExpanded,
               "flex items-center justify-between px-6": isExpanded,
             })}
           >
@@ -74,7 +75,7 @@ const SideBar = React.memo(
             <motion.button
               layout
               className={clsx(
-                "z-10 grid h-6 w-6 place-content-center rounded-full py-2 backdrop-blur-sm",
+                "z-10 grid h-6 w-6 place-content-center rounded-lg bg-default-200 p-4 backdrop-blur-sm",
               )}
               onClick={() => setIsExpanded(!isExpanded)}
             >
@@ -113,7 +114,7 @@ const SideBar = React.memo(
           ) : (
             <div
               className={clsx(
-                "bottom-4 mx-4 flex cursor-pointer flex-col items-center gap-4 rounded-full border bg-white p-1.5 transition-width dark:border-none dark:border-white/10 dark:bg-default-200",
+                "mx-4 flex cursor-pointer flex-col items-center gap-4 rounded-full border  bg-white p-1.5 transition-width dark:border-none dark:border-white/10 dark:bg-default-200",
                 {
                   "mx-auto w-fit border-none shadow-none": !isExpanded,
                   "rounded-lg": showMenu,
@@ -123,7 +124,7 @@ const SideBar = React.memo(
               ref={handlerRef}
             >
               {showMenu && <Menu onHide={onHide} />}
-              <div className="flex w-full items-center gap-2">
+              <div className="flex h-fit w-full items-center gap-2">
                 <AvatarMenu />
                 {isExpanded && isDesktop && (
                   <aside className="flex flex-col items-start">

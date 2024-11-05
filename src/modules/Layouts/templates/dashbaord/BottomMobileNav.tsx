@@ -12,29 +12,31 @@ const BottomMobileNav = () => {
   const pathname = usePathname();
 
   return (
-    <nav className="fixed bottom-0 z-30 flex w-full items-center justify-between border-t bg-white/50 px-8 py-4 pb-10 backdrop-blur-md dark:border-white/10 dark:bg-default-300/50">
-      {mobileOptions.map(({ href, icon, name, id }) => {
-        return (
-          <Link
-            key={id}
-            href={`/account/${params?.acc}${href}`}
-            className="flex flex-col items-center justify-center gap-2"
-            title={name}
-          >
-            <Icon
-              icon={icon}
-              width={24}
-              className={clsx({
-                "text-primary": pathname?.includes(href),
-              })}
-            />
-            <span className="hidden overflow-hidden text-ellipsis whitespace-nowrap text-center text-xs sm:block sm:w-20">
-              {name}
-            </span>
-          </Link>
-        );
-      })}
-    </nav>
+    <>
+      <nav className="fixed bottom-0 z-30 flex w-full items-center justify-between border-t bg-white/50 px-8 py-4 pb-10 backdrop-blur-md dark:border-white/10 dark:bg-default-300/50">
+        {mobileOptions.map(({ href, icon, name, id }) => {
+          return (
+            <Link
+              key={id}
+              href={`/account/${params?.acc}${href}`}
+              className="flex flex-col items-center justify-center gap-2"
+              title={name}
+            >
+              <Icon
+                icon={icon}
+                width={24}
+                className={clsx({
+                  "text-primary": pathname?.includes(href),
+                })}
+              />
+              <span className="hidden overflow-hidden text-ellipsis whitespace-nowrap text-center text-xs sm:block sm:w-20">
+                {name}
+              </span>
+            </Link>
+          );
+        })}
+      </nav>
+    </>
   );
 };
 

@@ -35,23 +35,34 @@ import { capitalize } from "../components/molecules/Table/utils";
 import { format } from "date-fns";
 import { es } from "date-fns/locale";
 
-import type { Goals } from "@prisma/client";
+import type { Goals, Transaction } from "@prisma/client";
 import type { TransactionIncludes } from "~/types/transactions";
 import { toast } from "sonner";
+import { GoalsIncludes } from "~/types/goal/goal.types";
+import { CategoryIncludes } from "~/types/category/category.types";
+import { EntityIncludes } from "~/types/entities/entity.types";
 
 interface TransactionFormProps {
   type: "goal" | "transfer";
   mode?: "create" | "edit";
   transactionDefault?: TransactionIncludes;
+  defaultGoal?: GoalsIncludes;
+  defCategory?: CategoryIncludes;
+  defEntity?: EntityIncludes;
+  onSuccess?: () => void;
 }
 
 const TransactionForm = ({
   type,
   mode = "create",
   transactionDefault,
+  defaultGoal,
+  defCategory,
+  defEntity,
+  onSuccess,
 }: TransactionFormProps) => {
   const [amountValue, setAmountValue] = useState("");
-  const [goalSelected, setGoalSelected] = useState<Goals>();
+  const [goalSelected, setGoalSelected] = useState<GoalsIncludes>();
 
   const { account } = useCurrentAccount();
   const { entities } = useEntity();
@@ -71,14 +82,19 @@ const TransactionForm = ({
     api.transaction.update.useMutation();
 
   const defaultCategory =
-    categories && transactionDefault && transactionDefault.categoryId
-      ? [String(transactionDefault.categoryId)]
-      : undefined;
+    categories && defCategory
+      ? [String(defCategory.id)]
+      : transactionDefault && transactionDefault.categoryId
+        ? [String(transactionDefault.categoryId)]
+        : undefined;
 
-  const defaultEntity =
-    entities && transactionDefault && transactionDefault.entityId
-      ? [String(transactionDefault.entityId)]
-      : undefined;
+  const defaultEntity = defEntity
+    ? [String(defEntity.id)]
+    : type === "goal" && defaultGoal
+      ? [String(defaultGoal.entityId)]
+      : entities && transactionDefault && transactionDefault.entityId
+        ? [String(transactionDefault.entityId)]
+        : undefined;
 
   const defaultDate =
     mode === "create"
@@ -91,8 +107,8 @@ const TransactionForm = ({
 
   const defaultGoalKey = transactionDefault?.goalId
     ? [`${transactionDefault.goalId}`]
-    : undefined || query?.goal
-      ? [`${query.goal}`]
+    : undefined || defaultGoal?.id
+      ? [`${defaultGoal?.id}`]
       : undefined;
 
   const defaultAccountKey = transactionDefault?.accountId
@@ -133,6 +149,7 @@ const TransactionForm = ({
           { ...payload, date: new Date() },
           {
             onSuccess(data) {
+              onSuccess && onSuccess();
               reset();
             },
           },
@@ -150,7 +167,8 @@ const TransactionForm = ({
         updateTransactionMutation(
           { id: String(transactionDefault.id), ...payload },
           {
-            onSuccess() {
+            onSuccess(data) {
+              onSuccess && onSuccess();
               reset();
             },
           },
@@ -167,9 +185,32 @@ const TransactionForm = ({
   // query params
   useEffect(() => {
     if (!account && transactionDefault) return;
+
     setValue("accountId", account?.id);
-    query?.category && setValue("categoryId", Number(query.category));
     setValue("transferType", type === "goal" ? 2 : 1);
+
+    if (defCategory) {
+      setValue("categoryId", Number(defCategory.id));
+    }
+
+    if (defEntity) {
+      setValue("entityId", Number(defEntity.id));
+    }
+
+    if (type === "goal" && defaultGoal) {
+      setGoalSelected(defaultGoal);
+      setValue("goalId", Number(defaultGoal.id));
+      defaultGoal.entity && setValue("entityId", Number(defaultGoal.entityId));
+      const entity = entities.find(
+        (ent) => ent.id === Number(defaultGoal.entityId),
+      );
+      setValue("reference", entity?.reference || "");
+      setValue("recipient", entity?.name);
+      return;
+    }
+
+    query?.category && setValue("categoryId", Number(query.category));
+
     if (type === "goal") {
       setValue(
         "goalId",
@@ -191,12 +232,6 @@ const TransactionForm = ({
       setValue("recipient", entity?.name);
     }
   }, [account, query]);
-
-  useEffect(() => {
-    if (query.goal && type === "goal") {
-      setGoalSelected(goals.find((goal) => goal.id === Number(query.goal)));
-    }
-  }, [goals]);
 
   useEffect(() => {
     if (transactionDefault) {
@@ -235,7 +270,6 @@ const TransactionForm = ({
     <AnimatePresence>
       <div className="flex w-full items-start gap-8">
         <Alert isOpen={isOpen} onClose={onClose} {...props} />
-
         <motion.form
           layout
           initial={{ x: -40, opacity: 0 }}
@@ -351,9 +385,7 @@ const TransactionForm = ({
                     color="primary"
                     variant="flat"
                     onClick={() => {
-                      setGoalSelected((prev) =>
-                        prev?.id === goal.id ? undefined : goal,
-                      );
+                      setGoalSelected(goal as GoalsIncludes);
                       setValue("type", goal.type as 1 | 2);
                       setValue("goalId", goal.id);
                       goal?.entityId && setValue("entityId", goal?.entityId);
@@ -414,7 +446,7 @@ const TransactionForm = ({
                   return items.map(({ data }) => (
                     <div
                       key={data?.id}
-                      className="flex flex-col rounded-xl bg-primary/10 px-4 py-2 pr-6 text-primary dark:bg-indigo-400/20 dark:text-primary-light"
+                      className="dark:text-primary-light flex flex-col rounded-xl bg-primary/10 px-4 py-2 pr-6 text-primary dark:bg-default-300/50"
                     >
                       <span className="font-semibold">{data?.name}</span>
                       <span className="text-xs">
@@ -450,7 +482,7 @@ const TransactionForm = ({
             </>
           )}
           <Accordion
-            defaultExpandedKeys={["1"]}
+            defaultExpandedKeys={type === "transfer" ? ["1"] : []}
             showDivider={type === "goal"}
             motionProps={{
               variants: {
@@ -494,6 +526,7 @@ const TransactionForm = ({
               aria-label="Accordion 1"
               classNames={{
                 base: "border-red-600",
+                subtitle: "dark:text-zinc-400",
               }}
               title="Información Adicional"
               subtitle="Agrega más información sobre tu transacción"
@@ -521,7 +554,10 @@ const TransactionForm = ({
                         <div key={data?.id} className="flex items-center gap-2">
                           <div className="grid h-8 w-8 place-items-center rounded-full bg-primary">
                             {data?.icon ? (
-                              <Icon icon={data?.icon} className="text-white" />
+                              <Icon
+                                icon={data?.icon}
+                                className="text-primary-foreground"
+                              />
                             ) : (
                               <Avatar name={data?.name} />
                             )}
@@ -659,6 +695,9 @@ const TransactionForm = ({
               key="2"
               aria-label="Accordion 2"
               hidden={type !== "goal"}
+              classNames={{
+                subtitle: "dark:text-zinc-400",
+              }}
               title="Información de Meta"
               subtitle="Aquí podrás ver el avance de tu meta"
             >
@@ -735,7 +774,7 @@ const TransactionForm = ({
             </Button>
             <Button
               className="py-1 text-sm sm:w-fit"
-              onClick={() => router.back()}
+              onClick={() => onSuccess && onSuccess()}
             >
               Cancelar
             </Button>

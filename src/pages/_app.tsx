@@ -1,6 +1,6 @@
 import { SessionProvider } from "next-auth/react";
 import { type AppType } from "next/app";
-import { Inter, Montserrat, Mukta, Poppins } from "next/font/google";
+import { Inter, Montserrat, Mukta, Poppins, Ubuntu } from "next/font/google";
 
 import { api } from "~/utils/api";
 import { NextUIProvider } from "@nextui-org/react";
@@ -17,8 +17,8 @@ const montserrat = Montserrat({
   variable: "--font-sans",
 });
 
-const poppins = Inter({
-  weight: ["200", "300", "400", "500", "600", "700", "800"],
+const poppins = Ubuntu({
+  weight: ["300", "400", "500", "700"],
   subsets: ["latin"],
   variable: "--font-sans",
 });
@@ -33,6 +33,7 @@ const MyApp: AppType<{ session: Session | null }> = ({
         <ThemeProvider>
           <FilterProvider>
             <div className={`font-sans ${poppins.variable}`}>
+              <div id="portal-root"></div>
               <Component {...pageProps} />
             </div>
             <Toaster />

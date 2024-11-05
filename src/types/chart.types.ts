@@ -13,6 +13,7 @@ export interface ChartProps {
   position?: string;
   showToolBar?: boolean;
   bottomBorder?: boolean;
+  plotTextSize?: string;
   curve?: Curve;
   hasZoom?: boolean;
   showLegend?: boolean;

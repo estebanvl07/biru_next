@@ -1,4 +1,4 @@
-import { useParams } from "next/navigation";
+import { useParams, useSearchParams } from "next/navigation";
 import { useRouter } from "next/router";
 import React, { useCallback, useEffect, useState } from "react";
 
@@ -22,6 +22,12 @@ import { ListTransactions } from "~/modules/Common";
 import { formatDatesOfGoals } from "~/lib/resource/formatDatesOfGoals";
 import { getPercent } from "~/lib/helpers";
 import DetailView from "~/modules/components/molecules/DetailView";
+import EditTransaction from "~/modules/Transactions/EditTransaction";
+import { useOnActive } from "~/lib/hooks";
+import CreateTransaction from "~/modules/Transactions/CreateTransaction";
+import useShowForm from "~/lib/hooks/useShowForm";
+import { TransactionIncludes } from "~/types/transactions";
+import EditGoal from "~/modules/Goals/EditGoal";
 
 const DetailGoalPage = ({
   goalData,
@@ -30,6 +36,24 @@ const DetailGoalPage = ({
   goalData: GoalsIncludes;
   acc: number;
 }) => {
+  const {
+    data,
+    onChageData,
+    showCreate,
+    showEdit,
+    onShowCreate,
+    onShowEdit,
+    onCloseCreate,
+    onCloseEdit,
+  } = useShowForm<TransactionIncludes>({});
+
+  const {
+    showEdit: showEditgoal,
+    onCloseEdit: onCloseEditGoal,
+    onShowEdit: onShowEditGoal,
+    data: defaultGoal,
+  } = useShowForm<GoalsIncludes>({ defaultData: goalData });
+
   const router = useRouter();
   const params = useParams();
   const { isMobile } = useResize();
@@ -38,8 +62,8 @@ const DetailGoalPage = ({
     goalData;
 
   const renderCell = useCallback(
-    (transaction: Transaction, columnKey: React.Key) => {
-      const cellValue = transaction[columnKey as keyof Transaction];
+    (transaction: TransactionIncludes, columnKey: React.Key) => {
+      const cellValue = transaction[columnKey as keyof TransactionIncludes];
       switch (columnKey) {
         case "amount":
           return (
@@ -84,16 +108,10 @@ const DetailGoalPage = ({
                   },
                 })
               }
-              onClickEdit={() =>
-                router.push({
-                  pathname: "/account/[acc]/transactions/[id]/edit",
-                  query: {
-                    acc: String(params?.acc),
-                    id: String(transaction?.id),
-                    goal: id,
-                  },
-                })
-              }
+              onClickEdit={() => {
+                onChageData(transaction);
+                onShowEdit();
+              }}
               onClickDelete={() => {}}
             />
           );
@@ -118,11 +136,10 @@ const DetailGoalPage = ({
               <p>{goalData.description || "Sin descripción"}</p>
             </aside>
             <Button
-              as={Link}
-              href={`/account/${params?.acc}/goals/${goalData.id}/edit`}
               color="primary"
               isIconOnly={isMobile}
               className="sm:w-fit"
+              onClick={() => onShowEditGoal()}
             >
               <Icon icon="akar-icons:edit" width={18} />
               {!isMobile && "Editar Meta"}
@@ -141,7 +158,10 @@ const DetailGoalPage = ({
                     renderCell={renderCell}
                     filterKeys={["amount"]}
                     headerConfig={{
-                      redirectTo: `/account/${acc}/transactions/new?transferType=2&goal=${goalData.id}&entity=${goalData.entityId}`,
+                      hasNew: true,
+                      onNew: () => {
+                        onShowCreate();
+                      },
                     }}
                   />
                 ) : (
@@ -197,6 +217,32 @@ const DetailGoalPage = ({
           },
         ]}
       />
+      {defaultGoal && (
+        <EditGoal
+          isOpen={showEditgoal}
+          onClose={onCloseEditGoal}
+          data={defaultGoal}
+        />
+      )}
+      <CreateTransaction
+        isOpen={showCreate}
+        options={{
+          transferType: "goals",
+          defaultGoal: defaultGoal,
+        }}
+        onClose={onCloseCreate}
+      />
+      {data && (
+        <EditTransaction
+          transaction={data}
+          options={{
+            transferType: "goals",
+            defaultGoal: defaultGoal,
+          }}
+          isOpen={showEdit}
+          onClose={onCloseEdit}
+        />
+      )}
     </DashboardLayout>
   );
 };

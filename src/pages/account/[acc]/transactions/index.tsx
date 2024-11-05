@@ -19,8 +19,16 @@ import MobileTransactionPage from "~/modules/Transactions/MobileTransactionPage"
 import Actions from "~/modules/components/molecules/Table/Actions";
 import { useRouter } from "next/router";
 import { api } from "~/utils/api";
+import NullChip from "~/modules/components/atoms/NullChip.component";
+import Dialog from "~/modules/components/molecules/Dialog.component";
+import CreateTransaction from "~/modules/Transactions/CreateTransaction";
+import EditTransaction from "~/modules/Transactions/EditTransaction";
 
 const TransactionPage = () => {
+  const [showSheetCreate, setShowSheetCreate] = useState(false);
+  const [showSheetEdit, setShowSheetEdit] = useState(false);
+  const [transactionSelected, setTransactionSelected] =
+    useState<TransactionIncludes>();
   const [isClient, setIsClient] = useState(false);
   const router = useRouter();
   const params = useParams<{ acc: string }>();
@@ -86,7 +94,10 @@ const TransactionPage = () => {
                     {transaction.recipient ? (
                       transaction.recipient.split("")[0]
                     ) : (
-                      <Icon icon={getIcon()} />
+                      <Icon
+                        icon={getIcon()}
+                        className="dark:text-primary-foreground"
+                      />
                     )}
                   </>
                 )}
@@ -101,12 +112,15 @@ const TransactionPage = () => {
             </div>
           );
         case "category":
-          return (
-            transaction.category?.name ?? (
-              <Chip size="sm" variant="flat">
-                Sin categoría
+          return transaction.category?.name ? (
+            <p className="flex items-center gap-2">
+              <Chip size="sm" className="bg-default-100 dark:bg-default-100">
+                <Icon icon={transaction.category.icon || ""} />
               </Chip>
-            )
+              {transaction.category?.name}{" "}
+            </p>
+          ) : (
+            <NullChip text="Sin categoría" />
           );
         case "type":
           return (
@@ -150,15 +164,10 @@ const TransactionPage = () => {
                   },
                 })
               }
-              onClickEdit={() =>
-                router.push({
-                  pathname: "/account/[acc]/transactions/[id]/edit",
-                  query: {
-                    acc: String(params?.acc),
-                    id: String(transaction.id),
-                  },
-                })
-              }
+              onClickEdit={() => {
+                setTransactionSelected(transaction);
+                setShowSheetEdit(true);
+              }}
               hasDelete={false}
             />
           );
@@ -182,8 +191,8 @@ const TransactionPage = () => {
         <Table
           headerConfig={{
             title: "",
-            redirectTo: `/account/${Number(params?.acc)}/transactions/new`,
             newButtonText: "Crear Transacción",
+            onNew: () => setShowSheetCreate(!showSheetCreate),
           }}
           columns={columns}
           filterKeys={["description", "amount"]}
@@ -193,6 +202,18 @@ const TransactionPage = () => {
         />
       ) : (
         <MobileTransactionPage transactions={(transactions as any) ?? []} />
+      )}
+
+      <CreateTransaction
+        isOpen={showSheetCreate}
+        onClose={() => setShowSheetCreate(false)}
+      />
+      {transactionSelected && (
+        <EditTransaction
+          transaction={transactionSelected}
+          isOpen={showSheetEdit}
+          onClose={() => setShowSheetEdit(false)}
+        />
       )}
     </DashboardLayout>
   );

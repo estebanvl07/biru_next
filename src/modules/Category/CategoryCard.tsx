@@ -25,7 +25,7 @@ const CategotyCard = ({
     <motion.article
       variants={groupedAnimation.item}
       className={clsx(
-        "relative flex w-full min-w-32 cursor-pointer flex-col items-center justify-start gap-4 rounded-lg bg-white px-6 py-8 transition-all hover:scale-105 hover:border-indigo-300 dark:bg-slate-900 dark:shadow-2xl hover:dark:border-indigo-400",
+        "relative flex w-full min-w-32 cursor-pointer flex-col items-center justify-start gap-4 rounded-lg bg-default-100 px-6 py-8 transition-all hover:scale-105 hover:border-indigo-300 dark:bg-slate-900 dark:shadow-2xl hover:dark:border-indigo-400",
         className,
         {
           "bg-black/5 dark:bg-white/5": state === 2,
@@ -40,13 +40,9 @@ const CategotyCard = ({
       {icon && (
         <Icon
           icon={icon}
-          className={clsx(
-            "right-4 text-indigo-600 dark:text-indigo-400",
-            iconClassName,
-            {
-              "!text-indigo-400/25": state === 2,
-            },
-          )}
+          className={clsx("right-4", iconClassName, {
+            "!text-indigo-400/25": state === 2,
+          })}
           width={32}
         />
       )}

@@ -22,12 +22,18 @@ import { Card } from "~/modules/components";
 import { TransactionIncludes } from "~/types/transactions";
 import { createServerSideCaller } from "~/utils/serverSideCaller/serverSideCaller";
 import { GetServerSideProps } from "next";
+import useShowForm from "~/lib/hooks/useShowForm";
+import EditTransaction from "~/modules/Transactions/EditTransaction";
+import { GoalsIncludes } from "~/types/goal/goal.types";
 
 const DetailTransactionPage = ({
   transaction,
 }: {
   transaction: TransactionIncludes;
 }) => {
+  const { data, onShowEdit, onCloseEdit, showEdit } =
+    useShowForm<TransactionIncludes>({ defaultData: transaction });
+
   const {
     id,
     amount,
@@ -46,7 +52,6 @@ const DetailTransactionPage = ({
   } = transaction;
 
   const router = useRouter();
-  const params = router.query;
 
   const getIcon = () => {
     if (category?.icon) {
@@ -95,7 +100,11 @@ const DetailTransactionPage = ({
             ) : (
               <div className="flex items-center gap-2">
                 <div className="grid h-10 w-10 place-content-center rounded-full bg-primary">
-                  <Icon icon={getIcon()} width={20} className="text-white" />
+                  <Icon
+                    icon={getIcon()}
+                    width={20}
+                    className="text-white dark:text-primary-foreground"
+                  />
                 </div>
                 <aside>
                   <p className="font-medium">
@@ -130,7 +139,7 @@ const DetailTransactionPage = ({
             classNames={{
               title: "font-medium",
             }}
-            className="border-1 !shadow-none dark:border-white/5 dark:!bg-default-200"
+            className="border-1 !bg-default-100 !shadow-none dark:border-white/5"
           >
             <ul className="flex flex-col gap-2 [&>li>p]:font-semibold [&>li>span]:opacity-70 [&>li]:flex [&>li]:flex-row [&>li]:items-center [&>li]:justify-between">
               <li>
@@ -212,7 +221,7 @@ const DetailTransactionPage = ({
             classNames={{
               title: "font-medium",
             }}
-            className="border-1 !shadow-none dark:border-white/5 dark:!bg-default-200"
+            className="border-1 !bg-default-100 !shadow-none dark:border-white/5"
           >
             <ul className="flex flex-col gap-2 [&>li>p]:font-semibold [&>li>span]:opacity-70 [&>li]:flex [&>li]:flex-row [&>li]:items-center [&>li]:justify-between">
               <li>
@@ -233,20 +242,32 @@ const DetailTransactionPage = ({
               title: "font-medium",
             }}
             subtitle="Descripción de transacción"
-            className="border-1 !shadow-none dark:border-white/5 dark:!bg-default-200"
+            className="border-1 !bg-default-100 !shadow-none dark:border-white/5"
           >
             <p>{description || "Sin descripción"}</p>
           </AccordionItem>
         </Accordion>
         <Button
           color="primary"
-          as={Link}
-          href={`/account/${params?.acc}/transactions/${transaction.id}/edit`}
+          onClick={() => {
+            onShowEdit();
+          }}
           className="mt-2 w-full"
         >
           Editar Transacción
         </Button>
       </div>
+      {data && (
+        <EditTransaction
+          transaction={data}
+          isOpen={showEdit}
+          onClose={onCloseEdit}
+          options={{
+            transferType: transaction.transferType === 1 ? "transfer" : "goals",
+            defaultGoal: transaction.transferType === 2 ? transaction.goal as GoalsIncludes : undefined,
+          }}
+        />
+      )}
     </DashboardLayout>
   );
 };

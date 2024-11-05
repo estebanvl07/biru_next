@@ -17,11 +17,17 @@ import { useRouter } from "next/router";
 import { api } from "~/utils/api";
 import clsx from "clsx";
 import { Empty } from "~/modules/components";
+import useShowForm from "~/lib/hooks/useShowForm";
+import { CategoryIncludes } from "~/types/category/category.types";
+import CreateCategory from "../../CreateCategory";
 
 const CategoryCardsView = () => {
   const params = useParams();
   const router = useRouter();
   const { isMobile } = useResize();
+
+  const { showCreate, onCloseCreate, onShowCreate } =
+    useShowForm<CategoryIncludes>({});
 
   const { data: categories, isLoading } = api.category.getAll.useQuery(
     undefined,
@@ -45,10 +51,9 @@ const CategoryCardsView = () => {
           onChange={(e) => onSearch(e.target.value)}
         />
         <Button
-          as={Link}
-          href={`/account/${params?.acc}/category/new`}
           radius="lg"
           color="primary"
+          onClick={onShowCreate}
           isIconOnly={isMobile as any}
         >
           <Icon icon="ph:plus" width={18} /> {!isMobile && "Crear Categoría"}
@@ -99,6 +104,7 @@ const CategoryCardsView = () => {
           )}
         </>
       )}
+      <CreateCategory isOpen={showCreate} onClose={onCloseCreate} />
     </>
   );
 };

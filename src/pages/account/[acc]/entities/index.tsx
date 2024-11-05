@@ -16,11 +16,25 @@ import Actions from "~/modules/components/molecules/Table/Actions";
 
 import { api } from "~/utils/api";
 import clsx from "clsx";
+import useShowForm from "~/lib/hooks/useShowForm";
+import { EntityIncludes } from "~/types/entities/entity.types";
+import CreateEntity from "~/modules/Entities/CreateEntity";
+import EditEntity from "~/modules/Entities/EditEntity";
 
 export default function EntitiesPage() {
   const router = useRouter();
   const params = useParams();
   const { size } = useResize();
+  const {
+    data,
+    onChageData,
+    onShowCreate,
+    onShowEdit,
+    showEdit,
+    showCreate,
+    onCloseCreate,
+    onCloseEdit,
+  } = useShowForm<EntityIncludes>({});
 
   const { data: entities, isLoading } = api.entity.getEntities.useQuery(
     undefined,
@@ -30,8 +44,8 @@ export default function EntitiesPage() {
   const isMobile = Boolean(size && size <= 768);
 
   const renderCell = useCallback(
-    (entity: Entities, columnKey: React.Key) => {
-      const cellValue = entity[columnKey as keyof Entities];
+    (entity: EntityIncludes, columnKey: React.Key) => {
+      const cellValue = entity[columnKey as keyof EntityIncludes];
       switch (columnKey) {
         case "name":
           return (
@@ -88,11 +102,10 @@ export default function EntitiesPage() {
               onClickView={() =>
                 router.push(`/account/${params?.acc}/entities/${entity.id}`)
               }
-              onClickEdit={() =>
-                router.push(
-                  `/account/${params?.acc}/entities/${entity.id}/edit`,
-                )
-              }
+              onClickEdit={() => {
+                onChageData(entity);
+                onShowEdit();
+              }}
               onClickDelete={() => console.log("delete")}
             />
           );
@@ -115,7 +128,9 @@ export default function EntitiesPage() {
         <Table
           headerConfig={{
             title: "",
-            redirectTo: `/account/${Number(params?.acc)}/entities/new`,
+            onNew() {
+              onShowCreate();
+            },
           }}
           columns={columns}
           isLoading={isLoading}
@@ -124,6 +139,10 @@ export default function EntitiesPage() {
         />
       ) : (
         <MobileEntityPage entities={entities ?? []} />
+      )}
+      <CreateEntity isOpen={showCreate} onClose={onCloseCreate} />
+      {data && (
+        <EditEntity isOpen={showEdit} onClose={onCloseEdit} entity={data} />
       )}
     </DashboardLayout>
   );

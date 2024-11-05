@@ -10,17 +10,19 @@ interface DashboardProps {
   children: React.ReactNode;
   title?: string;
   headDescription?: string;
-  hasFilter?: boolean
+  hasFilter?: boolean;
+  hasLogout?: boolean;
 }
 
 const WithoutSideBar: FC<DashboardProps> = ({
   children,
   title,
   headDescription,
-  hasFilter
+  hasFilter,
+  hasLogout,
 }) => {
-  const { isMobile } = useResize()
-  const [isClient, setIsClient] = useState(false)
+  const { isMobile } = useResize();
+  const [isClient, setIsClient] = useState(false);
 
   useEffect(() => {
     setIsClient(true);
@@ -32,12 +34,18 @@ const WithoutSideBar: FC<DashboardProps> = ({
         <title>Biru - {title}</title>
         <meta name="description" content={headDescription} />
       </Head>
-     
-      <main className="w-full min-h-screen flex flex-col flex-grow px-8 py-4 bg-white dark:bg-slate-950">
-        {
-          isMobile ? <HeaderMobile title={title} /> :
-          <HeaderApp title={title} hasFilter={hasFilter} logo />
-        }
+
+      <main className="flex min-h-screen w-full flex-grow flex-col bg-gradient-to-r from-zinc-100 to-zinc-100 px-8 py-4 dark:from-default-50 dark:via-default-100 dark:to-default-50">
+        {isMobile ? (
+          <HeaderMobile title={title} />
+        ) : (
+          <HeaderApp
+            hasLogout={hasLogout}
+            title={title}
+            hasFilter={hasFilter}
+            logo
+          />
+        )}
         {isClient && children}
       </main>
     </>

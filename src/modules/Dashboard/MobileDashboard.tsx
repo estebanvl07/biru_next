@@ -1,11 +1,7 @@
 import { useParams } from "next/navigation";
 import Link from "next/link";
 
-import {
-  BalanceEgress,
-  BalanceIncome,
-  LastTransactions,
-} from "~/modules/Common";
+import { LastTransactions } from "~/modules/Common";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import { Chip, Skeleton } from "@nextui-org/react";
 import MobileFilter from "../Layouts/templates/dashbaord/Header/MobileFilter";
@@ -82,10 +78,6 @@ const MobileDashboard = () => {
           </Link>
         </motion.nav>
       </section>
-      <div className="flex gap-2 overflow-auto scrollbar-hide">
-        <BalanceIncome className="min-w-72" />
-        <BalanceEgress className="min-w-72" />
-      </div>
       <LastTransactions transactionsMaxLength={10} />
     </div>
   );

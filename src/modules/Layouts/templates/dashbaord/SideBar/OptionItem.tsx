@@ -29,9 +29,9 @@ const OptionItem = ({
       ) : (
         <li
           className={clsx(
-            "flex  items-center gap-2 rounded-lg px-4 py-2 text-sm transition-all",
+            "flex items-center gap-2 rounded-lg px-4 py-2 text-sm transition-all hover:bg-default-200",
             {
-              "bg-indigo-100 font-semibold text-primary dark:bg-indigo-900/40 dark:font-normal dark:text-white":
+              "bg-default-300 font-semibold text-primary  dark:bg-default-300/40 dark:font-normal dark:text-white":
                 pathname?.includes(item.href),
               "mx-auto w-fit hover:scale-105": !isExpanded,
               "w-full hover:pl-6": isExpanded,

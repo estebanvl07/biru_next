@@ -12,6 +12,8 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import MainLoader from "../Loaders/mainLoader.component";
 import { useEffect, useState } from "react";
+import DrawerOptions from "./templates/DrawerOptions";
+import Sheet from "../components/molecules/Sheet";
 
 const variants = {
   hidden: { opacity: 0, x: -200, y: 0 },
@@ -42,7 +44,7 @@ const DashboardLayout = ({
   }, []);
 
   return (
-    <div className=" flex flex-row overflow-hidden md:p-1.5 md:pl-0 dark:bg-default-100">
+    <div className="flex h-screen  flex-row overflow-hidden bg-default-100 md:p-1.5 md:pl-0 dark:bg-default-100">
       <AnimatePresence>
         <Head>
           <title>Biru - {title}</title>
@@ -50,8 +52,9 @@ const DashboardLayout = ({
         </Head>
         {<SideBar serviceOptions={serviceOptions} />}
         {isMobile && <BottomMobileNav />}
+        {isMobile && <DrawerOptions />}
 
-        <section className="z-0 h-full min-h-screen w-full flex-grow rounded-md rounded-tl-2xl border bg-stone-200/50 py-3 dark:border-white/10 dark:bg-default-50">
+        <section className="  z-0 h-full w-full flex-grow overflow-y-auto rounded-md rounded-tl-2xl border bg-white py-3   scrollbar-hide dark:border-white/10 dark:bg-default-50">
           <div className="flex flex-col md:px-8">
             {!isMobile ? (
               <HeaderApp title={title} hasFilter={hasFilter} />

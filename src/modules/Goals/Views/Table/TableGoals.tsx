@@ -1,4 +1,4 @@
-import React, { useCallback } from "react";
+import React, { useCallback, useState } from "react";
 import { Table } from "~/modules/components";
 import { useGoals } from "../../hook/goal.hook";
 import { columns } from "./table";
@@ -11,8 +11,29 @@ import { format } from "date-fns";
 import { es } from "date-fns/locale";
 import Actions from "~/modules/components/molecules/Table/Actions";
 import { useRouter } from "next/router";
+import { getPercent } from "~/lib/helpers";
+import Dialog from "~/modules/components/molecules/Dialog.component";
+import GoalForm from "../../GoalForm";
+import CreateGoal from "../../CreateGoal";
+import useShowForm from "~/lib/hooks/useShowForm";
+import EditGoal from "../../EditGoal";
 
 const TableGoals = () => {
+  const [showSheetCreate, setShowSheetCreate] = useState(false);
+  const [showSheetEdit, setShowSheetEdit] = useState(false);
+  const [goalSelected, setGoalSelected] = useState<GoalsIncludes>();
+
+  const {
+    data,
+    onChageData,
+    showCreate,
+    showEdit,
+    onShowCreate,
+    onShowEdit,
+    onCloseEdit,
+    onCloseCreate,
+  } = useShowForm<GoalsIncludes>({});
+
   const { goals, isLoading } = useGoals();
   const params = useParams();
   const router = useRouter();
@@ -58,7 +79,7 @@ const TableGoals = () => {
           return (
             <div className="flex flex-col items-start justify-center">
               <span className="text-enter whitespace-nowrap font-medium">
-                {(goal.saved / goal.goal) * 100}%
+                {getPercent(goal.saved, goal.goal)}
               </span>
               <Progress
                 size="sm"
@@ -67,9 +88,9 @@ const TableGoals = () => {
                 value={goal.saved}
                 maxValue={goal.goal}
                 classNames={{
-                  indicator: "dark:bg-indigo-400",
+                  indicator: "dark:bg-white",
                 }}
-                className="my-1 rounded-full border bg-gray-200 dark:border-none dark:bg-slate-700"
+                className="my-1 rounded-full border bg-gray-200 dark:border-none dark:bg-white/30"
               />
             </div>
           );
@@ -111,15 +132,10 @@ const TableGoals = () => {
                   },
                 })
               }
-              onClickEdit={() =>
-                router.push({
-                  pathname: "/account/[acc]/goals/[id]/edit",
-                  query: {
-                    acc: String(params?.acc),
-                    id: String(goal.id),
-                  },
-                })
-              }
+              onClickEdit={() => {
+                onChageData(goal);
+                onShowEdit();
+              }}
               hasDelete={false}
             />
           );
@@ -131,17 +147,23 @@ const TableGoals = () => {
   );
 
   return (
-    <Table
-      headerConfig={{
-        newButtonText: "Crear Meta",
-        hasNew: true,
-        redirectTo: `/account/${params?.acc}/goals/new`,
-      }}
-      columns={columns}
-      data={goals}
-      isLoading={isLoading}
-      renderCell={renderCell}
-    />
+    <>
+      <Table
+        headerConfig={{
+          newButtonText: "Crear Meta",
+          hasNew: true,
+          onNew: () => {
+            onShowCreate();
+          },
+        }}
+        columns={columns}
+        data={goals}
+        isLoading={isLoading}
+        renderCell={renderCell}
+      />
+      <CreateGoal isOpen={showCreate} onClose={onCloseCreate} />
+      {data && <EditGoal data={data} isOpen={showEdit} onClose={onCloseEdit} />}
+    </>
   );
 };
 

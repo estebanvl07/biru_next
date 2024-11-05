@@ -18,6 +18,7 @@ const LineChart = ({
   showLegend = true,
   showXAxis = true,
   showYAxis = true,
+  widthChart = "100%",
   showToolTip = true,
   hasZoom = true,
   curve = "smooth",
@@ -78,7 +79,7 @@ const LineChart = ({
           shared: false,
           custom: function ({ series, seriesIndex, dataPointIndex, w }: any) {
             return `
-                <div class="bg-white px-6 py-2 flex flex-col justify-center border-[1px] dark:border-white/10 items-center dark:bg-slate-900">
+                <div class="bg-white px-6 py-2 flex flex-col justify-center dark:border-white/10 items-center dark:bg-default-200 backdrop-blur-xl">
                   <span class="text-xs">${
                     w.globals.initialSeries[seriesIndex].name
                   }</span>
@@ -139,7 +140,7 @@ const LineChart = ({
       }}
       series={series}
       type="area"
-      width="100%"
+      width={widthChart}
       height={heightChart}
     />
   );

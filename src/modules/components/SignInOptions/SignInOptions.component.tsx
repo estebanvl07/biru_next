@@ -9,7 +9,7 @@ const SignInOptions = ({ title }: { title?: string }) => {
     <div className="flex w-full flex-col items-center gap-3">
       <span className="text-sm">{title ?? "Iniciar con"}</span>
       <ButtonGroup className="w-full">
-        <Button
+        {/* <Button
           className="w-full bg-default-200/50"
           onClick={() =>
             signIn("facebook", {
@@ -19,7 +19,7 @@ const SignInOptions = ({ title }: { title?: string }) => {
           }
         >
           <Icon icon="logos:facebook" width={24} /> Facebook
-        </Button>
+        </Button> */}
         <Button
           className="w-full bg-default-200/50"
           onClick={() =>

@@ -34,6 +34,7 @@ export const RecoverPage = () => {
       title="Recuperar contraseña"
       description="¿Olvidaste tu contraseña?, no te preocupes, te ayudaremos a recuperarla"
     >
+      <div className="mt-20" />
       {isRecoverUserStep && (
         <RecoverForm
           onSubmit={onRecoverUserSubmit}

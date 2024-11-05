@@ -1,12 +1,8 @@
-import { Chip } from "@nextui-org/react";
 import { Header } from "../components/Header";
 import { HeroSection, Advantages, Explore, Footer } from "./components";
 import Features from "./components/Features/Features";
 import SlideComponents from "./components/SlideComponents/SlideComponents";
 import { motion } from "framer-motion";
-import Link from "next/link";
-import { Icon } from "@iconify/react/dist/iconify.js";
-import Inprovements from "./components/Inprovements/Inprovements";
 
 export const Landing = () => {
   return (
@@ -27,7 +23,6 @@ export const Landing = () => {
       >
         <Features />
         <Advantages />
-        <Inprovements />
         <Explore />
         <Footer />
       </motion.div>

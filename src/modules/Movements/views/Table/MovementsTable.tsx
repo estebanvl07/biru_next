@@ -105,19 +105,6 @@ const MovementsTable = () => {
         case "actions":
           return (
             <Actions
-              children={
-                <Tooltip
-                  content={"Crear Ocurrencia"}
-                  className="font-montserrat"
-                >
-                  <Link
-                    href={`/account/${params?.acc}/movements/new/ocurrence/${movement.id}`}
-                    className="cursor-pointer text-lg text-default-400 active:opacity-50"
-                  >
-                    <Icon icon="ic:round-plus" width={24} />
-                  </Link>
-                </Tooltip>
-              }
               onClickView={() =>
                 router.push({
                   pathname: "/account/[acc]/movements/[id]",
@@ -137,7 +124,16 @@ const MovementsTable = () => {
                 })
               }
               hasDelete={false}
-            />
+            >
+              <Tooltip content={"Crear ocurrencia"} className="font-montserrat">
+                <Link
+                  href={`/account/${params?.acc}/movements/new/ocurrence/${movement.id}`}
+                  className="cursor-pointer text-lg text-default-400 active:opacity-50"
+                >
+                  <Icon icon="ic:round-plus" width={24} />
+                </Link>
+              </Tooltip>
+            </Actions>
           );
         default:
           return cellValue;

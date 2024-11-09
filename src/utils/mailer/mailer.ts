@@ -3,8 +3,10 @@ import { SignInTemplate } from "./signInEmail";
 import nodemailer, { type Transport } from "nodemailer";
 import BrevoTransport from "nodemailer-brevo-transport";
 import { env } from "~/env";
+import { reminderMovement } from "./reminderMovement";
+import { FixedMovements } from "@prisma/client";
 
-const FROM_NO_REPLAY = "Biru <noreply@biru.com>";
+const FROM_NO_REPLAY = "Biru <viloriaalgarin@gmail.com>";
 
 const getBrevoTransport = (): Transport<string> =>
   new BrevoTransport({ apiKey: env.NODEMAILER_KEY }) as never;
@@ -18,7 +20,7 @@ const handleMailerError = (err: Error | null) => {
 };
 
 export const mailer = {
-  userConfirmationEmail({
+  async userConfirmationEmail({
     to,
     token,
     name,
@@ -50,16 +52,24 @@ export const mailer = {
     };
     return transporter.sendMail(recoverOptions, handleMailerError);
   },
-  remiderMovement({ to, name }: { to: string; name: string }) {
-    const remiderOptions = {
+  remiderMovement({
+    to,
+    name,
+    movements,
+  }: {
+    to: string;
+    name: string;
+    movements: FixedMovements[];
+  }) {
+    const reminderOptions = {
       from: FROM_NO_REPLAY,
       to,
-      subject: "RECORDATORIO",
-      html: `<p>Hola ${name}, Este correo es para recordarte que tienes uno de tus movimientos fijo está a punto de vencer</p>`,
+      subject: "Movimientos pendientes",
+      html: reminderMovement({ movements, name }),
     };
-    console.log(remiderOptions);
-    const result = transporter.sendMail(remiderOptions, handleMailerError);
 
-    return result;
+    console.log(reminderOptions);
+
+    return transporter.sendMail(reminderOptions, handleMailerError);
   },
 };

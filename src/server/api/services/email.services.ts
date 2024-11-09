@@ -1,4 +1,4 @@
-import { PrismaClient, User } from "@prisma/client";
+import { FixedMovements, PrismaClient, User } from "@prisma/client";
 import { mailer } from "~/utils/mailer";
 import { generateRandomString } from "~/utils/crypto";
 import type { PrismaTransaction } from "~/server/db";
@@ -32,6 +32,8 @@ export async function sendConfirmationEmail(
     token,
     expireAt,
   );
+
+  console.log("sending email");
 
   mailer.userConfirmationEmail({
     name,
@@ -67,20 +69,52 @@ export async function recoverUserEmail(
   return code;
 }
 
+type GroupedData = {
+  [key: string]: FixedMovements[];
+};
+
 export async function reminderMovement(db: PrismaClient) {
-  const movements = await db.fixedMovements.findMany({
-    where: {},
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+
+  const users = await db.user.findMany({
+    where: {
+      movements: {
+        some: {
+          next_ocurrence: {
+            lte: today,
+          },
+        },
+      },
+    },
     include: {
-      user: true,
+      movements: {
+        where: {
+          next_ocurrence: {
+            lte: today,
+          },
+          reminder_sent: false,
+        },
+      },
     },
   });
 
-  console.log(movements);
+  console.log(users);
 
-  movements.map(({ user }) => {
-    mailer.remiderMovement({
-      name: user.name || "",
-      to: user.email,
+  if (users) {
+    users.map(({ email, name, movements }) => {
+      console.log({
+        name: name || "",
+        to: email,
+        movements: movements,
+      });
+      mailer.remiderMovement({
+        name: name || "",
+        to: email,
+        movements: movements,
+      });
     });
-  });
+  }
+
+  return [];
 }

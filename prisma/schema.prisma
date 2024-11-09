@@ -27,6 +27,7 @@ model UserAccount {
   userId       String
   user         User          @relation(fields: [userId], references: [id], onDelete: Cascade)
   transactions Transaction[]
+  fixedMovements FixedMovements[]
 }
 
 model Goals {
@@ -143,6 +144,7 @@ model FixedMovements {
   type           Int @default(1)
   amount         Int
   status         Boolean @default(true)
+  accountId      Int?
   reminder_date  DateTime // fecha para enviar recordatorio
   reminder_sent  Boolean?  @default(true) // recordatorio enviado
   next_ocurrence DateTime
@@ -157,6 +159,7 @@ model FixedMovements {
   transactions Transaction[]
   entity      Entities? @relation(fields: [entityId], references: [id], onDelete: Cascade)
   category    Category? @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  userAccount UserAccount? @relation(fields: [accountId], references: [id], onDelete: Cascade)
   user        User @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 

@@ -57,6 +57,7 @@ export async function registerUser(
 
     const user = await db.$transaction(async (tx) => {
       const user = await userAccountTransaction(tx);
+      console.log("user registered", user);
       await sendConfirmationEmail(tx, user);
     });
 
@@ -154,9 +155,9 @@ export async function changePassword(
 
     const user = await db.user.findFirst({
       where: {
-        id: userId
-      }
-    })
+        id: userId,
+      },
+    });
 
     if (!user) {
       throw new TRPCError({
@@ -167,14 +168,14 @@ export async function changePassword(
 
     const [userPass] = await db.userPassword.findMany({
       where: {
-        userId
-      }
-    })
+        userId,
+      },
+    });
 
     console.log("user pass", userPass);
     if (!userPass) {
       console.log("because not user found");
-      
+
       await db.userPassword.create({
         data: {
           state: 1,
@@ -210,7 +211,6 @@ export async function recoverUser(db: PrismaClient, email: string) {
   const userWithPassword = await db.user.findUnique({
     where: {
       email,
-      userPassword: { email },
     },
     include: {
       userPassword: true,
@@ -219,7 +219,9 @@ export async function recoverUser(db: PrismaClient, email: string) {
 
   if (!userWithPassword || !userWithPassword?.userPassword) {
     // Si el usuario existe pero no tiene contraseña enviar un correo que se intento ingresar con contraseña y que solo tiene habilitado x, Ex. Google, Facebook
-    return;
+    throw new Error(
+      "Este usuario está asociado a un servicio de autentificación externo",
+    );
   }
 
   await recoverUserEmail(db, userWithPassword);

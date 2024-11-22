@@ -7,6 +7,7 @@ import FilterTemplates from "./FilterTemplates";
 import { Button } from "@nextui-org/button";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import { Tooltip } from "@nextui-org/react";
+import NotificationMenu from "~/modules/components/molecules/NotificationMenu";
 
 export default function HeaderMenu({
   hasFilter = true,
@@ -22,6 +23,7 @@ export default function HeaderMenu({
       layout
       className="relative z-10 flex items-center justify-end gap-2"
     >
+      <NotificationMenu />
       <HandlerTheme />
       {hasLogout && (
         <Tooltip content="Cerrar sesión" className="font-montserrat">

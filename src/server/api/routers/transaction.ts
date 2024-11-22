@@ -7,6 +7,7 @@ import * as TransactionServices from "~/server/api/services/transactions.service
 
 import { createTRPCRouter, protectedProcedure } from "~/server/api/trpc";
 import { z } from "zod";
+import { io } from "../initServer";
 
 export const transactionsRouter = createTRPCRouter({
   getTransactions: protectedProcedure
@@ -31,6 +32,8 @@ export const transactionsRouter = createTRPCRouter({
         ...input,
         userId,
       });
+
+      io?.emit("newTransaction", response)
       return response;
     }),
   update: protectedProcedure

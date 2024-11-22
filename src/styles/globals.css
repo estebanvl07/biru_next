@@ -26,12 +26,12 @@ h3 {
 }
 
 .scrollbar-y-customize::-webkit-scrollbar {
-  @apply h-[5px] w-1 bg-default-300 dark:bg-slate-800/80;
+  @apply h-[5px] w-1 bg-default-300 dark:bg-default-300/80;
 }
 
 /* Track */
 .scrollbar-customize .scrollbar-y-customize::-webkit-scrollbar-track {
-  @apply rounded-full bg-indigo-400 dark:bg-gray-900;
+  @apply rounded-full !bg-black dark:!bg-white; 
 }
 
 /* Handle */

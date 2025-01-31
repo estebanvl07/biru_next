@@ -49,6 +49,7 @@ interface TransactionFormProps {
   defaultGoal?: GoalsIncludes;
   defCategory?: CategoryIncludes;
   defEntity?: EntityIncludes;
+  defType?: 1 | 2;
   onSuccess?: () => void;
 }
 
@@ -59,6 +60,7 @@ const TransactionForm = ({
   defaultGoal,
   defCategory,
   defEntity,
+  defType,
   onSuccess,
 }: TransactionFormProps) => {
   const [amountValue, setAmountValue] = useState("");
@@ -103,7 +105,9 @@ const TransactionForm = ({
         ? transactionDefault.date
         : undefined;
 
-  const defaultType = transactionDefault ? transactionDefault.type : undefined;
+  const defaultType = transactionDefault
+    ? transactionDefault.type
+    : defType || undefined;
 
   const defaultGoalKey = transactionDefault?.goalId
     ? [`${transactionDefault.goalId}`]
@@ -400,11 +404,11 @@ const TransactionForm = ({
                               "reference",
                               currentEntity.reference || "",
                             );
-                          currentEntity?.description &&
-                            setValue(
-                              "description",
-                              currentEntity.description || "",
-                            );
+                          // currentEntity?.description &&
+                          //   setValue(
+                          //     "description",
+                          //     |.description || "",
+                          //   );
                         }
                       } else {
                         setValue("recipient", undefined);
@@ -682,7 +686,6 @@ const TransactionForm = ({
                       width={18}
                     />
                   }
-                  // iconPath="fluent:text-description-24-filled"
                   label="Descripción"
                   placeholder="Mercado del mes"
                   {...register("description")}

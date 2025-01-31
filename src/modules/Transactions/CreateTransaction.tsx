@@ -18,6 +18,7 @@ export type FormSetting = {
   defaultGoal?: GoalsIncludes;
   defaultCategory?: CategoryIncludes;
   defaultEntity?: EntityIncludes;
+  defaultType?: 1 | 2;
   onlyForm?: boolean;
 };
 
@@ -49,6 +50,7 @@ const CreateTransaction = ({
       {options.onlyForm ? (
         <TransactionForm
           mode="edit"
+          defType={options.defaultType}
           type={options.transferType ?? "transfer"}
           defaultGoal={options.defaultGoal}
           onSuccess={onClose}

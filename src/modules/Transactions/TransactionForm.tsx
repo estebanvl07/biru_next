@@ -60,7 +60,7 @@ const TransactionForm = ({
   defaultGoal,
   defCategory,
   defEntity,
-  defType,
+  defType = 1,
   onSuccess,
 }: TransactionFormProps) => {
   const [amountValue, setAmountValue] = useState("");

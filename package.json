@@ -4,7 +4,8 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "tsx src/server/api/initServer",
+    "dev-ws": "tsx src/server/api/initServer",
+    "dev": "next dev",
     "build": "next build",
     "db:push": "prisma db push",
     "db:studio": "prisma studio",

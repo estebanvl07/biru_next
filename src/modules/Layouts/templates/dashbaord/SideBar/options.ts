@@ -42,6 +42,12 @@ export const menuOptions = [
     href: "/category",
   },
 
+  {
+    id: 5,
+    name: "Plantillas de Transacciones",
+    icon: "fluent:calendar-template-20-regular",
+    href: "/templates",
+  },
   // {
   //   id: 5,
   //   name: "Facturas",

@@ -48,6 +48,25 @@ model Goals {
   entity       Entities?     @relation(fields: [entityId], references: [id])
 }
 
+model Templates {
+  id           Int           @id @default(autoincrement())
+  name         String
+  icon         String?
+  amount       Int?
+  description  String?
+  reference    String?
+  recipient    String?
+  categoryId   Int?
+  entityId     Int?
+  type         Int           @default(1) // 1:Ingreso, 2:Egreso
+  state        Int           @default(1) // 1: activo, 0: inactivo
+  userId       String
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  transactions Transaction[]
+  user         User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
 model Entities {
   id           Int           @id @default(autoincrement())
   name         String
@@ -95,6 +114,7 @@ model Transaction {
   goalId       Int?
   reference    String?
   categoryId   Int?
+  templateId   Int?
   state        Int?            @default(1) // 1: activo, 0: inactivo
   createdAt    DateTime        @default(now())
   updatedAt    DateTime        @updatedAt
@@ -104,6 +124,7 @@ model Transaction {
   entity       Entities?       @relation(fields: [entityId], references: [id], onDelete: Cascade)
   movent       FixedMovements? @relation(fields: [fiexedId], references: [id], onDelete: Cascade)
   goal         Goals?          @relation(fields: [goalId], references: [id], onDelete: Cascade)
+  Templates    Templates?      @relation(fields: [templateId], references: [id], onDelete: Cascade)
 }
 
 model UserPassword {
@@ -209,6 +230,7 @@ model User {
   userVerificationCode UserVerificationCode[]
   movements            FixedMovements[]
   notifications        Notifications[]
+  templates            Templates[]
 }
 
 model Notifications {

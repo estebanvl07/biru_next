@@ -54,9 +54,7 @@ const BarChart = ({
           position: "top",
           horizontalAlign: "left",
           markers: {
-            radius: 100,
-            width: 12,
-            height: 12,
+            size: 12,
             offsetX: -3,
           },
           offsetX: -28,

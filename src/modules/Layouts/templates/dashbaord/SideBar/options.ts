@@ -11,12 +11,12 @@ export const menuOptions = [
     icon: "mingcute:transfer-fill",
     href: "/transactions",
   },
-  // {
-  //   id: 6,
-  //   name: "Movimientos Fijos",
-  //   icon: "heroicons:wallet-solid",
-  //   href: "/movements",
-  // },
+  {
+    id: 6,
+    name: "Movimientos Fijos",
+    icon: "heroicons:wallet-solid",
+    href: "/movements",
+  },
   {
     id: 2,
     name: "Entidades",
@@ -42,6 +42,12 @@ export const menuOptions = [
     href: "/category",
   },
 
+  {
+    id: 5,
+    name: "Plantillas de Transacciones",
+    icon: "fluent:calendar-template-20-regular",
+    href: "/templates",
+  },
   // {
   //   id: 5,
   //   name: "Facturas",

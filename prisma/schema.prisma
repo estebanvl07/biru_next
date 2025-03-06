@@ -27,6 +27,7 @@ model UserAccount {
   userId       String
   user         User          @relation(fields: [userId], references: [id], onDelete: Cascade)
   transactions Transaction[]
+  fixedMovements FixedMovements[]
 }
 
 model Goals {
@@ -45,6 +46,25 @@ model Goals {
   updatedAt    DateTime      @updatedAt
   transactions Transaction[]
   entity       Entities?     @relation(fields: [entityId], references: [id])
+}
+
+model Templates {
+  id           Int           @id @default(autoincrement())
+  name         String
+  icon         String?
+  amount       Int?
+  description  String?
+  reference    String?
+  recipient    String?
+  categoryId   Int?
+  entityId     Int?
+  type         Int           @default(1) // 1:Ingreso, 2:Egreso
+  state        Int           @default(1) // 1: activo, 0: inactivo
+  userId       String
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  transactions Transaction[]
+  user         User          @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model Entities {
@@ -94,6 +114,7 @@ model Transaction {
   goalId       Int?
   reference    String?
   categoryId   Int?
+  templateId   Int?
   state        Int?            @default(1) // 1: activo, 0: inactivo
   createdAt    DateTime        @default(now())
   updatedAt    DateTime        @updatedAt
@@ -103,6 +124,7 @@ model Transaction {
   entity       Entities?       @relation(fields: [entityId], references: [id], onDelete: Cascade)
   movent       FixedMovements? @relation(fields: [fiexedId], references: [id], onDelete: Cascade)
   goal         Goals?          @relation(fields: [goalId], references: [id], onDelete: Cascade)
+  Templates    Templates?      @relation(fields: [templateId], references: [id], onDelete: Cascade)
 }
 
 model UserPassword {
@@ -143,6 +165,7 @@ model FixedMovements {
   type           Int @default(1)
   amount         Int
   status         Boolean @default(true)
+  accountId      Int?
   reminder_date  DateTime // fecha para enviar recordatorio
   reminder_sent  Boolean?  @default(true) // recordatorio enviado
   next_ocurrence DateTime
@@ -157,6 +180,7 @@ model FixedMovements {
   transactions Transaction[]
   entity      Entities? @relation(fields: [entityId], references: [id], onDelete: Cascade)
   category    Category? @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  userAccount UserAccount? @relation(fields: [accountId], references: [id], onDelete: Cascade)
   user        User @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
@@ -205,4 +229,32 @@ model User {
   setting              UserSetting?
   userVerificationCode UserVerificationCode[]
   movements            FixedMovements[]
+  notifications        Notifications[]
+  templates            Templates[]
+}
+
+model Notifications {
+  id          String      @id @default(uuid())
+  userId      String     // Relación con el modelo User
+  type        ModuleType // Enum que representa el módulo o tipo de notificación
+  title       String      @db.VarChar(60)
+  link        String?
+  message     String
+  isRead      Boolean     @default(false)
+  createdAt   DateTime    @default(now())
+  viewedAt    DateTime?  // Fecha opcional, solo si ya fue vista
+  metadata    Json?      // Datos adicionales específicos para cada tipo de notificación
+  
+  // Relación con el usuario
+  user        User       @relation(fields: [userId], references: [id])
+  @@index([userId])
+}
+
+enum ModuleType {
+  GOAL
+  TRANSACCION
+  CATEGORY
+  ENTITY
+  MOVEMENT
+  // Otros tipos de notificación según los módulos
 }

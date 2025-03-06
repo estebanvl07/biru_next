@@ -227,7 +227,8 @@ const DetailGoalPage = ({
       <CreateTransaction
         isOpen={showCreate}
         options={{
-          transferType: "goals",
+          transferType: "goal",
+          onlyForm: true,
           defaultGoal: defaultGoal,
         }}
         onClose={onCloseCreate}
@@ -256,11 +257,10 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const [goalData] = formatDatesOfGoals(goal as any);
 
   return {
-    props:
-      {
-        goalData,
-        acc,
-      } ?? {},
+    props: {
+      goalData,
+      acc,
+    },
   };
 };
 

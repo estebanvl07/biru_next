@@ -1,5 +1,5 @@
 import React from "react";
-import { IconType } from "./icons.type";
+import { IconType } from "./icons.type.jsx";
 import clsx from "clsx";
 
 const LockIcon = ({

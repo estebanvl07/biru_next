@@ -241,10 +241,9 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   };
 
   return {
-    props:
-      {
-        entity: entityData,
-      } ?? {},
+    props: {
+      entity: entityData,
+    },
   };
 };
 

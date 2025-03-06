@@ -94,7 +94,7 @@ const DataTable = <T,>({
           color="primary"
           isHeaderSticky
           aria-label="Data table"
-          align="left"
+          align="center"
           selectionMode="none"
           topContentPlacement="outside"
           topContent={

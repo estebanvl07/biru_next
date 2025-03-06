@@ -14,10 +14,12 @@ import { CategoryIncludes } from "~/types/category/category.types";
 import { EntityIncludes } from "~/types/entities/entity.types";
 
 export type FormSetting = {
-  transferType?: "transfer" | "goals";
+  transferType?: "transfer" | "goal";
   defaultGoal?: GoalsIncludes;
   defaultCategory?: CategoryIncludes;
   defaultEntity?: EntityIncludes;
+  defaultType?: 1 | 2;
+  onlyForm?: boolean;
 };
 
 interface CreateTransactionProps {
@@ -29,7 +31,7 @@ interface CreateTransactionProps {
 const CreateTransaction = ({
   isOpen,
   onClose,
-  options = { transferType: "transfer" },
+  options = { transferType: "transfer", onlyForm: false },
 }: CreateTransactionProps) => {
   const params = useParams();
   const { isMobile } = useResize();
@@ -45,73 +47,83 @@ const CreateTransaction = ({
         content: "h-[98vh]",
       }}
     >
-      <Tabs
-        color="primary"
-        defaultSelectedKey={options.transferType || "transfer"}
-        aria-label="Forms transaction tabs"
-        radius="full"
-        variant={isMobile ? "underlined" : undefined}
-        className={isMobile ? "w-full" : "w-fit"}
-        classNames={
-          isMobile
-            ? {
-                tabList:
-                  "gap-6 w-full relative rounded-none p-0 border-b border-divider",
-                cursor: "w-full bg-primary dark:bg-slate-200",
-                tab: "w-full px-0 h-12",
-                tabContent:
-                  "group-data-[selected=true]:text-primary group-data-[selected=true]:dark:text-slate-300",
-              }
-            : undefined
-        }
-      >
-        <Tab
-          key="transfer"
-          className="w-full"
-          title={
-            <div className="flex items-center space-x-2 px-2">
-              <Icon icon="bx:transfer" width={20} />
-              <span>Transferencia</span>
-            </div>
+      {options.onlyForm ? (
+        <TransactionForm
+          mode="edit"
+          defType={options.defaultType}
+          type={options.transferType ?? "transfer"}
+          defaultGoal={options.defaultGoal}
+          onSuccess={onClose}
+        />
+      ) : (
+        <Tabs
+          color="primary"
+          defaultSelectedKey={options.transferType || "transfer"}
+          aria-label="Forms transaction tabs"
+          radius="full"
+          variant={isMobile ? "underlined" : undefined}
+          className={isMobile ? "w-full" : "w-fit"}
+          classNames={
+            isMobile
+              ? {
+                  tabList:
+                    "gap-6 w-full relative rounded-none p-0 border-b border-divider",
+                  cursor: "w-full bg-primary dark:bg-slate-200",
+                  tab: "w-full px-0 h-12",
+                  tabContent:
+                    "group-data-[selected=true]:text-primary group-data-[selected=true]:dark:text-slate-300",
+                }
+              : undefined
           }
         >
-          <TransactionForm
-            defaultGoal={options.defaultGoal}
-            defCategory={options.defaultCategory}
-            defEntity={options.defaultEntity}
-            type="transfer"
-            onSuccess={onClose}
-          />
-        </Tab>
-        <Tab
-          className="w-full"
-          key="goals"
-          title={
-            <div className="flex items-center space-x-2 px-2">
-              <Icon icon="ph:target" width={20} />
-              <span>Meta</span>
-            </div>
-          }
-        >
-          {!goalIsLoading && goals.length === 0 ? (
-            <Card className="w-[32rem] py-8">
-              <Empty
-                description="No tienes metas creadas"
-                buttonText="Crear Meta"
-                href={`/account/${params?.acc}/goals/new`}
-              />
-            </Card>
-          ) : (
+          <Tab
+            key="transfer"
+            className="w-full"
+            title={
+              <div className="flex items-center space-x-2 px-2">
+                <Icon icon="bx:transfer" width={20} />
+                <span>Transferencia</span>
+              </div>
+            }
+          >
             <TransactionForm
               defaultGoal={options.defaultGoal}
               defCategory={options.defaultCategory}
               defEntity={options.defaultEntity}
-              type="goal"
+              type="transfer"
               onSuccess={onClose}
             />
-          )}
-        </Tab>
-      </Tabs>
+          </Tab>
+          <Tab
+            className="w-full"
+            key="goals"
+            title={
+              <div className="flex items-center space-x-2 px-2">
+                <Icon icon="ph:target" width={20} />
+                <span>Meta</span>
+              </div>
+            }
+          >
+            {!goalIsLoading && goals.length === 0 ? (
+              <Card className="w-[32rem] py-8">
+                <Empty
+                  description="No tienes metas creadas"
+                  buttonText="Crear Meta"
+                  href={`/account/${params?.acc}/goals/new`}
+                />
+              </Card>
+            ) : (
+              <TransactionForm
+                defaultGoal={options.defaultGoal}
+                defCategory={options.defaultCategory}
+                defEntity={options.defaultEntity}
+                type="goal"
+                onSuccess={onClose}
+              />
+            )}
+          </Tab>
+        </Tabs>
+      )}
     </Dialog>
   );
 };

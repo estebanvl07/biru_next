@@ -35,12 +35,13 @@ import { capitalize } from "../components/molecules/Table/utils";
 import { format } from "date-fns";
 import { es } from "date-fns/locale";
 
-import type { Goals, Transaction } from "@prisma/client";
+import type { Goals, Templates, Transaction } from "@prisma/client";
 import type { TransactionIncludes } from "~/types/transactions";
 import { toast } from "sonner";
 import { GoalsIncludes } from "~/types/goal/goal.types";
 import { CategoryIncludes } from "~/types/category/category.types";
 import { EntityIncludes } from "~/types/entities/entity.types";
+import TemplatesSection from "./TemplatesSection";
 
 interface TransactionFormProps {
   type: "goal" | "transfer";
@@ -49,6 +50,7 @@ interface TransactionFormProps {
   defaultGoal?: GoalsIncludes;
   defCategory?: CategoryIncludes;
   defEntity?: EntityIncludes;
+  defType?: 1 | 2;
   onSuccess?: () => void;
 }
 
@@ -59,6 +61,7 @@ const TransactionForm = ({
   defaultGoal,
   defCategory,
   defEntity,
+  defType = 1,
   onSuccess,
 }: TransactionFormProps) => {
   const [amountValue, setAmountValue] = useState("");
@@ -103,17 +106,19 @@ const TransactionForm = ({
         ? transactionDefault.date
         : undefined;
 
-  const defaultType = transactionDefault ? transactionDefault.type : undefined;
+  const defaultType = transactionDefault
+    ? transactionDefault.type
+    : defType || undefined;
 
   const defaultGoalKey = transactionDefault?.goalId
     ? [`${transactionDefault.goalId}`]
-    : undefined || defaultGoal?.id
+    : defaultGoal?.id ?? undefined
       ? [`${defaultGoal?.id}`]
       : undefined;
 
   const defaultAccountKey = transactionDefault?.accountId
     ? [`${transactionDefault.accountId}`]
-    : undefined || account
+    : account
       ? [`${account.id}`]
       : undefined;
 
@@ -182,7 +187,26 @@ const TransactionForm = ({
     }
   };
 
-  // query params
+  const setTemplate = (template: Templates | null | undefined): void => {
+    if (template) {
+      console.log(template);
+
+      setValue("categoryId", template.categoryId || undefined);
+      setValue("entityId", template.entityId || undefined);
+      setValue("recipient", template.recipient || undefined);
+      setValue("reference", template.reference || undefined);
+      setValue("description", template.description || undefined);
+      setValue("type", template.type || 1);
+    } else {
+      setValue("categoryId", undefined);
+      setValue("entityId", undefined);
+      setValue("recipient", undefined);
+      setValue("reference", undefined);
+      setValue("description", undefined);
+      setValue("type", 1);
+    }
+  };
+
   useEffect(() => {
     if (!account && transactionDefault) return;
 
@@ -268,8 +292,11 @@ const TransactionForm = ({
 
   return (
     <AnimatePresence>
-      <div className="flex w-full items-start gap-8">
+      <div className="flex w-full flex-col items-start gap-4">
         <Alert isOpen={isOpen} onClose={onClose} {...props} />
+        {type === "transfer" && (
+          <TemplatesSection onChange={(template) => setTemplate(template)} />
+        )}
         <motion.form
           layout
           initial={{ x: -40, opacity: 0 }}
@@ -400,11 +427,11 @@ const TransactionForm = ({
                               "reference",
                               currentEntity.reference || "",
                             );
-                          currentEntity?.description &&
-                            setValue(
-                              "description",
-                              currentEntity.description || "",
-                            );
+                          // currentEntity?.description &&
+                          //   setValue(
+                          //     "description",
+                          //     |.description || "",
+                          //   );
                         }
                       } else {
                         setValue("recipient", undefined);
@@ -682,7 +709,6 @@ const TransactionForm = ({
                       width={18}
                     />
                   }
-                  // iconPath="fluent:text-description-24-filled"
                   label="Descripción"
                   placeholder="Mercado del mes"
                   {...register("description")}

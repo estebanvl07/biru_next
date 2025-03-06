@@ -1,12 +1,18 @@
 {
-  "extends": "./tsconfig.json",
   "compilerOptions": {
+    "module": "ESNext",
+    "moduleResolution": "node",
     "target": "ES2022",
-    "module": "CommonJS",
-    "outDir": "dist",
-    "lib": ["ES2019", "DOM"],
-    "isolatedModules": false,
-    "noEmit": false
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "noEmit": true,
+    "strict": true,
+    "resolveJsonModule": true,
+    "allowJs": true,
+    "isolatedModules": true
   },
-  "include": ["next-env.d.ts", "src/**/*.ts", "src/**/*.tsx"]
+  "include": [
+    "src/server/**/*.ts",
+    "src/server/**/*.tsx"
+  ]
 }

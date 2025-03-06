@@ -11,20 +11,9 @@ const DarkMode = ({ className }: { className?: string }) => {
   };
 
   return (
-    <Button
-      isIconOnly
-      variant="flat"
-      radius="full"
-      color="primary"
-      className="bg-white dark:bg-default-100"
-      onClick={toggleTheme}
-    >
+    <Button isIconOnly radius="full" onClick={toggleTheme}>
       {theme === "dark" ? (
-        <Icon
-          icon="akar-icons:sun-fill"
-          width={20}
-          className="text-slate-300"
-        />
+        <Icon icon="akar-icons:sun-fill" width={20} className="text-white" />
       ) : (
         <Icon width={20} icon="akar-icons:moon-fill" />
       )}

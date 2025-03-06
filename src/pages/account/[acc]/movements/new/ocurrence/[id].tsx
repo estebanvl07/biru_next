@@ -184,7 +184,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     props:
       {
         data: JSON.stringify(movement),
-      } ?? {},
+      },
   };
 };
 

@@ -112,13 +112,13 @@ const TransactionForm = ({
 
   const defaultGoalKey = transactionDefault?.goalId
     ? [`${transactionDefault.goalId}`]
-    : undefined || defaultGoal?.id
+    : defaultGoal?.id ?? undefined
       ? [`${defaultGoal?.id}`]
       : undefined;
 
   const defaultAccountKey = transactionDefault?.accountId
     ? [`${transactionDefault.accountId}`]
-    : undefined || account
+    : account
       ? [`${account.id}`]
       : undefined;
 
@@ -187,7 +187,7 @@ const TransactionForm = ({
     }
   };
 
-  const setTemplate = (template: Templates | null) => {
+  const setTemplate = (template: Templates | null | undefined): void => {
     if (template) {
       console.log(template);
 

@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 
 import { getQueryKey } from "@trpc/react-query";
 import { useQueryClient } from "@tanstack/react-query";
@@ -58,6 +58,10 @@ export const useTransactions = (options: FilterOptions) => {
       enabled: !!accountId && !hasTransactionsCached,
     },
   );
+
+  const refreshTransactions = useCallback(() => {
+    queryClient.invalidateQueries(transactionKey as any);
+  }, [queryClient, transactionKey]);
 
   return { transactions: data!, isLoading };
 };

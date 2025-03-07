@@ -23,6 +23,7 @@ import NullChip from "~/modules/components/atoms/NullChip.component";
 import Dialog from "~/modules/components/molecules/Dialog.component";
 import CreateTransaction from "~/modules/Transactions/CreateTransaction";
 import EditTransaction from "~/modules/Transactions/EditTransaction";
+import { useTransactions } from "~/modules/Transactions/hook";
 
 const TransactionPage = () => {
   const [showSheetCreate, setShowSheetCreate] = useState(false);
@@ -35,11 +36,7 @@ const TransactionPage = () => {
 
   const { size } = useResize();
   const isMobile = Boolean(size && size <= 768);
-  const { data: transactions, isLoading } =
-    api.transaction.getTransactions.useQuery({
-      accountId: Number(params?.acc),
-      filter: 0,
-    });
+  const { transactions, isLoading, refreshTransactions } = useTransactions();
 
   const renderCell = useCallback(
     (transaction: TransactionIncludes, columnKey: React.Key) => {

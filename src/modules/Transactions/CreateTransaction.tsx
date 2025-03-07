@@ -26,12 +26,14 @@ interface CreateTransactionProps {
   isOpen: boolean;
   onClose: () => void;
   options?: FormSetting;
+  onSuccess?: VoidFunction;
 }
 
 const CreateTransaction = ({
   isOpen,
   onClose,
   options = { transferType: "transfer", onlyForm: false },
+  onSuccess,
 }: CreateTransactionProps) => {
   const params = useParams();
   const { isMobile } = useResize();
@@ -53,7 +55,7 @@ const CreateTransaction = ({
           defType={options.defaultType}
           type={options.transferType ?? "transfer"}
           defaultGoal={options.defaultGoal}
-          onSuccess={onClose}
+          onSuccess={onSuccess}
         />
       ) : (
         <Tabs

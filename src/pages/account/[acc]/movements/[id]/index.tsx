@@ -293,11 +293,10 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const [movement] = formatDatesOfMovements([movements] as any);
 
   return {
-    props:
-      {
-        movement,
-        acc,
-      } ?? {},
+    props: {
+      movement,
+      acc,
+    },
   };
 };
 

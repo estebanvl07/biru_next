@@ -7,7 +7,9 @@ import * as TransactionServices from "~/server/api/services/transactions.service
 
 import { createTRPCRouter, protectedProcedure } from "~/server/api/trpc";
 import { z } from "zod";
-import { io } from "../initServer";
+import { Server } from "socket.io";
+
+const io = new Server();
 
 export const transactionsRouter = createTRPCRouter({
   getTransactions: protectedProcedure

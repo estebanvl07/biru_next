@@ -44,7 +44,7 @@ const DashboardLayout = ({
   }, []);
 
   return (
-    <div className="flex h-screen  flex-row overflow-hidden bg-default-100 md:p-1.5 md:pl-0 dark:bg-default-100">
+    <div className="flex h-screen flex-row overflow-hidden bg-default-100 md:p-1.5 md:pl-0 dark:bg-default-100">
       <AnimatePresence>
         <Head>
           <title>Biru - {title}</title>
@@ -54,7 +54,7 @@ const DashboardLayout = ({
         {isMobile && <BottomMobileNav />}
         {isMobile && <DrawerOptions />}
 
-        <section className="  z-0 h-full w-full flex-grow overflow-y-auto rounded-md rounded-tl-2xl border bg-white py-3   scrollbar-hide dark:border-white/10 dark:bg-default-50">
+        <section className="z-0 h-full w-full flex-grow overflow-y-auto rounded-md rounded-tl-2xl border bg-white py-3   scrollbar-hide dark:border-white/10 dark:bg-default-50">
           <div className="mx-auto flex max-w-[80rem] flex-col md:px-8">
             {!isMobile ? (
               <HeaderApp title={title} hasFilter={hasFilter} />

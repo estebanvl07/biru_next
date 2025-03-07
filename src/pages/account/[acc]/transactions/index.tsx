@@ -36,7 +36,7 @@ const TransactionPage = () => {
 
   const { size } = useResize();
   const isMobile = Boolean(size && size <= 768);
-  const { transactions, isLoading, refreshTransactions } = useTransactions();
+  const { transactions, isLoading, refreshTransactions } = useTransactions({});
 
   const renderCell = useCallback(
     (transaction: TransactionIncludes, columnKey: React.Key) => {
@@ -200,10 +200,13 @@ const TransactionPage = () => {
       ) : (
         <MobileTransactionPage transactions={(transactions as any) ?? []} />
       )}
-
       <CreateTransaction
         isOpen={showSheetCreate}
         onClose={() => setShowSheetCreate(false)}
+        onSuccess={() => {
+          refreshTransactions();
+          setShowSheetCreate(false);
+        }}
       />
       {transactionSelected && (
         <EditTransaction

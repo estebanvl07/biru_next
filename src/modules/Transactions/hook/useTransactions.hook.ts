@@ -49,7 +49,7 @@ export const useTransactions = (options: FilterOptions) => {
 
   const { data, isLoading } = api.transaction.getTransactions.useQuery(
     {
-      accountId: Number(accountId) as any,
+      accountId: Number(accountId),
       filter: options?.filter ?? FILTERS.none,
       startDate: options?.startDate,
       endDate: options?.endDate,
@@ -63,7 +63,7 @@ export const useTransactions = (options: FilterOptions) => {
     queryClient.invalidateQueries(transactionKey as any);
   }, [queryClient, transactionKey]);
 
-  return { transactions: data!, isLoading };
+  return { transactions: data!, isLoading, refreshTransactions };
 };
 
 export const useFilterByType = ({ type, options }: FilterByTypeProps) => {

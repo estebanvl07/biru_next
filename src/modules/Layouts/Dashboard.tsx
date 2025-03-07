@@ -55,7 +55,7 @@ const DashboardLayout = ({
         {isMobile && <DrawerOptions />}
 
         <section className="  z-0 h-full w-full flex-grow overflow-y-auto rounded-md rounded-tl-2xl border bg-white py-3   scrollbar-hide dark:border-white/10 dark:bg-default-50">
-          <div className="flex flex-col md:px-8">
+          <div className="mx-auto flex max-w-[80rem] flex-col md:px-8">
             {!isMobile ? (
               <HeaderApp title={title} hasFilter={hasFilter} />
             ) : (

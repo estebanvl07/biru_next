@@ -14,7 +14,7 @@ import {
   SelectItem,
   User,
 } from "@nextui-org/react";
-import { ButtonGroup, Card, InputDate } from "~/modules/components";
+import { ButtonGroup, InputDate } from "~/modules/components";
 
 import { api } from "~/utils/api";
 import { Icon } from "@iconify/react/dist/iconify.js";
@@ -73,10 +73,11 @@ const TransactionForm = ({
   const { categories } = useCategory();
   const { goals } = useGoals();
 
-  const params = useParams();
   const router = useRouter();
 
   const query = router.query;
+
+  const transactionsRefresh = api.useUtils().transaction;
 
   const { mutateAsync: createTransactionMutation } =
     api.transaction.create.useMutation();
@@ -153,7 +154,8 @@ const TransactionForm = ({
         createTransactionMutation(
           { ...payload, date: new Date() },
           {
-            onSuccess(data) {
+            async onSuccess(data) {
+              await transactionsRefresh.invalidate();
               onSuccess && onSuccess();
               reset();
             },

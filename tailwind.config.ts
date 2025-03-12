@@ -11,11 +11,16 @@ const config = {
   ],
   theme: {
     light: {
-      color: {
-        primary: "#0c0a09",
-        "primary-light": "#44403c",
-        "primary-lighter": "#a8a29e",
+      colors: {
+        primary: "#3E1FE9",
+        "primary-light": "#A7B5F6",
+        "primary-lighter": "#E1E7FD",
       },
+      // color: {
+      //   primary: "#0c0a09",
+      //   "primary-light": "#44403c",
+      //   "primary-lighter": "#a8a29e",
+      // },
     },
     dark: {
       color: {
@@ -64,7 +69,7 @@ const config = {
         light: {
           colors: {
             primary: {
-              DEFAULT: "#0c0a09",
+              DEFAULT: "#3E1FE9",
             },
             default: {
               DEFAULT: "#fafaf9",
@@ -79,16 +84,16 @@ const config = {
           colors: {
             foreground: "#fff",
             primary: {
-              DEFAULT: "#fff",
-              foreground: "#000",
+              DEFAULT: "#3E1FE9",
+              foreground: "#fff",
             },
-            content1: "#080808",
+            content1: "#0f172a",
             default: {
-              DEFAULT: "#18181b",
-              50: "#080808",
-              100: "#171717",
-              200: "#262626",
-              300: "#404040",
+              DEFAULT: "#0f172a",
+              50: "#0f172a",
+              100: "#0f172a",
+              200: "#1e293b",
+              300: "#334155",
             },
           },
         },

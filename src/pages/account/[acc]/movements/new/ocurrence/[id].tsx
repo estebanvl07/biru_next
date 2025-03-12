@@ -1,7 +1,7 @@
-import { Button } from "@nextui-org/button";
+import { Button } from "@heroui/button";
 import React, { useEffect, useState } from "react";
 import { MovementsIncludes } from "~/types/movements";
-import { Accordion, AccordionItem, Chip, Input } from "@nextui-org/react";
+import { Accordion, AccordionItem, Chip, Input } from "@heroui/react";
 import { amountFormatter } from "~/utils/formatters";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import { format } from "date-fns";

@@ -4,8 +4,8 @@ import { useParams } from "next/navigation";
 import { useRouter } from "next/router";
 
 import { Icon } from "@iconify/react/dist/iconify.js";
-import { Button, Chip } from "@nextui-org/react";
-import { User } from "@nextui-org/user";
+import { Button, Chip } from "@heroui/react";
+import { User } from "@heroui/user";
 import { detailColumns } from "~/modules/Entities/table";
 import { Table } from "~/modules/components";
 import Actions from "~/modules/components/molecules/Table/Actions";

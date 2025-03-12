@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import Link from "next/link";
 
 import { Icon } from "@iconify/react/dist/iconify.js";
-import { Button } from "@nextui-org/button";
+import { Button } from "@heroui/button";
 
 import type { GetServerSideProps } from "next";
 import { useAccounts } from "~/modules/Account/hooks";
@@ -16,7 +16,7 @@ import {
   VisuallyHidden,
   cn,
   useRadio,
-} from "@nextui-org/react";
+} from "@heroui/react";
 import { optionsTypeAccount } from "~/pages/account/new";
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {

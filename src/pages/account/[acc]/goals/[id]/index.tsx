@@ -15,7 +15,7 @@ import { columns } from "~/modules/Goals/table";
 import { Table } from "~/modules/components";
 import DashboardLayout from "~/modules/Layouts/Dashboard";
 import { GoalsIncludes } from "~/types/goal/goal.types";
-import { Button, Chip, Link } from "@nextui-org/react";
+import { Button, Chip, Link } from "@heroui/react";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import { useResize } from "~/lib/hooks/useResize";
 import { ListTransactions } from "~/modules/Common";

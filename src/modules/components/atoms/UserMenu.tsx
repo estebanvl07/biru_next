@@ -1,4 +1,4 @@
-import { Skeleton } from "@nextui-org/skeleton";
+import { Skeleton } from "@heroui/skeleton";
 import clsx from "clsx";
 import { useSession } from "next-auth/react";
 import React, { useState } from "react";

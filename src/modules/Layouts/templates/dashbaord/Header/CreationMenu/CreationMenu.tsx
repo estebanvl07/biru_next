@@ -11,7 +11,7 @@ import {
   ListboxItem,
   ListboxSection,
   useDisclosure,
-} from "@nextui-org/react";
+} from "@heroui/react";
 
 import type { ListMenu } from "~/types/root.types";
 import { useResize } from "~/lib/hooks/useResize";

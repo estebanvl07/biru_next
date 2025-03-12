@@ -1,7 +1,7 @@
 import { Icon } from "@iconify/react/dist/iconify.js";
 import React, { useState } from "react";
 
-import { Button } from "@nextui-org/button";
+import { Button } from "@heroui/button";
 import { menuOptions } from "./dashbaord/SideBar/options";
 import Link from "next/link";
 import CustomDrawer from "~/modules/components/molecules/CustomDrawer";

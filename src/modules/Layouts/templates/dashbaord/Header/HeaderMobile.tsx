@@ -3,7 +3,7 @@ import { usePathname, useParams } from "next/navigation";
 import NavigationBack from "./NavigationBack";
 
 import { useCurrentAccount } from "~/modules/Account/hooks";
-import { Avatar } from "@nextui-org/react";
+import { Avatar } from "@heroui/react";
 import { useSession } from "next-auth/react";
 import ButtonMenu from "./ButtonMenu";
 import Link from "next/link";

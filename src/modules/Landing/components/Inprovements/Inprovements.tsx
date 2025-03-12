@@ -1,5 +1,5 @@
 import { Icon } from "@iconify/react/dist/iconify.js";
-import { Chip } from "@nextui-org/react";
+import { Chip } from "@heroui/react";
 import Link from "next/link";
 import React from "react";
 import { motion } from "framer-motion";

@@ -10,7 +10,7 @@ import {
   getKeyValue,
   type SortDescriptor,
   type Selection,
-} from "@nextui-org/react";
+} from "@heroui/react";
 
 import { type TableProps } from "~/types/component/table.types";
 import BottomContent from "./BottomContent";
@@ -86,7 +86,7 @@ const DataTable = <T,>({
       {isLoading ? (
         <LoaderSkeleton skeletonType="Table" />
       ) : (
-        <Table
+        (<Table
           className="dark:text-white"
           classNames={{
             wrapper: "dark:bg-default-200/80",
@@ -149,7 +149,7 @@ const DataTable = <T,>({
               </TableRow>
             )}
           </TableBody>
-        </Table>
+        </Table>)
         // <Card className="py-5 dark:bg-default-200">
         // </Card>
       )}

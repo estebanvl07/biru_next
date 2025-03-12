@@ -1,4 +1,4 @@
-import { Button, Pagination } from "@nextui-org/react";
+import { Button, Pagination } from "@heroui/react";
 import React from "react";
 import { BottomContentProps } from "~/types/component/table.types";
 

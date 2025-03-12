@@ -7,7 +7,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import clsx from "clsx";
 
-import { Button, Input } from "@nextui-org/react";
+import { Button, Input } from "@heroui/react";
 import { ButtonGroup } from "~/modules/components";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import { IconSearcher } from "~/modules/Category/IconSelector";

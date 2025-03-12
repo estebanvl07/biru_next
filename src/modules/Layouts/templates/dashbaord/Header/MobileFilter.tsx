@@ -2,7 +2,7 @@ import { useState } from "react";
 
 import Modal from "~/modules/components/atoms/Modal.component";
 import { motion } from "framer-motion";
-import { RangeCalendar } from "@nextui-org/react";
+import { RangeCalendar } from "@heroui/react";
 import { Icon } from "@iconify/react/dist/iconify.js";
 
 import { useFilterContext } from "~/lib/context/Filter.context";

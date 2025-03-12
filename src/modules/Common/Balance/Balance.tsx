@@ -6,7 +6,7 @@ import { LineChart } from "~/modules/Charts";
 
 import { useResize } from "~/lib/hooks/useResize";
 import { Series } from "~/types/chart.types";
-import { Spinner, Tooltip, Chip, Skeleton } from "@nextui-org/react";
+import { Spinner, Tooltip, Chip, Skeleton } from "@heroui/react";
 import { parseAmount } from "~/lib/helpers";
 
 type Props = {

@@ -1,4 +1,4 @@
-import { nextui } from "@nextui-org/theme";
+import { heroui } from "@heroui/theme";
 
 import type { Config } from "tailwindcss";
 import { fontFamily } from "tailwindcss/defaultTheme";
@@ -7,7 +7,7 @@ const config = {
   darkMode: "selector",
   content: [
     "./src/**/*.tsx",
-    "./node_modules/@nextui-org/theme/dist/components/(accordion|badge|button|calendar|input|listbox|modal|pagination|progress|radio|select|skeleton|spinner|table|tabs|user|divider|ripple|popover|scroll-shadow|checkbox|spacer|avatar).js",
+    "./node_modules/@heroui/theme/dist/components/(accordion|badge|button|calendar|input|listbox|modal|pagination|progress|radio|select|skeleton|spinner|table|tabs|user|divider|ripple|popover|scroll-shadow|checkbox|spacer|avatar).js",
   ],
   theme: {
     light: {
@@ -64,7 +64,7 @@ const config = {
     },
   },
   plugins: [
-    nextui({
+    heroui({
       themes: {
         light: {
           colors: {

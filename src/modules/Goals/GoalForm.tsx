@@ -12,7 +12,7 @@ import {
   SelectItem,
   Textarea,
   User,
-} from "@nextui-org/react";
+} from "@heroui/react";
 import { IconSearcher } from "~/modules/Category/IconSelector";
 import { ButtonGroup, InputDate } from "~/modules/components";
 import { Alert } from "~/modules/components/molecules/Alert.component";

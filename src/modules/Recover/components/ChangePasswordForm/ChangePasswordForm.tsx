@@ -1,7 +1,7 @@
 import React from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Button } from "@nextui-org/react";
+import { Button } from "@heroui/react";
 import { useRouter } from "next/router";
 import { InputPassword } from "~/modules/components";
 import type { ChangePasswordFormProps } from "./ChangePasswordForm.types";

@@ -9,7 +9,7 @@ import { useResize } from "~/lib/hooks/useResize";
 import { usePathname } from "next/navigation";
 import { useThemeContext } from "~/lib/context/Theme.context";
 import DarkMode from "../atoms/HandlerTheme.component";
-import { Button } from "@nextui-org/button";
+import { Button } from "@heroui/button";
 import Sheet from "../molecules/Sheet";
 import { useState } from "react";
 

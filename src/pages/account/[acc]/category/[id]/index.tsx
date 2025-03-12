@@ -4,7 +4,7 @@ import { useRouter } from "next/router";
 import { useCallback } from "react";
 
 import { Icon } from "@iconify/react/dist/iconify.js";
-import { Button, Chip } from "@nextui-org/react";
+import { Button, Chip } from "@heroui/react";
 import { Table } from "~/modules/components";
 import Actions from "~/modules/components/molecules/Table/Actions";
 import DashboardLayout from "~/modules/Layouts/Dashboard";

@@ -3,7 +3,7 @@ import clsx from "clsx";
 import { useResize } from "~/lib/hooks/useResize";
 
 import { Icon } from "@iconify/react/dist/iconify.js";
-import { Tab, Tabs } from "@nextui-org/tabs";
+import { Tab, Tabs } from "@heroui/tabs";
 
 interface TabContentProps {
   children?: React.ReactNode;

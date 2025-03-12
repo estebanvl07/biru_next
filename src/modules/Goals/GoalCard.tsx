@@ -1,7 +1,7 @@
 import { useRouter } from "next/router";
 import { useParams } from "next/navigation";
 
-import { Progress } from "@nextui-org/progress";
+import { Progress } from "@heroui/progress";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import { motion } from "framer-motion";
 

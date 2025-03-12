@@ -14,8 +14,8 @@ import {
   Avatar,
   Chip,
   Button,
-} from "@nextui-org/react";
-import { User } from "@nextui-org/user";
+} from "@heroui/react";
+import { User } from "@heroui/user";
 import DashboardLayout from "~/modules/Layouts/Dashboard";
 import { Card } from "~/modules/components";
 

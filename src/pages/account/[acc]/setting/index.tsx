@@ -1,5 +1,5 @@
 import { Icon } from "@iconify/react/dist/iconify.js";
-import { Avatar, Tab, Tabs } from "@nextui-org/react";
+import { Avatar, Tab, Tabs } from "@heroui/react";
 import DashboardLayout from "~/modules/Layouts/Dashboard";
 import MobileSettingPage from "~/modules/Profile/MobileSettingPage";
 import Section from "~/modules/Profile/Section";

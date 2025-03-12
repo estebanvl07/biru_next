@@ -6,7 +6,7 @@ import { CALLBACK_SIGN_OUT_URL } from "~/lib/constants/config";
 import AccountsOptions from "./AccountsOptions";
 import type { ListMenu } from "~/types/root.types";
 
-import { Listbox, ListboxItem } from "@nextui-org/react";
+import { Listbox, ListboxItem } from "@heroui/react";
 import { useRouter } from "next/router";
 import { useParams } from "next/navigation";
 import clsx from "clsx";

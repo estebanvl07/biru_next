@@ -3,7 +3,7 @@ import Link from "next/link";
 
 import { motion } from "framer-motion";
 import { useThemeContext } from "~/lib/context/Theme.context";
-import { Button } from "@nextui-org/button";
+import { Button } from "@heroui/button";
 import Typewriter from "typewriter-effect";
 
 export const Explore = () => {

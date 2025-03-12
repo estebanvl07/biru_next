@@ -13,7 +13,7 @@ import {
   Select,
   SelectItem,
   User,
-} from "@nextui-org/react";
+} from "@heroui/react";
 import { ButtonGroup, InputDate } from "~/modules/components";
 
 import { api } from "~/utils/api";

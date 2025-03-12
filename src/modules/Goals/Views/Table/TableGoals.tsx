@@ -5,7 +5,7 @@ import { columns } from "./table";
 import { useParams } from "next/navigation";
 import { GoalsIncludes } from "~/types/goal/goal.types";
 import { Icon } from "@iconify/react/dist/iconify.js";
-import { Avatar, Chip, Progress } from "@nextui-org/react";
+import { Avatar, Chip, Progress } from "@heroui/react";
 import { capitalize } from "~/modules/components/molecules/Table/utils";
 import { format } from "date-fns";
 import { es } from "date-fns/locale";

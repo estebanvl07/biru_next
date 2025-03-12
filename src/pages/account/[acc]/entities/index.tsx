@@ -11,7 +11,7 @@ import { es } from "date-fns/locale";
 import DashboardLayout from "~/modules/Layouts/Dashboard";
 import { columns } from "~/modules/Entities/table";
 import { Entities } from "@prisma/client";
-import { Chip, User } from "@nextui-org/react";
+import { Chip, User } from "@heroui/react";
 import Actions from "~/modules/components/molecules/Table/Actions";
 
 import { api } from "~/utils/api";

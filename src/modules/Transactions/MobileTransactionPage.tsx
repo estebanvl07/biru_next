@@ -2,7 +2,7 @@ import Link from "next/link";
 import { useParams } from "next/navigation";
 
 import { Icon } from "@iconify/react/dist/iconify.js";
-import { Button, Input } from "@nextui-org/react";
+import { Button, Input } from "@heroui/react";
 import { ListTransactions } from "../Common";
 
 import { useSearch } from "~/lib/hooks";

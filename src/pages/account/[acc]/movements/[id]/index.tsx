@@ -1,5 +1,5 @@
 import { Icon } from "@iconify/react/dist/iconify.js";
-import { Avatar, Button, Chip, User } from "@nextui-org/react";
+import { Avatar, Button, Chip, User } from "@heroui/react";
 import clsx from "clsx";
 import { format } from "date-fns";
 import { es } from "date-fns/locale";

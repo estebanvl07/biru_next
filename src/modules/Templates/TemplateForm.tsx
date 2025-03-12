@@ -10,7 +10,7 @@ import {
   SelectItem,
   useDisclosure,
   User,
-} from "@nextui-org/react";
+} from "@heroui/react";
 
 import { useCategory } from "../Category/hook/category.hook";
 import { Icon } from "@iconify/react";

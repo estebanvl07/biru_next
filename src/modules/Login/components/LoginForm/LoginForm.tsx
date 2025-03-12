@@ -1,5 +1,5 @@
 "use client";
-import { Button, Input } from "@nextui-org/react";
+import { Button, Input } from "@heroui/react";
 import { CALLBACK_SIGN_IN_URL } from "~/lib/constants/config";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import { InputPassword } from "~/modules/components";

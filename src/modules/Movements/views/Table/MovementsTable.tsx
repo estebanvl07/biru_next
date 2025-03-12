@@ -4,7 +4,7 @@ import { columns } from "./table";
 import { api } from "~/utils/api";
 import { useParams } from "next/navigation";
 import { MovementsIncludes } from "~/types/movements";
-import { Avatar, Chip, Tooltip } from "@nextui-org/react";
+import { Avatar, Chip, Tooltip } from "@heroui/react";
 import clsx from "clsx";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import Actions from "~/modules/components/molecules/Table/Actions";

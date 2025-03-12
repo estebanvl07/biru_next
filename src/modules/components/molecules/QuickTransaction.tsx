@@ -2,8 +2,8 @@ import Link from "next/link";
 import { FormEvent, useState } from "react";
 import { Icon } from "@iconify/react/dist/iconify.js";
 
-import { Button } from "@nextui-org/button";
-import { Avatar, Input } from "@nextui-org/react";
+import { Button } from "@heroui/button";
+import { Avatar, Input } from "@heroui/react";
 import { Card } from "../atoms";
 
 import { ButtonGroup } from "~/modules/components";
@@ -78,6 +78,7 @@ const QuickTransaction = () => {
             //   key={id}
             //   href={`/account/${params?.acc}/transactions/new?entity=${id}`}
             // >
+            // </Link>
             <div key={id} className="flex flex-col items-center justify-center">
               <Avatar
                 isBordered={entitySelected === id}
@@ -97,7 +98,6 @@ const QuickTransaction = () => {
                 {name}
               </span>
             </div>
-            // </Link>
           );
         })}
       </nav>

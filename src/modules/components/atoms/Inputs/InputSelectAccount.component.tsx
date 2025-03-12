@@ -1,4 +1,4 @@
-import { Select, SelectItem, Spinner } from "@nextui-org/react";
+import { Select, SelectItem, Spinner } from "@heroui/react";
 import { useMemo } from "react";
 import { useAccounts, useCurrentAccount } from "~/modules/Account/hooks";
 

@@ -2,7 +2,7 @@ import clsx from "clsx";
 import { motion } from "framer-motion";
 
 import type { UserAccount } from "@prisma/client";
-import { Tooltip } from "@nextui-org/react";
+import { Tooltip } from "@heroui/react";
 
 interface AccountCardProps {
   account: UserAccount;

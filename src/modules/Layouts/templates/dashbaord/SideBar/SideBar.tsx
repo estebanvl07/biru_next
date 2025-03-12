@@ -5,7 +5,7 @@ import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import OptionItem from "./OptionItem";
 import AvatarMenu from "../Header/Menu/AvatarMenu";
-import { Skeleton } from "@nextui-org/skeleton";
+import { Skeleton } from "@heroui/skeleton";
 import { useResize } from "~/lib/hooks/useResize";
 import { useSession } from "next-auth/react";
 import { Icon } from "@iconify/react/dist/iconify.js";

@@ -3,7 +3,7 @@ import Link from "next/link";
 
 import { LastTransactions } from "~/modules/Common";
 import { Icon } from "@iconify/react/dist/iconify.js";
-import { Chip, Skeleton } from "@nextui-org/react";
+import { Chip, Skeleton } from "@heroui/react";
 import MobileFilter from "../Layouts/templates/dashbaord/Header/MobileFilter";
 
 import { motion } from "framer-motion";

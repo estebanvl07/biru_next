@@ -1,11 +1,11 @@
 import { Icon } from "@iconify/react/dist/iconify.js";
-import { Button } from "@nextui-org/button";
+import { Button } from "@heroui/button";
 import React, { useState } from "react";
 import { useOutsideClick } from "~/lib/hooks";
 import { useWebSocket } from "~/lib/hooks/useWebSocket";
 import { motion } from "framer-motion";
-import { Badge } from "@nextui-org/badge";
-import { Avatar, Chip } from "@nextui-org/react";
+import { Badge } from "@heroui/badge";
+import { Avatar, Chip } from "@heroui/react";
 import { useNotification } from "~/lib/hooks/useNotification";
 
 const NotificationMenu = () => {

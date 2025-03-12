@@ -1,5 +1,5 @@
-import { CircularProgress } from "@nextui-org/progress";
-import { Spinner } from "@nextui-org/spinner";
+import { CircularProgress } from "@heroui/progress";
+import { Spinner } from "@heroui/spinner";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import React, { useEffect } from "react";

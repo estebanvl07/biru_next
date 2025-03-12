@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 
 import { Card, Empty } from "~/modules/components";
-import { Spinner } from "@nextui-org/spinner";
+import { Spinner } from "@heroui/spinner";
 import PieChart from "~/modules/Charts/pieChart";
 
 import { useCategory } from "../../Category/hook/category.hook";

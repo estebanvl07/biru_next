@@ -6,7 +6,7 @@ import DashboardLayout from "~/modules/Layouts/Dashboard";
 import { Table } from "~/modules/components";
 
 import { columns } from "~/modules/Transactions/table";
-import { Avatar, Chip } from "@nextui-org/react";
+import { Avatar, Chip } from "@heroui/react";
 
 import { format } from "date-fns";
 import { es } from "date-fns/locale";

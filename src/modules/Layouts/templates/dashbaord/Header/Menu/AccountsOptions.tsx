@@ -2,7 +2,7 @@ import React from "react";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { Button, Listbox, ListboxItem } from "@nextui-org/react";
+import { Button, Listbox, ListboxItem } from "@heroui/react";
 import { useAccounts } from "~/modules/Account/hooks";
 import { LoaderSkeleton } from "~/modules/Loaders";
 

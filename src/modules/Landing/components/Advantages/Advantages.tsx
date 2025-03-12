@@ -13,7 +13,7 @@ import {
   card,
   Chip,
   Progress,
-} from "@nextui-org/react";
+} from "@heroui/react";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";

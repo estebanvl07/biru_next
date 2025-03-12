@@ -1,5 +1,5 @@
 "use client";
-import { Button, Input, Spinner } from "@nextui-org/react";
+import { Button, Input, Spinner } from "@heroui/react";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import {
   recoverUserInput,

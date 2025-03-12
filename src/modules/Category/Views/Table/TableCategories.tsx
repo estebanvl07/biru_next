@@ -5,7 +5,7 @@ import { useRouter } from "next/router";
 import { CategoryIncludes } from "~/types/category/category.types";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import Actions from "~/modules/components/molecules/Table/Actions";
-import { Chip } from "@nextui-org/react";
+import { Chip } from "@heroui/react";
 import { Table } from "~/modules/components";
 import { columns } from "./table";
 import CreateCategory from "../../CreateCategory";

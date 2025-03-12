@@ -5,7 +5,7 @@ import { useParams } from "next/navigation";
 import { useGoals } from "../hook/goal.hook";
 
 import { Card, Empty } from "~/modules/components";
-import { Avatar, Progress } from "@nextui-org/react";
+import { Avatar, Progress } from "@heroui/react";
 
 import { getPercent } from "~/lib/helpers";
 

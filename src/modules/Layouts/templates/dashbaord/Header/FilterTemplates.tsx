@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { options } from "./filterOptions";
-import { RangeCalendar, Select, SelectItem } from "@nextui-org/react";
+import { RangeCalendar, Select, SelectItem } from "@heroui/react";
 
 import { Icon } from "@iconify/react/dist/iconify.js";
 import { AnimatePresence, motion } from "framer-motion";

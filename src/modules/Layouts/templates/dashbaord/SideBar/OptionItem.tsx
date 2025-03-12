@@ -3,9 +3,9 @@ import Link from "next/link";
 import clsx from "clsx";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import { useCurrentAccount } from "~/modules/Account/hooks";
-import { Skeleton } from "@nextui-org/skeleton";
+import { Skeleton } from "@heroui/skeleton";
 import { motion } from "framer-motion";
-import { Tooltip } from "@nextui-org/react";
+import { Tooltip } from "@heroui/react";
 
 const OptionItem = ({
   item,

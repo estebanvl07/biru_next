@@ -1,5 +1,5 @@
 import React, { ChangeEvent, useEffect, useState } from "react";
-import { Button, InputProps } from "@nextui-org/react";
+import { Button, InputProps } from "@heroui/react";
 import Image from "next/image";
 import clsx from "clsx";
 import { Icon } from "@iconify/react/dist/iconify.js";

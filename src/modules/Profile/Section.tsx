@@ -1,7 +1,7 @@
 import React, { ReactElement } from "react";
 
 import { Icon } from "@iconify/react/dist/iconify.js";
-import { Listbox, ListboxItem } from "@nextui-org/listbox";
+import { Listbox, ListboxItem } from "@heroui/listbox";
 
 interface SectionsProps {
   title?: string;

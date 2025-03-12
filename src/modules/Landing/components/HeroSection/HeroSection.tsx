@@ -5,7 +5,7 @@ import { motion } from "framer-motion";
 
 import { Header } from "~/modules/components/Header";
 import { useThemeContext } from "~/lib/context/Theme.context";
-import { Avatar, Button, Chip } from "@nextui-org/react";
+import { Avatar, Button, Chip } from "@heroui/react";
 import TypewriterComponent from "typewriter-effect";
 
 export const HeroSection = () => {

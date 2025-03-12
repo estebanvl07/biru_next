@@ -3,7 +3,7 @@ import clsx from "clsx";
 import Link from "next/link";
 
 import { Icon } from "@iconify/react/dist/iconify.js";
-import { Button } from "@nextui-org/button";
+import { Button } from "@heroui/button";
 
 interface EmptyProps {
   href?: string;

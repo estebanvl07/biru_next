@@ -5,7 +5,7 @@ import clsx from "clsx";
 import { format } from "date-fns";
 
 import { Icon } from "@iconify/react/dist/iconify.js";
-import { Avatar } from "@nextui-org/react";
+import { Avatar } from "@heroui/react";
 
 import { DATE_FORMAT_TRANS } from "~/lib/constants/config";
 import type { TransactionIncludes } from "~/types/transactions";

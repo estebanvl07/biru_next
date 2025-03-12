@@ -1,7 +1,7 @@
 import type { FC } from "react";
 import type { ActivationResultProps } from "./ActivationResult.types";
 import { Icon } from "@iconify/react/dist/iconify.js";
-import { Button } from "@nextui-org/button";
+import { Button } from "@heroui/button";
 import Link from "next/link";
 import { BasicLayout } from "~/modules/Layouts";
 import { ICONS, MESSAGES } from "./ActivationResult.constants";

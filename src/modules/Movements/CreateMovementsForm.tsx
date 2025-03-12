@@ -8,7 +8,7 @@ import {
   SelectItem,
   Tooltip,
   User,
-} from "@nextui-org/react";
+} from "@heroui/react";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { amountFormatter } from "~/utils/formatters";

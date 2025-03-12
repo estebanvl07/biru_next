@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useTemplate } from "../Templates/hooks/useTemplate";
-import { Button, Chip, Select, SelectItem } from "@nextui-org/react";
+import { Button, Chip, Select, SelectItem } from "@heroui/react";
 import { Icon } from "@iconify/react";
 import { TemplatesIncludes } from "~/types/templates/templates";
 import { Templates } from "@prisma/client";

@@ -1,5 +1,5 @@
 import { Icon } from "@iconify/react/dist/iconify.js";
-import { Chip } from "@nextui-org/react";
+import { Chip } from "@heroui/react";
 import clsx from "clsx";
 import React from "react";
 import Marquee from "react-fast-marquee";

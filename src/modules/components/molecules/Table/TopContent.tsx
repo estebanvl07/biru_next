@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import Link from "next/link";
 
-import { Input } from "@nextui-org/react";
-import { Button } from "@nextui-org/button";
+import { Input } from "@heroui/react";
+import { Button } from "@heroui/button";
 import { Icon } from "@iconify/react/dist/iconify.js";
 
 import { type TopContentProps } from "~/types/component/table.types";

@@ -21,7 +21,7 @@ import clsx from "clsx";
 import { BASIC_DATE } from "~/lib/constants/config";
 import { useTransactionSeries } from "~/modules/Transactions/hook/useTransactionSeries";
 import { parseAmount } from './../../../lib/helpers/index';
-import { Tooltip } from "@nextui-org/react";
+import { Tooltip } from "@heroui/react";
 import FilterTemplates from "~/modules/Layouts/templates/dashbaord/Header/FilterTemplates";
 
 interface Props {

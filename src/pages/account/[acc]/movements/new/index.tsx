@@ -1,4 +1,4 @@
-import { Input } from "@nextui-org/react";
+import { Input } from "@heroui/react";
 import React from "react";
 import DashboardLayout from "~/modules/Layouts/Dashboard";
 import CreateMovementsForm from "~/modules/Movements/CreateMovementsForm";

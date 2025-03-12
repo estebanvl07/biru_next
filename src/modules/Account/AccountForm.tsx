@@ -1,5 +1,5 @@
 import { useForm } from "react-hook-form";
-import { Button, Input, Select, SelectItem } from "@nextui-org/react";
+import { Button, Input, Select, SelectItem } from "@heroui/react";
 import { useRouter } from "next/navigation";
 
 import { Icon } from "@iconify/react/dist/iconify.js";

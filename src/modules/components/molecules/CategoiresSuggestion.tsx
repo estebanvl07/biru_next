@@ -4,7 +4,7 @@ import clsx from "clsx";
 import { SystemCategories } from "~/lib/resource/system-catetories";
 import { useOnActive } from "~/lib/hooks";
 
-import { Button, Chip } from "@nextui-org/react";
+import { Button, Chip } from "@heroui/react";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import { api } from "~/utils/api";
 import { CreateCategory } from "~/modules/Category/schema";

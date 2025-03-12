@@ -1,5 +1,5 @@
 import { Icon } from "@iconify/react/dist/iconify.js";
-import { Button } from "@nextui-org/button";
+import { Button } from "@heroui/button";
 import React, { useState } from "react";
 import { useOutsideClick } from "~/lib/hooks";
 import Menu from "./Menu/Menu";

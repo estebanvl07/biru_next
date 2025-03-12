@@ -1,5 +1,5 @@
 import { Icon } from "@iconify/react/dist/iconify.js";
-import { Button, ButtonGroup } from "@nextui-org/button";
+import { Button, ButtonGroup } from "@heroui/button";
 
 import { CALLBACK_SIGN_IN_URL } from "~/lib/constants/config";
 import { signIn } from "next-auth/react";

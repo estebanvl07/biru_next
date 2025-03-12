@@ -7,7 +7,7 @@ import { useTemplate } from "./hooks/useTemplate";
 import { useParams } from "next/navigation";
 import { useRouter } from "next/router";
 import { TemplatesIncludes } from "~/types/templates/templates";
-import { Avatar, Chip } from "@nextui-org/react";
+import { Avatar, Chip } from "@heroui/react";
 import { Icon } from "@iconify/react";
 import Actions from "../components/molecules/Table/Actions";
 import { es } from "date-fns/locale";

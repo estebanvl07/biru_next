@@ -86,7 +86,7 @@ const DataTable = <T,>({
       {isLoading ? (
         <LoaderSkeleton skeletonType="Table" />
       ) : (
-        (<Table
+        <Table
           className="dark:text-white"
           classNames={{
             wrapper: "dark:bg-default-200/80",
@@ -94,8 +94,8 @@ const DataTable = <T,>({
           color="primary"
           isHeaderSticky
           aria-label="Data table"
-          align="left"
           selectionMode="none"
+          align="center"
           topContentPlacement="outside"
           topContent={
             hasTopContent && (
@@ -127,7 +127,7 @@ const DataTable = <T,>({
             {({ uid, align, sorting, name }) => (
               <TableColumn
                 key={uid}
-                align={align ?? "end"}
+                align={align ?? "start"}
                 allowsSorting={sorting}
               >
                 {name}
@@ -149,7 +149,7 @@ const DataTable = <T,>({
               </TableRow>
             )}
           </TableBody>
-        </Table>)
+        </Table>
         // <Card className="py-5 dark:bg-default-200">
         // </Card>
       )}

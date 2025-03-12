@@ -32,7 +32,7 @@ const MyApp: AppType<{ session: Session | null }> = ({
       <NextUIProvider>
         <ThemeProvider>
           <FilterProvider>
-            <div className={`font-sans ${poppins.variable}`}>
+            <div className={`font-sans ${montserrat.variable}`}>
               <div id="portal-root"></div>
               <Component {...pageProps} />
             </div>

@@ -19,34 +19,18 @@ interface SideBarProps {
 
 const SideBar = React.memo(
   ({ serviceOptions = true, className }: SideBarProps) => {
-    const [isExpanded, setIsExpanded] = useState(false);
-    const [showMenu, setShowMenu] = useState(false);
-
-    const handlerRef = useOutsideClick<HTMLDivElement>(() => onHide());
-    const { data: session, status } = useSession();
+    const [isExpanded, setIsExpanded] = useState(true);
     const { isDesktop } = useResize();
 
-    const onHide = () => {
-      setShowMenu(false);
-    };
-
     useEffect(() => {
-      if (showMenu) {
-        setIsExpanded(true);
-      }
-    }, [showMenu]);
-
-    useEffect(() => {
-      if (!isExpanded) {
-        setShowMenu(false);
-      }
-    }, [isExpanded]);
+      isDesktop ? setIsExpanded(true) : setIsExpanded(false);
+    }, [isDesktop]);
 
     return (
       <motion.aside
         layout
         className={clsx(
-          "relative z-20 hidden min-h-screen bg-default-100 duration-700 transition-width md:block dark:bg-default-100",
+          "relative z-20 hidden min-h-screen duration-700 transition-width md:block",
           {
             "w-[90px]": !isExpanded,
             "!w-[300px]": isExpanded,
@@ -72,18 +56,6 @@ const SideBar = React.memo(
             })}
           >
             <NavigationLogo isExpanded={isExpanded} />
-            <motion.button
-              layout
-              className={clsx(
-                "z-10 grid h-6 w-6 place-content-center rounded-lg bg-default-200 p-4 backdrop-blur-sm",
-              )}
-              onClick={() => setIsExpanded(!isExpanded)}
-            >
-              <Icon
-                width={24}
-                icon={isExpanded ? "formkit:arrowleft" : "formkit:arrowright"}
-              />
-            </motion.button>
           </motion.aside>
 
           <nav
@@ -103,48 +75,6 @@ const SideBar = React.memo(
               />
             ))}
           </nav>
-          {status === "loading" ? (
-            <div className="flex w-40 items-center gap-2 rounded-full border p-2">
-              <Skeleton className="h-8 w-8 rounded-full" />{" "}
-              <aside>
-                <Skeleton className="mb-1 h-3 w-14 rounded-xl" />
-                <Skeleton className="h-2 w-10 rounded-xl" />
-              </aside>
-            </div>
-          ) : (
-            <div
-              className={clsx(
-                "mx-4 flex cursor-pointer flex-col items-center gap-4 rounded-full border  bg-white p-1.5 transition-width dark:border-none dark:border-white/10 dark:bg-default-200",
-                {
-                  "mx-auto w-fit border-none shadow-none": !isExpanded,
-                  "rounded-lg": showMenu,
-                },
-              )}
-              onClick={() => setShowMenu(!showMenu)}
-              ref={handlerRef}
-            >
-              {showMenu && <Menu onHide={onHide} />}
-              <div className="flex h-fit w-full items-center gap-2">
-                <AvatarMenu />
-                {isExpanded && isDesktop && (
-                  <aside className="flex flex-col items-start">
-                    <p
-                      className="m-0 max-w-28 overflow-hidden text-ellipsis whitespace-nowrap p-0 text-sm font-semibold dark:text-white"
-                      title={session?.user.name ?? ""}
-                    >
-                      {session?.user.name}
-                    </p>
-                    <span
-                      className="max-w-24 overflow-hidden text-ellipsis whitespace-nowrap text-xs dark:text-slate-300"
-                      title={session?.user.email ?? ""}
-                    >
-                      {session?.user.email}
-                    </span>
-                  </aside>
-                )}
-              </div>
-            </div>
-          )}
         </div>
       </motion.aside>
     );

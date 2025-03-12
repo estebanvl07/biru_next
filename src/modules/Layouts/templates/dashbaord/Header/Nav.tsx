@@ -7,6 +7,7 @@ import FilterTemplates from "./FilterTemplates";
 import { Button } from "@nextui-org/button";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import { Tooltip } from "@nextui-org/react";
+import UserMenu from "~/modules/components/atoms/UserMenu";
 
 export default function HeaderMenu({
   hasFilter = true,
@@ -32,6 +33,7 @@ export default function HeaderMenu({
       )}
       {hasFilter && <FilterTemplates />}
       {params?.acc && <CreationMenu />}
+      <UserMenu />
     </motion.nav>
   );
 }

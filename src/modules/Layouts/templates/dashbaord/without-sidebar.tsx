@@ -35,7 +35,7 @@ const WithoutSideBar: FC<DashboardProps> = ({
         <meta name="description" content={headDescription} />
       </Head>
 
-      <main className="flex min-h-screen w-full flex-grow flex-col bg-gradient-to-r from-zinc-100 to-zinc-100 px-8 py-4 dark:from-default-50 dark:via-default-100 dark:to-default-50">
+      <main className="flex min-h-screen w-full flex-grow flex-col bg-gradient-to-r from-white to-white px-8 py-4 dark:from-default-50 dark:via-default-100 dark:to-default-50">
         {isMobile ? (
           <HeaderMobile title={title} />
         ) : (

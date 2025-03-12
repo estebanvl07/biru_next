@@ -14,7 +14,7 @@ import {
   SelectItem,
   User,
 } from "@nextui-org/react";
-import { ButtonGroup, Card, InputDate } from "~/modules/components";
+import { ButtonGroup, InputDate } from "~/modules/components";
 
 import { api } from "~/utils/api";
 import { Icon } from "@iconify/react/dist/iconify.js";
@@ -35,7 +35,6 @@ import { capitalize } from "../components/molecules/Table/utils";
 import { format } from "date-fns";
 import { es } from "date-fns/locale";
 
-import type { Goals, Transaction } from "@prisma/client";
 import type { TransactionIncludes } from "~/types/transactions";
 import { toast } from "sonner";
 import { GoalsIncludes } from "~/types/goal/goal.types";
@@ -70,10 +69,11 @@ const TransactionForm = ({
   const { categories } = useCategory();
   const { goals } = useGoals();
 
-  const params = useParams();
   const router = useRouter();
 
   const query = router.query;
+
+  const transactionsRefresh = api.useUtils().transaction;
 
   const { mutateAsync: createTransactionMutation } =
     api.transaction.create.useMutation();
@@ -148,7 +148,8 @@ const TransactionForm = ({
         createTransactionMutation(
           { ...payload, date: new Date() },
           {
-            onSuccess(data) {
+            async onSuccess(data) {
+              await transactionsRefresh.invalidate();
               onSuccess && onSuccess();
               reset();
             },

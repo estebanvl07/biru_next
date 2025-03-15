@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Icon } from "@iconify/react/dist/iconify.js";
+import { Icon, IconProps } from "@iconify/react/dist/iconify.js";
 import clsx from "clsx";
 
 type ButtonOptions = {
@@ -10,6 +10,7 @@ type ButtonOptions = {
   iconClass?: string;
   onClick: () => void;
   colorSelected?: string;
+  iconProps?: Partial<IconProps>
 };
 
 type ButtonGroupProps = {
@@ -65,6 +66,7 @@ const ButtonGroup = ({
               icon={option.icon ?? ""}
               width={18}
               className={option.iconClass}
+              {...option.iconProps}
             />
           )}
           {option.label}

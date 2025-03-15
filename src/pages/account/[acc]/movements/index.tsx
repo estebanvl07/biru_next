@@ -32,12 +32,14 @@ const Movements = () => {
               label: "",
               onClick: () => setMode(1),
               icon: "ph:table-fill",
+              colorSelected: "bg-primary-500",
             },
             {
               id: 2,
               label: "",
               onClick: () => setMode(2),
               icon: "mingcute:grid-line",
+              colorSelected: "bg-primary-500",
             },
           ]}
         />

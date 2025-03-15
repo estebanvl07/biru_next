@@ -71,6 +71,7 @@ const CreateMovementsForm = ({ defaultMovement }: any) => {
               onSuccess(data) {
                 reset();
                 setAmountValue("");
+                router.back();
               },
             }),
             {
@@ -194,7 +195,7 @@ const CreateMovementsForm = ({ defaultMovement }: any) => {
           <SelectItem
             color="primary"
             variant="flat"
-            onClick={() => {
+            onPress={() => {
               if (frecuency.id !== 4 && frecuency.value) {
                 setValue("frecuency", frecuency.value);
                 setCustomFrecuency(false);
@@ -205,7 +206,7 @@ const CreateMovementsForm = ({ defaultMovement }: any) => {
             }}
             className="font-montserrat dark:text-white"
             textValue={frecuency.name}
-            value={frecuency.id}
+            data-value={frecuency.id}
             key={frecuency.id}
           >
             {frecuency.name}
@@ -319,7 +320,7 @@ const CreateMovementsForm = ({ defaultMovement }: any) => {
                     key={category.id}
                     className="font-montserrat dark:text-white"
                     textValue={category.name}
-                    value={category.id}
+                    data-value={category.id}
                   >
                     {category.name}
                   </SelectItem>
@@ -366,7 +367,7 @@ const CreateMovementsForm = ({ defaultMovement }: any) => {
                     <SelectItem
                       color="primary"
                       variant="solid"
-                      onClick={() => {
+                      onPress={() => {
                         entity.id && setValue("entityId", entity.id);
                       }}
                       key={entity.id}
@@ -394,7 +395,7 @@ const CreateMovementsForm = ({ defaultMovement }: any) => {
         <Button type="submit" color="primary">
           Crear Movimiento
         </Button>
-        <Button type="button" onClick={() => router.back()}>
+        <Button type="button" onPress={() => router.back()}>
           Cancelar
         </Button>
       </div>

@@ -2,22 +2,22 @@ const columns = [
   {
     name: "ID",
     uid: "id",
-    sortable: false,
+    sotring: false,
   },
   {
     name: "ENTIDAD",
     uid: "name",
-    sortable: true,
+    sotring: true,
   },
   {
     name: "REFERENCIA",
     uid: "reference",
-    sortable: true,
+    sotring: true,
   },
   {
     name: "ESTADO",
     uid: "state",
-    sortable: true,
+    sotring: true,
   },
   {
     name: "FECHA DE CREACIÓN",
@@ -33,27 +33,27 @@ const detailColumns = [
   {
     name: "TRANSACCIÓN",
     uid: "amount",
-    sortable: true,
+    sotring: true,
   },
   {
     name: "REFERENCIA",
     uid: "reference",
-    sortable: true,
+    sotring: true,
   },
   {
     name: "DESCRIPCION",
     uid: "description",
-    sortable: true,
+    sotring: true,
   },
   {
     name: "TIPO",
     uid: "type",
-    sortable: true,
+    sotring: true,
   },
   {
     name: "ACCIONES",
     uid: "actions",
-    sortable: true,
+    sotring: true,
   },
 ];
 export { columns, detailColumns };

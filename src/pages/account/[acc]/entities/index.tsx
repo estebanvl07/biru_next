@@ -132,6 +132,23 @@ export default function EntitiesPage() {
               onShowCreate();
             },
           }}
+          isStriped
+          filterBy={[
+            {
+              by: "type",
+              title: "Tipo",
+              options: [
+                {
+                  text: "Ingreso",
+                  value: 1,
+                },
+                {
+                  text: "Egreso",
+                  value: 2,
+                },
+              ],
+            },
+          ]}
           columns={columns}
           isLoading={isLoading}
           renderCell={renderCell}

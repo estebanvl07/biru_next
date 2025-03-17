@@ -36,12 +36,32 @@ import { format } from "date-fns";
 import { es } from "date-fns/locale";
 
 import type { Goals, Templates, Transaction } from "@prisma/client";
-import type { TransactionIncludes } from "~/types/transactions";
+import { STATUS_TRANS, type TransactionIncludes } from "~/types/transactions";
 import { toast } from "sonner";
 import { GoalsIncludes } from "~/types/goal/goal.types";
 import { CategoryIncludes } from "~/types/category/category.types";
 import { EntityIncludes } from "~/types/entities/entity.types";
 import TemplatesSection from "./TemplatesSection";
+import {
+  getTransactionStatus,
+  statusColor,
+  statusIcon,
+} from "~/utils/transactionStatus";
+
+const statusOptions = [
+  {
+    value: STATUS_TRANS.confirmed,
+    text: "Confirmado",
+  },
+  {
+    value: STATUS_TRANS.cancelled,
+    text: "Cancelado",
+  },
+  {
+    value: STATUS_TRANS.scheduled,
+    text: "Programado",
+  },
+];
 
 interface TransactionFormProps {
   type: "goal" | "transfer";
@@ -84,6 +104,11 @@ const TransactionForm = ({
 
   const { mutateAsync: updateTransactionMutation } =
     api.transaction.update.useMutation();
+
+  const defaultState =
+    transactionDefault && transactionDefault.state
+      ? [String(transactionDefault.state)]
+      : undefined;
 
   const defaultCategory =
     categories && defCategory
@@ -174,7 +199,8 @@ const TransactionForm = ({
         updateTransactionMutation(
           { id: String(transactionDefault.id), ...payload },
           {
-            onSuccess(data) {
+            async onSuccess(data) {
+              await transactionsRefresh.getTransactionById.invalidate();
               onSuccess && onSuccess();
               reset();
             },
@@ -191,8 +217,6 @@ const TransactionForm = ({
 
   const setTemplate = (template: Templates | null | undefined): void => {
     if (template) {
-      console.log(template);
-
       setValue("categoryId", template.categoryId || undefined);
       setValue("entityId", template.entityId || undefined);
       setValue("recipient", template.recipient || undefined);
@@ -374,6 +398,49 @@ const TransactionForm = ({
             isInvalid={Boolean(errors?.amount)}
             errorMessage={errors?.amount?.message}
           />
+          {mode === "edit" && (
+            <Select
+              items={statusOptions}
+              placeholder="Seleccione un estado"
+              label="Estado"
+              classNames={{
+                label: "group-data-[filled=true]:-translate-y-4",
+                trigger: "min-h-[70px]",
+                listboxWrapper: "max-h-[200px]",
+              }}
+              renderValue={(items) => {
+                return items.map(({ data }) => (
+                  <Chip
+                    key={data!.value}
+                    size="sm"
+                    variant="flat"
+                    color={statusColor(data!.value) as any}
+                    startContent={
+                      <Icon icon={statusIcon(data!.value) || ""} width={14} />
+                    }
+                  >
+                    {getTransactionStatus(data!.value)}
+                  </Chip>
+                ));
+              }}
+              defaultSelectedKeys={defaultState}
+              isRequired
+              // isInvalid={Boolean(errors?.categoryId)}
+              // errorMessage={errors?.categoryId?.message ?? ""}
+            >
+              {(state) => (
+                <SelectItem
+                  color="primary"
+                  onPress={() => setValue("categoryId", state.value)}
+                  key={state.value}
+                  className="font-montserrat dark:text-white"
+                  textValue={state.text}
+                >
+                  {state.text}
+                </SelectItem>
+              )}
+            </Select>
+          )}
           {type === "goal" && (
             <>
               <Select

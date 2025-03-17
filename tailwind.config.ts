@@ -7,7 +7,7 @@ const config = {
   darkMode: "selector",
   content: [
     "./src/**/*.tsx",
-    "./node_modules/@heroui/theme/dist/components/(accordion|badge|button|calendar|input|listbox|modal|pagination|progress|radio|select|skeleton|spinner|table|tabs|user|divider|ripple|popover|scroll-shadow|checkbox|spacer|avatar).js",
+    "./node_modules/@heroui/theme/dist/components/(accordion|badge|button|calendar|checkbox|input|listbox|modal|pagination|progress|radio|select|skeleton|spinner|table|tabs|user|divider|ripple|form|popover|scroll-shadow|spacer|avatar).js"
   ],
   theme: {
     light: {

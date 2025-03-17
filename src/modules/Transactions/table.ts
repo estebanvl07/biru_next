@@ -6,12 +6,16 @@ const columns = [
   },
   {
     name: "DESCRIPTION",
-    uid: "description",
+    uid: "amount",
     sortable: true,
   },
   {
     name: "CATEGORIA",
     uid: "category",
+  },
+  {
+    name: "ESTADO",
+    uid: "state",
     sortable: true,
   },
   {
@@ -22,6 +26,7 @@ const columns = [
   {
     name: "FECHA DE TRANSACCION",
     uid: "date",
+    sortable: true,
   },
   {
     name: "ACTIONS",

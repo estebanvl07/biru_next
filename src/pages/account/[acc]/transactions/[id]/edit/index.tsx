@@ -31,8 +31,6 @@ const EditTransactionPage = ({
 }: {
   transaction: TransactionIncludes;
 }) => {
-  const router = useRouter();
-
   return (
     <DashboardLayout
       title="Editar transacción"

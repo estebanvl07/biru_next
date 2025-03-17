@@ -59,10 +59,6 @@ export const useTransactions = (options: FilterOptions) => {
     },
   );
 
-  const refreshTransactions = useCallback(() => {
-    queryClient.invalidateQueries(transactionKey as any);
-  }, [queryClient, transactionKey]);
-
   return { transactions: data!, isLoading };
 };
 

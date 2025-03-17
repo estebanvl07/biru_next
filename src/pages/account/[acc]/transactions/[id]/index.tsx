@@ -8,13 +8,7 @@ import { DATE_FORMAT_TRANS } from "~/lib/constants/config";
 import { formatDatesOfTransactions } from "~/lib/resource/formatDatesOfTransactions";
 
 import { Icon } from "@iconify/react/dist/iconify.js";
-import {
-  Accordion,
-  AccordionItem,
-  Avatar,
-  Chip,
-  Button,
-} from "@heroui/react";
+import { Accordion, AccordionItem, Avatar, Chip, Button } from "@heroui/react";
 import { User } from "@heroui/user";
 import DashboardLayout from "~/modules/Layouts/Dashboard";
 import { Card } from "~/modules/components";
@@ -52,6 +46,7 @@ const DetailTransactionPage = ({
   } = transaction;
 
   const router = useRouter();
+  const query = router.query;
 
   const getIcon = () => {
     if (category?.icon) {
@@ -249,8 +244,8 @@ const DetailTransactionPage = ({
         </Accordion>
         <Button
           color="primary"
-          onClick={() => {
-            onShowEdit();
+          onPress={() => {
+            router.push(`/account/${query.acc}/transactions/${id}/edit`);
           }}
           className="mt-2 w-full"
         >
@@ -264,7 +259,10 @@ const DetailTransactionPage = ({
           onClose={onCloseEdit}
           options={{
             transferType: transaction.transferType === 1 ? "transfer" : "goals",
-            defaultGoal: transaction.transferType === 2 ? transaction.goal as GoalsIncludes : undefined,
+            defaultGoal:
+              transaction.transferType === 2
+                ? (transaction.goal as GoalsIncludes)
+                : undefined,
           }}
         />
       )}
@@ -282,7 +280,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
 
   const [transaction] = formatDatesOfTransactions(data as any);
 
-  if (!transaction) redirect(`/account/${acc}/main`);
+  if (!transaction) redirect(`/account/${acc}/transactions`);
 
   return {
     props: {

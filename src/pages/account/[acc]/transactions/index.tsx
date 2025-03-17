@@ -12,18 +12,19 @@ import { format } from "date-fns";
 import { es } from "date-fns/locale";
 import { capitalize } from "~/modules/components/molecules/Table/utils";
 
-import { TransactionIncludes } from "~/types/transactions";
+import { STATUS_TRANS, TransactionIncludes } from "~/types/transactions";
 
 import { useResize } from "~/lib/hooks/useResize";
 import MobileTransactionPage from "~/modules/Transactions/MobileTransactionPage";
 import Actions from "~/modules/components/molecules/Table/Actions";
 import { useRouter } from "next/router";
-import { api } from "~/utils/api";
 import NullChip from "~/modules/components/atoms/NullChip.component";
-import Dialog from "~/modules/components/molecules/Dialog.component";
-import CreateTransaction from "~/modules/Transactions/CreateTransaction";
-import EditTransaction from "~/modules/Transactions/EditTransaction";
 import { useTransactions } from "~/modules/Transactions/hook";
+import {
+  getTransactionStatus,
+  statusColor,
+  statusIcon,
+} from "~/utils/transactionStatus";
 
 const TransactionPage = () => {
   const [showSheetCreate, setShowSheetCreate] = useState(false);
@@ -36,7 +37,27 @@ const TransactionPage = () => {
 
   const { size } = useResize();
   const isMobile = Boolean(size && size <= 768);
-  const { transactions, isLoading, refreshTransactions } = useTransactions();
+  const { transactions, isLoading } = useTransactions({});
+
+  const categories = transactions
+    ?.filter((tr) => tr.category)
+    .map((item) => {
+      return { text: item.category!.name, value: item.category!.id };
+    });
+
+  const categoriesOfTrasactions = [
+    ...new Map(categories?.map((item) => [item.value, item])).values(),
+  ];
+
+  const entities = transactions
+    ?.filter((tr) => tr.entity)
+    .map((item) => {
+      return { text: item.entity!.name, value: item.entity!.id };
+    });
+
+  const entitiesOfTrasactions = [
+    ...new Map(entities?.map((item) => [item.value, item])).values(),
+  ];
 
   const renderCell = useCallback(
     (transaction: TransactionIncludes, columnKey: React.Key) => {
@@ -72,10 +93,10 @@ const TransactionPage = () => {
       };
 
       switch (columnKey) {
-        case "description":
+        case "amount":
           return (
             <div className="flex items-center gap-2">
-              <div className="flex !h-10 !min-w-10 items-center justify-center whitespace-nowrap rounded-full bg-primary text-xl text-white">
+              <div className="flex !h-9 !min-w-9 items-center justify-center whitespace-nowrap rounded-full bg-primary text-xl text-white">
                 {transaction.entityId ? (
                   <Avatar
                     src={
@@ -84,6 +105,7 @@ const TransactionPage = () => {
                         : undefined
                     }
                     color="primary"
+                    size="sm"
                     name={transaction.entity?.name}
                   />
                 ) : (
@@ -119,20 +141,29 @@ const TransactionPage = () => {
           ) : (
             <NullChip text="Sin categoría" />
           );
+        case "state":
+          return (
+            <Chip
+              variant="flat"
+              size="sm"
+              className="gap-1 border-none capitalize"
+              color={statusColor(transaction.state!) as any}
+              startContent={
+                <Icon icon={statusIcon(transaction.state!) || ""} width={14} />
+              }
+            >
+              {getTransactionStatus(transaction.state!)}
+            </Chip>
+          );
         case "type":
           return (
             <Chip
-              size="lg"
-              variant="flat"
+              size="md"
+              variant="dot"
               color={transaction.type === 1 ? "success" : "danger"}
+              className="flex items-center gap-1 whitespace-nowrap border-none"
             >
-              <Icon
-                icon={
-                  transaction.type === 1
-                    ? "iconamoon:arrow-bottom-left-1"
-                    : "iconamoon:arrow-top-right-1"
-                }
-              />
+              {transaction.type === 1 ? "Ingreso" : "Egreso"}
             </Chip>
           );
         case "date":
@@ -162,8 +193,13 @@ const TransactionPage = () => {
                 })
               }
               onClickEdit={() => {
-                setTransactionSelected(transaction);
-                setShowSheetEdit(true);
+                router.push({
+                  pathname: "/account/[acc]/transactions/[id]/edit",
+                  query: {
+                    acc: String(params?.acc),
+                    id: String(transaction.id),
+                  },
+                });
               }}
               hasDelete={false}
             />
@@ -189,28 +225,77 @@ const TransactionPage = () => {
           headerConfig={{
             title: "",
             newButtonText: "Crear Transacción",
-            onNew: () => setShowSheetCreate(!showSheetCreate),
+            redirectTo: `/account/${params?.acc}/transactions/new`,
           }}
+          filterBy={[
+            {
+              by: "state",
+              title: "Estado",
+              options: [
+                {
+                  text: "Confirmado",
+                  value: 1,
+                },
+                {
+                  text: "Cancelado",
+                  value: 2,
+                },
+              ],
+            },
+            {
+              by: "type",
+              title: "Tipo",
+              options: [
+                {
+                  text: "Ingerso",
+                  value: 1,
+                },
+                {
+                  text: "Egreso",
+                  value: 2,
+                },
+              ],
+            },
+            {
+              by: "entityId",
+              title: "Entidades",
+              options: entitiesOfTrasactions
+                ? Array.from(entitiesOfTrasactions).map(({ text, value }) => {
+                    return {
+                      text,
+                      value,
+                    };
+                  })
+                : [],
+            },
+            {
+              by: "categoryId",
+              title: "Categoría",
+              options: categoriesOfTrasactions
+                ? Array.from(categoriesOfTrasactions).map(({ text, value }) => {
+                    return {
+                      text,
+                      value,
+                    };
+                  })
+                : [],
+            },
+          ]}
           columns={columns}
           filterKeys={["description", "amount"]}
           isLoading={isLoading}
+          checkboxesProps={{
+            classNames: {
+              wrapper: "!text-default-100 border border-default-300",
+              label: "",
+            },
+          }}
+          isStriped
           data={transactions ?? []}
           renderCell={renderCell}
         />
       ) : (
         <MobileTransactionPage transactions={(transactions as any) ?? []} />
-      )}
-
-      <CreateTransaction
-        isOpen={showSheetCreate}
-        onClose={() => setShowSheetCreate(false)}
-      />
-      {transactionSelected && (
-        <EditTransaction
-          transaction={transactionSelected}
-          isOpen={showSheetEdit}
-          onClose={() => setShowSheetEdit(false)}
-        />
       )}
     </DashboardLayout>
   );

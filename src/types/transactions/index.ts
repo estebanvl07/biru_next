@@ -16,6 +16,11 @@ export enum FILTERS {
   customized = 5,
 }
 
+export enum STATUS_TRANS {
+  confirmed = 1,
+  cancelled = 2,
+  scheduled = 3,
+}
 export interface FilterOptions {
   accountId?: number;
   filter?: FILTERS;

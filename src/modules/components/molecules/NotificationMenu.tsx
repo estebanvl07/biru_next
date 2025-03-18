@@ -2,7 +2,7 @@ import { Icon } from "@iconify/react/dist/iconify.js";
 import { Button } from "@heroui/button";
 import React, { useState } from "react";
 import { useOutsideClick } from "~/lib/hooks";
-import { useWebSocket } from "~/lib/hooks/useWebSocket";
+// import { useWebSocket } from "~/lib/hooks/useWebSocket";
 import { motion } from "framer-motion";
 import { Badge } from "@heroui/badge";
 import { Avatar, Chip } from "@heroui/react";
@@ -11,7 +11,7 @@ import { useNotification } from "~/lib/hooks/useNotification";
 const NotificationMenu = () => {
   const [showMenu, setShowMenu] = useState(false);
   const { notifications, isLoading } = useNotification();
-  const { isConnected } = useWebSocket();
+  // const { isConnected } = useWebSocket();
   const element = useOutsideClick<HTMLDivElement>(() => onHideMenu());
 
   const onHideMenu = () => {
@@ -27,7 +27,13 @@ const NotificationMenu = () => {
         }}
         color="primary"
       >
-        <Button isIconOnly radius="full" onClick={() => setShowMenu(!showMenu)}>
+        <Button
+          isIconOnly
+          variant="bordered"
+          className="border border-divider"
+          radius="full"
+          onPress={() => setShowMenu(!showMenu)}
+        >
           {" "}
           <Icon icon="flowbite:bell-outline" width={24} />{" "}
         </Button>
@@ -46,7 +52,7 @@ const NotificationMenu = () => {
             <h2 className="whitespace-nowrap text-lg">Tus Notificaciones</h2>
             {/* <Button variant='ghost'>Marcar como leídas</Button> */}
           </header>
-          {isConnected ? <p>Conectado </p> : <p>Descontectado</p>}
+          {/* {isConnected ? <p>Conectado </p> : <p>Descontectado</p>} */}
           <nav className="mb-2 flex items-center gap-2 px-4">
             <Chip color="primary">Todas</Chip>
             <Chip className="bg-default-200">No Leídas</Chip>

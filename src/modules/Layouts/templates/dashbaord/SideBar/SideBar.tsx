@@ -39,7 +39,7 @@ const SideBar = React.memo(
       >
         <div
           className={clsx(
-            "fixed left-0 top-0 z-20 flex h-screen min-h-screen flex-col justify-between gap-4 pb-4 pt-2 dark:border-white/10",
+            "fixed left-0 top-0 z-20 flex h-screen min-h-screen flex-col gap-4 pb-4 pt-2 dark:border-white/10",
             className,
             {
               "w-[85px]": !isExpanded,
@@ -49,7 +49,7 @@ const SideBar = React.memo(
         >
           <motion.aside
             layout
-            className={clsx("mt-2 h-16 pt-2", {
+            className={clsx("mt-2 pt-2", {
               "mt-6 flex flex-col items-center justify-center gap-6":
                 !isExpanded,
               "flex items-center justify-between px-6": isExpanded,
@@ -60,21 +60,30 @@ const SideBar = React.memo(
 
           <nav
             className={clsx(
-              "scrollbar-y-customize mt-6 w-full flex-grow overflow-y-auto transition-all",
+              "scrollbar-y-customize mt-3 w-full flex-grow overflow-y-auto transition-all",
               {
                 "px-4": isExpanded,
-                // "flex flex-col justify-center": !isExpanded,
               },
             )}
           >
-            {menuOptions.map((option) => (
-              <OptionItem
-                isExpanded={isExpanded}
-                key={option.id}
-                item={option}
-              />
+            {menuOptions.map(({ options, title }, index) => (
+              <div className="mb-4">
+                <h6 className="mb-1 px-2 text-xs">{title}</h6>
+                <ul>
+                  {options.map((item) => (
+                    <OptionItem
+                      isExpanded={isExpanded}
+                      key={item.id}
+                      item={item}
+                    />
+                  ))}
+                </ul>
+              </div>
             ))}
           </nav>
+          <footer>
+            <p className="px-6 text-xs">Create By, Team Dev'forgx 🚀</p>
+          </footer>
         </div>
       </motion.aside>
     );

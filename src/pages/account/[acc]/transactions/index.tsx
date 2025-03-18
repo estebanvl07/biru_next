@@ -27,10 +27,6 @@ import {
 } from "~/utils/transactionStatus";
 
 const TransactionPage = () => {
-  const [showSheetCreate, setShowSheetCreate] = useState(false);
-  const [showSheetEdit, setShowSheetEdit] = useState(false);
-  const [transactionSelected, setTransactionSelected] =
-    useState<TransactionIncludes>();
   const [isClient, setIsClient] = useState(false);
   const router = useRouter();
   const params = useParams<{ acc: string }>();
@@ -259,6 +255,7 @@ const TransactionPage = () => {
             {
               by: "entityId",
               title: "Entidades",
+              selectionMode: "multiple",
               options: entitiesOfTrasactions
                 ? Array.from(entitiesOfTrasactions).map(({ text, value }) => {
                     return {

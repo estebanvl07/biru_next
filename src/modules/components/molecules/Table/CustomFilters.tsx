@@ -35,7 +35,7 @@ const CustomFilters = ({
           variant="bordered"
           size="sm"
           radius="full"
-          className="border-default-300"
+          className="border border-default-300"
           endContent={<ChevronDownIcon className="text-small" />}
         >
           <div className="flex flex-col items-start">

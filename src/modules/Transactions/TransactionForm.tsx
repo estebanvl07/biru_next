@@ -12,6 +12,8 @@ import {
   Input,
   Select,
   SelectItem,
+  Switch,
+  Tooltip,
   User,
 } from "@heroui/react";
 import { ButtonGroup, InputDate } from "~/modules/components";
@@ -63,6 +65,33 @@ const statusOptions = [
   },
 ];
 
+const frecuency = [
+  {
+    text: "Diario",
+    value: 1,
+  },
+  {
+    text: "Semanal",
+    value: 7,
+  },
+  {
+    text: "Quincenal",
+    value: 15,
+  },
+  {
+    text: "Mensual",
+    value: 30,
+  },
+  {
+    text: "Trimestral",
+    value: 90,
+  },
+  {
+    text: "Anual",
+    value: 365,
+  },
+];
+
 interface TransactionFormProps {
   type: "goal" | "transfer";
   mode?: "create" | "edit";
@@ -86,6 +115,7 @@ const TransactionForm = ({
 }: TransactionFormProps) => {
   const [amountValue, setAmountValue] = useState("");
   const [goalSelected, setGoalSelected] = useState<GoalsIncludes>();
+  const [recurrent, setRecurrent] = useState(false);
 
   const { account } = useCurrentAccount();
   const { entities } = useEntity();
@@ -138,7 +168,7 @@ const TransactionForm = ({
 
   const defaultGoalKey = transactionDefault?.goalId
     ? [`${transactionDefault.goalId}`]
-    : defaultGoal?.id ?? undefined
+    : (defaultGoal?.id ?? undefined)
       ? [`${defaultGoal?.id}`]
       : undefined;
 
@@ -320,14 +350,17 @@ const TransactionForm = ({
     <AnimatePresence>
       <div className="flex w-full flex-col items-start gap-4">
         <Alert isOpen={isOpen} onClose={onClose} {...props} />
-        {type === "transfer" && (
-          <TemplatesSection onChange={(template) => setTemplate(template)} />
-        )}
         <motion.form
           layout
           initial={{ x: -40, opacity: 0 }}
           animate={{ x: 0, opacity: 1 }}
           exit={{ opacity: 0 }}
+          transition={{
+            type: "spring",
+            stiffness: 500,
+            damping: 30,
+            duration: 1,
+          }}
           className="flex w-full flex-col items-center justify-center gap-2 pt-6 md:max-w-[36rem] md:pt-0"
           onSubmit={(e) => {
             e.preventDefault();
@@ -335,6 +368,13 @@ const TransactionForm = ({
             onOpen();
           }}
         >
+          <div className="mb-2 flex w-full items-center justify-between">
+            {type === "transfer" && (
+              <TemplatesSection
+                onChange={(template) => setTemplate(template)}
+              />
+            )}
+          </div>
           <Input
             type="text"
             isRequired
@@ -442,144 +482,143 @@ const TransactionForm = ({
             </Select>
           )}
           {type === "goal" && (
-            <>
-              <Select
-                items={goals ?? []}
-                placeholder="Seleccione la meta"
-                label="Meta"
-                isRequired
-                classNames={{
-                  label: "group-data-[filled=true]:-translate-y-5",
-                  trigger: "min-h-[70px]",
-                  listboxWrapper: "max-h-[200px]",
-                }}
-                renderValue={(items) => {
-                  return items.map(({ data }) => (
-                    <div key={data?.id} className="flex items-center gap-2">
-                      <div className="grid h-8 w-8 place-items-center rounded-full bg-primary">
-                        {data?.icon ? (
-                          <Icon icon={data?.icon} className="text-white" />
-                        ) : (
-                          <Avatar name={data?.name} />
-                        )}
-                      </div>
-                      <aside className="flex flex-col">
-                        <span>{data?.name}</span>
-                        <span className="text-xs">
-                          $ {data?.saved.toLocaleString()}
-                        </span>
-                      </aside>
+            <Select
+              items={goals ?? []}
+              placeholder="Seleccione la meta"
+              label="Meta"
+              isRequired
+              classNames={{
+                label: "group-data-[filled=true]:-translate-y-5",
+                trigger: "min-h-[70px]",
+                listboxWrapper: "max-h-[200px]",
+              }}
+              renderValue={(items) => {
+                return items.map(({ data }) => (
+                  <div key={data?.id} className="flex items-center gap-2">
+                    <div className="grid h-8 w-8 place-items-center rounded-full bg-primary">
+                      {data?.icon ? (
+                        <Icon icon={data?.icon} className="text-white" />
+                      ) : (
+                        <Avatar name={data?.name} />
+                      )}
                     </div>
-                  ));
-                }}
-                defaultSelectedKeys={defaultGoalKey}
-                isInvalid={Boolean(errors?.categoryId)}
-                errorMessage={errors?.categoryId?.message ?? ""}
-              >
-                {(goal) => (
-                  <SelectItem
-                    color="primary"
-                    variant="flat"
-                    onClick={() => {
-                      setGoalSelected(goal as GoalsIncludes);
-                      setValue("type", goal.type as 1 | 2);
-                      setValue("goalId", goal.id);
-                      goal?.entityId && setValue("entityId", goal?.entityId);
-                      if (goal?.entityId) {
-                        const currentEntity = entities.find(
-                          (entity) => entity.id === goal.entityId,
-                        );
-                        if (currentEntity) {
-                          setValue("recipient", currentEntity.name || "");
-                          currentEntity?.reference &&
-                            setValue(
-                              "reference",
-                              currentEntity.reference || "",
-                            );
-                          // currentEntity?.description &&
-                          //   setValue(
-                          //     "description",
-                          //     |.description || "",
-                          //   );
-                        }
-                      } else {
-                        setValue("recipient", undefined);
-                        setValue("reference", undefined);
-                        setValue("description", undefined);
+                    <aside className="flex flex-col">
+                      <span>{data?.name}</span>
+                      <span className="text-xs">
+                        $ {data?.saved.toLocaleString()}
+                      </span>
+                    </aside>
+                  </div>
+                ));
+              }}
+              defaultSelectedKeys={defaultGoalKey}
+              isInvalid={Boolean(errors?.categoryId)}
+              errorMessage={errors?.categoryId?.message ?? ""}
+            >
+              {(goal) => (
+                <SelectItem
+                  color="primary"
+                  variant="flat"
+                  onPress={() => {
+                    setGoalSelected(goal as GoalsIncludes);
+                    setValue("type", goal.type as 1 | 2);
+                    setValue("goalId", goal.id);
+                    goal?.entityId && setValue("entityId", goal?.entityId);
+                    if (goal?.entityId) {
+                      const currentEntity = entities.find(
+                        (entity) => entity.id === goal.entityId,
+                      );
+                      if (currentEntity) {
+                        setValue("recipient", currentEntity.name || "");
+                        currentEntity?.reference &&
+                          setValue("reference", currentEntity.reference || "");
+                        // currentEntity?.description &&
+                        //   setValue(
+                        //     "description",
+                        //     |.description || "",
+                        //   );
                       }
-                    }}
-                    className="font-montserrat dark:text-white"
-                    textValue={goal.name}
-                    value={goal.id}
-                    key={goal.id}
-                  >
-                    <div className="flex items-center gap-2">
-                      <div className="grid h-8 w-8 place-items-center rounded-full bg-primary">
-                        {goal?.icon && (
-                          <Icon icon={goal?.icon} className="text-white" />
-                        )}
-                      </div>
-                      <aside className="flex flex-col">
-                        <span>{goal?.name}</span>
-                        <span className="text-xs">
-                          $ {goal?.saved.toLocaleString()}
-                        </span>
-                      </aside>
+                    } else {
+                      setValue("recipient", undefined);
+                      setValue("reference", undefined);
+                      setValue("description", undefined);
+                    }
+                  }}
+                  className="font-montserrat dark:text-white"
+                  textValue={goal.name}
+                  key={goal.id}
+                >
+                  <div className="flex items-center gap-2">
+                    <div className="grid h-8 w-8 place-items-center rounded-full bg-primary">
+                      {goal?.icon && (
+                        <Icon icon={goal?.icon} className="text-white" />
+                      )}
                     </div>
-                  </SelectItem>
-                )}
-              </Select>
-              <Select
-                items={accounts ?? []}
-                placeholder="Seleccione una cuenta"
-                label="Cuenta"
-                classNames={{
-                  label: "group-data-[filled=true]:-translate-y-7",
-                  trigger: "min-h-[86px]",
-                  listboxWrapper: "max-h-[200px]",
-                }}
-                renderValue={(items) => {
-                  return items.map(({ data }) => (
-                    <div
-                      key={data?.id}
-                      className="dark:text-primary-light flex flex-col rounded-xl bg-primary/10 px-4 py-2 pr-6 text-primary dark:bg-default-300/50"
-                    >
-                      <span className="font-semibold">{data?.name}</span>
+                    <aside className="flex flex-col">
+                      <span>{goal?.name}</span>
                       <span className="text-xs">
-                        $ {data?.balance?.toLocaleString()}
+                        $ {goal?.saved.toLocaleString()}
                       </span>
-                    </div>
-                  ));
-                }}
-                required
-                isRequired
-                defaultSelectedKeys={defaultAccountKey}
-                isInvalid={Boolean(errors?.categoryId)}
-                errorMessage={errors?.categoryId?.message ?? ""}
-              >
-                {(account) => (
-                  <SelectItem
-                    color="primary"
-                    onClick={() => setValue("accountId", account.id)}
-                    key={account.id}
-                    className="font-montserrat dark:text-white"
-                    textValue={account.name}
-                    value={account.id}
-                  >
-                    <div className="flex flex-col px-2 py-1">
-                      <span className="font-medium">{account.name}</span>
-                      <span className="text-xs">
-                        $ {account.balance?.toLocaleString()}
-                      </span>
-                    </div>
-                  </SelectItem>
-                )}
-              </Select>
-            </>
+                    </aside>
+                  </div>
+                </SelectItem>
+              )}
+            </Select>
           )}
+          <Select
+            items={accounts ?? []}
+            placeholder="Seleccione una cuenta"
+            label="Cuenta"
+            classNames={{
+              label: "group-data-[filled=true]:-translate-y-7",
+              trigger: "min-h-[86px]",
+              listboxWrapper: "max-h-[200px]",
+            }}
+            renderValue={(items) => {
+              return items.map(({ data }) => (
+                <div
+                  key={data?.id}
+                  className="dark:text-primary-light flex flex-col rounded-xl bg-primary/10 px-4 py-2 pr-6 text-primary dark:bg-default-300/50"
+                >
+                  <span className="font-semibold">{data?.name}</span>
+                  <span className="text-xs">
+                    $ {data?.balance?.toLocaleString()}
+                  </span>
+                </div>
+              ));
+            }}
+            required
+            isRequired
+            defaultSelectedKeys={defaultAccountKey}
+            isInvalid={Boolean(errors?.categoryId)}
+            errorMessage={errors?.categoryId?.message ?? ""}
+          >
+            {(account) => (
+              <SelectItem
+                color="primary"
+                onPress={() => setValue("accountId", account.id)}
+                key={account.id}
+                className="font-montserrat dark:text-white"
+                textValue={account.name}
+              >
+                <div className="flex flex-col px-2 py-1">
+                  <span className="font-medium">{account.name}</span>
+                  <span className="text-xs">
+                    $ {account.balance?.toLocaleString()}
+                  </span>
+                </div>
+              </SelectItem>
+            )}
+          </Select>
+
           <Accordion
+            className="m-0 rounded-lg border border-divider !p-0 !shadow-sm"
+            itemClasses={{
+              base: "px-4",
+            }}
             defaultExpandedKeys={type === "transfer" ? ["1"] : []}
             showDivider={type === "goal"}
+            selectionMode="multiple"
             motionProps={{
               variants: {
                 enter: {
@@ -621,13 +660,12 @@ const TransactionForm = ({
               key="1"
               aria-label="Accordion 1"
               classNames={{
-                base: "border-red-600",
                 subtitle: "dark:text-zinc-400",
               }}
               title="Información Adicional"
               subtitle="Agrega más información sobre tu transacción"
             >
-              <div className="flex flex-col gap-2 pb-8">
+              <div className="flex flex-col gap-2 pb-2">
                 <InputDate
                   label="Fecha de transacción"
                   containerClassName="mt-4"
@@ -669,11 +707,10 @@ const TransactionForm = ({
                     {(category) => (
                       <SelectItem
                         color="primary"
-                        onClick={() => setValue("categoryId", category.id)}
+                        onPress={() => setValue("categoryId", category.id)}
                         key={category.id}
                         className="font-montserrat dark:text-white"
                         textValue={category.name}
-                        value={category.id}
                       >
                         {category.name}
                       </SelectItem>
@@ -797,7 +834,7 @@ const TransactionForm = ({
               subtitle="Aquí podrás ver el avance de tu meta"
             >
               {Boolean(goalSelected) ? (
-                <ul className="grid grid-cols-1 gap-2 md:flex-grow md:grid-cols-2 [&>li>span]:font-semibold [&>li]:text-xs">
+                <ul className="mb-2 grid grid-cols-1 gap-2 md:flex-grow md:grid-cols-2 [&>li>span]:font-semibold [&>li]:text-xs">
                   <li>
                     <span>Nombre:</span>
                     <p>{goalSelected?.name}</p>
@@ -858,6 +895,55 @@ const TransactionForm = ({
               )}
             </AccordionItem>
           </Accordion>
+          <motion.div className="mb-2 flex w-full flex-col gap-3 rounded-lg border border-divider p-4 shadow-sm">
+            <div className="flex items-center justify-between">
+              <aside>
+                <h4 className="text-base font-semibold">
+                  Transacción Recurrente
+                </h4>
+                <p className="text-sm text-foreground-500 dark:text-zinc-400">
+                  Activa esta opción si la transacción se repite periódicamente
+                </p>
+              </aside>
+              <Switch onValueChange={setRecurrent} size="sm" />
+            </div>
+            {recurrent && (
+              <motion.div
+                initial={{
+                  opacity: 0,
+                }}
+                exit={{
+                  opacity: 0,
+                }}
+                animate={{
+                  opacity: 1,
+                }}
+                transition={{
+                  type: "tween",
+                  stiffness: 500,
+                  damping: 30,
+                  duration: 0.6,
+                }}
+              >
+                <Select
+                  isRequired
+                  label="Frecuencia"
+                  placeholder="Selecciona una frecuencia"
+                  items={frecuency}
+                >
+                  {(item) => (
+                    <SelectItem
+                      color="primary"
+                      className="font-montserrat"
+                      key={item.value}
+                    >
+                      {item.text}
+                    </SelectItem>
+                  )}
+                </Select>
+              </motion.div>
+            )}
+          </motion.div>
           <div className="flex w-full flex-col gap-2 sm:flex-row">
             <Button
               className="py-1 text-sm sm:w-fit"
@@ -869,7 +955,7 @@ const TransactionForm = ({
             </Button>
             <Button
               className="py-1 text-sm sm:w-fit"
-              onClick={() => onSuccess && onSuccess()}
+              onPress={() => onSuccess && onSuccess()}
             >
               Cancelar
             </Button>

@@ -118,7 +118,7 @@ const TopContent = React.memo(
             )}
             <div className="flex gap-3">
               {hasExport && (
-                <Button className="!border">
+                <Button className="!border border-divider" variant="bordered">
                   <Icon icon="mingcute:file-export-line" width={18} />
                   Exportar
                 </Button>
@@ -169,7 +169,7 @@ const TopContent = React.memo(
                   variant="bordered"
                   size="sm"
                   radius="full"
-                  className="border-default-300"
+                  className="border border-default-300"
                   endContent={<ChevronDownIcon className="text-small" />}
                 >
                   Columnas
@@ -196,7 +196,7 @@ const TopContent = React.memo(
             </Dropdown>
             <Button
               onPress={() => setFilters([])}
-              className="border-default-300"
+              className="border border-default-300"
               isIconOnly
               radius="full"
               variant="bordered"

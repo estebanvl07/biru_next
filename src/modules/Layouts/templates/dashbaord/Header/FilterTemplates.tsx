@@ -86,6 +86,10 @@ const FilterTemplates = () => {
       <Select
         className="w-32 lg:w-48"
         defaultSelectedKeys={[0]}
+        variant="bordered"
+        classNames={{
+          trigger: "border shadow-none",
+        }}
         aria-label="Select filter templates"
         placeholder="Filtrar"
         startContent={

@@ -17,17 +17,11 @@ const OPTIONS: ListMenu[] = [
   //   href: "/setting",
   //   icon: "mdi:account-outline",
   // },
-  // {
-  //   label: "Configurar tema",
-  //   href: "/setting/theme",
-  //   icon: "mingcute:settings-6-line",
-  // },
-  // {
-  //   label: "Ayuda",
-  //   href: "/help",
-  //   showLine: true,
-  //   icon: "material-symbols:help-outline",
-  // },
+  {
+    label: "Configuración",
+    href: "/setting",
+    icon: "mingcute:settings-6-line",
+  },
   {
     label: "Cerrar Sesión",
     icon: "humbleicons:logout",

@@ -80,7 +80,7 @@ const PieChart = ({
         },
         stroke: {
           width: 4,
-          colors: [isDark ? "#262626" : "#f5f5f4"],
+          colors: [isDark ? "#262626" : "#fff"],
           curve: "straight",
           lineCap: "square",
         },

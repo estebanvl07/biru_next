@@ -25,7 +25,6 @@ export default function HeaderMenu({
       className="relative z-10 flex items-center justify-end gap-2"
     >
       <NotificationMenu />
-      <HandlerTheme />
       {hasLogout && (
         <Tooltip content="Cerrar sesión" className="font-montserrat">
           <Button isIconOnly>

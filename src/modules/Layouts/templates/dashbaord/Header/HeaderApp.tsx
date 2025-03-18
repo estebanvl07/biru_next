@@ -32,12 +32,12 @@ const HeaderApp = ({
         } */}
           {!pathname?.includes("main") && <NavigationBack />}
           <div className="flex flex-col items-start justify-center">
-            <span className="text-gray-600 dark:text-slate-200">
-              {account?.name || "Bienvenido"}
-            </span>
-            <h1 className="text-start text-xl font-semibold text-primary lg:text-2xl dark:text-slate-200">
+            <h1 className="text-start text-xl font-semibold -tracking-wide text-primary lg:text-3xl dark:text-slate-200">
               {title}
             </h1>
+            <p className="text-gray-600 dark:text-slate-200">
+              Cuenta Seleccionada ({account?.name || "Bienvenido"})
+            </p>
           </div>
         </aside>
         <Nav hasLogout={hasLogout} hasFilter={hasFilter} />

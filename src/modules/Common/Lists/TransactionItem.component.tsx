@@ -38,7 +38,10 @@ const TransactionItem: FC<TransactionItemProps> = ({ item, index, length }) => {
   };
 
   const getIcon = (): string => {
-    const typeIcon = item.type === 1 ? "ph:trend-up" : "ph:trend-down";
+    const typeIcon =
+      item.type === 1
+        ? "iconamoon:arrow-bottom-left-1"
+        : "iconamoon:arrow-top-right-1";
 
     if (item.transferType === 2) {
       return (item.goal?.icon as string) || typeIcon;
@@ -71,10 +74,17 @@ const TransactionItem: FC<TransactionItemProps> = ({ item, index, length }) => {
       >
         <aside className="flex items-center gap-3">
           {item.entityId ? (
-            <Avatar color="primary" name={item.entity?.name} />
+            <Avatar
+              className="border text-primary dark:text-primary-foreground"
+              name={item.entity?.name}
+            />
           ) : (
-            <span className="flex h-10 w-10 items-center justify-center rounded-full bg-primary text-white shadow-lg dark:text-primary-foreground">
-              <Icon icon={getIcon() ?? icon} width={22} />
+            <span className="flex h-10 w-10 items-center justify-center rounded-full border bg-foreground-50 text-white dark:bg-transparent dark:text-primary-foreground">
+              <Icon
+                className="text-primary dark:text-primary-foreground"
+                icon={getIcon() ?? icon}
+                width={22}
+              />
             </span>
           )}
           <div className="flex flex-col">

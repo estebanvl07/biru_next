@@ -48,12 +48,17 @@ const CardDetailAmount = React.memo(
           </div>
         ) : (
           <div className="flex h-full flex-col justify-end">
-            <span className="text-nowrap text-3xl font-medium">
+            <span className="text-nowrap text-2xl font-semibold">
               $ {amount.toLocaleString()}
             </span>
             {percent && (
               <p className="text-nowrap !text-xs">
-                <Chip size="sm" variant="flat" className={color}>
+                <Chip
+                  size="sm"
+                  variant="dot"
+                  className="border-none px-0"
+                  color={color as any}
+                >
                   {percent}
                 </Chip>{" "}
                 {titlePercent}

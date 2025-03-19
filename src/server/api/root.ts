@@ -8,6 +8,7 @@ import { goalsRouter } from "./routers/goals";
 import { movementsRouter } from "./routers/movements";
 import { notificationRouter } from "./routers/notification";
 import { templateRouter } from "./routers/templates";
+import { budgetRouter } from "./routers/budget";
 
 /**
  * This is the primary router for your server.
@@ -24,6 +25,7 @@ export const appRouter = createTRPCRouter({
   templates: templateRouter,
   movements: movementsRouter,
   notifications: notificationRouter,
+  budget: budgetRouter,
 });
 
 // export type definition of API

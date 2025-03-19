@@ -171,6 +171,11 @@ const DataTable = <T,>({
               />
             )
           }
+          checkboxesProps={{
+            classNames: {
+              wrapper: "border border-divider",
+            },
+          }}
           bottomContentPlacement="outside"
           onSortChange={setSortDescriptor}
           {...(props as TableHeroProps)}

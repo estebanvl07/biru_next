@@ -177,11 +177,11 @@ model FixedMovements {
   createdAt      DateTime @default(now())
   updatedAt      DateTime @updatedAt
 
-  transactions Transaction[]
-  entity      Entities? @relation(fields: [entityId], references: [id], onDelete: Cascade)
-  category    Category? @relation(fields: [categoryId], references: [id], onDelete: Cascade)
-  userAccount UserAccount? @relation(fields: [accountId], references: [id], onDelete: Cascade)
-  user        User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  transactions  Transaction[]
+  entity        Entities? @relation(fields: [entityId], references: [id], onDelete: Cascade)
+  category      Category? @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  userAccount   UserAccount? @relation(fields: [accountId], references: [id], onDelete: Cascade)
+  user          User @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 // Necessary for Next auth

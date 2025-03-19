@@ -32,7 +32,7 @@ export interface BottomConfig {
   navButtons?: boolean;
 }
 
-type ColumnsProps = {
+export type ColumnsProps = {
   uid: string;
   name: string;
   align?: "start" | "center" | "end";
@@ -59,7 +59,7 @@ export interface TableProps<T> extends Omit<TableHeroProps<T>, "children"> {
   footerConfig?: BottomConfig;
   hasTopContent?: boolean;
   hasBottomContent?: boolean;
-  filterBy: FilterByProps[];
+  filterBy?: FilterByProps[];
   filterKeys?: string | string[];
   renderCell?: (item: any, columnKey: any) => void;
   isLoading?: boolean;

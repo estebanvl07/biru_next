@@ -25,6 +25,7 @@ import {
   statusColor,
   statusIcon,
 } from "~/utils/transactionStatus";
+import { DASHBOARD_MAIN_PATH } from "~/lib/constants/config";
 
 const TransactionPage = () => {
   const [isClient, setIsClient] = useState(false);
@@ -221,7 +222,7 @@ const TransactionPage = () => {
           headerConfig={{
             title: "",
             newButtonText: "Crear Transacción",
-            redirectTo: `/account/${params?.acc}/transactions/new`,
+            redirectTo: `/${DASHBOARD_MAIN_PATH}/${params?.acc}/transactions/new`,
           }}
           filterBy={[
             {

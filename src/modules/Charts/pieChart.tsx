@@ -4,7 +4,7 @@ const Chart = dynamic(() => import("react-apexcharts"), {
 });
 
 import { useThemeContext } from "~/lib/context/Theme.context";
-import { ChartProps } from "~/types/chart.types";
+import { ChartProps, Series } from "~/types/chart.types";
 
 import { FONT_FAMILY } from "~/lib/constants/config";
 import { useResize } from "~/lib/hooks/useResize";
@@ -66,23 +66,25 @@ const PieChart = ({
           custom: (props) => {
             const currentValue = `${props.series[props.seriesIndex]}`;
             return `
-                <div  class=" bg-white px-6 py-2 flex flex-col justify-center items-center dark:bg-default-300/30 backdrop-blur-lg border dark:border-white/10">
-                <span class="text-black dark:text-white/60">${
+                <div  class=" bg-white px-4 py-1.5 flex flex-col justify-center items-center dark:bg-default-300/30 backdrop-blur-lg border dark:border-white/10">
+                <span class="text-xs text-foreground-700">${
                   keys ? keys[props.seriesIndex] : ""
                 }</span>
-                <span class="text-black font-semibold text-base dark:text-white">
+                <span class="text-black font-semibold text-sm dark:text-white">
                   $ ${Number(currentValue).toLocaleString()}
                 </span>
-
                 </div>
                 `;
           },
         },
+        markers: {
+          size: 6,
+        },
         stroke: {
-          width: 4,
+          width: 6,
           colors: [isDark ? "#262626" : "#fff"],
-          curve: "straight",
-          lineCap: "square",
+          curve: "stepline",
+          lineCap: "butt",
         },
         dataLabels: {
           formatter: (val, options) => {
@@ -92,6 +94,7 @@ const PieChart = ({
         legend: {
           show: showLegend,
           fontFamily: FONT_FAMILY,
+          fontSize: "13.5px",
           position: position || isMobile ? "bottom" : "right",
           labels: {
             colors: !isDark ? "#1e293b" : "#e5e7eb",

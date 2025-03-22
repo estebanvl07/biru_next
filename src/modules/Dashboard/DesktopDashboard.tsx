@@ -66,37 +66,22 @@ const DesktopDashboard = () => {
         />
       ),
     },
-    savings_balance: {
-      className: "col-span-1",
-      children: (
-        <Balance
-          title="Total de Ahorros"
-          amount={balance?.savings || 0}
-          color="warning"
-          percent={getPercent(
-            balance?.savings || 0,
-            balance?.transactonTotal || 0,
-          )}
-          titlePercent="De Egresos"
-        />
-      ),
-    },
     last_transactions: {
       className: "col-span-2",
       children: (
-        <LastTransactions transactionsMaxLength={6} cardClassName="h-full" />
+        <LastTransactions transactionsMaxLength={3} cardClassName="h-full" />
       ),
     },
     balance_by_categories: {
-      className: "col-span-2",
+      className: "col-span-1 row-span-2",
       children: <PieChartAmountByCategoires />,
     },
     account_balance: {
-      className: "col-span-4",
+      className: "col-span-2",
       children: (
         <BalanceAccount
           chartOptions={{
-            heightChart: "250",
+            heightChart: "150",
           }}
           className="col-span-2 h-fit"
         />
@@ -190,7 +175,7 @@ const DesktopDashboard = () => {
           list={list || []}
           setList={setList}
           animation={600}
-          className="grid grid-cols-4 grid-rows-[120px] gap-2"
+          className="grid grid-cols-3 gap-2"
         >
           {list?.map((option) => (
             <div key={option.id} className={widgets[option.name]?.className}>

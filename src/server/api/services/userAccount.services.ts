@@ -73,9 +73,6 @@ export async function getAllAccounts(db: PrismaClient, userId: string) {
       userId,
       state: 1,
     },
-    orderBy: {
-      lastAccess: "desc",
-    },
   });
 
   if (activeAccounts.length === 0) {
@@ -93,17 +90,6 @@ export function getAccountById(
     where: {
       userId,
       id,
-    },
-  });
-}
-
-export function setLastAccess(db: PrismaClient, id: number) {
-  return db.userAccount.update({
-    where: {
-      id,
-    },
-    data: {
-      lastAccess: new Date(),
     },
   });
 }

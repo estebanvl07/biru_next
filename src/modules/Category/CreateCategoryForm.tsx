@@ -47,6 +47,7 @@ const CreateCategoryForm = ({
     resolver: zodResolver(createCategory),
   });
 
+  const categoryRefresh = api.useUtils().category;
   const icon = watch("icon") || "";
 
   const alertConfig: any = {
@@ -74,6 +75,7 @@ const CreateCategoryForm = ({
           { ...data, id: String(categoryDefault?.id) },
           {
             onSuccess(data) {
+              categoryRefresh.invalidate();
               onSuccess && onSuccess();
               reset();
             },
@@ -95,6 +97,7 @@ const CreateCategoryForm = ({
         },
         {
           onSuccess() {
+            categoryRefresh.invalidate();
             onSuccess && onSuccess();
             reset();
           },

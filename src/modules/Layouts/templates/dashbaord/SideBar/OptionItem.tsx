@@ -5,6 +5,7 @@ import { Icon } from "@iconify/react/dist/iconify.js";
 import { useCurrentAccount } from "~/modules/Account/hooks";
 import { Skeleton } from "@heroui/skeleton";
 import { motion } from "framer-motion";
+import { useCurrentBook } from "~/modules/Books/hooks/useBooks.hook";
 
 type OptionsProps = {
   id: number;
@@ -58,10 +59,15 @@ const RedirectionLink = ({
   item: any;
   isExpanded: boolean;
 }) => {
-  const { account } = useCurrentAccount();
+  const { book } = useCurrentBook();
+  if (!book?.id) return null;
+
   return (
     <Link
-      href={item.cleanPath ? item.href : `/account/${account?.id}${item.href}`}
+      href={{
+        pathname: `/app/[bookId]/${item.href}`,
+        query: { bookId: book.id },
+      }}
       className="z-0 flex items-center gap-2"
       title={item.name}
     >

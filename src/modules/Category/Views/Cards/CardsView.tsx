@@ -53,7 +53,7 @@ const CategoryCardsView = () => {
         <Button
           radius="lg"
           color="primary"
-          onClick={onShowCreate}
+          onPress={onShowCreate}
           isIconOnly={isMobile as any}
         >
           <Icon icon="ph:plus" width={18} /> {!isMobile && "Crear Categoría"}

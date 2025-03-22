@@ -34,6 +34,8 @@ const EntityForm = ({ hasEdit, entityDefault }: EntityFormProps) => {
   const { mutateAsync: EntityCreateMutation } = api.entity.create.useMutation();
   const { mutateAsync: EntityUpdateMutation } = api.entity.update.useMutation();
 
+  const entitiesRefresh = api.useUtils().entity;
+
   const alertConfig: any = {
     type: "quest",
     cancel: true,
@@ -57,6 +59,7 @@ const EntityForm = ({ hasEdit, entityDefault }: EntityFormProps) => {
           { ...payload, id: String(entityDefault?.id) },
           {
             onSuccess() {
+              entitiesRefresh.invalidate();
               reset();
             },
           },
@@ -72,6 +75,7 @@ const EntityForm = ({ hasEdit, entityDefault }: EntityFormProps) => {
     toast.promise(
       EntityCreateMutation(payload, {
         onSuccess() {
+          entitiesRefresh.invalidate();
           reset();
         },
       }),

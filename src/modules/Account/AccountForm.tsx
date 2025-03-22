@@ -125,8 +125,7 @@ const AccountForm = ({
             key={opt.value}
             color="primary"
             className="font-montserrat"
-            onClick={() => setValue("type", Number(opt.value))}
-            value={opt.value}
+            onPress={() => setValue("type", Number(opt.value))}
           >
             {opt.name}
           </SelectItem>

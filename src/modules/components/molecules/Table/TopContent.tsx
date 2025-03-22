@@ -51,9 +51,10 @@ const TopContent = React.memo(
   ({
     title,
     lenght,
-    hasExport = true,
+    hasExport = false,
     hasNew = true,
     hasSearch = true,
+    hasFilters = true,
     newButtonText,
     filterValue,
     filterBy,
@@ -138,73 +139,80 @@ const TopContent = React.memo(
               )}
             </div>
           </div>
-          <div className="flex items-center gap-1">
-            {filterBy?.map((props) => {
-              if (props.options.length === 0) return;
-              return (
-                <CustomFilters
-                  {...props}
-                  onChangeFilters={(currentFilter) => {
-                    setFilters((prevFilters) => {
-                      const updatedFilters = prevFilters.map((filter) =>
-                        filter.by === currentFilter.by ? currentFilter : filter,
-                      );
+          {hasFilters && (
+            <div className="flex items-center gap-1">
+              {filterBy?.map((props) => {
+                if (props.options.length === 0) return;
+                return (
+                  <CustomFilters
+                    {...props}
+                    onChangeFilters={(currentFilter) => {
+                      setFilters((prevFilters) => {
+                        const updatedFilters = prevFilters.map((filter) =>
+                          filter.by === currentFilter.by
+                            ? currentFilter
+                            : filter,
+                        );
 
-                      // update if exist else add
-                      return prevFilters.some(
-                        (filter) => filter.by === currentFilter.by,
-                      )
-                        ? updatedFilters
-                        : [...updatedFilters, currentFilter];
-                    });
-                  }}
-                  options={[{ text: "Todos", value: "all" }, ...props.options]}
-                  key={props.by}
-                />
-              );
-            })}
-            <Dropdown>
-              <DropdownTrigger className="hidden sm:flex">
-                <Button
-                  variant="bordered"
-                  size="sm"
-                  radius="full"
-                  className="border border-default-300"
-                  endContent={<ChevronDownIcon className="text-small" />}
-                >
-                  Columnas
-                </Button>
-              </DropdownTrigger>
-              <DropdownMenu
-                disallowEmptySelection
-                aria-label="Table Columns"
-                closeOnSelect={false}
-                selectedKeys={visibleColumns}
-                selectionMode="multiple"
-                items={columns}
-                onSelectionChange={setVisibleColumns}
-              >
-                {(column) => (
-                  <DropdownItem
-                    key={column.uid}
-                    className="font-montserrat capitalize"
+                        // update if exist else add
+                        return prevFilters.some(
+                          (filter) => filter.by === currentFilter.by,
+                        )
+                          ? updatedFilters
+                          : [...updatedFilters, currentFilter];
+                      });
+                    }}
+                    options={[
+                      { text: "Todos", value: "all" },
+                      ...props.options,
+                    ]}
+                    key={props.by}
+                  />
+                );
+              })}
+              <Dropdown>
+                <DropdownTrigger className="hidden sm:flex">
+                  <Button
+                    variant="bordered"
+                    size="sm"
+                    radius="full"
+                    className="border border-default-300"
+                    endContent={<ChevronDownIcon className="text-small" />}
                   >
-                    {capitalize(column.name)}
-                  </DropdownItem>
-                )}
-              </DropdownMenu>
-            </Dropdown>
-            <Button
-              onPress={() => setFilters([])}
-              className="border border-default-300"
-              isIconOnly
-              radius="full"
-              variant="bordered"
-              size="sm"
-            >
-              <Icon icon="ix:reload" width={16} />
-            </Button>
-          </div>
+                    Columnas
+                  </Button>
+                </DropdownTrigger>
+                <DropdownMenu
+                  disallowEmptySelection
+                  aria-label="Table Columns"
+                  closeOnSelect={false}
+                  selectedKeys={visibleColumns}
+                  selectionMode="multiple"
+                  items={columns}
+                  onSelectionChange={setVisibleColumns}
+                >
+                  {(column) => (
+                    <DropdownItem
+                      key={column.uid}
+                      className="font-montserrat capitalize"
+                    >
+                      {capitalize(column.name)}
+                    </DropdownItem>
+                  )}
+                </DropdownMenu>
+              </Dropdown>
+              <Button
+                onPress={() => setFilters([])}
+                className="border border-default-300"
+                isIconOnly
+                radius="full"
+                variant="bordered"
+                size="sm"
+              >
+                <Icon icon="ix:reload" width={16} />
+              </Button>
+            </div>
+          )}
           <div className="flex items-center justify-between">
             <span className="text-small text-default-500">
               Total de registros: {lenght}

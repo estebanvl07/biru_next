@@ -1,7 +1,7 @@
 import { useRouter } from "next/router";
 import { useParams } from "next/navigation";
 import { useCallback } from "react";
-import { Card, Table } from "~/modules/components";
+import { Table } from "~/modules/components";
 import { format } from "date-fns";
 
 import MobileEntityPage from "~/modules/Entities/MobileEntityContent";
@@ -11,7 +11,7 @@ import { es } from "date-fns/locale";
 import DashboardLayout from "~/modules/Layouts/Dashboard";
 import { columns } from "~/modules/Entities/table";
 import { Entities } from "@prisma/client";
-import { Chip, User } from "@heroui/react";
+import { CardBody, CardHeader, Chip, User, Card } from "@heroui/react";
 import Actions from "~/modules/components/molecules/Table/Actions";
 
 import { api } from "~/utils/api";
@@ -20,6 +20,7 @@ import useShowForm from "~/lib/hooks/useShowForm";
 import { EntityIncludes } from "~/types/entities/entity.types";
 import CreateEntity from "~/modules/Entities/CreateEntity";
 import EditEntity from "~/modules/Entities/EditEntity";
+import SettingsLayout from "~/modules/Layouts/SettingsLayout";
 
 export default function EntitiesPage() {
   const router = useRouter();
@@ -123,44 +124,65 @@ export default function EntitiesPage() {
   );
 
   return (
-    <DashboardLayout title="Entidades">
-      {!isMobile ? (
-        <Table
-          headerConfig={{
-            title: "",
-            onNew() {
-              onShowCreate();
-            },
-          }}
-          isStriped
-          filterBy={[
-            {
-              by: "type",
-              title: "Tipo",
-              options: [
-                {
-                  text: "Ingreso",
-                  value: 1,
+    <SettingsLayout>
+      <Card shadow="none" className="border border-divider ">
+        <CardHeader className="flex items-center justify-between px-6 pt-4">
+          <aside>
+            <h2>Entidades</h2>
+            <p>
+              Añade tus contactos para mantener un control mas detallado de tus
+              finanzas
+            </p>
+          </aside>
+          <div
+            className={clsx("w-fit", {
+              hidden: isMobile,
+            })}
+          ></div>
+        </CardHeader>
+        <CardBody className="p-6">
+          {!isMobile ? (
+            <Table
+              headerConfig={{
+                title: "",
+                onNew() {
+                  onShowCreate();
                 },
+              }}
+              isStriped
+              isCompact
+              hasBottomContent={false}
+              filterBy={[
                 {
-                  text: "Egreso",
-                  value: 2,
+                  by: "type",
+                  title: "Tipo",
+                  options: [
+                    {
+                      text: "Ingreso",
+                      value: 1,
+                    },
+                    {
+                      text: "Egreso",
+                      value: 2,
+                    },
+                  ],
                 },
-              ],
-            },
-          ]}
-          columns={columns}
-          isLoading={isLoading}
-          renderCell={renderCell}
-          data={entities ?? []}
-        />
-      ) : (
-        <MobileEntityPage entities={entities ?? []} />
-      )}
+              ]}
+              columns={columns}
+              isLoading={isLoading}
+              renderCell={renderCell}
+              data={entities ?? []}
+            />
+          ) : (
+            <MobileEntityPage entities={entities ?? []} />
+          )}
+        </CardBody>
+      </Card>
+
       <CreateEntity isOpen={showCreate} onClose={onCloseCreate} />
       {data && (
         <EditEntity isOpen={showEdit} onClose={onCloseEdit} entity={data} />
       )}
-    </DashboardLayout>
+    </SettingsLayout>
   );
 }

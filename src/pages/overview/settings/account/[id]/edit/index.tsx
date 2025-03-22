@@ -3,7 +3,7 @@ import AccountForm from "~/modules/Account/AccountForm";
 import { GetServerSideProps } from "next";
 import { createServerSideCaller } from "~/utils/serverSideCaller/serverSideCaller";
 import { UserAccount } from "@prisma/client";
-import WhitoutSideBar from "~/modules/Layouts/templates/dashbaord/without-sidebar";
+import WhitoutSideBar from "~/modules/Layouts/templates/dashbaord/OverviewLayout";
 
 const EditAccountPage = ({ defaultAccount }: { defaultAccount: string }) => {
   const data = JSON.parse(defaultAccount) as UserAccount;

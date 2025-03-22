@@ -11,7 +11,7 @@ const withAuthRedirect = (WrappedComponent: React.ComponentType) => {
 
     useEffect(() => {
       if (status === "loading") return; // Do nothing while loading
-      if (session) router.push("/account"); // Redirect to home if authenticated
+      if (session) router.push("/overview"); // Redirect to home if authenticated
     }, [session, status, router]);
 
     if (status === "loading" || session) {

@@ -27,7 +27,6 @@ export async function getMovements(db: PrismaClient, userId: string) {
           category: true,
           entity: true,
           goal: true,
-          user: true,
           userAccount: true,
         },
       },

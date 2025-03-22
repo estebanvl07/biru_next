@@ -9,6 +9,7 @@ import { movementsRouter } from "./routers/movements";
 import { notificationRouter } from "./routers/notification";
 import { templateRouter } from "./routers/templates";
 import { budgetRouter } from "./routers/budget";
+import { booksRouter } from "./routers/books";
 
 /**
  * This is the primary router for your server.
@@ -26,6 +27,7 @@ export const appRouter = createTRPCRouter({
   movements: movementsRouter,
   notifications: notificationRouter,
   budget: budgetRouter,
+  books: booksRouter,
 });
 
 // export type definition of API

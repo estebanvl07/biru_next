@@ -12,14 +12,14 @@ import { useParams } from "next/navigation";
 import clsx from "clsx";
 
 const OPTIONS: ListMenu[] = [
-  // {
-  //   label: "Perfil",
-  //   href: "/setting",
-  //   icon: "mdi:account-outline",
-  // },
+  {
+    label: "Libros",
+    href: "/overview",
+    icon: "ph:books-light",
+  },
   {
     label: "Configuración",
-    href: "/setting",
+    href: "/overview/settings",
     icon: "mingcute:settings-6-line",
   },
   {
@@ -65,11 +65,8 @@ const Menu = ({
           {OPTIONS.map((option) => {
             return (
               <ListboxItem
-                onClick={() => {
-                  if (option.href)
-                    return router.push(
-                      `/account/${params?.acc}/${option.href}`,
-                    );
+                onPress={() => {
+                  if (option.href) return router.push(option.href);
                   option.onClick && option.onClick();
                   onHide();
                 }}

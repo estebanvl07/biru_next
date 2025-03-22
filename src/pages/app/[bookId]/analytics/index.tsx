@@ -50,9 +50,6 @@ const AnalyticsPage = () => {
             titlePercent="De Egresos"
           />
         </article>
-        <article className="col-span-12 xl:col-span-7">
-          <AnnualBalance />
-        </article>
         <article className="col-span-12 xl:col-span-5">
           <PieChartAmountByCategoires />
         </article>
@@ -61,6 +58,9 @@ const AnalyticsPage = () => {
         </article>
         <article className="col-span-12 lg:col-span-6">
           <CategoriesPercent />
+        </article>
+        <article className="col-span-12">
+          <AnnualBalance />
         </article>
       </div>
     </DashboardLayout>

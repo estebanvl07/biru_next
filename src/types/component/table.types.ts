@@ -11,6 +11,7 @@ export interface TopContentProps {
   hasSearch?: boolean;
   hasExport?: boolean;
   hasNew?: boolean;
+  hasFilters?: boolean;
   lenght?: number;
   visibleColumns?: SharedSelection;
   setVisibleColumns?: Dispatch<SetStateAction<SharedSelection>>;

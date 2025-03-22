@@ -1,24 +1,13 @@
-import { Swiper, SwiperSlide } from "swiper/react";
-import { CardInfo } from "./CardInfo";
-import { Pagination } from "swiper/modules";
 
 import { useResize } from "~/lib/hooks/useResize";
 import { AnimatePresence, motion } from "framer-motion";
 
-import "swiper/css";
-import "swiper/css/pagination";
-import {
-  Accordion,
-  AccordionItem,
-  card,
-  Chip,
-  Progress,
-} from "@heroui/react";
+// import "swiper/css";
+// import "swiper/css/pagination";
 import { Icon } from "@iconify/react/dist/iconify.js";
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 import Image from "next/image";
 import clsx from "clsx";
-import { groupedAnimation } from "~/modules/animations";
 
 type CardProps = {
   id: number;

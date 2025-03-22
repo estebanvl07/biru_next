@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-import { Card, Empty } from "~/modules/components";
+import { Empty } from "~/modules/components";
 import { Spinner } from "@heroui/spinner";
 import PieChart from "~/modules/Charts/pieChart";
 
@@ -9,6 +9,7 @@ import { useTransactions } from "../../Transactions/hook/useTransactions.hook";
 import { useFilterContext } from "~/lib/context/Filter.context";
 
 import type { Transaction } from "@prisma/client";
+import { Card, CardBody, CardHeader } from "@heroui/react";
 
 const PieChartAmountByCategoires = () => {
   const [chartLabels, setChartLabels] = useState<string[]>([]);
@@ -77,12 +78,12 @@ const PieChartAmountByCategoires = () => {
   }, [transactions]);
 
   return (
-    <Card className="h-full flex-col !px-6">
-      <header className="mb-4 flex items-center justify-between gap-8">
+    <Card className="h-full border border-divider px-4 py-2 shadow-sm">
+      <CardHeader className="pb-0">
         <h3>Categorías</h3>
-        <button>filtrar</button>
-      </header>
-      <main className="my-auto w-full">
+      </CardHeader>
+      <CardBody className="flex w-full flex-grow">
+        <p>Mira el detalle de tus gastos por categoría</p>
         {isLoading ? (
           <div className="flex flex-col items-center justify-center gap-2">
             <Spinner />
@@ -97,13 +98,13 @@ const PieChartAmountByCategoires = () => {
                 series={chartSeries}
                 keys={chartLabels}
                 position="bottom"
-                heightChart="230"
+                heightChart="340"
                 showToolBar={false}
               />
             )}
           </>
         )}
-      </main>
+      </CardBody>
     </Card>
   );
 };

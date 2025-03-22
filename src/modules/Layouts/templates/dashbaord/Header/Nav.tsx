@@ -13,9 +13,11 @@ import NotificationMenu from "~/modules/components/molecules/NotificationMenu";
 export default function HeaderMenu({
   hasFilter = true,
   hasLogout = false,
+  hasNotifications = true,
 }: {
   hasFilter?: boolean;
   hasLogout?: boolean;
+  hasNotifications?: boolean;
 }) {
   const params = useParams();
 
@@ -24,7 +26,7 @@ export default function HeaderMenu({
       layout
       className="relative z-10 flex items-center justify-end gap-2"
     >
-      <NotificationMenu />
+      {hasNotifications && <NotificationMenu />}
       {hasLogout && (
         <Tooltip content="Cerrar sesión" className="font-montserrat">
           <Button isIconOnly>

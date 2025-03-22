@@ -23,10 +23,10 @@ const NavigationLogo = ({
 
   return (
     <Link
-      href={params?.acc ? `/account/${params?.acc}/main` : "/account"}
+      href={params?.acc ? `/app/${params?.bookId}` : "/overview"}
       className={clsx("flex items-center gap-2", className)}
     >
-      <Image src={srcminimal} alt="Logo de Biru" width={25} height={35} />
+      {/* <Image src={srcminimal} alt="Logo de Biru" width={25} height={35} /> */}
       {isExpanded && <span className="text-xl font-medium">Biru</span>}
     </Link>
   );

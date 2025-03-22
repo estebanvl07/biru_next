@@ -1,23 +1,25 @@
 import React, { useState } from "react";
 
-import Link from "next/link";
-
-import { Icon } from "@iconify/react/dist/iconify.js";
-import { Button } from "@heroui/button";
-
 import type { GetServerSideProps } from "next";
 import { useAccounts } from "~/modules/Account/hooks";
 import { createServerSideCaller } from "~/utils/serverSideCaller/serverSideCaller";
 import { useResize } from "~/lib/hooks/useResize";
-import WithoutSideBar from "~/modules/Layouts/templates/dashbaord/without-sidebar";
 import {
-  RadioGroup,
+  Button,
+  Card,
+  CardBody,
+  CardHeader,
+  Input,
   RadioProps,
   VisuallyHidden,
   cn,
   useRadio,
 } from "@heroui/react";
-import { optionsTypeAccount } from "~/pages/account/new";
+import { optionsTypeAccount } from "~/pages/overview/settings/account/new";
+import DashboardLayout from "~/modules/Layouts/Dashboard";
+import SettingsLayout from "~/modules/Layouts/SettingsLayout";
+import { useSearch } from "~/lib/hooks";
+import { Icon } from "@iconify/react/dist/iconify.js";
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const helpers = await createServerSideCaller(ctx);
@@ -44,52 +46,67 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
 
 const AccountPage = () => {
   const [accountSelected, setAccountSelected] = useState<number>();
-  const { accounts } = useAccounts();
+  const { accounts: data } = useAccounts();
+
+  const {
+    newList: accounts,
+    refreshList,
+    onSearch,
+  } = useSearch({ data, keys: ["name"] });
+
   const { isMobile } = useResize();
 
   return (
-    <>
-      <WithoutSideBar hasLogout title="Centro de Cuentas" hasFilter={false}>
-        <div className="m-auto flex w-full max-w-[38rem] flex-col">
-          <header className="flex items-center justify-between gap-4">
-            <aside>
-              <h2>Mis cuentas</h2>
-              <p>Selecciona una de tus cuentas</p>
-            </aside>
-            <Button
-              color="primary"
-              type="button"
-              as={Link}
-              href="/account/new"
-              isIconOnly={isMobile}
-            >
-              <Icon icon="ph:plus" width={18} /> {!isMobile && "Crear Cuenta"}
-            </Button>
-          </header>
-          <RadioGroup className="my-4 flex flex-col gap-6">
+    <SettingsLayout>
+      <Card shadow="none" className="border border-divider ">
+        <CardHeader className="flex items-center justify-between px-6 pt-4">
+          <aside>
+            <h2>Mis Cuentas</h2>
+            <p>
+              Inscribe las cuentas que tengas disponibles, y lleva más ordenado
+              tus ingresos
+            </p>
+          </aside>
+        </CardHeader>
+        <CardBody className="px-6 pb-6">
+          <div className="flex gap-2">
+            <Input
+              classNames={{
+                inputWrapper:
+                  "bg-white border border-divider dark:bg-default-100",
+              }}
+              radius="sm"
+              isClearable
+              onClear={refreshList}
+              onValueChange={onSearch}
+              placeholder="Buscar Cuenta"
+              startContent={<Icon icon={"mynaui:search"} width={18} />}
+            />
+            <Button color="primary">Crear Cuenta</Button>
+          </div>
+          <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {accounts.map((account) => {
               const [typeAcc] = optionsTypeAccount.filter(
                 (acc) => acc.value === account.type,
               );
               return (
-                <CustomRadio
-                  value={`${account.id}`}
+                <Card
                   key={account.id}
-                  classNames={{
-                    base: "border-2 !border-red-600",
-                  }}
-                  onClick={() => setAccountSelected(account.id)}
+                  className="group col-span-1 border border-divider hover:border-primary hover:bg-default-50"
+                  shadow="none"
                 >
-                  <div className="flex w-full items-center justify-between px-2">
-                    <aside className="flex flex-col">
-                      <h4 className="w-48 overflow-hidden text-ellipsis whitespace-nowrap font-medium">
+                  <CardHeader className="flex items-center justify-between">
+                    <aside>
+                      <h4 className="overflow-hidden text-ellipsis whitespace-nowrap font-medium">
                         {account.name}
                       </h4>
                       <span className="text-xs">
                         {account.reference ?? "Sin referencia"}
                       </span>
                     </aside>
-                    <aside className="flex flex-col items-end">
+                  </CardHeader>
+                  <CardBody>
+                    <aside className="flex flex-col items-start">
                       <span className="text-xs">{typeAcc?.name}</span>
                       <span className="text-lg font-semibold">
                         {" "}
@@ -97,27 +114,14 @@ const AccountPage = () => {
                         {account?.balance?.toLocaleString()}
                       </span>
                     </aside>
-                  </div>
-                </CustomRadio>
+                  </CardBody>
+                </Card>
               );
             })}
-          </RadioGroup>
-          <div className="flex gap-2">
-            <Button
-              as={Link}
-              href={`/account/${accountSelected}/main`}
-              color="primary"
-              isDisabled={Boolean(!accountSelected)}
-            >
-              Ir al Dashboard
-            </Button>
-            <Button as={Link} href={`/account/${accountSelected}/edit`}>
-              Editar cuenta
-            </Button>
           </div>
-        </div>
-      </WithoutSideBar>
-    </>
+        </CardBody>
+      </Card>
+    </SettingsLayout>
   );
 };
 

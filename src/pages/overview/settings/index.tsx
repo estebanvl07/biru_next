@@ -9,6 +9,7 @@ import { CALLBACK_SIGN_OUT_URL } from "~/lib/constants/config";
 import { useThemeContext } from "~/lib/context/Theme.context";
 import { useResize } from "~/lib/hooks/useResize";
 import { Card } from "~/modules/components";
+import SettingsLayout from "~/modules/Layouts/SettingsLayout";
 
 const ProfilePage = () => {
   const { data } = useSession();
@@ -20,9 +21,9 @@ const ProfilePage = () => {
   const avatarSrc = data?.user.image ?? "";
 
   return (
-    <DashboardLayout
-      title="Configuración"
-      headDescription="Configuracion de tu cuenta"
+    <SettingsLayout
+    // title="Configuración"
+    // headDescription="Configuracion de tu cuenta"
     >
       {isMobile ? (
         <MobileSettingPage />
@@ -30,7 +31,7 @@ const ProfilePage = () => {
         <div className="mx-auto flex w-full flex-col items-center justify-center gap-10 rounded-xl dark:border-white/10">
           <div className="w-full max-w-[45rem]">
             <section className="flex w-full items-center justify-between gap-6 ">
-              <article className="flex flex-row items-center gap-4 rounded-xl px-6 py-8 lg:items-end">
+              <article className="flex flex-row items-center gap-4 rounded-xl px-6 pb-8 lg:items-end">
                 <Avatar
                   isBordered
                   src={avatarSrc ?? undefined}
@@ -156,7 +157,7 @@ const ProfilePage = () => {
           </div>
         </div>
       )}
-    </DashboardLayout>
+    </SettingsLayout>
   );
 };
 

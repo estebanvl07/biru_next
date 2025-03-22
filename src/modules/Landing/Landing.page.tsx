@@ -22,7 +22,7 @@ export const Landing = () => {
         className="rounded-t-xl bg-default-200 bg-[url('/background-content.webp')] dark:bg-default-100/40"
       >
         <Features />
-        <Advantages />
+        {/* <Advantages /> */}
         <Explore />
         <Footer />
       </motion.div>

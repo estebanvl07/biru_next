@@ -36,7 +36,7 @@ const TableCategories = () => {
         case "name":
           return (
             <div className="flex items-center gap-2">
-              <div className="flex !h-10 !min-w-10 items-center justify-center whitespace-nowrap rounded-full bg-primary text-xl text-white">
+              <div className="flex !h-8 !w-8 items-center justify-center whitespace-nowrap rounded-full bg-primary text-xl text-white">
                 <Icon icon={category.icon ?? "ph:category"} />
               </div>
               <aside>
@@ -97,14 +97,17 @@ const TableCategories = () => {
         headerConfig={{
           newButtonText: "Crear Categoría",
           hasNew: true,
+          hasFilters: false,
           onNew() {
             onShowCreate();
           },
         }}
         columns={columns}
+        isStriped
         data={categories}
         isLoading={isLoading}
         renderCell={renderCell}
+        hasBottomContent={false}
       />
       <CreateCategory isOpen={showCreate} onClose={onCloseCreate} />
       {data && (

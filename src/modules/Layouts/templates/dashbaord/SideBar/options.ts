@@ -6,7 +6,7 @@ export const menuOptions = [
         id: 325,
         name: "Dashboard",
         icon: "akar-icons:dashboard",
-        href: "/main",
+        href: "/",
       },
     ],
   },
@@ -59,29 +59,6 @@ export const menuOptions = [
         name: "Facturas",
         icon: "mingcute:bill-line",
         href: "/bills",
-      },
-    ],
-  },
-  {
-    title: "Administración",
-    options: [
-      {
-        id: 1,
-        name: "Categorías",
-        icon: "iconamoon:category",
-        href: "/category",
-      },
-      {
-        id: 2,
-        name: "Entidades",
-        icon: "ph:users-bold",
-        href: "/entities",
-      },
-      {
-        id: 2,
-        name: "Plantillas",
-        icon: "fluent:calendar-template-20-regular",
-        href: "/templates",
       },
     ],
   },

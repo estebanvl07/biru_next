@@ -24,23 +24,22 @@ interface FilterByTypeProps {
   options: FilterOptions;
 }
 
-export const useTransactions = (options: FilterOptions) => {
+export const useTransactions = (options: Omit<FilterOptions, "bookId">) => {
   const params = useParams();
   const queryClient = useQueryClient();
-  const accountId = params?.acc ? String(params?.acc) : undefined;
-
+  const bookId = String(params?.bookId);
   const transactionKey = useMemo(() => {
     return getQueryKey(
       api.transaction.getTransactions,
       {
-        accountId: Number(accountId),
+        bookId: bookId!,
         filter: options?.filter ?? FILTERS.none,
         startDate: options?.startDate,
         endDate: options?.endDate,
       },
       "query",
     );
-  }, [accountId, options]);
+  }, [bookId, options]);
 
   const hasTransactionsCached = useMemo(() => {
     const transactionCache = queryClient.getQueryData(transactionKey);
@@ -49,13 +48,13 @@ export const useTransactions = (options: FilterOptions) => {
 
   const { data, isLoading } = api.transaction.getTransactions.useQuery(
     {
-      accountId: Number(accountId) as any,
+      bookId: bookId!,
       filter: options?.filter ?? FILTERS.none,
       startDate: options?.startDate,
       endDate: options?.endDate,
     },
     {
-      enabled: !!accountId && !hasTransactionsCached,
+      enabled: !!bookId && !hasTransactionsCached,
     },
   );
 

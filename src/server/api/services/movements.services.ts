@@ -1,4 +1,20 @@
 import { PrismaClient, Prisma } from "@prisma/client";
+import { addDays } from "date-fns";
+import { createTransaction } from "./transactions.services";
+type GetMovement = {
+  db: PrismaClient;
+  userId: string;
+  id: number;
+  bookId: string;
+};
+type MakeMovement = {
+  db: PrismaClient;
+  userId: string;
+  id: number;
+  amount: number;
+  accountId: number;
+  bookId: string;
+};
 
 export async function createMovement(
   db: PrismaClient,
@@ -10,9 +26,14 @@ export async function createMovement(
   return result;
 }
 
-export async function getMovementById(db: PrismaClient, id: number) {
+export async function getMovementById({ bookId, db, id, userId }: GetMovement) {
   const result = await db.fixedMovements.findFirst({
-    where: { id },
+    where: { id, userId, bookId },
+    include: {
+      transactions: true,
+      category: true,
+      entity: true,
+    },
   });
   return result;
 }
@@ -33,4 +54,58 @@ export async function getMovements(db: PrismaClient, userId: string) {
       entity: true,
     },
   });
+}
+
+export async function makeMovement({
+  bookId,
+  db,
+  id,
+  accountId,
+  userId,
+  amount,
+}: MakeMovement) {
+  if (!accountId) throw new Error("Debe seleccionar una cuenta");
+
+  const movement = await getMovementById({ db, userId, id, bookId });
+
+  if (movement) {
+    try {
+      const data = {
+        reference: movement.entity?.reference,
+        description: movement.description,
+        recipient: movement.entity?.name,
+        categoryId: movement.categoryId,
+        entityId: movement.entityId,
+        fixedId: id,
+        type: movement.type,
+        transferType: 1,
+        date: new Date(),
+        accountId,
+        state: 1,
+        amount,
+        bookId,
+        userId,
+      };
+
+      await createTransaction(db, data);
+      const movementModifed = await db.fixedMovements.update({
+        data: {
+          last_ocurrence: movement.next_ocurrence,
+          next_ocurrence: addDays(
+            new Date(movement.next_ocurrence),
+            movement.frecuency,
+          ),
+        },
+        where: {
+          id,
+          userId,
+          bookId,
+        },
+      });
+
+      return movementModifed;
+    } catch (error) {
+      return error;
+    }
+  }
 }

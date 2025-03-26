@@ -9,7 +9,8 @@ export const filter = {
     z.literal(4),
     z.literal(5),
   ]),
-  accountId: z.number(),
+  bookId: z.string(),
+  accountId: z.number().optional(),
   startDate: z.optional(z.date()),
   endDate: z.optional(z.date()),
 };

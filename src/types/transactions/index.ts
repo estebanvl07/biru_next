@@ -22,6 +22,7 @@ export enum STATUS_TRANS {
   scheduled = 3,
 }
 export interface FilterOptions {
+  bookId: string;
   accountId?: number;
   filter?: FILTERS;
   startDate?: Date | undefined;

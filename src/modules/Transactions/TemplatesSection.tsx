@@ -16,6 +16,8 @@ const TemplatesSection = ({ onChange }: TemplateSectionProps) => {
   );
   const { templates } = useTemplate();
 
+  if (templates.length === 0) return null;
+
   return (
     <div className="flex w-full justify-start">
       <Select

@@ -25,8 +25,8 @@ const config = {
     dark: {
       color: {
         primary: "#fff",
-        "primary-light": "#44403c",
-        "primary-lighter": "#a8a29e",
+        "primary-light": "#A7B5F6",
+        "primary-lighter": "#E1E7FD",
       },
     },
     extend: {

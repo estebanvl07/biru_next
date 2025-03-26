@@ -13,38 +13,47 @@ const DrawerOptions = () => {
     <>
       <Button
         isIconOnly
-        onClick={() => setDrawerOptions(!drawerOptions)}
+        onPress={() => setDrawerOptions(!drawerOptions)}
         size="lg"
         className="fixed bottom-24 right-4 z-20 border shadow-2xl dark:border-white/10"
       >
         <Icon icon="flowbite:angle-top-solid" width={20} />
       </Button>
       <CustomDrawer
+        placement="bottom"
+        size="full"
         isOpen={drawerOptions}
         onClose={() => setDrawerOptions(false)}
         title="Menu de Opciones"
         subtitle="Selecciona la opción que desees"
       >
-        <div className="mt-4 grid grid-cols-4 gap-y-6 px-10">
-          {menuOptions.map((option) => {
+        <div className="flex flex-col gap-6">
+          {menuOptions.map(({ options, title }, index) => {
             return (
-              <Link
-                key={option.id}
-                href={option.href}
-                className="flex flex-col items-center justify-center gap-3"
-                title={option.name}
-              >
-                <div className="flex h-14 w-14 items-center justify-center rounded-full bg-default-100">
-                  <Icon
-                    icon={option.icon}
-                    className="text-black dark:text-white"
-                    width={24}
-                  />
+              <div key={index} className="flex flex-col">
+                <h4 className="mb-2">{title}</h4>
+                <div className="grid grid-cols-4 gap-y-6">
+                  {options.map(({ href, icon, name, id }) => (
+                    <Link
+                      key={id}
+                      href={href}
+                      className="flex flex-col items-center justify-center gap-2"
+                      title={name}
+                    >
+                      <div className="flex h-12 w-12 items-center justify-center rounded-full bg-default-100">
+                        <Icon
+                          icon={icon}
+                          className="text-black dark:text-white"
+                          width={22}
+                        />
+                      </div>
+                      <h4 className="w-20 overflow-hidden text-ellipsis whitespace-nowrap text-center text-xs">
+                        {name}
+                      </h4>
+                    </Link>
+                  ))}
                 </div>
-                <h4 className="w-20 overflow-hidden text-ellipsis whitespace-nowrap text-center">
-                  {option.name}
-                </h4>
-              </Link>
+              </div>
             );
           })}
         </div>

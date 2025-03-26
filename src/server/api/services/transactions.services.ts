@@ -33,7 +33,7 @@ export async function createTransaction(
       });
 
       await db.userAccount.update({
-        where: { id: data.accountId },
+        where: { id: data.accountId! },
         data: {
           balance: {
             increment: data.amount * validate,
@@ -48,7 +48,7 @@ export async function createTransaction(
         validate = data.type === 1 ? -1 : 1;
       }
       await db.userAccount.update({
-        where: { id: data.accountId },
+        where: { id: data.accountId! },
         data: {
           balance: {
             increment: data.amount * validate,
@@ -108,7 +108,7 @@ export async function updateTransaction(
     }
 
     await db.userAccount.update({
-      where: { id: oldTransaction.accountId },
+      where: { id: oldTransaction.accountId! },
       data: {
         balance: {
           increment: amountDiff,
@@ -135,7 +135,7 @@ export async function deleteTransaction(db: PrismaClient, id: number) {
     await db.transaction.delete({ where: { id } });
 
     await db.userAccount.update({
-      where: { id: transaction!.accountId },
+      where: { id: transaction!.accountId! },
       data: {
         balance: {
           increment: -transaction!.amount * (transaction!.type === 1 ? 1 : -1),
@@ -147,26 +147,16 @@ export async function deleteTransaction(db: PrismaClient, id: number) {
   });
 }
 
-export function getTransactionsByAccount(db: PrismaClient, accountId: number) {
-  return db.transaction.findMany({
-    where: { accountId },
-    include: { userAccount: true, category: true, entity: true, goal: true },
-    orderBy: {
-      date: "desc",
-    },
-  });
-}
-
 export async function getTransactionsByFilter(
   db: PrismaClient,
   options: FilterOptions,
 ) {
-  const { accountId } = options;
+  const { bookId } = options;
   const { filterEndDate, filterStartDate } = filtersHandler(options);
 
-  return db.transaction.findMany({
+  const transactionsFound = await db.transaction.findMany({
     where: {
-      accountId,
+      bookId,
       date: {
         gte: filterStartDate,
         lt: filterEndDate,
@@ -177,11 +167,20 @@ export async function getTransactionsByFilter(
       date: "desc",
     },
   });
+
+  console.log(transactionsFound);
+
+  return transactionsFound;
 }
 
-export async function getTransactionById(db: PrismaClient, id: number) {
-  return await db.transaction.findMany({
-    where: { id },
+export async function getTransactionById(
+  db: PrismaClient,
+  id: number,
+  bookId: string,
+  userId: string,
+) {
+  return await db.transaction.findFirst({
+    where: { id, bookId, userId },
     include: { userAccount: true, category: true, entity: true, goal: true },
   });
 }

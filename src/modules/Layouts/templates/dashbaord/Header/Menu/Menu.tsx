@@ -41,7 +41,6 @@ const Menu = ({
   onHide: () => void;
 }) => {
   const router = useRouter();
-  const params = useParams();
 
   return (
     <motion.div
@@ -62,9 +61,10 @@ const Menu = ({
       <AccountsOptions />
       <ul className="flex w-full flex-col">
         <Listbox variant="flat" aria-label="options the app">
-          {OPTIONS.map((option) => {
+          {OPTIONS.map((option, index) => {
             return (
               <ListboxItem
+                key={index}
                 onPress={() => {
                   if (option.href) return router.push(option.href);
                   option.onClick && option.onClick();
@@ -74,7 +74,6 @@ const Menu = ({
                 className="px-3 hover:rounded-md dark:!text-white"
                 showDivider={option.showLine}
                 startContent={<Icon icon={option.icon ?? ""} />}
-                key={option.label}
               >
                 {option.label}
               </ListboxItem>

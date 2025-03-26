@@ -20,13 +20,24 @@ import DashboardLayout from "~/modules/Layouts/Dashboard";
 import { MovementsIncludes } from "~/types/movements";
 import { TransactionIncludes } from "~/types/transactions";
 import { createServerSideCaller } from "~/utils/serverSideCaller/serverSideCaller";
+import { DASHBOARD_MAIN_PATH } from "~/lib/constants/config";
+import NotFound from "~/modules/components/404";
 
 interface MovementDetailProps {
-  movement: MovementsIncludes;
-  acc: number;
+  data: string;
 }
 
-const MovementDetail = ({ movement, acc }: MovementDetailProps) => {
+const MovementDetail = ({ data }: MovementDetailProps) => {
+  const movement = JSON.parse(data) as MovementsIncludes;
+
+  if (!movement) {
+    return (
+      <DashboardLayout title="Detalle de Movimiento">
+        <NotFound />
+      </DashboardLayout>
+    );
+  }
+
   const {
     transactions,
     amount,
@@ -223,7 +234,7 @@ const MovementDetail = ({ movement, acc }: MovementDetailProps) => {
                     headerConfig={{
                       hasNew: true,
                       newButtonText: "Crear Ocurrencia",
-                      redirectTo: `/account/${params?.acc}/movements/new/ocurrence/${movement.id}`,
+                      redirectTo: `${DASHBOARD_MAIN_PATH}/${params?.bookId}/movements/new/ocurrence/${movement.id}`,
                     }}
                     filterKeys={["name", "amount"]}
                     columns={detailColumns}
@@ -285,17 +296,17 @@ const MovementDetail = ({ movement, acc }: MovementDetailProps) => {
 };
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
-  const { id, acc } = ctx.params!;
+  const { id, bookId } = ctx.params!;
 
   const helper = await createServerSideCaller(ctx);
-  const movements = await helper.movements.getMovementById.fetch(Number(id));
-
-  const [movement] = formatDatesOfMovements([movements] as any);
+  const data = await helper.movements.getMovementById.fetch({
+    bookId: String(bookId)!,
+    id: Number(id),
+  });
 
   return {
     props: {
-      movement,
-      acc,
+      data: JSON.stringify(data),
     },
   };
 };

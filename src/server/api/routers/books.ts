@@ -37,4 +37,10 @@ export const booksRouter = createTRPCRouter({
     .query(async ({ ctx, input: bookId }) => {
       return BookServices.setLastAccess(ctx.db, bookId, ctx.session.user.id);
     }),
+  getBalance: protectedProcedure
+    .input(z.string())
+    .query(async ({ ctx, input: bookId }) => {
+      const userId = ctx.session.user.id;
+      return BookServices.getBookBalance(ctx.db, userId, bookId);
+    }),
 });

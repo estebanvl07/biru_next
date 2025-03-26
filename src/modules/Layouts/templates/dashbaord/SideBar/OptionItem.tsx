@@ -1,11 +1,11 @@
-import { usePathname } from "next/navigation";
+import { useParams, usePathname } from "next/navigation";
 import Link from "next/link";
 import clsx from "clsx";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import { useCurrentAccount } from "~/modules/Account/hooks";
 import { Skeleton } from "@heroui/skeleton";
-import { motion } from "framer-motion";
 import { useCurrentBook } from "~/modules/Books/hooks/useBooks.hook";
+import { DASHBOARD_MAIN_PATH } from "~/lib/constants/config";
 
 type OptionsProps = {
   id: number;
@@ -22,7 +22,9 @@ const OptionItem = ({
   isExpanded: boolean;
 }) => {
   const pathname = usePathname();
+  const params = useParams<{ bookId: string }>();
   const { isLoading } = useCurrentAccount();
+
   return (
     <>
       {isLoading ? (
@@ -39,7 +41,8 @@ const OptionItem = ({
             "flex items-center gap-2 rounded-lg px-3 py-1.5 text-sm transition-all hover:bg-default-200/30",
             {
               "bg-default-200 font-semibold text-primary dark:bg-default-300/40 dark:font-normal dark:text-white":
-                pathname?.includes(item.href),
+                pathname ===
+                `${DASHBOARD_MAIN_PATH}/${params?.bookId}${item.href === "/" ? "" : item.href}`,
               "mx-auto w-fit hover:scale-105": !isExpanded,
               "w-full hover:pl-6": isExpanded,
             },
@@ -65,31 +68,14 @@ const RedirectionLink = ({
   return (
     <Link
       href={{
-        pathname: `/app/[bookId]/${item.href}`,
+        pathname: `${DASHBOARD_MAIN_PATH}/[bookId]${item.href}`,
         query: { bookId: book.id },
       }}
       className="z-0 flex items-center gap-2"
       title={item.name}
     >
       <Icon icon={item.icon} width={18} />
-      {isExpanded && (
-        <motion.p
-          initial={{
-            opacity: 0,
-            x: -10,
-          }}
-          animate={{
-            opacity: 1,
-            x: 0,
-          }}
-          transition={{
-            duration: 0.2,
-            delay: 0.1,
-          }}
-        >
-          {item.name}
-        </motion.p>
-      )}
+      {isExpanded && <p>{item.name}</p>}
     </Link>
   );
 };

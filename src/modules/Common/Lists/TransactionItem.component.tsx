@@ -7,7 +7,7 @@ import { format } from "date-fns";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import { Avatar } from "@heroui/react";
 
-import { DATE_FORMAT_TRANS } from "~/lib/constants/config";
+import { DASHBOARD_MAIN_PATH, DATE_FORMAT_TRANS } from "~/lib/constants/config";
 import type { TransactionIncludes } from "~/types/transactions";
 import { useParams } from "next/navigation";
 import { hr } from "date-fns/locale";
@@ -61,9 +61,9 @@ const TransactionItem: FC<TransactionItemProps> = ({ item, index, length }) => {
     >
       <Link
         href={{
-          pathname: "/account/[acc]/transactions/[id]",
+          pathname: `${DASHBOARD_MAIN_PATH}/[bookId]/transactions/[id]`,
           query: {
-            acc: params?.acc,
+            bookId: params?.bookId,
             id: item.id,
           },
         }}

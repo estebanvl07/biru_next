@@ -1,5 +1,6 @@
 import { Prisma, PrismaClient } from "@prisma/client";
 import { TRPCError } from "@trpc/server";
+import { endOfMonth, startOfMonth } from "date-fns";
 
 export async function getBooksByUserId(db: PrismaClient, userId: string) {
   const books = await db.book.findMany({
@@ -30,14 +31,25 @@ export async function createBook(
 ) {
   try {
     const book = await db.book.create({
-      data,
+      data: {
+        ...data,
+        accounts: {
+          create: {
+            name: "Cuenta Principal",
+            type: 2,
+            balance: 0,
+            isMain: true,
+            userId: data.userId,
+          },
+        },
+      },
     });
+
     return book;
   } catch (error) {
     throw new TRPCError({
       code: "BAD_REQUEST",
-      message:
-        "Ha ocurrido un error, prueba con otro correo o intenta más tarde",
+      message: "Ha ocurrido un error, Intente de nuevo",
     });
   }
 }
@@ -81,5 +93,37 @@ export async function setLastAccess(
     data: {
       lastAccess: new Date(),
     },
+  });
+}
+
+export async function getBookBalance(
+  db: PrismaClient,
+  userId: string,
+  bookId: string,
+) {
+  return db.$transaction(async (db) => {
+    const result = await db.transaction.groupBy({
+      by: ["type", "transferType"],
+      where: { state: 1, userId, bookId },
+      _sum: { amount: true },
+    });
+
+    const incomes =
+      result.find((r) => r.type === 1 && r.transferType === 1)?._sum.amount ||
+      0;
+    const egress =
+      result.find((r) => r.type === 2 && r.transferType === 1)?._sum.amount ||
+      0;
+    const savings =
+      result.find((r) => r.type === 2 && r.transferType === 2)?._sum.amount ||
+      0;
+    const transactionTotal = incomes - egress - savings;
+
+    return {
+      incomes,
+      egress,
+      savings,
+      transactionTotal,
+    };
   });
 }

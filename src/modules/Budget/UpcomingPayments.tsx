@@ -1,7 +1,11 @@
 import { Badge } from "@heroui/badge";
 import { Button, Checkbox, Chip } from "@heroui/react";
 import { Icon } from "@iconify/react/dist/iconify.js";
+import { useParams } from "next/navigation";
 import React from "react";
+import { BudgetSummary } from "~/server/api/services/budget.services";
+import { api } from "~/utils/api";
+import { differenceInDays } from "date-fns";
 
 const upcomingPayments = [
   {
@@ -34,6 +38,11 @@ const upcomingPayments = [
 ];
 
 const UpcomingPayments = () => {
+  const params = useParams<{ bookId: string }>();
+  const { data } = api.budget.getCurrentBudget.useQuery(params?.bookId);
+
+  const upcomingPayments = data?.upcomingPayments.movements || [];
+
   const getBadgeVariant = (daysRemaining: number) => {
     if (daysRemaining <= 3) return "danger";
     if (daysRemaining <= 7) return "warning";
@@ -49,8 +58,13 @@ const UpcomingPayments = () => {
   return (
     <div className="space-y-4">
       {upcomingPayments.map((payment) => {
-        const badgeColor = getBadgeVariant(payment.daysRemaining);
-        const badgeText = getBadgeText(payment.daysRemaining);
+        const daysRemaining = differenceInDays(
+          new Date(payment.next_ocurrence),
+          new Date(),
+        );
+
+        const badgeColor = getBadgeVariant(daysRemaining);
+        const badgeText = getBadgeText(daysRemaining);
 
         return (
           <div
@@ -58,24 +72,27 @@ const UpcomingPayments = () => {
             className="flex items-center justify-between space-y-0 border-b border-divider pb-2"
           >
             <div className="space-y-1">
-              <div className="flex items-center gap-2">
+              <div className="flex items-center">
                 <Checkbox
                   classNames={{
                     wrapper: "border border-divider",
                   }}
                   id={`payment-${payment.id}`}
-                />
-                <label
-                  htmlFor={`payment-${payment.id}`}
-                  className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
                 >
-                  {payment.description}
-                </label>
+                  <p className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+                    {payment.name}{" "}
+                    {payment.description && (
+                      <span className="text-xs text-foreground-600">
+                        ({payment.description})
+                      </span>
+                    )}
+                  </p>
+                </Checkbox>
               </div>
               <div className="text-muted-foreground flex items-center gap-2 text-xs">
                 <Icon icon="mynaui:calendar" width={18} />
                 <span>
-                  {new Date(payment.dueDate).toLocaleDateString("es", {
+                  {new Date(payment.next_ocurrence).toLocaleDateString("es", {
                     day: "numeric",
                     month: "short",
                   })}

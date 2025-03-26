@@ -105,7 +105,7 @@ model Book {
   transactions  Transaction[]
   movements     FixedMovements[]
   goals         Goals[]
-
+  accounts      UserAccount[]
   user          User @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
@@ -165,22 +165,27 @@ model Templates {
   user         User          @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
+// modules
+
 model UserAccount {
-  id           Int           @id @default(autoincrement())
-  name         String
-  type         Int
-  balance      Int?          @default(0)
-  reference    String?
-  state        Int?          @default(1) // 1: activo, 0: inactivo
-  createdAt    DateTime      @default(now())
-  updatedAt    DateTime      @updatedAt
-  userId       String
-  user         User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id            Int           @id @default(autoincrement())
+  name          String
+  type          Int
+  balance       Int?          @default(0)
+  reference     String?
+  isMain        Boolean?      @default(false)
+  state         Int?          @default(1) // 1: activo, 0: inactivo
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+  bookId        String
+  userId        String
+
+  user          User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  book          Book          @relation(fields: [bookId], references: [id], onDelete: Cascade)
+  
   transactions    Transaction[]
   fixedMovements  FixedMovements[]
 }
-
-// modules
 
 model Goals {
   id           Int           @id @default(autoincrement())
@@ -204,7 +209,7 @@ model Goals {
 
 model Transaction {
   id           Int             @id @default(autoincrement())
-  accountId    Int
+  accountId    Int?
   userId       String
   bookId       String
   amount       Int
@@ -222,8 +227,9 @@ model Transaction {
   state        Int?            @default(1) // 1: confirmado, 2: cancelado, 3: programado
   createdAt    DateTime        @default(now())
   updatedAt    DateTime        @updatedAt
+
   book         Book            @relation(fields: [bookId], references: [id], onDelete: Cascade)
-  userAccount  UserAccount     @relation(fields: [accountId], references: [id], onDelete: Cascade)
+  userAccount  UserAccount?     @relation(fields: [accountId], references: [id], onDelete: Cascade)
 
   category     Category?       @relation(fields: [categoryId], references: [id], onDelete: Cascade)
   entity       Entities?       @relation(fields: [entityId], references: [id], onDelete: Cascade)
@@ -236,7 +242,7 @@ model FixedMovements {
   id             Int      @id @default(autoincrement())
   userId         String
   name           String
-  type           Int @default(1)
+  type           Int    @default(1)
   amount         Int
   bookId         String
   status         Boolean @default(true)

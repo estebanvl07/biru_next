@@ -42,14 +42,14 @@ const HeaderMobile = ({ title = "Dashboard" }: { title?: string }) => {
           <>
             <NavigationBack />
             <div className="flex flex-col items-start justify-center">
+              <h1 className="text-xl font-semibold text-primary md:text-2xl dark:text-slate-200">
+                {title}
+              </h1>
               {account?.name && (
                 <span className="text-xs text-gray-600 dark:text-slate-200">
                   {account?.name}
                 </span>
               )}
-              <h1 className="text-xl font-semibold text-primary md:text-2xl dark:text-slate-200">
-                {title}
-              </h1>
             </div>
           </>
         )}

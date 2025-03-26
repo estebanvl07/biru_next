@@ -3,6 +3,7 @@ import { updateSchema } from "~/lib/resolver/zod";
 
 const input = {
   name: z.string(),
+  bookId: z.string(),
   description: z.string(),
   type: z.number(),
   amount: z.number(),

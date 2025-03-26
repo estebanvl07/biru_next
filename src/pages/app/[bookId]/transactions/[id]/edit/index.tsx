@@ -10,27 +10,24 @@ import { TransactionIncludes } from "~/types/transactions";
 import { createServerSideCaller } from "~/utils/serverSideCaller/serverSideCaller";
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
-  const { id } = ctx.params!;
+  const { id, bookId } = ctx.params!;
 
   const helper = await createServerSideCaller(ctx);
   const transaction = await helper.transaction.getTransactionById.fetch({
     id: Number(id),
+    bookId: bookId! as string,
   });
-
-  const [tr] = formatDatesOfTransactions(transaction as any);
 
   return {
     props: {
-      transaction: tr,
+      data: JSON.stringify(transaction),
     },
   };
 };
 
-const EditTransactionPage = ({
-  transaction,
-}: {
-  transaction: TransactionIncludes;
-}) => {
+const EditTransactionPage = ({ data }: { data: string }) => {
+  const transaction = JSON.parse(data) as TransactionIncludes;
+
   return (
     <DashboardLayout
       title="Editar transacción"

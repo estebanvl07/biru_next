@@ -5,8 +5,14 @@ export const menuOptions = [
       {
         id: 325,
         name: "Dashboard",
-        icon: "akar-icons:dashboard",
+        icon: "mynaui:panel-left",
         href: "/",
+      },
+      {
+        id: 2,
+        name: "Calendario",
+        icon: "mynaui:calendar-up",
+        href: "/calendar",
       },
     ],
   },
@@ -16,7 +22,7 @@ export const menuOptions = [
       {
         id: 1,
         name: "Transacciones",
-        icon: "mingcute:transfer-fill",
+        icon: "mynaui:arrow-left-right",
         href: "/transactions",
       },
       {
@@ -28,13 +34,13 @@ export const menuOptions = [
       {
         id: 3,
         name: "Metas",
-        icon: "ph:target",
+        icon: "mynaui:target",
         href: "/goals",
       },
       {
         id: 4,
         name: "Presupuesto",
-        icon: "heroicons:currency-dollar",
+        icon: "mynaui:bitcoin-circle",
         href: "/budget",
       },
     ],
@@ -45,20 +51,14 @@ export const menuOptions = [
       {
         id: 1,
         name: "Análisis",
-        icon: "material-symbols:analytics-outline",
+        icon: "mynaui:chart-bubble",
         href: "/analytics",
       },
       {
         id: 2,
         name: "Reportes",
-        icon: "mdi:report-box-outline",
-        href: "/reports",
-      },
-      {
-        id: 3,
-        name: "Facturas",
-        icon: "mingcute:bill-line",
-        href: "/bills",
+        icon: "mynaui:archive",
+        href: "/#",
       },
     ],
   },
@@ -82,7 +82,7 @@ export const mobileOptions = [
     id: 1,
     name: "Dashboard",
     icon: "akar-icons:dashboard",
-    href: "/main",
+    href: "/",
   },
   {
     id: 2,

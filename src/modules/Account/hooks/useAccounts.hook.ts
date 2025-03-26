@@ -26,25 +26,23 @@ export const useCurrentAccount = () => {
   const params = useParams();
   const queryClient = useQueryClient();
 
-  const accountId = params?.acc ? Number(params?.acc) : null;
+  const bookId = String(params?.bookId);
 
   const hasAccountCached = useMemo(() => {
     const accountKey = getQueryKey(
-      api.userAccount.getOne,
-      { id: accountId! },
+      api.userAccount.getDefaultAccount,
+      bookId!,
       "query",
     );
 
     const accountCache = queryClient.getQueryData(accountKey);
     return Boolean(accountCache);
-  }, [accountId]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [bookId]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  const { data, isLoading } = api.userAccount.getOne.useQuery(
+  const { data, isLoading } = api.userAccount.getDefaultAccount.useQuery(
+    bookId!,
     {
-      id: accountId!,
-    },
-    {
-      enabled: !!accountId && !hasAccountCached,
+      enabled: !!bookId && !hasAccountCached,
     },
   );
 

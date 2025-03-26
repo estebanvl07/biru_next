@@ -22,10 +22,7 @@ export default function HeaderMenu({
   const params = useParams();
 
   return (
-    <motion.nav
-      layout
-      className="relative z-10 flex items-center justify-end gap-2"
-    >
+    <nav className="relative z-10 flex items-center justify-end gap-2">
       {hasNotifications && <NotificationMenu />}
       {hasLogout && (
         <Tooltip content="Cerrar sesión" className="font-montserrat">
@@ -37,6 +34,6 @@ export default function HeaderMenu({
       {hasFilter && <FilterTemplates />}
       {params?.acc && <CreationMenu />}
       <UserMenu />
-    </motion.nav>
+    </nav>
   );
 }

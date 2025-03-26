@@ -9,7 +9,7 @@ body {
 }
 
 [data-slot="input-wrapper"] {
-  @apply border !border-divider;
+  @apply dark:!border-divider;
 }
 
 main {

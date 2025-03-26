@@ -16,7 +16,11 @@ import {
   Tooltip,
   User,
 } from "@heroui/react";
-import { ButtonGroup, InputDate } from "~/modules/components";
+import {
+  ButtonGroup,
+  InputDate,
+  InputSelectAccount,
+} from "~/modules/components";
 
 import { api } from "~/utils/api";
 import { Icon } from "@iconify/react/dist/iconify.js";
@@ -49,6 +53,7 @@ import {
   statusColor,
   statusIcon,
 } from "~/utils/transactionStatus";
+import { set } from "lodash";
 
 const statusOptions = [
   {
@@ -127,7 +132,8 @@ const TransactionForm = ({
 
   const query = router.query;
 
-  const transactionsRefresh = api.useUtils().transaction;
+  const transactionsRefresh = api.useUtils().transaction.getTransactions;
+  const BookBalanceRefresh = api.useUtils().books.getBalance;
 
   const { mutateAsync: createTransactionMutation } =
     api.transaction.create.useMutation();
@@ -182,46 +188,41 @@ const TransactionForm = ({
     register,
     formState: { errors },
     setValue,
-    getValues,
+    handleSubmit,
     watch,
     reset,
   } = useForm<createTransaction>({
     resolver: zodResolver(createTransaction),
   });
 
-  const alertConfig = {
-    cancel: true,
-    confirmProps: {
-      onClick: () => {
-        onClose();
-        onSubmit();
-      },
-    },
-    type: "quest",
-  } as any;
-
-  const { isOpen, onClose, onOpen, props, setProps } = useAlert(alertConfig);
-
-  const onSubmit = () => {
-    const payload = getValues();
+  const onSubmit = (payload: createTransaction) => {
     if (mode === "create") {
-      toast.promise(
-        createTransactionMutation(
-          { ...payload, date: new Date() },
-          {
-            async onSuccess(data) {
-              await transactionsRefresh.invalidate();
-              onSuccess && onSuccess();
-              reset();
-            },
+      toast("Esta seguro de realizar esta acción", {
+        icon: "❓",
+        action: {
+          label: "Crear",
+          onClick: () => {
+            toast.promise(
+              createTransactionMutation(
+                { ...payload, date: new Date() },
+                {
+                  async onSuccess(data) {
+                    await BookBalanceRefresh.invalidate();
+                    await transactionsRefresh.invalidate();
+                    onSuccess && onSuccess();
+                    reset();
+                  },
+                },
+              ),
+              {
+                loading: "Creando Transacción...",
+                success: "La transacción se ha creado con éxito.",
+                error: "Hubo un error, intente de nuevo",
+              },
+            );
           },
-        ),
-        {
-          loading: "Creando Transacción...",
-          success: "La transacción se ha creado con éxito.",
-          error: "Hubo un error, intente de nuevo",
         },
-      );
+      });
       return;
     }
     if (transactionDefault) {
@@ -230,7 +231,8 @@ const TransactionForm = ({
           { id: String(transactionDefault.id), ...payload },
           {
             async onSuccess(data) {
-              await transactionsRefresh.getTransactionById.invalidate();
+              await BookBalanceRefresh.invalidate();
+              await transactionsRefresh.invalidate();
               onSuccess && onSuccess();
               reset();
             },
@@ -323,10 +325,12 @@ const TransactionForm = ({
         date,
         reference,
         recipient,
+        accountId,
         type: typeDef,
       } = transactionDefault;
 
       setValue("amount", amount);
+      setValue("accountId", Number(accountId));
       setAmountValue(amountFormatter(String(amount)).formatted);
       setValue("type", typeDef as 1 | 2);
       setValue("transferType", type === "transfer" ? 1 : 2);
@@ -346,10 +350,13 @@ const TransactionForm = ({
     }
   }, [goalSelected]);
 
+  useEffect(() => {
+    setValue("bookId", String(query.bookId));
+  }, []);
+
   return (
     <AnimatePresence>
       <div className="flex w-full flex-col items-start gap-4">
-        <Alert isOpen={isOpen} onClose={onClose} {...props} />
         <motion.form
           layout
           initial={{ x: -40, opacity: 0 }}
@@ -361,20 +368,22 @@ const TransactionForm = ({
             damping: 30,
             duration: 1,
           }}
-          className="flex w-full flex-col items-center justify-center gap-2 pt-6 md:max-w-[36rem] md:pt-0"
-          onSubmit={(e) => {
-            e.preventDefault();
-            setProps(alertConfig);
-            onOpen();
-          }}
+          className="flex w-full flex-col items-center justify-center gap-2 rounded-xl md:max-w-[36rem]"
+          onSubmit={handleSubmit(onSubmit)}
         >
-          <div className="mb-2 flex w-full items-center justify-between">
-            {type === "transfer" && (
+          <div className="flex w-full flex-col items-start">
+            <h2 className="text-base">Información Requerida</h2>
+            <p className="text-foreground-500">
+              Completa el formulario para registrar una nueva transacción.
+            </p>
+          </div>
+          {type === "transfer" && (
+            <div className="flex w-full items-center justify-between">
               <TemplatesSection
                 onChange={(template) => setTemplate(template)}
               />
-            )}
-          </div>
+            </div>
+          )}
           <Input
             type="text"
             isRequired
@@ -565,56 +574,19 @@ const TransactionForm = ({
               )}
             </Select>
           )}
-          <Select
-            items={accounts ?? []}
-            placeholder="Seleccione una cuenta"
-            label="Cuenta"
-            classNames={{
-              label: "group-data-[filled=true]:-translate-y-7",
-              trigger: "min-h-[86px]",
-              listboxWrapper: "max-h-[200px]",
-            }}
-            renderValue={(items) => {
-              return items.map(({ data }) => (
-                <div
-                  key={data?.id}
-                  className="dark:text-primary-light flex flex-col rounded-xl bg-primary/10 px-4 py-2 pr-6 text-primary dark:bg-default-300/50"
-                >
-                  <span className="font-semibold">{data?.name}</span>
-                  <span className="text-xs">
-                    $ {data?.balance?.toLocaleString()}
-                  </span>
-                </div>
-              ));
-            }}
-            required
+          <InputSelectAccount
             isRequired
-            defaultSelectedKeys={defaultAccountKey}
-            isInvalid={Boolean(errors?.categoryId)}
-            errorMessage={errors?.categoryId?.message ?? ""}
-          >
-            {(account) => (
-              <SelectItem
-                color="primary"
-                onPress={() => setValue("accountId", account.id)}
-                key={account.id}
-                className="font-montserrat dark:text-white"
-                textValue={account.name}
-              >
-                <div className="flex flex-col px-2 py-1">
-                  <span className="font-medium">{account.name}</span>
-                  <span className="text-xs">
-                    $ {account.balance?.toLocaleString()}
-                  </span>
-                </div>
-              </SelectItem>
-            )}
-          </Select>
+            defaultSelected={defaultAccountKey}
+            hasError={Boolean(errors.accountId)}
+            errorMessage={errors.accountId?.message}
+            onChange={() => setValue("accountId", account?.id)}
+          />
 
           <Accordion
-            className="m-0 rounded-lg border border-divider !p-0 !shadow-sm"
+            className="m-0 rounded-lg !p-0 !shadow-none"
             itemClasses={{
-              base: "px-4",
+              trigger: "!shadow-none",
+              base: "px-0 !shadow-none",
             }}
             defaultExpandedKeys={type === "transfer" ? ["1"] : []}
             showDivider={type === "goal"}
@@ -895,7 +867,7 @@ const TransactionForm = ({
               )}
             </AccordionItem>
           </Accordion>
-          <motion.div className="mb-2 flex w-full flex-col gap-3 rounded-lg border border-divider p-4 shadow-sm">
+          <motion.div className="mb-2 flex w-full flex-col gap-3">
             <div className="flex items-center justify-between">
               <aside>
                 <h4 className="text-base font-semibold">

@@ -3,6 +3,7 @@ import { Z_NUMBER, Z_STRING, updateSchema, z } from "~/lib/resolver/zod";
 export const input = {
   name: Z_STRING,
   type: Z_NUMBER,
+  bookId: Z_STRING,
   balance: z.optional(z.number()),
   reference: z.optional(z.string()),
 };

@@ -21,29 +21,6 @@ import SettingsLayout from "~/modules/Layouts/SettingsLayout";
 import { useSearch } from "~/lib/hooks";
 import { Icon } from "@iconify/react/dist/iconify.js";
 
-export const getServerSideProps: GetServerSideProps = async (ctx) => {
-  const helpers = await createServerSideCaller(ctx);
-
-  const accounts = await helpers.userAccount.getAll.fetch();
-
-  if (accounts.length === 0) {
-    return {
-      redirect: {
-        destination: "/account/new",
-        permanent: false,
-      },
-    };
-  }
-
-  const trpcState = helpers.dehydrate();
-
-  return {
-    props: {
-      trpcState,
-    },
-  };
-};
-
 const AccountPage = () => {
   const [accountSelected, setAccountSelected] = useState<number>();
   const { accounts: data } = useAccounts();

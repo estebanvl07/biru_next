@@ -5,17 +5,16 @@ import {
   CategoriesPercent,
   LastTransactions,
 } from "../Common";
-import { useCurrentAccount } from "../Account/hooks";
 import { ReactSortable } from "react-sortablejs";
 import clsx from "clsx";
 import { api } from "~/utils/api";
 import { getPercent } from "~/lib/helpers";
 import { OrderComponent, UI_ORDER } from "~/lib/constants/ui";
 import { PieChartAmountByCategoires } from "../Charts";
+import { useBookBalance } from "../Books/hooks/useBooks.hook";
 
 const DesktopDashboard = () => {
-  const { account, isLoading } = useCurrentAccount();
-  const { data: balance } = api.userAccount.getBalance.useQuery();
+  const { balance, isLoading } = useBookBalance();
   const { data: defaultSetting } = api.users.getUiSetting.useQuery();
   const { mutate } = api.users.setSetting.useMutation();
 
@@ -27,7 +26,7 @@ const DesktopDashboard = () => {
       children: (
         <Balance
           title="Total de Cuenta"
-          amount={account?.balance || 0}
+          amount={balance?.transactionTotal || 0}
           isLoading={isLoading}
           color="default"
           percent="10%"
@@ -45,7 +44,7 @@ const DesktopDashboard = () => {
           color="success"
           percent={getPercent(
             balance?.incomes || 0,
-            balance?.transactonTotal || 0,
+            balance?.transactionTotal || 0,
           )}
           titlePercent="De Ingresos"
         />
@@ -60,7 +59,7 @@ const DesktopDashboard = () => {
           color="danger"
           percent={getPercent(
             balance?.egress || 0,
-            balance?.transactonTotal || 0,
+            balance?.transactionTotal || 0,
           )}
           titlePercent="De Egresos"
         />

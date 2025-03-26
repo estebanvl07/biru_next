@@ -52,3 +52,22 @@ export const useCurrentBook = () => {
 
   return { book: data!, isLoading };
 };
+
+export const useBookBalance = () => {
+  const queryClient = useQueryClient();
+  const params = useParams();
+  const bookId = String(params?.bookId!);
+
+  const hasBalanceCached = useMemo(() => {
+    const balanceKey = getQueryKey(api.books.getBalance, bookId, "query");
+
+    const balanceCached = queryClient.getQueryData(balanceKey);
+    return Boolean(balanceCached);
+  }, [bookId]);
+
+  const { data: balance, isLoading } = api.books.getBalance.useQuery(bookId, {
+    enabled: !!bookId && !hasBalanceCached,
+  });
+
+  return { balance, isLoading };
+};

@@ -37,7 +37,7 @@ const NewTransactionPage = () => {
                 cursor: "w-full bg-primary dark:bg-slate-200",
                 tab: "w-full px-0 h-12",
                 tabContent:
-                  "group-data-[selected=true]:text-primary group-data-[selected=true]:dark:text-slate-300",
+                  "group-data-[selected=true]:text-primary  group-data-[selected=true]:dark:text-slate-300",
               }
             : undefined
         }

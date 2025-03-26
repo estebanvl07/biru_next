@@ -9,7 +9,7 @@ import {
   Tooltip,
   User,
 } from "@heroui/react";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { amountFormatter } from "~/utils/formatters";
 import { ButtonGroup, InputDate } from "../components";
@@ -22,6 +22,7 @@ import { api } from "~/utils/api";
 import { toast } from "sonner";
 import { useCategory } from "../Category/hook/category.hook";
 import { useEntity } from "../Entities/hook/entities.hook";
+import { useParams } from "next/navigation";
 
 const CreateMovementsForm = ({ defaultMovement }: any) => {
   const [amountValue, setAmountValue] = useState<string>("");
@@ -40,6 +41,7 @@ const CreateMovementsForm = ({ defaultMovement }: any) => {
   });
   const router = useRouter();
   const query = router.query;
+  const params = useParams();
 
   const { mutateAsync: CreateMovementsMutation } =
     api.movements.create.useMutation();
@@ -84,7 +86,9 @@ const CreateMovementsForm = ({ defaultMovement }: any) => {
     });
   };
 
-  console.log(errors);
+  useEffect(() => {
+    setValue("bookId", String(params.bookId));
+  }, []);
 
   return (
     <form
@@ -194,7 +198,7 @@ const CreateMovementsForm = ({ defaultMovement }: any) => {
           <SelectItem
             color="primary"
             variant="flat"
-            onClick={() => {
+            onPress={() => {
               if (frecuency.id !== 4 && frecuency.value) {
                 setValue("frecuency", frecuency.value);
                 setCustomFrecuency(false);
@@ -205,7 +209,6 @@ const CreateMovementsForm = ({ defaultMovement }: any) => {
             }}
             className="font-montserrat dark:text-white"
             textValue={frecuency.name}
-            value={frecuency.id}
             key={frecuency.id}
           >
             {frecuency.name}
@@ -315,11 +318,10 @@ const CreateMovementsForm = ({ defaultMovement }: any) => {
                 {(category) => (
                   <SelectItem
                     color="primary"
-                    onClick={() => setValue("categoryId", category.id)}
+                    onPress={() => setValue("categoryId", category.id)}
                     key={category.id}
                     className="font-montserrat dark:text-white"
                     textValue={category.name}
-                    value={category.id}
                   >
                     {category.name}
                   </SelectItem>

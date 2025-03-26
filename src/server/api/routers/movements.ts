@@ -15,8 +15,34 @@ export const movementsRouter = createTRPCRouter({
     return MovementsServices.getMovements(ctx.db, userId);
   }),
   getMovementById: protectedProcedure
-    .input(z.number())
+    .input(
+      z.object({
+        bookId: z.string(),
+        id: z.number(),
+      }),
+    )
     .query(async ({ input, ctx }) => {
-      return MovementsServices.getMovementById(ctx.db, input);
+      return MovementsServices.getMovementById({
+        db: ctx.db,
+        userId: ctx.session.user.id,
+        id: input.id,
+        bookId: input.bookId,
+      });
+    }),
+  makeMovement: protectedProcedure
+    .input(
+      z.object({
+        accountId: z.number(),
+        bookId: z.string(),
+        id: z.number(),
+        amount: z.number(),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      return MovementsServices.makeMovement({
+        db: ctx.db,
+        ...input,
+        userId: ctx.session.user.id,
+      });
     }),
 });

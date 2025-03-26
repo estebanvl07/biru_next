@@ -28,9 +28,8 @@ import {
 import { DASHBOARD_MAIN_PATH } from "~/lib/constants/config";
 
 const TransactionPage = () => {
-  const [isClient, setIsClient] = useState(false);
   const router = useRouter();
-  const params = useParams<{ acc: string }>();
+  const params = useParams<{ bookId: string }>();
 
   const { size } = useResize();
   const isMobile = Boolean(size && size <= 768);
@@ -182,18 +181,18 @@ const TransactionPage = () => {
             <Actions
               onClickView={() =>
                 router.push({
-                  pathname: "/account/[acc]/transactions/[id]",
+                  pathname: `${DASHBOARD_MAIN_PATH}/[bookId]/transactions/[id]`,
                   query: {
-                    acc: String(params?.acc),
+                    bookId: params?.bookId,
                     id: String(transaction.id),
                   },
                 })
               }
               onClickEdit={() => {
                 router.push({
-                  pathname: "/account/[acc]/transactions/[id]/edit",
+                  pathname: `${DASHBOARD_MAIN_PATH}/[bookId]/transactions/[id]/edit`,
                   query: {
-                    acc: String(params?.acc),
+                    bookId: params?.bookId,
                     id: String(transaction.id),
                   },
                 });
@@ -205,24 +204,20 @@ const TransactionPage = () => {
           return cellValue;
       }
     },
-    [isClient, params],
+    [params, transactions],
   );
-
-  useEffect(() => {
-    setIsClient(true);
-  }, []);
 
   return (
     <DashboardLayout
       title="Transacciones"
       headDescription="Listado de tu historial de transacciones"
     >
-      {!isMobile && isClient ? (
+      {!isMobile ? (
         <Table
           headerConfig={{
             title: "",
             newButtonText: "Crear Transacción",
-            redirectTo: `/${DASHBOARD_MAIN_PATH}/${params?.acc}/transactions/new`,
+            redirectTo: `${DASHBOARD_MAIN_PATH}/${params?.bookId}/transactions/new`,
           }}
           filterBy={[
             {

@@ -11,6 +11,15 @@ importers:
       '@auth/prisma-adapter':
         specifier: ^1.4.0
         version: 1.6.0(@prisma/client@5.22.0(prisma@5.22.0))(nodemailer@6.10.0)
+      '@fullcalendar/core':
+        specifier: ^6.1.15
+        version: 6.1.15
+      '@fullcalendar/daygrid':
+        specifier: ^6.1.15
+        version: 6.1.15(@fullcalendar/core@6.1.15)
+      '@fullcalendar/react':
+        specifier: ^6.1.15
+        version: 6.1.15(@fullcalendar/core@6.1.15)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
       '@heroui/accordion':
         specifier: 2.2.13
         version: 2.2.13(@heroui/system@2.4.12(@heroui/theme@2.4.12(tailwindcss@3.4.17))(framer-motion@11.18.2(react-dom@18.2.0(react@18.2.0))(react@18.2.0))(react-dom@18.2.0(react@18.2.0))(react@18.2.0))(@heroui/theme@2.4.12(tailwindcss@3.4.17))(framer-motion@11.18.2(react-dom@18.2.0(react@18.2.0))(react@18.2.0))(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
@@ -626,6 +635,21 @@ packages:
 
   '@formatjs/intl-localematcher@0.6.0':
     resolution: {integrity: sha512-4rB4g+3hESy1bHSBG3tDFaMY2CH67iT7yne1e+0CLTsGLDcmoEWWpJjjpWVaYgYfYuohIRuo0E+N536gd2ZHZA==}
+
+  '@fullcalendar/core@6.1.15':
+    resolution: {integrity: sha512-BuX7o6ALpLb84cMw1FCB9/cSgF4JbVO894cjJZ6kP74jzbUZNjtwffwRdA+Id8rrLjT30d/7TrkW90k4zbXB5Q==}
+
+  '@fullcalendar/daygrid@6.1.15':
+    resolution: {integrity: sha512-j8tL0HhfiVsdtOCLfzK2J0RtSkiad3BYYemwQKq512cx6btz6ZZ2RNc/hVnIxluuWFyvx5sXZwoeTJsFSFTEFA==}
+    peerDependencies:
+      '@fullcalendar/core': ~6.1.15
+
+  '@fullcalendar/react@6.1.15':
+    resolution: {integrity: sha512-L0b9hybS2J4e7lq6G2CD4nqriyLEqOH1tE8iI6JQjAMTVh5JicOo5Mqw+fhU5bJ7hLfMw2K3fksxX3Ul1ssw5w==}
+    peerDependencies:
+      '@fullcalendar/core': ~6.1.15
+      react: ^16.7.0 || ^17 || ^18 || ^19
+      react-dom: ^16.7.0 || ^17 || ^18 || ^19
 
   '@heroui/accordion@2.2.13':
     resolution: {integrity: sha512-0y+eOwc4CV6dGP9LBoXPpPza6ZUxoyUajbzaTA3NTADvqnIV6+TB/G6nbKtYJf4F4omMZwRGoLQ5vr/dKLCGCA==}
@@ -3874,6 +3898,9 @@ packages:
   preact@10.11.3:
     resolution: {integrity: sha512-eY93IVpod/zG3uMF22Unl8h9KkrcKIRs2EGar8hwLZZDU1lkjph303V9HZBwufh2s736U6VXuhD109LYqPoffg==}
 
+  preact@10.12.1:
+    resolution: {integrity: sha512-l8386ixSsBdbreOAkqtrwqHwdvR35ID8c3rKPa8lCWuO86dBi32QWHV4vfsZK1utLLFMvw+Z5Ad4XLkZzchscg==}
+
   preact@10.26.4:
     resolution: {integrity: sha512-KJhO7LBFTjP71d83trW+Ilnjbo+ySsaAgCfXOXUlmGzJ4ygYPWmysm77yg4emwfmoz3b22yvH5IsVFHbhUaH5w==}
 
@@ -4947,6 +4974,20 @@ snapshots:
   '@formatjs/intl-localematcher@0.6.0':
     dependencies:
       tslib: 2.8.1
+
+  '@fullcalendar/core@6.1.15':
+    dependencies:
+      preact: 10.12.1
+
+  '@fullcalendar/daygrid@6.1.15(@fullcalendar/core@6.1.15)':
+    dependencies:
+      '@fullcalendar/core': 6.1.15
+
+  '@fullcalendar/react@6.1.15(@fullcalendar/core@6.1.15)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)':
+    dependencies:
+      '@fullcalendar/core': 6.1.15
+      react: 18.2.0
+      react-dom: 18.2.0(react@18.2.0)
 
   '@heroui/accordion@2.2.13(@heroui/system@2.4.12(@heroui/theme@2.4.12(tailwindcss@3.4.17))(framer-motion@11.18.2(react-dom@18.2.0(react@18.2.0))(react@18.2.0))(react-dom@18.2.0(react@18.2.0))(react@18.2.0))(@heroui/theme@2.4.12(tailwindcss@3.4.17))(framer-motion@11.18.2(react-dom@18.2.0(react@18.2.0))(react@18.2.0))(react-dom@18.2.0(react@18.2.0))(react@18.2.0)':
     dependencies:
@@ -9234,6 +9275,8 @@ snapshots:
       pretty-format: 3.8.0
 
   preact@10.11.3: {}
+
+  preact@10.12.1: {}
 
   preact@10.26.4: {}
 

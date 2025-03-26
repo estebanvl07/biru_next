@@ -191,15 +191,9 @@ const DataTable = <T,>({
               </TableColumn>
             )}
           </TableHeader>
-          <TableBody
-            items={bodyData}
-            onLoadMore={() => {
-              alert("load more");
-            }}
-            emptyContent="Data not found"
-          >
+          <TableBody items={bodyData} emptyContent="Data not found">
             {(item: any) => (
-              <TableRow key={item.name}>
+              <TableRow key={`${item.id}`}>
                 {(columnKey) => {
                   return (
                     <TableCell align="justify">

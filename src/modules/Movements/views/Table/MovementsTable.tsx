@@ -13,6 +13,7 @@ import { format } from "date-fns";
 import { es } from "date-fns/locale";
 import { useRouter } from "next/router";
 import Link from "next/link";
+import { DASHBOARD_MAIN_PATH } from "~/lib/constants/config";
 
 const MovementsTable = () => {
   const params = useParams();
@@ -40,9 +41,7 @@ const MovementsTable = () => {
                 <h4 className="whitespace-nowrap font-semibold">
                   {movement.name}
                 </h4>
-                <p className="!text-xs">
-                  {movement.description || "Sin descripción"}
-                </p>
+                <p className="!text-xs">${movement.amount.toLocaleString()}</p>
               </aside>
             </div>
           );
@@ -51,7 +50,7 @@ const MovementsTable = () => {
             <>
               {movement.category ? (
                 <Chip
-                  size="lg"
+                  size="md"
                   variant="flat"
                   classNames={{
                     content: "flex items-center gap-2",
@@ -107,18 +106,18 @@ const MovementsTable = () => {
             <Actions
               onClickView={() =>
                 router.push({
-                  pathname: "/account/[acc]/movements/[id]",
+                  pathname: `${DASHBOARD_MAIN_PATH}/[bookId]/movements/[id]`,
                   query: {
-                    acc: String(params?.acc),
+                    bookId: params?.bookId,
                     id: String(movement.id),
                   },
                 })
               }
               onClickEdit={() =>
                 router.push({
-                  pathname: "/account/[acc]/movements/[id]/edit",
+                  pathname: `${DASHBOARD_MAIN_PATH}/[bookId]/movements/[id]/edit`,
                   query: {
-                    acc: String(params?.acc),
+                    bookId: params?.bookId,
                     id: String(movement.id),
                   },
                 })
@@ -127,7 +126,7 @@ const MovementsTable = () => {
             >
               <Tooltip content={"Crear ocurrencia"} className="font-montserrat">
                 <Link
-                  href={`/account/${params?.acc}/movements/new/ocurrence/${movement.id}`}
+                  href={`${DASHBOARD_MAIN_PATH}/${params?.bookId}/movements/new/ocurrence/${movement.id}`}
                   className="cursor-pointer text-lg text-default-400 active:opacity-50"
                 >
                   <Icon icon="ic:round-plus" width={24} />
@@ -147,7 +146,7 @@ const MovementsTable = () => {
       headerConfig={{
         hasNew: true,
         newButtonText: "Crear Movimiento",
-        redirectTo: `/account/${params?.acc}/movements/new`,
+        redirectTo: `${DASHBOARD_MAIN_PATH}/${params?.bookId}/movements/new`,
       }}
       filterKeys={["name", "amount"]}
       columns={columns}

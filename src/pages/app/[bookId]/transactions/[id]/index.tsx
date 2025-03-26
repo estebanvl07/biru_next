@@ -1,11 +1,8 @@
 import clsx from "clsx";
-import Link from "next/link";
 import { format } from "date-fns";
 import { useRouter } from "next/router";
 import { capitalize } from "~/modules/components/molecules/Table/utils";
-import { redirect } from "next/navigation";
 import { DATE_FORMAT_TRANS } from "~/lib/constants/config";
-import { formatDatesOfTransactions } from "~/lib/resource/formatDatesOfTransactions";
 
 import { Icon } from "@iconify/react/dist/iconify.js";
 import { Accordion, AccordionItem, Avatar, Chip, Button } from "@heroui/react";
@@ -19,14 +16,28 @@ import { GetServerSideProps } from "next";
 import useShowForm from "~/lib/hooks/useShowForm";
 import EditTransaction from "~/modules/Transactions/EditTransaction";
 import { GoalsIncludes } from "~/types/goal/goal.types";
+import NotFound from "~/modules/components/404";
 
-const DetailTransactionPage = ({
-  transaction,
-}: {
-  transaction: TransactionIncludes;
-}) => {
+const DetailTransactionPage = ({ data: transactionData }: { data: string }) => {
+  const transaction = JSON.parse(transactionData) as TransactionIncludes;
+  const router = useRouter();
+  const query = router.query;
+
+  if (!transaction) {
+    return (
+      <DashboardLayout
+        title="Detalle de transacción"
+        headDescription="detalle de transacción"
+      >
+        <NotFound />
+      </DashboardLayout>
+    );
+  }
+
   const { data, onShowEdit, onCloseEdit, showEdit } =
-    useShowForm<TransactionIncludes>({ defaultData: transaction });
+    useShowForm<TransactionIncludes>({
+      defaultData: transaction,
+    });
 
   const {
     id,
@@ -45,9 +56,6 @@ const DetailTransactionPage = ({
     goal,
   } = transaction;
 
-  const router = useRouter();
-  const query = router.query;
-
   const getIcon = () => {
     if (category?.icon) {
       return category.icon;
@@ -63,11 +71,11 @@ const DetailTransactionPage = ({
       title="Detalle de transacción"
       headDescription="detalle de transacción"
     >
-      <div className="flex max-w-[40rem] flex-col gap-2">
-        <Card className="mx-2 flex items-center justify-between rounded-xl border px-6 py-4">
+      <div className="flex max-w-[34rem] flex-col gap-2">
+        <div className="flex flex-col items-start justify-between rounded-xl">
           <aside className="flex items-center">
             {transferType === 2 ? (
-              <div className="flex items-center gap-2">
+              <div className="flex flex-col items-center gap-2">
                 {goal?.icon ? (
                   <div className="grid h-10 w-10 place-content-center rounded-full bg-primary">
                     <Icon icon={goal?.icon} width={18} className="text-white" />
@@ -105,26 +113,23 @@ const DetailTransactionPage = ({
                   <p className="font-medium">
                     {type === 1 ? "Ingresos varios" : "Gastos Varios"}
                   </p>
-                  <span className="opacity-70">Sin descripción</span>
+                  <span
+                    className={clsx("text-3xl font-bold", {
+                      "text-green-500": type === 1,
+                      "text-red-500": type === 2,
+                    })}
+                  >
+                    {type === 1 ? "+" : "-"}
+                    {amount.toLocaleString()}
+                  </span>
                 </aside>
               </div>
             )}
           </aside>
-          <aside>
-            <span
-              className={clsx("text-3xl font-bold", {
-                "text-green-500": type === 1,
-                "text-red-500": type === 2,
-              })}
-            >
-              {type === 1 ? "+" : "-"}
-              {amount.toLocaleString()}
-            </span>
-          </aside>
-        </Card>
+        </div>
         <Accordion
           defaultExpandedKeys={["1", "2"]}
-          variant="splitted"
+          variant="light"
           selectionMode="multiple"
         >
           <AccordionItem
@@ -134,7 +139,6 @@ const DetailTransactionPage = ({
             classNames={{
               title: "font-medium",
             }}
-            className="border-1 !bg-default-100 !shadow-none dark:border-white/5"
           >
             <ul className="flex flex-col gap-2 [&>li>p]:font-semibold [&>li>span]:opacity-70 [&>li]:flex [&>li]:flex-row [&>li]:items-center [&>li]:justify-between">
               <li>
@@ -144,7 +148,7 @@ const DetailTransactionPage = ({
 
               <li>
                 <span>Tipo:</span>
-                <p>
+                <div>
                   {transferType === 1 && type === 1 ? (
                     <Chip variant="flat" color="success" size="sm">
                       <span className="flex flex-row items-center gap-2 font-semibold">
@@ -167,7 +171,7 @@ const DetailTransactionPage = ({
                       </span>
                     </Chip>
                   )}
-                </p>
+                </div>
               </li>
 
               <li>
@@ -177,7 +181,7 @@ const DetailTransactionPage = ({
 
               <li>
                 <span>Categoría:</span>
-                <p>
+                <div>
                   {category?.name ? (
                     <Chip variant="flat" color="default" size="sm">
                       <span className="flex flex-row items-center gap-2 font-semibold">
@@ -188,7 +192,7 @@ const DetailTransactionPage = ({
                   ) : (
                     "Ninguna"
                   )}
-                </p>
+                </div>
               </li>
 
               <li>
@@ -216,7 +220,6 @@ const DetailTransactionPage = ({
             classNames={{
               title: "font-medium",
             }}
-            className="border-1 !bg-default-100 !shadow-none dark:border-white/5"
           >
             <ul className="flex flex-col gap-2 [&>li>p]:font-semibold [&>li>span]:opacity-70 [&>li]:flex [&>li]:flex-row [&>li]:items-center [&>li]:justify-between">
               <li>
@@ -237,7 +240,6 @@ const DetailTransactionPage = ({
               title: "font-medium",
             }}
             subtitle="Descripción de transacción"
-            className="border-1 !bg-default-100 !shadow-none dark:border-white/5"
           >
             <p>{description || "Sin descripción"}</p>
           </AccordionItem>
@@ -271,20 +273,17 @@ const DetailTransactionPage = ({
 };
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
-  const { id, acc } = ctx.params!;
+  const { id, bookId } = ctx.params!;
 
   const helper = await createServerSideCaller(ctx);
   const data = await helper.transaction.getTransactionById.fetch({
     id: Number(id),
+    bookId: String(bookId),
   });
-
-  const [transaction] = formatDatesOfTransactions(data as any);
-
-  if (!transaction) redirect(`/account/${acc}/transactions`);
 
   return {
     props: {
-      transaction,
+      data: JSON.stringify(data),
     },
   };
 };

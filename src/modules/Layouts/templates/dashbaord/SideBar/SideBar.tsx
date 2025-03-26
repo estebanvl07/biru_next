@@ -2,15 +2,8 @@ import clsx from "clsx";
 import { menuOptions } from "./options";
 import NavigationLogo from "../Header/NavigationLogo";
 import React, { useEffect, useState } from "react";
-import { motion } from "framer-motion";
 import OptionItem from "./OptionItem";
-import AvatarMenu from "../Header/Menu/AvatarMenu";
-import { Skeleton } from "@heroui/skeleton";
 import { useResize } from "~/lib/hooks/useResize";
-import { useSession } from "next-auth/react";
-import { Icon } from "@iconify/react/dist/iconify.js";
-import { useOutsideClick } from "~/lib/hooks";
-import Menu from "../Header/Menu/Menu";
 
 interface SideBarProps {
   serviceOptions?: boolean;
@@ -27,8 +20,7 @@ const SideBar = React.memo(
     }, [isDesktop]);
 
     return (
-      <motion.aside
-        layout
+      <aside
         className={clsx(
           "relative z-20 hidden min-h-screen duration-700 transition-width md:block",
           {
@@ -47,8 +39,7 @@ const SideBar = React.memo(
             },
           )}
         >
-          <motion.aside
-            layout
+          <aside
             className={clsx("mt-2 pt-2", {
               "mt-6 flex flex-col items-center justify-center gap-6":
                 !isExpanded,
@@ -56,7 +47,7 @@ const SideBar = React.memo(
             })}
           >
             <NavigationLogo isExpanded={isExpanded} />
-          </motion.aside>
+          </aside>
 
           <nav
             className={clsx(
@@ -67,7 +58,7 @@ const SideBar = React.memo(
             )}
           >
             {menuOptions.map(({ options, title }, index) => (
-              <div className="mb-4">
+              <div className="mb-4" key={index}>
                 <h6 className="mb-1 px-2 text-xs">{title}</h6>
                 <ul>
                   {options.map((item) => (
@@ -85,7 +76,7 @@ const SideBar = React.memo(
             <p className="px-6 text-xs">Create By, Team Dev'forgx 🚀</p>
           </footer>
         </div>
-      </motion.aside>
+      </aside>
     );
   },
 );

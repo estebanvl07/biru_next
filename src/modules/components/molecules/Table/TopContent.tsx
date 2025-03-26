@@ -141,11 +141,12 @@ const TopContent = React.memo(
           </div>
           {hasFilters && (
             <div className="flex items-center gap-1">
-              {filterBy?.map((props) => {
+              {filterBy?.map((props, index) => {
                 if (props.options.length === 0) return;
                 return (
                   <CustomFilters
                     {...props}
+                    key={index}
                     onChangeFilters={(currentFilter) => {
                       setFilters((prevFilters) => {
                         const updatedFilters = prevFilters.map((filter) =>
@@ -166,7 +167,6 @@ const TopContent = React.memo(
                       { text: "Todos", value: "all" },
                       ...props.options,
                     ]}
-                    key={props.by}
                   />
                 );
               })}

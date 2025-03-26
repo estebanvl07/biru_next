@@ -21,10 +21,18 @@ export const transactionsRouter = createTRPCRouter({
     .input(
       z.object({
         id: z.number(),
+        bookId: z.string(),
       }),
     )
     .query(({ input, ctx }) => {
-      return TransactionServices.getTransactionById(ctx.db, input.id);
+      const userId = ctx.session.user.id;
+
+      return TransactionServices.getTransactionById(
+        ctx.db,
+        input.id,
+        input.bookId,
+        userId,
+      );
     }),
   create: protectedProcedure
     .input(createTransaction)

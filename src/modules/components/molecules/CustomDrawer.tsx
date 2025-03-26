@@ -1,17 +1,19 @@
-import clsx from "clsx";
-import React from "react";
 import {
   Drawer,
+  DrawerBody,
   DrawerContent,
-  DrawerDescription,
   DrawerFooter,
   DrawerHeader,
-  DrawerTitle,
-} from "~/modules/components/atoms/Drawer.component";
-import { DialogProps } from "~/types/component/dialog";
+  type DrawerProps,
+} from "@heroui/drawer";
+import clsx from "clsx";
+import React from "react";
+import { DrawerDescription, DrawerTitle } from "../atoms/Drawer.component";
 
-interface CustomDrawerProps extends DialogProps {
+interface CustomDrawerProps extends DrawerProps {
+  subtitle?: string;
   footerContent?: JSX.Element;
+  content?: string;
 }
 
 const CustomDrawer = ({
@@ -22,17 +24,20 @@ const CustomDrawer = ({
   title,
   footerContent,
   classNames,
+  ...props
 }: CustomDrawerProps) => {
   return (
-    <Drawer open={isOpen} onClose={onClose}>
+    <Drawer isOpen={isOpen} onClose={onClose} {...props}>
       <DrawerContent
-        className={clsx("h-[70vh] px-2 pb-4", classNames?.content)}
+        className={clsx("px-2 pb-4 font-montserrat", classNames?.base)}
       >
-        <DrawerHeader>
-          {title && <DrawerTitle className="text-2xl">{title}</DrawerTitle>}
-          {subtitle && <DrawerDescription>{subtitle}</DrawerDescription>}
+        <DrawerHeader className="flex flex-col">
+          {title && <h3 className="text-2xl">{title}</h3>}
+          {subtitle && <p className="text-sm font-normal">{subtitle}</p>}
         </DrawerHeader>
-        <div className="overflow-auto">{children}</div>
+        <DrawerBody>
+          <div className="overflow-auto">{children}</div>
+        </DrawerBody>
         {footerContent && <DrawerFooter>{footerContent}</DrawerFooter>}
       </DrawerContent>
     </Drawer>

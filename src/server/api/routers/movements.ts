@@ -1,4 +1,4 @@
-import { createMovements } from "~/modules/Movements/schema";
+import { createMovements, updateMovements } from "~/modules/Movements/schema";
 import { createTRPCRouter, protectedProcedure } from "../trpc";
 import * as MovementsServices from "../services/movements.services";
 import { z } from "zod";
@@ -9,6 +9,12 @@ export const movementsRouter = createTRPCRouter({
     .mutation(async ({ input, ctx }) => {
       const userId = ctx.session.user.id;
       return MovementsServices.createMovement(ctx.db, { ...input, userId });
+    }),
+  update: protectedProcedure
+    .input(updateMovements)
+    .mutation(async ({ input, ctx }) => {
+      const userId = ctx.session.user.id;
+      return MovementsServices.updateMovement(ctx.db, { ...input, userId });
     }),
   getAll: protectedProcedure.query(async ({ ctx }) => {
     const userId = ctx.session.user.id;

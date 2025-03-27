@@ -33,6 +33,7 @@ export async function getCurrentMovementsMonth(
       },
       include: {
         category: true,
+        entity: true,
       },
       orderBy: {
         next_ocurrence: "asc",

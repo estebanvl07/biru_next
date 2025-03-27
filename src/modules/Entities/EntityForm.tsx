@@ -31,10 +31,18 @@ const EntityForm = ({ hasEdit, entityDefault }: EntityFormProps) => {
   } = useForm<createEntity>({
     resolver: zodResolver(createEntity),
   });
-  const { mutateAsync: EntityCreateMutation } = api.entity.create.useMutation();
-  const { mutateAsync: EntityUpdateMutation } = api.entity.update.useMutation();
+  const entitiesRefresh = api.useUtils();
 
-  const entitiesRefresh = api.useUtils().entity;
+  const { mutateAsync: EntityCreateMutation } = api.entity.create.useMutation({
+    onSuccess() {
+      entitiesRefresh.invalidate();
+    },
+  });
+  const { mutateAsync: EntityUpdateMutation } = api.entity.update.useMutation({
+    onSuccess() {
+      entitiesRefresh.invalidate();
+    },
+  });
 
   const alertConfig: any = {
     type: "quest",
@@ -59,7 +67,6 @@ const EntityForm = ({ hasEdit, entityDefault }: EntityFormProps) => {
           { ...payload, id: String(entityDefault?.id) },
           {
             onSuccess() {
-              entitiesRefresh.invalidate();
               reset();
             },
           },
@@ -75,7 +82,6 @@ const EntityForm = ({ hasEdit, entityDefault }: EntityFormProps) => {
     toast.promise(
       EntityCreateMutation(payload, {
         onSuccess() {
-          entitiesRefresh.invalidate();
           reset();
         },
       }),

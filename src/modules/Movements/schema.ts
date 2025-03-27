@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { updateSchema } from "~/lib/resolver/zod";
+import { updateIntSchema } from "~/lib/resolver/zod";
 
 const input = {
   name: z.string(),
@@ -16,5 +16,5 @@ const input = {
 
 export const createMovements = z.object(input);
 export type createMovements = z.infer<typeof createMovements>;
-export const updateMovements = updateSchema(input);
+export const updateMovements = updateIntSchema(input);
 export type updateMovements = z.infer<typeof updateMovements>;

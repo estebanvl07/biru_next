@@ -8,6 +8,13 @@ body {
   @apply text-sm text-slate-900 dark:text-slate-200;
 }
 
+.fc-toolbar-title {
+  @apply capitalize -tracking-wide;
+}
+.fc-col-header-cell-cushion {
+  @apply capitalize;
+}
+
 [data-slot="input-wrapper"] {
   @apply dark:!border-divider;
 }

@@ -26,6 +26,21 @@ export async function createMovement(
   return result;
 }
 
+export async function updateMovement(
+  db: PrismaClient,
+  data: Prisma.FixedMovementsUncheckedUpdateInput,
+) {
+  const result = await db.fixedMovements.update({
+    data,
+    where: {
+      id: Number(data.id),
+      bookId: String(data.bookId),
+      userId: String(data.userId),
+    },
+  });
+  return result;
+}
+
 export async function getMovementById({ bookId, db, id, userId }: GetMovement) {
   const result = await db.fixedMovements.findFirst({
     where: { id, userId, bookId },
@@ -76,7 +91,7 @@ export async function makeMovement({
         recipient: movement.entity?.name,
         categoryId: movement.categoryId,
         entityId: movement.entityId,
-        fixedId: id,
+        fiexedId: id,
         type: movement.type,
         transferType: 1,
         date: new Date(),

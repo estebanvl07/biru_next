@@ -21,6 +21,7 @@ import { EntityIncludes } from "~/types/entities/entity.types";
 import CreateEntity from "~/modules/Entities/CreateEntity";
 import EditEntity from "~/modules/Entities/EditEntity";
 import SettingsLayout from "~/modules/Layouts/SettingsLayout";
+import { useEntity } from "~/modules/Entities/hook/entities.hook";
 
 export default function EntitiesPage() {
   const router = useRouter();
@@ -37,10 +38,7 @@ export default function EntitiesPage() {
     onCloseEdit,
   } = useShowForm<EntityIncludes>({});
 
-  const { data: entities, isLoading } = api.entity.getEntities.useQuery(
-    undefined,
-    { enabled: Boolean(params?.acc) },
-  );
+  const { entities, isLoading } = useEntity();
 
   const isMobile = Boolean(size && size <= 768);
 

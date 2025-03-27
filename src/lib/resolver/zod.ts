@@ -34,4 +34,18 @@ export const updateSchema = <T extends z.ZodRawShape>(base: T) => {
   return z.object(props);
 };
 
+export const updateIntSchema = <T extends z.ZodRawShape>(base: T) => {
+  type UpdateBase = T & { id: z.ZodNumber };
+
+  const keys = Object.keys(base) as Array<keyof typeof base>;
+  const props = keys.reduce(
+    (input, key) => {
+      return { ...input, [key]: base[key]!.optional() };
+    },
+    { id: Z_NUMBER } as UpdateBase,
+  );
+
+  return z.object(props);
+};
+
 export { z };

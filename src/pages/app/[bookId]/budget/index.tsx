@@ -10,8 +10,6 @@ const BudgetPage = () => {
   const params = useParams<{ bookId: string }>();
   const { data } = api.budget.getCurrentBudget.useQuery(params?.bookId);
 
-  console.log(data);
-
   return (
     <DashboardLayout
       title="Presupuesto"

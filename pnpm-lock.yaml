@@ -20,6 +20,9 @@ importers:
       '@fullcalendar/react':
         specifier: ^6.1.15
         version: 6.1.15(@fullcalendar/core@6.1.15)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
+      '@fullcalendar/timegrid':
+        specifier: ^6.1.15
+        version: 6.1.15(@fullcalendar/core@6.1.15)
       '@heroui/accordion':
         specifier: 2.2.13
         version: 2.2.13(@heroui/system@2.4.12(@heroui/theme@2.4.12(tailwindcss@3.4.17))(framer-motion@11.18.2(react-dom@18.2.0(react@18.2.0))(react@18.2.0))(react-dom@18.2.0(react@18.2.0))(react@18.2.0))(@heroui/theme@2.4.12(tailwindcss@3.4.17))(framer-motion@11.18.2(react-dom@18.2.0(react@18.2.0))(react@18.2.0))(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
@@ -650,6 +653,11 @@ packages:
       '@fullcalendar/core': ~6.1.15
       react: ^16.7.0 || ^17 || ^18 || ^19
       react-dom: ^16.7.0 || ^17 || ^18 || ^19
+
+  '@fullcalendar/timegrid@6.1.15':
+    resolution: {integrity: sha512-61ORr3A148RtxQ2FNG7JKvacyA/TEVZ7z6I+3E9Oeu3dqTf6M928bFcpehRTIK6zIA6Yifs7BeWHgOE9dFnpbw==}
+    peerDependencies:
+      '@fullcalendar/core': ~6.1.15
 
   '@heroui/accordion@2.2.13':
     resolution: {integrity: sha512-0y+eOwc4CV6dGP9LBoXPpPza6ZUxoyUajbzaTA3NTADvqnIV6+TB/G6nbKtYJf4F4omMZwRGoLQ5vr/dKLCGCA==}
@@ -4988,6 +4996,11 @@ snapshots:
       '@fullcalendar/core': 6.1.15
       react: 18.2.0
       react-dom: 18.2.0(react@18.2.0)
+
+  '@fullcalendar/timegrid@6.1.15(@fullcalendar/core@6.1.15)':
+    dependencies:
+      '@fullcalendar/core': 6.1.15
+      '@fullcalendar/daygrid': 6.1.15(@fullcalendar/core@6.1.15)
 
   '@heroui/accordion@2.2.13(@heroui/system@2.4.12(@heroui/theme@2.4.12(tailwindcss@3.4.17))(framer-motion@11.18.2(react-dom@18.2.0(react@18.2.0))(react@18.2.0))(react-dom@18.2.0(react@18.2.0))(react@18.2.0))(@heroui/theme@2.4.12(tailwindcss@3.4.17))(framer-motion@11.18.2(react-dom@18.2.0(react@18.2.0))(react@18.2.0))(react-dom@18.2.0(react@18.2.0))(react@18.2.0)':
     dependencies:

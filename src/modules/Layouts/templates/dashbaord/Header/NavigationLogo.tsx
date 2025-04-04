@@ -26,8 +26,8 @@ const NavigationLogo = ({
       href={params?.acc ? `/app/${params?.bookId}` : "/overview"}
       className={clsx("flex items-center gap-2", className)}
     >
-      {/* <Image src={srcminimal} alt="Logo de Biru" width={25} height={35} /> */}
-      {isExpanded && <span className="text-xl font-medium">Biru</span>}
+      <Image src={srcminimal} alt="Logo de Biru" width={25} height={35} />
+      {isExpanded && <span className="pt-1 text-2xl font-semibold">Biru</span>}
     </Link>
   );
 };

@@ -34,7 +34,7 @@ const CustomFilters = ({
         <Button
           variant="bordered"
           size="sm"
-          radius="full"
+          radius="sm"
           className="border border-default-300"
           endContent={<ChevronDownIcon className="text-small" />}
         >

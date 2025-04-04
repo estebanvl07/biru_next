@@ -5,26 +5,26 @@ const columns = [
     sotring: false,
   },
   {
-    name: "ENTIDAD",
+    name: "Entidad",
     uid: "name",
     sotring: true,
   },
   {
-    name: "REFERENCIA",
+    name: "Referencia",
     uid: "reference",
     sotring: true,
   },
   {
-    name: "ESTADO",
-    uid: "state",
+    name: "Tipo",
+    uid: "type",
     sotring: true,
   },
   {
-    name: "FECHA DE CREACIÓN",
+    name: "Fecha de creación",
     uid: "createdAt",
   },
   {
-    name: "ACTIONS",
+    name: "Acciones",
     uid: "actions",
   },
 ];

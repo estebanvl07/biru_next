@@ -2,6 +2,8 @@ import { useRouter } from "next/router";
 import { BreadcrumbItem, Breadcrumbs } from "@heroui/react";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import Link from "next/link";
+import { DASHBOARD_MAIN_PATH } from "~/lib/constants/config";
+import { usePathname } from "next/navigation";
 
 const segmentTranslations = {
   main: {
@@ -18,6 +20,14 @@ const segmentTranslations = {
   },
   goals: {
     title: "Metas",
+    icon: "ph:target",
+  },
+  calendar: {
+    title: "Calendario",
+    icon: "ph:target",
+  },
+  budget: {
+    title: "Presupuesto",
     icon: "ph:target",
   },
   analytics: {
@@ -45,6 +55,7 @@ const segmentTranslations = {
 
 const Breadcrum = () => {
   const router = useRouter();
+  const pathname = usePathname();
   const params = router.query;
   const pathSegments = router.asPath
     .split("/")
@@ -56,36 +67,28 @@ const Breadcrum = () => {
   }
 
   return (
-    // <Breadcrumbs className="mb-2">
-    //   {!router.pathname.includes("/main") && (
-    //     <BreadcrumbItem>
-    //       <Link href={`/account/${params?.acc}/main`}>
-    //         <Icon icon="akar-icons:dashboard" width={14} />
-    //       </Link>
-    //     </BreadcrumbItem>
-    //   )}
-    //   {pathSegments.map((segment, index) => (
-    //     <BreadcrumbItem
-    //       startContent={
-    //         segment
-    //           ? segmentTranslations[segment]?.icon && (
-    //               <Icon icon={segmentTranslations[segment]?.icon} width={14} />
-    //             )
-    //           : null
-    //       }
-    //       key={index}
-    //     >
-    //       <Link
-    //         href={`/account/${params?.acc}/${pathSegments.slice(0, index + 1).join("/")}`}
-    //       >
-    //         {segmentTranslations[segment]?.title
-    //           ? segmentTranslations[segment].title
-    //           : segment}
-    //       </Link>
-    //     </BreadcrumbItem>
-    //   ))}
-    // </Breadcrumbs>
-    <></>
+    <Breadcrumbs className="mb-2">
+      {pathname !== `${DASHBOARD_MAIN_PATH}/${params?.bookId}` && (
+        <BreadcrumbItem>
+          <Link href={`${DASHBOARD_MAIN_PATH}/${params?.bookId}`}>
+            Dashboard
+          </Link>
+        </BreadcrumbItem>
+      )}
+      {pathSegments.map((segment, index) => (
+        <BreadcrumbItem key={`${segment}-${index}`}>
+          <Link
+            href={`${DASHBOARD_MAIN_PATH}/${params?.bookId}/${pathSegments.slice(0, index + 1).join("/")}`}
+          >
+            {segmentTranslations[segment as keyof typeof segmentTranslations]
+              ?.title
+              ? segmentTranslations[segment as keyof typeof segmentTranslations]
+                  .title
+              : segment}
+          </Link>
+        </BreadcrumbItem>
+      ))}
+    </Breadcrumbs>
   );
 };
 

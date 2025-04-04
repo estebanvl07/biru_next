@@ -1,12 +1,10 @@
 import React from "react";
 import { Card, CardBody, CardHeader } from "@heroui/react";
 import { Icon } from "@iconify/react/dist/iconify.js";
-import { useParams } from "next/navigation";
-import { api } from "~/utils/api";
+import { useCurrentMonthBudget } from "./hooks/useBudget";
 
 const BudgetSummary = () => {
-  const params = useParams<{ bookId: string }>();
-  const { data } = api.budget.getCurrentBudget.useQuery(params?.bookId);
+  const { budget: data } = useCurrentMonthBudget();
 
   return (
     <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">

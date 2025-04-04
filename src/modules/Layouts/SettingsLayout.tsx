@@ -43,18 +43,8 @@ const SettingsLayout = ({ children }: { children: React.ReactNode }) => {
         <p>Lorem ipsum dolor sit amet.</p>
       </div>
       <main className="mt-10 flex items-start gap-8">
-        <aside className="flex w-80 flex-col">
-          <Input
-            classNames={{
-              inputWrapper:
-                "bg-white border border-divider dark:bg-default-100",
-            }}
-            radius="sm"
-            isClearable
-            placeholder="Buscar Libro"
-            startContent={<Icon icon={"mynaui:search"} width={18} />}
-          />
-          <ul className="mt-4 flex flex-col">
+        <aside className="flex w-64 flex-col">
+          <ul className="flex flex-col">
             {routes.map(({ href, name }) => (
               <Link
                 key={name}

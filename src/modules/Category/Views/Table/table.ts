@@ -5,16 +5,16 @@ const columns = [
     sortable: false,
   },
   {
-    name: "NOMBRE",
+    name: "Nombre",
     uid: "name",
     sortable: true,
   },
   {
-    name: "TIPO",
+    name: "Tipo",
     uid: "type",
   },
   {
-    name: "ACTIONS",
+    name: "Acciones",
     uid: "actions",
   },
 ];

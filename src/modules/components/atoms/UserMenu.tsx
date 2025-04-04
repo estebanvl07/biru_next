@@ -31,28 +31,12 @@ const UserMenu = () => {
       ) : (
         <div
           className={clsx(
-            "flex cursor-pointer flex-col items-center gap-4 rounded-full border  bg-white p-1.5 transition-width dark:border-none dark:border-white/10 dark:bg-default-200",
+            "flex cursor-pointer flex-col items-center gap-4 p-1.5",
           )}
           onClick={() => setShowMenu(!showMenu)}
           ref={handlerRef}
         >
           <div className="flex h-fit w-full items-center gap-2">
-            {isDesktop && (
-              <aside className="flex flex-col items-start pl-3">
-                <p
-                  className="m-0 max-w-28 overflow-hidden text-ellipsis whitespace-nowrap p-0 text-end text-sm font-semibold dark:text-white"
-                  title={session?.user.name ?? ""}
-                >
-                  {session?.user.name}
-                </p>
-                <span
-                  className="max-w-24 overflow-hidden text-ellipsis whitespace-nowrap text-end text-xs dark:text-slate-300"
-                  title={session?.user.email ?? ""}
-                >
-                  {session?.user.email}
-                </span>
-              </aside>
-            )}
             <AvatarMenu />
           </div>
         </div>

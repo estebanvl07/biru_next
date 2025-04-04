@@ -68,8 +68,10 @@ const RedirectionLink = ({
   return (
     <Link
       href={{
-        pathname: `${DASHBOARD_MAIN_PATH}/[bookId]${item.href}`,
-        query: { bookId: book.id },
+        pathname: item.cleanPath
+          ? item.href
+          : `${DASHBOARD_MAIN_PATH}/[bookId]${item.href}`,
+        query: !item.cleanPath ? { bookId: book.id } : undefined,
       }}
       className="z-0 flex items-center gap-2"
       title={item.name}

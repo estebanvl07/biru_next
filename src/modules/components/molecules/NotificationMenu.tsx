@@ -30,7 +30,7 @@ const NotificationMenu = () => {
         <Button
           isIconOnly
           variant="bordered"
-          className="border border-divider"
+          className="border-none"
           radius="full"
           onPress={() => setShowMenu(!showMenu)}
         >

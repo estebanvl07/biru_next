@@ -62,6 +62,25 @@ export const menuOptions = [
       },
     ],
   },
+  {
+    title: "Configuración",
+    options: [
+      {
+        id: 1,
+        name: "Configuración",
+        icon: "mynaui:config",
+        href: "/overview/settings",
+        cleanPath: true,
+      },
+      {
+        id: 2,
+        name: "Mis Libros",
+        icon: "mynaui:book",
+        href: "/overview",
+        cleanPath: true,
+      },
+    ],
+  },
 
   // {
   //   id: 6,

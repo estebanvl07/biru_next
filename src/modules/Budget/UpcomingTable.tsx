@@ -21,6 +21,7 @@ import { MovementsIncludes } from "~/types/movements";
 import { toast } from "sonner";
 import CreateOcurrenceForm from "../Movements/CreateOcurrenceForm";
 import clsx from "clsx";
+import { useExpensesCurrentMonth } from "./hooks/useBudget";
 
 const getDaysRemaining = (dateString: string) => {
   const today = new Date();
@@ -38,14 +39,12 @@ const UpcomingTable = () => {
   const [currentMovementSelected, setCurrentMovementSelected] =
     useState<MovementsIncludes>();
   const { isOpen, onClose, onOpen } = useDisclosure();
-  const { data, isLoading } = api.budget.getExepensesCurrentMonth.useQuery();
+  const { expenses: data, isLoading } = useExpensesCurrentMonth();
 
   const router = useRouter();
   const params = router.query;
 
   const onMakeMovement = (id: string) => {
-    console.log(id);
-
     const movement = data?.find((m) => m.id === Number(id));
 
     if (movement) {
@@ -62,8 +61,6 @@ const UpcomingTable = () => {
   };
 
   const getDefaultsSelected = () => {
-    console.log(data);
-
     const defaultKeys = data
       ?.filter(({ last_ocurrence, id }) => {
         if (
@@ -243,7 +240,8 @@ const UpcomingTable = () => {
           </DrawerHeader>
           <DrawerBody>
             <CreateOcurrenceForm
-              {...(currentMovementSelected as MovementsIncludes)}
+              movement={currentMovementSelected as MovementsIncludes}
+              onSuccess={() => onClose()}
             />
           </DrawerBody>
         </DrawerContent>

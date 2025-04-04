@@ -3,11 +3,11 @@ import { useRouter } from "next/router";
 import { useResize } from "~/lib/hooks/useResize";
 import { useGoals } from "~/modules/Goals/hook/goal.hook";
 
-import { Tab, Tabs } from "@heroui/react";
+import { CardBody, Tab, Tabs, Card } from "@heroui/react";
 import DashboardLayout from "~/modules/Layouts/Dashboard";
 import TransactionForm from "~/modules/Transactions/TransactionForm";
 import { Icon } from "@iconify/react/dist/iconify.js";
-import { Card, Empty } from "~/modules/components";
+import { Empty } from "~/modules/components";
 
 const NewTransactionPage = () => {
   const params = useParams();
@@ -27,20 +27,13 @@ const NewTransactionPage = () => {
         defaultSelectedKey={(query.transferType as string) || "transfer"}
         aria-label="Forms transaction tabs"
         radius="full"
-        variant={isMobile ? "underlined" : undefined}
+        variant={"underlined"}
         className={isMobile ? "w-full" : "w-fit"}
-        classNames={
-          isMobile
-            ? {
-                tabList:
-                  "gap-6 w-full relative rounded-none p-0 border-b border-divider",
-                cursor: "w-full bg-primary dark:bg-slate-200",
-                tab: "w-full px-0 h-12",
-                tabContent:
-                  "group-data-[selected=true]:text-primary  group-data-[selected=true]:dark:text-slate-300",
-              }
-            : undefined
-        }
+        classNames={{
+          tab: "px-0 pt-0",
+          cursor: "w-[90%]",
+          tabList: "gap-x-4 pt-0",
+        }}
       >
         <Tab
           key="transfer"
@@ -52,13 +45,14 @@ const NewTransactionPage = () => {
             </div>
           }
         >
-          <TransactionForm
-            // defaultGoal={options.defaultGoal}
-            // defCategory={options.defaultCategory}
-            // defEntity={options.defaultEntity}
-            type="transfer"
-            onSuccess={() => router.back()}
-          />
+          <Card className="px-4 py-2 shadow-sm md:max-w-[36rem]">
+            <CardBody>
+              <TransactionForm
+                type="transfer"
+                onSuccess={() => router.back()}
+              />
+            </CardBody>
+          </Card>
         </Tab>
         <Tab
           className="w-full"
@@ -71,7 +65,7 @@ const NewTransactionPage = () => {
           }
         >
           {!goalIsLoading && goals.length === 0 ? (
-            <Card className="w-[32rem] py-8">
+            <Card className="max-w-[36rem] p-4 shadow-sm">
               <Empty
                 description="No tienes metas creadas"
                 buttonText="Crear Meta"
@@ -79,13 +73,7 @@ const NewTransactionPage = () => {
               />
             </Card>
           ) : (
-            <TransactionForm
-              // defaultGoal={options.defaultGoal}
-              // defCategory={options.defaultCategory}
-              // defEntity={options.defaultEntity}
-              type="goal"
-              onSuccess={() => router.back()}
-            />
+            <TransactionForm type="goal" onSuccess={() => router.back()} />
           )}
         </Tab>
       </Tabs>

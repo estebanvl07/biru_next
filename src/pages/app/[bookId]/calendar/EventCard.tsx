@@ -1,5 +1,5 @@
 import clsx from "clsx";
-import { format, isSameMonth } from "date-fns";
+import { format, isAfter, isBefore, isSameMonth } from "date-fns";
 import { es } from "date-fns/locale";
 import Link from "next/link";
 import { useParams } from "next/navigation";
@@ -11,15 +11,27 @@ const EventCard = ({
   name,
   next_ocurrence,
   last_ocurrence,
+  transferType,
   id,
 }: MovementsIncludes) => {
   const params = useParams();
   const isPay =
     last_ocurrence && isSameMonth(new Date(last_ocurrence), new Date());
+  const isDefeated = isBefore(new Date(next_ocurrence), new Date());
+
+  // TODO: add goals and saving
+  const pathname = {
+    goal: `#`,
+    transaction: `${DASHBOARD_MAIN_PATH}/[bookId]/transactions/[id]/make`,
+    movement: `${DASHBOARD_MAIN_PATH}/[bookId]/movements/new/ocurrence/[id]`,
+    saving: `#`,
+    default: "#",
+  }[transferType || "default"];
+
   return (
     <Link
       href={{
-        pathname: `${DASHBOARD_MAIN_PATH}/[bookId]/movements/[id]`,
+        pathname,
         query: {
           bookId: params?.bookId,
           id,
@@ -30,13 +42,13 @@ const EventCard = ({
         className={clsx(
           "hover:bg-muted ml-1 cursor-pointer border-l border-divider px-4 py-1 transition-colors ",
           {
-            "cursor-auto select-none opacity-50": isPay,
+            "cursor-auto select-none border-green-500 opacity-50": isPay,
+            "border-red-500": isDefeated,
             "hover:bg-default-50 dark:hover:bg-slate-800": !isPay,
           },
         )}
       >
         <div className="flex items-center">
-          {/* <div className={`w-3 h-3 rounded-full ${tipoEvento?.color} mr-2`}></div> */}
           <span className="font-medium">{name}</span>
         </div>
         <p className="text-muted-foreground text-sm">

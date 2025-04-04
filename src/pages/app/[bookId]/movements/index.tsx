@@ -5,7 +5,7 @@ import MovementsTable from "~/modules/Movements/views/Table/MovementsTable";
 
 const Movements = () => {
   return (
-    <DashboardLayout title="Movimientos Fijos">
+    <DashboardLayout title="Movimientos">
       <MovementsTable />
     </DashboardLayout>
   );

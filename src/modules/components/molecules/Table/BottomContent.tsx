@@ -1,4 +1,5 @@
 import { Button, Pagination } from "@heroui/react";
+import { MoveLeft, MoveRight } from "lucide-react";
 import React from "react";
 import { BottomContentProps } from "~/types/component/table.types";
 
@@ -18,7 +19,7 @@ const BottomContent = React.memo(
           <Pagination
             isCompact
             showControls
-            showShadow
+            showShadow={false}
             color="primary"
             page={page}
             total={pages}
@@ -27,21 +28,11 @@ const BottomContent = React.memo(
         )}
         {navButtons && (
           <div className="hidden w-[30%] justify-end gap-2 sm:flex">
-            <Button
-              isDisabled={pages === 1}
-              size="sm"
-              variant="flat"
-              onPress={onPreviousPage}
-            >
-              Previous
+            <Button isDisabled={pages === 1} size="sm" onPress={onPreviousPage}>
+              <MoveLeft width={16} />
             </Button>
-            <Button
-              isDisabled={pages === 1}
-              size="sm"
-              variant="flat"
-              onPress={onNextPage}
-            >
-              Next
+            <Button isDisabled={pages === 1} size="sm" onPress={onNextPage}>
+              <MoveRight width={16} />
             </Button>
           </div>
         )}

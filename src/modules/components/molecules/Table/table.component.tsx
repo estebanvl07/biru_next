@@ -11,14 +11,16 @@ import {
   type SortDescriptor,
   TableProps as TableHeroProps,
   SharedSelection,
+  Spinner,
 } from "@heroui/react";
 
 import { FilterValidate, type TableProps } from "~/types/component/table.types";
 import BottomContent from "./BottomContent";
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 
 import { useSearch } from "~/lib/hooks";
 import { LoaderSkeleton } from "~/modules/Loaders";
+import { divide } from "lodash";
 
 const DataTable = <T,>({
   headerConfig,
@@ -30,6 +32,8 @@ const DataTable = <T,>({
   hasTopContent = true,
   removeWrapper,
   hasBottomContent = true,
+  onChangeTable,
+  pages = 1,
   filterKeys,
   footerConfig,
   ...props
@@ -48,31 +52,33 @@ const DataTable = <T,>({
     new Set(INITIAL_VISIBLE_COLUMNS),
   );
 
-  const { onSearch, newList } = useSearch({
+  const { onSearch, newList, refreshList } = useSearch({
     data,
     keys: filterKeys ?? "",
   });
 
   useMemo(() => {
-    onSearch(filterValue);
+    if (!headerConfig?.onCustomSearch) {
+      refreshList();
+      onSearch(filterValue);
+    }
+    setPage(1);
   }, [data, filterValue]);
 
   const filteredItems = useMemo(() => {
     if (!customFilters?.length) return newList; // Si no hay filtros, devolver data original
-
     const filteredData = newList.filter((item: any) =>
       customFilters.every(({ by, value }) => {
         return value === "all" ? true : item[by] == value;
       }),
     );
 
-    setPage(1);
+    setPage(1); // Reset page to 1 when filters change
 
     return filteredData;
   }, [newList, customFilters]);
 
-  // TODO: sorted columns
-  const sortedItems = useMemo(() => {
+  const dataSorted = useMemo(() => {
     return [...filteredItems].sort((a: T, b: T) => {
       const first = a[sortDescriptor.column as keyof T] as number;
       const second = b[sortDescriptor.column as keyof T] as number;
@@ -85,8 +91,10 @@ const DataTable = <T,>({
   const bodyData = useMemo(() => {
     const start = (page - 1) * rowsPerPage;
     const end = start + rowsPerPage;
-    return sortedItems.slice(start, end);
-  }, [page, sortedItems, rowsPerPage]);
+    return !headerConfig?.onCustomSearch
+      ? dataSorted.slice(start, end)
+      : dataSorted;
+  }, [page, dataSorted, rowsPerPage, headerConfig?.onCustomSearch]);
 
   const headerColumns = useMemo(() => {
     if (visibleColumns === "all") return columns;
@@ -96,13 +104,15 @@ const DataTable = <T,>({
     );
   }, [visibleColumns]);
 
-  const pages = Math.ceil(filteredItems.length / rowsPerPage);
+  const customPages = headerConfig?.onCustomSearch
+    ? pages
+    : Math.ceil(filteredItems.length / rowsPerPage);
 
   const onNextPage = useCallback(() => {
-    if (page < pages) {
+    if (page < customPages) {
       setPage(page + 1);
     }
-  }, [page, pages]);
+  }, [page, customPages]);
 
   const onPreviousPage = useCallback(() => {
     if (page > 1) {
@@ -126,91 +136,97 @@ const DataTable = <T,>({
     [],
   );
 
+  useEffect(() => {
+    onChangeTable && onChangeTable(page, rowsPerPage);
+  }, [rowsPerPage, page]);
+
   return (
-    <>
-      {isLoading ? (
-        <LoaderSkeleton skeletonType="Table" />
-      ) : (
-        <Table
-          isHeaderSticky
-          className="dark:text-white"
-          classNames={classNames}
-          aria-label="Data table"
-          color="primary"
-          sortDescriptor={sortDescriptor}
-          align="center"
-          topContentPlacement="outside"
-          topContent={
-            hasTopContent && (
-              <TopContent
-                lenght={filteredItems.length}
-                columns={columns}
-                filterBy={filterBy}
-                filterValue={filterValue}
-                setFilterValue={setFilterValue}
-                visibleColumns={visibleColumns}
-                setVisibleColumns={setVisibleColumns}
-                setPage={setPage}
-                setRowsPerPage={setRowsPerPage}
-                onChangeFilters={(filters) => {
-                  setCustomFilters(filters);
-                }}
-                {...headerConfig}
-              />
-            )
-          }
-          bottomContent={
-            hasBottomContent && (
-              <BottomContent
-                page={page}
-                setPage={setPage}
-                onNextPage={onNextPage}
-                onPreviousPage={onPreviousPage}
-                pages={pages}
-                {...footerConfig}
-              />
-            )
-          }
-          checkboxesProps={{
-            classNames: {
-              wrapper: "border border-divider",
-            },
-          }}
-          bottomContentPlacement="outside"
-          onSortChange={setSortDescriptor}
-          {...(props as TableHeroProps)}
-        >
-          <TableHeader columns={headerColumns}>
-            {({ uid, align, sortable, name }) => (
-              <TableColumn
-                key={uid}
-                align={align ?? "start"}
-                allowsSorting={sortable}
-              >
-                {name}
-              </TableColumn>
-            )}
-          </TableHeader>
-          <TableBody items={bodyData} emptyContent="Data not found">
-            {(item: any) => (
-              <TableRow key={`${item.id}`}>
-                {(columnKey) => {
-                  return (
-                    <TableCell align="justify">
-                      {renderCell
-                        ? renderCell(item, columnKey)
-                        : getKeyValue(item, columnKey)}
-                    </TableCell>
-                  );
-                }}
-              </TableRow>
-            )}
-          </TableBody>
-        </Table>
-        // <Card className="py-5 dark:bg-default-200">
-        // </Card>
-      )}
-    </>
+    <Table
+      isHeaderSticky
+      className="dark:text-white"
+      classNames={classNames}
+      aria-label="Data table"
+      isLoading={isLoading}
+      color="primary"
+      sortDescriptor={sortDescriptor}
+      align="center"
+      topContentPlacement="outside"
+      topContent={
+        hasTopContent && (
+          <TopContent
+            lenght={filteredItems.length}
+            columns={columns}
+            filterBy={filterBy}
+            filterValue={filterValue}
+            setFilterValue={setFilterValue}
+            visibleColumns={visibleColumns}
+            setVisibleColumns={setVisibleColumns}
+            setPage={setPage}
+            setRowsPerPage={setRowsPerPage}
+            onChangeFilters={(filters) => {
+              setCustomFilters(filters);
+            }}
+            {...headerConfig}
+          />
+        )
+      }
+      bottomContent={
+        hasBottomContent && (
+          <BottomContent
+            page={page}
+            setPage={setPage}
+            onNextPage={onNextPage}
+            onPreviousPage={onPreviousPage}
+            pages={customPages}
+            {...footerConfig}
+          />
+        )
+      }
+      checkboxesProps={{
+        classNames: {
+          wrapper: "border border-divider",
+        },
+      }}
+      bottomContentPlacement="outside"
+      onSortChange={setSortDescriptor}
+      {...(props as TableHeroProps)}
+    >
+      <TableHeader columns={headerColumns}>
+        {({ uid, align, sortable, name }) => (
+          <TableColumn
+            key={uid}
+            align={align ?? "start"}
+            allowsSorting={sortable}
+          >
+            <span className="text-xs font-medium">{name}</span>
+          </TableColumn>
+        )}
+      </TableHeader>
+      <TableBody
+        isLoading={isLoading}
+        loadingContent={
+          <div className="flex h-full w-full items-center justify-center rounded-xl bg-default-200/30">
+            <Spinner />
+          </div>
+        }
+        items={bodyData}
+        emptyContent="No se han encontrado datos"
+      >
+        {(item: any) => (
+          <TableRow key={`${item.id}`}>
+            {(columnKey) => {
+              return (
+                <TableCell align="justify">
+                  {renderCell
+                    ? renderCell(item, columnKey)
+                    : getKeyValue(item, columnKey)}
+                </TableCell>
+              );
+            }}
+          </TableRow>
+        )}
+      </TableBody>
+    </Table>
   );
 };
 

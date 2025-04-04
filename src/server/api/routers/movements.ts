@@ -16,10 +16,12 @@ export const movementsRouter = createTRPCRouter({
       const userId = ctx.session.user.id;
       return MovementsServices.updateMovement(ctx.db, { ...input, userId });
     }),
-  getAll: protectedProcedure.query(async ({ ctx }) => {
-    const userId = ctx.session.user.id;
-    return MovementsServices.getMovements(ctx.db, userId);
-  }),
+  getAll: protectedProcedure
+    .input(z.string())
+    .query(async ({ ctx, input: bookId }) => {
+      const userId = ctx.session.user.id;
+      return MovementsServices.getMovements(ctx.db, userId, bookId);
+    }),
   getMovementById: protectedProcedure
     .input(
       z.object({

@@ -53,9 +53,13 @@ export async function getMovementById({ bookId, db, id, userId }: GetMovement) {
   return result;
 }
 
-export async function getMovements(db: PrismaClient, userId: string) {
+export async function getMovements(
+  db: PrismaClient,
+  userId: string,
+  bookId: string,
+) {
   return db.fixedMovements.findMany({
-    where: { userId },
+    where: { userId, bookId },
     include: {
       category: true,
       transactions: {

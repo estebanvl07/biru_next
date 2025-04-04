@@ -1,66 +1,149 @@
 import type { Prisma, PrismaClient } from "@prisma/client";
 import { FilterOptions } from "~/types/transactions";
 import { filtersHandler } from "../filterHandler";
+import { advanceSchema } from "~/modules/Transactions/advanceSchema";
+
+interface PaginationOptions {
+  limit: number;
+  page: number;
+}
 
 export async function createTransaction(
-  db: PrismaClient,
+  mainDb: PrismaClient,
   data: Prisma.TransactionUncheckedCreateInput,
 ) {
-  const result = await db.$transaction(async (db) => {
+  const result = await mainDb.$transaction(async (db) => {
     const transaction = await db.transaction.create({
       data,
     });
 
-    if (data.transferType === 2) {
-      const goal = await db.goals.findFirst({
-        where: { id: Number(data.goalId) },
-      });
-
-      let validate;
-      if (goal?.type === 1) {
-        validate = data.type === 1 ? 1 : -1;
-      } else {
-        validate = data.type === 1 ? -1 : 1;
-      }
-
-      await db.goals.update({
-        where: { id: Number(data.goalId) },
-        data: {
-          saved: {
-            increment: data.amount,
-          },
-        },
-      });
-
-      await db.userAccount.update({
-        where: { id: data.accountId! },
-        data: {
-          balance: {
-            increment: data.amount * validate,
-          },
-        },
-      });
-    } else {
-      let validate;
-      if (data.transferType === 1) {
-        validate = data.type === 1 ? 1 : -1;
-      } else {
-        validate = data.type === 1 ? -1 : 1;
-      }
-      await db.userAccount.update({
-        where: { id: data.accountId! },
-        data: {
-          balance: {
-            increment: data.amount * validate,
-          },
-        },
-      });
+    if (data.state !== 3) {
+      makeTransaction(mainDb, transaction.bookId, transaction.id, data.userId);
     }
 
     return transaction;
   });
 
   return result;
+}
+
+export async function searchTransactions(
+  db: PrismaClient,
+  data: advanceSchema,
+  userId: string,
+) {
+  const {
+    bookId,
+    categoryId,
+    entityId,
+    type,
+    state,
+    max,
+    min,
+    start_date,
+    end_date,
+  } = data;
+
+  const transactionsFound = await db.transaction.findMany({
+    where: {
+      bookId,
+      categoryId,
+      entityId,
+      amount: {
+        gte: min,
+        lte: max,
+      },
+      type,
+      state,
+      date: {
+        gte: start_date,
+        lt: end_date,
+      },
+
+      userId,
+    },
+    include: { userAccount: true, category: true, entity: true, goal: true },
+    orderBy: {
+      date: "desc",
+    },
+  });
+
+  return transactionsFound;
+}
+
+export async function makeTransaction(
+  db: PrismaClient,
+  bookId: string,
+  id: number,
+  userId: string,
+) {
+  const data = await db.transaction.findFirst({
+    where: {
+      bookId,
+      id,
+      userId,
+    },
+  });
+
+  if (!data) throw new Error("Transaction not found");
+
+  if (data.state !== 1) {
+    // comfirmed transaction
+    await db.transaction.update({
+      data: {
+        state: 1,
+      },
+      where: {
+        id: Number(data.id),
+      },
+    });
+  }
+
+  if (data.transferType === 2) {
+    const goal = await db.goals.findFirst({
+      where: { id: Number(data.goalId) },
+    });
+
+    let validate;
+    if (goal?.type === 1) {
+      validate = data.type === 1 ? 1 : -1;
+    } else {
+      validate = data.type === 1 ? -1 : 1;
+    }
+
+    await db.goals.update({
+      where: { id: Number(data.goalId) },
+      data: {
+        saved: {
+          increment: data.amount,
+        },
+      },
+    });
+
+    await db.userAccount.update({
+      where: { id: data.accountId! },
+      data: {
+        balance: {
+          increment: data.amount * validate,
+        },
+      },
+    });
+  } else {
+    let validate;
+    if (data.transferType === 1) {
+      validate = data.type === 1 ? 1 : -1;
+    } else {
+      validate = data.type === 1 ? -1 : 1;
+    }
+    await db.userAccount.update({
+      where: { id: data.accountId! },
+      data: {
+        balance: {
+          increment: data.amount * validate,
+        },
+      },
+    });
+  }
 }
 
 export async function updateTransaction(
@@ -168,9 +251,92 @@ export async function getTransactionsByFilter(
     },
   });
 
-  console.log(transactionsFound);
+  console.log(transactionsFound.find((tr) => tr.id === 50));
 
   return transactionsFound;
+}
+
+export async function getTransactionsByQuery(
+  db: PrismaClient,
+  bookId: string,
+  userId: string,
+  query: string,
+) {
+  return db.transaction.findMany({
+    where: {
+      bookId,
+      userId,
+      OR: [
+        {
+          description: {
+            mode: "insensitive",
+            contains: query,
+          },
+        },
+        {
+          category: {
+            name: {
+              mode: "insensitive",
+              contains: query,
+            },
+          },
+        },
+        {
+          entity: {
+            name: {
+              contains: query,
+            },
+          },
+        },
+        {
+          goal: {
+            name: {
+              contains: query,
+            },
+          },
+        },
+      ],
+    },
+    include: { userAccount: true, category: true, entity: true, goal: true },
+    orderBy: {
+      date: "desc",
+    },
+    take: 50,
+  });
+}
+
+export async function getTransactions(
+  db: PrismaClient,
+  bookId: string,
+  userId: string,
+  options: PaginationOptions,
+) {
+  const { limit = 5, page = 1 } = options;
+  const skip = (page - 1) * limit;
+  const [transaction, total] = await db.$transaction([
+    db.transaction.findMany({
+      skip,
+      take: limit,
+      where: {
+        bookId,
+        userId,
+      },
+      include: { userAccount: true, category: true, entity: true, goal: true },
+      orderBy: { createdAt: "desc" },
+    }),
+    db.transaction.count({
+      where: {
+        bookId,
+        userId,
+      },
+    }),
+  ]);
+
+  return {
+    transaction,
+    total,
+    totalPages: Math.ceil(total / limit),
+  };
 }
 
 export async function getTransactionById(

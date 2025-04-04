@@ -13,8 +13,18 @@ import { api } from "~/utils/api";
 import { toast } from "sonner";
 import { InputSelectAccount } from "../components";
 import { useCurrentAccount } from "../Account/hooks";
+import { useMovements } from "./hooks/useMovements";
+import { useExpensesCurrentMonth } from "../Budget/hooks/useBudget";
 
-const CreateOcurrenceForm = (movement: MovementsIncludes) => {
+interface CreateOcurrenceFormProps {
+  movement: MovementsIncludes;
+  onSuccess?: () => void;
+}
+
+const CreateOcurrenceForm = ({
+  movement,
+  onSuccess,
+}: CreateOcurrenceFormProps) => {
   const [amount, setAmount] = useState("");
   const [amountValue, setAmountValue] = useState<number>(0);
   const [accountSelected, setAccountSelected] = useState<number>(0);
@@ -22,18 +32,51 @@ const CreateOcurrenceForm = (movement: MovementsIncludes) => {
   const router = useRouter();
   const params = useParams<{ bookId: string }>();
   const { account } = useCurrentAccount();
+  const { invalidateMovements } = useMovements();
+  const { invalidateExpenses } = useExpensesCurrentMonth();
 
-  const utils = api.useUtils();
-
-  const { mutateAsync: MakeMovementMutation, isPending } =
+  const { mutateAsync: MakeMovementMutation } =
     api.movements.makeMovement.useMutation({
-      onSuccess: () => {
-        utils.invalidate();
+      onSuccess: async () => {
+        await invalidateExpenses({ hasRefetch: true });
+        onSuccess?.();
+        invalidateMovements();
+      },
+    });
+
+  const { mutateAsync: MakeTransactionMutation } =
+    api.transaction.makeTransaction.useMutation({
+      onSuccess: async () => {
+        await invalidateExpenses({ hasRefetch: true });
+        onSuccess?.();
+        invalidateMovements();
       },
     });
 
   const onSubmit = () => {
-    toast("Esta seguro de realizar esta acción", {
+    if (movement.transferType === "transaction") {
+      toast("Está seguro de realizar esta acción", {
+        action: {
+          label: "Crear",
+          onClick: () => {
+            toast.promise(
+              MakeTransactionMutation({
+                bookId: params?.bookId,
+                id: movement.id,
+              }),
+              {
+                loading: "Creando Transacción...",
+                success: "La transacción se ha creado con éxito.",
+                error: "Hubo un error, intente de nuevo",
+              },
+            );
+          },
+        },
+      });
+
+      return;
+    }
+    toast("Está seguro de realizar esta acción", {
       action: {
         label: "Crear",
         onClick: () => {
@@ -66,6 +109,9 @@ const CreateOcurrenceForm = (movement: MovementsIncludes) => {
       setAmount(amountFormatter(String(movement.amount)).formatted);
       setAmountValue(movement.amount);
     }
+    if (!movement) {
+      router.back();
+    }
   }, [movement]);
 
   useEffect(() => {
@@ -73,10 +119,6 @@ const CreateOcurrenceForm = (movement: MovementsIncludes) => {
       setAccountSelected(account.id);
     }
   }, [account]);
-
-  if (!movement) {
-    router.back();
-  }
 
   return (
     <form

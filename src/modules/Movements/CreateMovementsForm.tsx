@@ -24,6 +24,11 @@ import { useCategory } from "../Category/hook/category.hook";
 import { useEntity } from "../Entities/hook/entities.hook";
 import { useParams } from "next/navigation";
 import { MovementsIncludes } from "~/types/movements";
+import { useMovements } from "./hooks/useMovements";
+import {
+  useCurrentMonthBudget,
+  useExpensesCurrentMonth,
+} from "../Budget/hooks/useBudget";
 
 interface MovementFormProps {
   mode?: "create" | "edit";
@@ -52,8 +57,18 @@ const CreateMovementsForm = ({
   const query = router.query;
   const params = useParams();
 
+  const { invalidateMovements } = useMovements();
+  const { invalidateBudget } = useCurrentMonthBudget();
+  const { invalidateExpenses } = useExpensesCurrentMonth();
+
   const { mutateAsync: CreateMovementsMutation } =
-    api.movements.create.useMutation();
+    api.movements.create.useMutation({
+      onSuccess: () => {
+        invalidateMovements();
+        invalidateBudget();
+        invalidateExpenses({ hasRefetch: false });
+      },
+    });
   const { mutateAsync: UpdateMovementMutation } =
     api.movements.update.useMutation();
 

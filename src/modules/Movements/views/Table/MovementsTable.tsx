@@ -14,11 +14,12 @@ import { es } from "date-fns/locale";
 import { useRouter } from "next/router";
 import Link from "next/link";
 import { DASHBOARD_MAIN_PATH } from "~/lib/constants/config";
+import { useMovements } from "../../hooks/useMovements";
 
 const MovementsTable = () => {
   const params = useParams();
   const router = useRouter();
-  const { data, isLoading } = api.movements.getAll.useQuery();
+  const { movements, isLoading } = useMovements();
 
   const renderCell = useCallback(
     (movement: MovementsIncludes, columnKey: React.Key) => {
@@ -138,7 +139,7 @@ const MovementsTable = () => {
           return cellValue;
       }
     },
-    [data],
+    [movements],
   );
 
   return (
@@ -152,7 +153,7 @@ const MovementsTable = () => {
       columns={columns}
       isLoading={isLoading}
       renderCell={renderCell}
-      data={data ?? []}
+      data={movements ?? []}
     />
   );
 };

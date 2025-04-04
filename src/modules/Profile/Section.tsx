@@ -17,7 +17,7 @@ interface SectionsProps {
 
 const Section = ({ title, options }: SectionsProps) => {
   return (
-    <section className="mb-4">
+    <section>
       {title && (
         <h4 className="mb-2 font-semibold text-primary dark:text-indigo-300">
           {title}

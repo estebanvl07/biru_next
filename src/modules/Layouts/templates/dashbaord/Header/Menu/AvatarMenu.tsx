@@ -9,7 +9,12 @@ const AvatarMenu = () => {
 
   return (
     <div className="relative flex items-center justify-center">
-      <Avatar src={session?.user.image || ""} name={session?.user.name || ""} />
+      <Avatar
+        src={session?.user.image || ""}
+        isBordered
+        className="outline-divider"
+        name={session?.user.name || ""}
+      />
     </div>
   );
 };

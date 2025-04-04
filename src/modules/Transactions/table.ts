@@ -1,35 +1,39 @@
 const columns = [
   {
-    name: "ID",
-    uid: "id",
-    sortable: false,
-  },
-  {
-    name: "DESCRIPTION",
-    uid: "amount",
+    name: "Descripción",
+    uid: "description",
     sortable: true,
   },
   {
-    name: "CATEGORIA",
+    name: "Entidad",
+    uid: "entityId",
+  },
+  {
+    name: "Categoría",
     uid: "category",
   },
   {
-    name: "ESTADO",
+    name: "Estado",
     uid: "state",
     sortable: true,
   },
   {
-    name: "TIPO",
+    name: "Tipo",
     uid: "type",
     sortable: true,
   },
   {
-    name: "FECHA DE TRANSACCION",
+    name: "Monto",
+    uid: "amount",
+    sortable: true,
+  },
+  {
+    name: "Fecha de transacción",
     uid: "date",
     sortable: true,
   },
   {
-    name: "ACTIONS",
+    name: "Acciones",
     uid: "actions",
   },
 ];

@@ -48,17 +48,12 @@ export default function EntitiesPage() {
       switch (columnKey) {
         case "name":
           return (
-            <User
-              name={entity.name}
-              description={
-                entity.description !== "" ? entity.description : "N/A"
-              }
-              avatarProps={{
-                src: entity.avatar ?? undefined,
-                name: entity.name,
-                color: "primary",
-              }}
-            />
+            <div>
+              <h4 className="whitespace-nowrap font-semibold">{entity.name}</h4>
+              <p className="!text-xs">
+                {entity.description ?? "Sin desctipción"}
+              </p>
+            </div>
           );
         case "reference":
           return (
@@ -70,14 +65,14 @@ export default function EntitiesPage() {
               {!entity.reference ? "Sin referencia" : entity.reference}
             </span>
           );
-        case "state":
+        case "type":
           return (
             <Chip
-              variant="flat"
-              size="sm"
-              color={cellValue === 1 ? "success" : "default"}
+              variant="dot"
+              className="border-none"
+              color={cellValue === 1 ? "success" : "danger"}
             >
-              {cellValue === 1 ? "Activo" : "Inactivo"}
+              {cellValue === 1 ? "Ingreso" : "Egreso"}
             </Chip>
           );
         case "reference":
@@ -142,14 +137,14 @@ export default function EntitiesPage() {
           {!isMobile ? (
             <Table
               headerConfig={{
-                title: "",
+                hasNew: true,
+                newButtonText: "Crear Entidad",
                 onNew() {
                   onShowCreate();
                 },
               }}
               isStriped
-              isCompact
-              hasBottomContent={false}
+              filterKeys={["name", "description", "reference"]}
               filterBy={[
                 {
                   by: "type",

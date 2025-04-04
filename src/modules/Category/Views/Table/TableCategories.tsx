@@ -11,6 +11,7 @@ import { columns } from "./table";
 import CreateCategory from "../../CreateCategory";
 import useShowForm from "~/lib/hooks/useShowForm";
 import EditCategory from "../../EditCategory";
+import { DASHBOARD_MAIN_PATH } from "~/lib/constants/config";
 
 const TableCategories = () => {
   const { categories, isLoading } = useCategory();
@@ -52,17 +53,11 @@ const TableCategories = () => {
         case "type":
           return (
             <Chip
-              size="lg"
-              variant="flat"
+              variant="dot"
+              className="border-none"
               color={category.type === 1 ? "success" : "danger"}
             >
-              <Icon
-                icon={
-                  category.type === 1
-                    ? "iconamoon:arrow-bottom-left-1"
-                    : "iconamoon:arrow-top-right-1"
-                }
-              />
+              {category.type === 1 ? "Ingreso" : "Egreso"}
             </Chip>
           );
         case "actions":
@@ -70,9 +65,9 @@ const TableCategories = () => {
             <Actions
               onClickView={() =>
                 router.push({
-                  pathname: "/account/[acc]/category/[id]",
+                  pathname: `${DASHBOARD_MAIN_PATH}/${params?.bookId}/category/[id]`,
                   query: {
-                    acc: String(params?.acc),
+                    bookId: String(params?.bookId),
                     id: String(category.id),
                   },
                 })
@@ -97,17 +92,18 @@ const TableCategories = () => {
         headerConfig={{
           newButtonText: "Crear Categoría",
           hasNew: true,
-          hasFilters: false,
+          hasFilters: true,
+
           onNew() {
             onShowCreate();
           },
         }}
+        filterKeys={["name", "description"]}
         columns={columns}
         isStriped
         data={categories}
         isLoading={isLoading}
         renderCell={renderCell}
-        hasBottomContent={false}
       />
       <CreateCategory isOpen={showCreate} onClose={onCloseCreate} />
       {data && (

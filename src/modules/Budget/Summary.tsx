@@ -3,12 +3,8 @@ import { Button, Card, CardBody, CardFooter, CardHeader } from "@heroui/react";
 import BudgetProgress from "~/modules/Budget/BudgetProgress";
 import BudgetSummary from "~/modules/Budget/BudgetSummary";
 import UpcomingPayments from "~/modules/Budget/UpcomingPayments";
-import { useParams } from "next/navigation";
-import { api } from "~/utils/api";
 
 const Summary = () => {
-  const params = useParams<{ bookId: string }>();
-
   return (
     <div className="space-y-4">
       <BudgetSummary />
@@ -18,7 +14,9 @@ const Summary = () => {
             <h3 className="font-semibold">Progreso del Presupuesto</h3>
             <p>Seguimiento de gastos por categoría</p>
           </CardHeader>
-          <CardBody>{/* <BudgetProgress /> */}</CardBody>
+          <CardBody>
+            <BudgetProgress />{" "}
+          </CardBody>
         </Card>
         <Card className="border border-divider p-3 shadow-sm lg:col-span-3">
           <CardHeader className="flex flex-col items-start">

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/router";
 import { useParams } from "next/navigation";
@@ -54,6 +54,7 @@ import {
   statusIcon,
 } from "~/utils/transactionStatus";
 import { set } from "lodash";
+import { useQueryClient } from "@tanstack/react-query";
 
 const statusOptions = [
   {
@@ -120,7 +121,9 @@ const TransactionForm = ({
 }: TransactionFormProps) => {
   const [amountValue, setAmountValue] = useState("");
   const [goalSelected, setGoalSelected] = useState<GoalsIncludes>();
-  const [recurrent, setRecurrent] = useState(false);
+  const [schedule, setSchedule] = useState<boolean>(
+    transactionDefault?.state === 3,
+  );
 
   const { account } = useCurrentAccount();
   const { entities } = useEntity();
@@ -132,14 +135,22 @@ const TransactionForm = ({
 
   const query = router.query;
 
-  const transactionsRefresh = api.useUtils().transaction.getTransactions;
-  const BookBalanceRefresh = api.useUtils().books.getBalance;
+  const trpcQuery = api.useUtils();
 
   const { mutateAsync: createTransactionMutation } =
-    api.transaction.create.useMutation();
+    api.transaction.create.useMutation({
+      onSuccess: () => {
+        trpcQuery.transaction.getTransactions.invalidate();
+      },
+    });
 
   const { mutateAsync: updateTransactionMutation } =
-    api.transaction.update.useMutation();
+    api.transaction.update.useMutation({
+      onSuccess: () => {
+        const queryClient = useQueryClient();
+        queryClient.invalidateQueries();
+      },
+    });
 
   const defaultState =
     transactionDefault && transactionDefault.state
@@ -195,7 +206,9 @@ const TransactionForm = ({
     resolver: zodResolver(createTransaction),
   });
 
-  const onSubmit = (payload: createTransaction) => {
+  const onSubmit = (data: createTransaction) => {
+    const payload = { ...data, state: schedule ? 3 : 1 };
+
     if (mode === "create") {
       toast("Esta seguro de realizar esta acción", {
         icon: "❓",
@@ -204,11 +217,9 @@ const TransactionForm = ({
           onClick: () => {
             toast.promise(
               createTransactionMutation(
-                { ...payload, date: new Date() },
+                { ...payload },
                 {
-                  async onSuccess(data) {
-                    await BookBalanceRefresh.invalidate();
-                    await transactionsRefresh.invalidate();
+                  onSuccess(data) {
                     onSuccess && onSuccess();
                     reset();
                   },
@@ -230,9 +241,7 @@ const TransactionForm = ({
         updateTransactionMutation(
           { id: String(transactionDefault.id), ...payload },
           {
-            async onSuccess(data) {
-              await BookBalanceRefresh.invalidate();
-              await transactionsRefresh.invalidate();
+            onSuccess(data) {
               onSuccess && onSuccess();
               reset();
             },
@@ -265,7 +274,7 @@ const TransactionForm = ({
     }
   };
 
-  useEffect(() => {
+  useMemo(() => {
     if (!account && transactionDefault) return;
 
     setValue("accountId", account?.id);
@@ -315,7 +324,7 @@ const TransactionForm = ({
     }
   }, [account, query]);
 
-  useEffect(() => {
+  useMemo(() => {
     if (transactionDefault) {
       const {
         amount,
@@ -368,7 +377,7 @@ const TransactionForm = ({
             damping: 30,
             duration: 1,
           }}
-          className="flex w-full flex-col items-center justify-center gap-2 rounded-xl md:max-w-[36rem]"
+          className="flex w-full flex-col items-center justify-center gap-2 rounded-xl "
           onSubmit={handleSubmit(onSubmit)}
         >
           <div className="flex w-full flex-col items-start">
@@ -581,7 +590,53 @@ const TransactionForm = ({
             errorMessage={errors.accountId?.message}
             onChange={() => setValue("accountId", account?.id)}
           />
-
+          <motion.div className="mb-2 mt-4 flex w-full flex-col gap-3">
+            <div className="flex items-center justify-between">
+              <aside>
+                <h4 className="text-base font-semibold">
+                  Transacción Programada
+                </h4>
+                <p className="text-sm text-foreground-500 dark:text-zinc-400">
+                  Habilita esta opción si deseas realizar la transacción en una
+                  fecha futura.
+                </p>
+              </aside>
+              <Switch
+                onValueChange={setSchedule}
+                defaultChecked={schedule}
+                defaultSelected={schedule}
+                size="sm"
+              />
+            </div>
+            {schedule && (
+              <motion.div
+                initial={{
+                  opacity: 0,
+                }}
+                exit={{
+                  opacity: 0,
+                }}
+                animate={{
+                  opacity: 1,
+                }}
+                transition={{
+                  type: "tween",
+                  stiffness: 500,
+                  damping: 30,
+                  duration: 0.6,
+                }}
+              >
+                <InputDate
+                  label="Fecha Programada"
+                  containerClassName="mt-4"
+                  changeValue={(newDate) => setValue("date", newDate)}
+                  value={watch("date")}
+                  required
+                  defaultValue={transactionDefault && defaultDate}
+                />
+              </motion.div>
+            )}
+          </motion.div>
           <Accordion
             className="m-0 rounded-lg !p-0 !shadow-none"
             itemClasses={{
@@ -638,13 +693,15 @@ const TransactionForm = ({
               subtitle="Agrega más información sobre tu transacción"
             >
               <div className="flex flex-col gap-2 pb-2">
-                <InputDate
-                  label="Fecha de transacción"
-                  containerClassName="mt-4"
-                  changeValue={(newDate) => setValue("date", newDate)}
-                  value={watch("date")}
-                  defaultValue={defaultDate}
-                />
+                {!schedule && (
+                  <InputDate
+                    label="Fecha de transacción"
+                    containerClassName="mt-4"
+                    changeValue={(newDate) => setValue("date", newDate)}
+                    value={watch("date")}
+                    defaultValue={defaultDate}
+                  />
+                )}
                 <section className="flex w-full flex-col gap-2 sm:flex-row">
                   <Select
                     items={categories ?? []}
@@ -867,55 +924,7 @@ const TransactionForm = ({
               )}
             </AccordionItem>
           </Accordion>
-          <motion.div className="mb-2 flex w-full flex-col gap-3">
-            <div className="flex items-center justify-between">
-              <aside>
-                <h4 className="text-base font-semibold">
-                  Transacción Recurrente
-                </h4>
-                <p className="text-sm text-foreground-500 dark:text-zinc-400">
-                  Activa esta opción si la transacción se repite periódicamente
-                </p>
-              </aside>
-              <Switch onValueChange={setRecurrent} size="sm" />
-            </div>
-            {recurrent && (
-              <motion.div
-                initial={{
-                  opacity: 0,
-                }}
-                exit={{
-                  opacity: 0,
-                }}
-                animate={{
-                  opacity: 1,
-                }}
-                transition={{
-                  type: "tween",
-                  stiffness: 500,
-                  damping: 30,
-                  duration: 0.6,
-                }}
-              >
-                <Select
-                  isRequired
-                  label="Frecuencia"
-                  placeholder="Selecciona una frecuencia"
-                  items={frecuency}
-                >
-                  {(item) => (
-                    <SelectItem
-                      color="primary"
-                      className="font-montserrat"
-                      key={item.value}
-                    >
-                      {item.text}
-                    </SelectItem>
-                  )}
-                </Select>
-              </motion.div>
-            )}
-          </motion.div>
+
           <div className="flex w-full flex-col gap-2 sm:flex-row">
             <Button
               className="py-1 text-sm sm:w-fit"

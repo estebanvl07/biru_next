@@ -88,7 +88,7 @@ const FilterTemplates = () => {
         defaultSelectedKeys={[0]}
         variant="bordered"
         classNames={{
-          trigger: "border shadow-none",
+          trigger: "border shadow-none bg-white dark:bg-default-200",
         }}
         aria-label="Select filter templates"
         placeholder="Filtrar"
@@ -103,12 +103,7 @@ const FilterTemplates = () => {
         onChange={handleChange}
       >
         {options.map(({ value, name }) => (
-          <SelectItem
-            key={value}
-            color="primary"
-            value={value}
-            className="font-montserrat"
-          >
+          <SelectItem key={value} color="primary" className="font-montserrat">
             {name}
           </SelectItem>
         ))}

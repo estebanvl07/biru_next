@@ -76,7 +76,6 @@ const InputDate: FC<InputDateProps> = ({
       onKeyDown={(e) => e.key === "Escape" && onDisabled()}
     >
       <Input
-        // {...props}
         autoComplete="off"
         readOnly
         isRequired={props.required}

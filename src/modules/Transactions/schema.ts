@@ -16,6 +16,7 @@ export const input = {
   recipient: z.optional(z.string()),
   description: z.optional(z.string()),
   transferType: z.optional(z.number()),
+  state: z.optional(z.number()),
   goalId: z.optional(z.number()),
   entityId: z.optional(z.number()),
   categoryId: z.optional(z.number()),

@@ -8,6 +8,7 @@ import { useResize } from "~/lib/hooks/useResize";
 import { Tab, Tabs } from "@heroui/tabs";
 import { usePathname } from "next/navigation";
 import { AnimatePresence } from "framer-motion";
+import Link from "next/link";
 
 interface DashboardProps {
   children: React.ReactNode;
@@ -15,6 +16,7 @@ interface DashboardProps {
   headDescription?: string;
   hasFilter?: boolean;
   subtitle?: string;
+  showOptions?: boolean;
   hasLogout?: boolean;
   hasLeftContent?: boolean;
   headerChildren?: React.ReactNode;
@@ -46,11 +48,12 @@ const OverviewLayout: FC<DashboardProps> = ({
       </Head>
 
       <main className="mx-auto flex min-h-screen w-full flex-grow flex-col bg-default-100 dark:bg-slate-950">
-        <div className="border-b border-divider bg-white px-8 pt-4 dark:bg-slate-900">
+        <div className="border-b border-divider  bg-white md:px-8 py-2 dark:bg-slate-900">
           {isMobile ? (
             <HeaderMobile title={title} />
           ) : (
             <HeaderApp
+              hasGoBack={false}
               hasLogout={hasLogout}
               hasNotifications={hasNotifications}
               title={title}
@@ -59,22 +62,13 @@ const OverviewLayout: FC<DashboardProps> = ({
               hasLeftContent={false}
               logo
             >
-              <div className="flex gap-3">
-                <Tabs
-                  selectedKey={pathname}
-                  variant="underlined"
-                  classNames={{
-                    tabList: "px-0",
-                    cursor: "-bottom-1",
-                  }}
-                >
-                  <Tab title="Libros" href="/overview" key={"/overview"}></Tab>
-                  <Tab
-                    title="Configuración"
-                    href="/overview/settings"
-                    key={"/overview/settings"}
-                  ></Tab>
-                </Tabs>
+              <div className="flex items-center gap-6">
+                <Link title="Libros" href="/overview">
+                  Libros
+                </Link>
+                <Link title="Configuración" href="/overview/settings">
+                  Configuración
+                </Link>
               </div>
             </HeaderApp>
           )}

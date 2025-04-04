@@ -46,7 +46,7 @@ const Empty = ({
           as={Link}
           href={href}
           variant="flat"
-          className="text-xs font-medium dark:font-normal dark:text-primary-light"
+          className="dark:text-primary-light text-xs font-medium dark:font-normal"
         >
           <Icon icon="ph:plus" width={16} /> {buttonText || "Crear"}
         </Button>

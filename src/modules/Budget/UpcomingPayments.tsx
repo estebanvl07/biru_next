@@ -1,117 +1,14 @@
-import { Badge } from "@heroui/badge";
-import { Button, Checkbox, Chip } from "@heroui/react";
-import { Icon } from "@iconify/react/dist/iconify.js";
-import { useParams } from "next/navigation";
+import { Button } from "@heroui/react";
 import React from "react";
-import { BudgetSummary } from "~/server/api/services/budget.services";
-import { api } from "~/utils/api";
-import { differenceInDays } from "date-fns";
-
-const upcomingPayments = [
-  {
-    id: "2",
-    description: "Mercado Semanal",
-    amount: 200000,
-    dueDate: "2025-03-10",
-    category: "Alimentación",
-    isPaid: false,
-    daysRemaining: 3,
-  },
-  {
-    id: "3",
-    description: "Netflix",
-    amount: 45000,
-    dueDate: "2025-03-15",
-    category: "Entretenimiento",
-    isPaid: false,
-    daysRemaining: 8,
-  },
-  {
-    id: "4",
-    description: "Electricidad",
-    amount: 120000,
-    dueDate: "2025-03-20",
-    category: "Servicios",
-    isPaid: false,
-    daysRemaining: 7,
-  },
-];
+import { useExpensesCurrentMonth } from "./hooks/useBudget";
+import PaymentItem from "./PaymentItem";
 
 const UpcomingPayments = () => {
-  const params = useParams<{ bookId: string }>();
-  const { data } = api.budget.getCurrentBudget.useQuery(params?.bookId);
-
-  const upcomingPayments = data?.upcomingPayments.movements || [];
-
-  const getBadgeVariant = (daysRemaining: number) => {
-    if (daysRemaining <= 3) return "danger";
-    if (daysRemaining <= 7) return "warning";
-    return "default";
-  };
-
-  const getBadgeText = (daysRemaining: number) => {
-    if (daysRemaining === 0) return "Hoy";
-    if (daysRemaining === 1) return "Mañana";
-    return `${daysRemaining} días`;
-  };
+  const { expenses } = useExpensesCurrentMonth();
 
   return (
     <div className="space-y-4">
-      {upcomingPayments.map((payment) => {
-        const daysRemaining = differenceInDays(
-          new Date(payment.next_ocurrence),
-          new Date(),
-        );
-
-        const badgeColor = getBadgeVariant(daysRemaining);
-        const badgeText = getBadgeText(daysRemaining);
-
-        return (
-          <div
-            key={payment.id}
-            className="flex items-center justify-between space-y-0 border-b border-divider pb-2"
-          >
-            <div className="space-y-1">
-              <div className="flex items-center">
-                <Checkbox
-                  classNames={{
-                    wrapper: "border border-divider",
-                  }}
-                  id={`payment-${payment.id}`}
-                >
-                  <p className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
-                    {payment.name}{" "}
-                    {payment.description && (
-                      <span className="text-xs text-foreground-600">
-                        ({payment.description})
-                      </span>
-                    )}
-                  </p>
-                </Checkbox>
-              </div>
-              <div className="text-muted-foreground flex items-center gap-2 text-xs">
-                <Icon icon="mynaui:calendar" width={18} />
-                <span>
-                  {new Date(payment.next_ocurrence).toLocaleDateString("es", {
-                    day: "numeric",
-                    month: "short",
-                  })}
-                </span>
-                <Chip
-                  size="sm"
-                  color={badgeColor}
-                  className="ml-1 px-1 py-0 text-[10px]"
-                >
-                  {badgeText}
-                </Chip>
-              </div>
-            </div>
-            <div className="text-sm font-medium">
-              ${payment.amount.toLocaleString()}
-            </div>
-          </div>
-        );
-      })}
+      {expenses?.map((payment) => <PaymentItem {...payment} />)}
 
       <div className="pt-2">
         <Button variant="ghost" size="sm" className="w-full">

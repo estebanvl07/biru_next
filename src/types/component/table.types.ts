@@ -15,6 +15,8 @@ export interface TopContentProps {
   lenght?: number;
   visibleColumns?: SharedSelection;
   setVisibleColumns?: Dispatch<SetStateAction<SharedSelection>>;
+  onCustomSearch?: (value: string) => void;
+  isQueryLoading?: boolean;
   redirectTo?: string;
   inputPlaceholder?: string;
   columns?: ColumnsProps[];
@@ -58,7 +60,9 @@ export interface TableProps<T> extends Omit<TableHeroProps<T>, "children"> {
   >;
   columns: ColumnsProps[];
   footerConfig?: BottomConfig;
+  pages?: number;
   hasTopContent?: boolean;
+  onChangeTable?: (page: number, limit: number) => void;
   hasBottomContent?: boolean;
   filterBy?: FilterByProps[];
   filterKeys?: string | string[];

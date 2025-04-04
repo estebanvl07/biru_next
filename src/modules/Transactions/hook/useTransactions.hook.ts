@@ -24,13 +24,65 @@ interface FilterByTypeProps {
   options: FilterOptions;
 }
 
+interface TablePagination {
+  limit: number;
+  page: number;
+}
+
+export const useTransactionsTable = (pagination: TablePagination) => {
+  const params = useParams();
+  const queryClient = useQueryClient();
+  const bookId = String(params?.bookId);
+
+  const transactionKey = useMemo(() => {
+    return getQueryKey(
+      api.transaction.getTransactions,
+      {
+        bookId: bookId!,
+        ...pagination,
+      },
+      "query",
+    );
+  }, [bookId, pagination]);
+
+  const hasTransactionsCached = useMemo(() => {
+    const transactionCache = queryClient.getQueryData(transactionKey);
+    return Boolean(transactionCache);
+  }, [transactionKey, queryClient]);
+
+  const { data, isLoading, refetch } = api.transaction.getTransactions.useQuery(
+    {
+      bookId: bookId!,
+      ...pagination,
+    },
+    {
+      enabled: !!bookId && !hasTransactionsCached,
+    },
+  );
+
+  const invalidateTractionsTable = async () => {
+    queryClient.removeQueries({ queryKey: transactionKey });
+    await queryClient.invalidateQueries({ queryKey: transactionKey });
+  };
+
+  return {
+    transactions: data?.transaction!,
+    total: data?.total,
+    totalPages: data?.totalPages,
+    invalidateTractionsTable,
+    refetch,
+    isLoading,
+  };
+};
+
 export const useTransactions = (options: Omit<FilterOptions, "bookId">) => {
   const params = useParams();
   const queryClient = useQueryClient();
   const bookId = String(params?.bookId);
+
   const transactionKey = useMemo(() => {
     return getQueryKey(
-      api.transaction.getTransactions,
+      api.transaction.getTransactionsByFilter,
       {
         bookId: bookId!,
         filter: options?.filter ?? FILTERS.none,
@@ -46,7 +98,7 @@ export const useTransactions = (options: Omit<FilterOptions, "bookId">) => {
     return Boolean(transactionCache);
   }, [transactionKey, queryClient]);
 
-  const { data, isLoading } = api.transaction.getTransactions.useQuery(
+  const { data, isLoading } = api.transaction.getTransactionsByFilter.useQuery(
     {
       bookId: bookId!,
       filter: options?.filter ?? FILTERS.none,

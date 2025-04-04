@@ -19,6 +19,7 @@ import { Alert } from "../components/molecules/Alert.component";
 import { useAlert } from "~/lib/hooks/useAlert";
 import { CategoryIncludes } from "~/types/category/category.types";
 import { toast } from "sonner";
+import { useCategory } from "./hook/category.hook";
 
 interface CategoryFormProps {
   hasEdit?: boolean;
@@ -47,7 +48,8 @@ const CreateCategoryForm = ({
     resolver: zodResolver(createCategory),
   });
 
-  const categoryRefresh = api.useUtils().category;
+  const { invalidate } = useCategory();
+
   const icon = watch("icon") || "";
 
   const alertConfig: any = {
@@ -75,7 +77,7 @@ const CreateCategoryForm = ({
           { ...data, id: String(categoryDefault?.id) },
           {
             onSuccess(data) {
-              categoryRefresh.invalidate();
+              invalidate();
               onSuccess && onSuccess();
               reset();
             },
@@ -97,7 +99,7 @@ const CreateCategoryForm = ({
         },
         {
           onSuccess() {
-            categoryRefresh.invalidate();
+            invalidate();
             onSuccess && onSuccess();
             reset();
           },

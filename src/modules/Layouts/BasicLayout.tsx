@@ -1,6 +1,7 @@
 import type { FC } from "react";
 import { Header } from "~/modules/components/Header";
 import Head from "next/head";
+import { Spotlight } from "../components/ui/spotLight";
 
 interface LayoutProps {
   children?: React.ReactNode;
@@ -14,15 +15,13 @@ export const BasicLayout: FC<LayoutProps> = ({
   description = "Descubre la manera mas sencilla de manejar tu finanzas",
 }) => {
   return (
-    <div className="bg-gradient-to-r from-zinc-100 to-zinc-100 dark:from-default-50 dark:via-default-100 dark:to-default-50">
+    <div className="h-screen bg-white dark:bg-slate-950">
       <Head>
         <title>{title}</title>
         <meta name="description" content={description} />
       </Head>
-      <main className="relative flex h-full min-h-screen flex-col px-2 sm:px-0">
-        {/* ??? */}
-
-        <div className="absolute top-0 -z-0 hidden h-screen w-full bg-[url(/point.svg)] bg-repeat dark:block" />
+      <main className="relative flex h-full flex-col overflow-hidden px-2 pb-16 sm:px-0">
+        <Spotlight smallWidth={200} />
         <Header />
         {children}
       </main>

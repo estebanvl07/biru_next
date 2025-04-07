@@ -1,27 +1,28 @@
 import React from "react";
-import { Card } from "~/modules/components";
 import Security from "./Security";
 import Control from "./Control";
 import Analytics from "./Analytics";
 import Easy from "./Easy";
-import Image from "next/image";
 import Efficiency from "./Efficiency";
 
 const Features = () => {
   return (
-    <div className="mx-auto my-20 flex w-full max-w-[72rem] flex-col items-center px-4">
-      <h2 className="text-4xl">Caracteristicas</h2>
-      <p className="text-center">
-        Disfruta de los beneficios de controlar tu dinero con Biru.
-      </p>
-      <div className="relative mt-10 grid w-full grid-cols-4 gap-4">
+    <section className="mx-auto flex w-full max-w-7xl flex-col items-center gap-y-16 px-4">
+      <header className="flex flex-col items-center justify-center gap-2 text-center">
+        <p className="text-center text-primary">CARACTERISTICAS</p>
+        <h2 className="text-4xl tracking-tight md:text-5xl">
+          Conoce Las Caracteristicas de Biru
+        </h2>
+      </header>
+
+      <div className="relative grid w-full grid-cols-4 gap-4">
         <Efficiency />
         <Analytics />
         <Control />
         <Security />
         <Easy />
       </div>
-    </div>
+    </section>
   );
 };
 

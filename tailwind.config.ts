@@ -45,6 +45,31 @@ const config = {
         "calc-64": "calc(100vh - 64px)",
         "calc-48": "calc(100vh - 48px)",
       },
+      animation: {
+        meteor: "meteor 5s linear infinite",
+        ripple: "ripple var(--duration,2s) ease calc(var(--i, 0)*.2s) infinite",
+      },
+      keyframes: {
+        ripple: {
+          "0%, 100%": {
+            transform: "translate(-50%, -50%) scale(1)",
+          },
+          "50%": {
+            transform: "translate(-50%, -50%) scale(0.9)",
+          },
+        },
+        meteor: {
+          "0%": {
+            transform: "rotate(var(--angle)) translateX(0)",
+            opacity: "1",
+          },
+          "70%": { opacity: "1" },
+          "100%": {
+            transform: "rotate(var(--angle)) translateX(-500px)",
+            opacity: "0",
+          },
+        },
+      },
       // colors: {
 
       //   primary: "#0c0a09",
@@ -84,7 +109,7 @@ const config = {
           colors: {
             foreground: "#fff",
             primary: {
-              DEFAULT: "#3E1FE9",
+              DEFAULT: "#4f46e5",
               foreground: "#fff",
             },
             content1: "#0f172a",

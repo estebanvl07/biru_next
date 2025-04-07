@@ -6,7 +6,7 @@ const MobileVideo = () => {
   const { isMobile } = useResize();
 
   return (
-    <div className="absolute top-4 flex h-full w-[140px] flex-1 justify-end md:top-0 md:w-[220px]">
+    <div className="absolute top-4 flex h-full w-[130px] flex-1 justify-end transition-all duration-300 group-hover:top-2 md:top-8 md:w-[220px] md:group-hover:top-0">
       <Image
         src={"/device.png"}
         alt="mobile device"
@@ -14,9 +14,9 @@ const MobileVideo = () => {
         width={isMobile ? 140 : 220}
         height={400}
       />
-      <div className="absolute top-0 w-[140px] px-2 py-1.5 shadow-2xl md:w-[220px] md:px-3 md:py-2.5 dark:shadow-black">
+      <div className="shadow-3xl absolute top-0 w-[130px] px-2 py-1.5 md:w-[220px] md:px-2.5 md:py-2 dark:shadow-black">
         <video
-          className="w-full rounded-2xl md:rounded-[1.5rem]"
+          className="w-full rounded-[0.8rem] md:rounded-[1.7rem]"
           autoPlay
           muted
           playsInline

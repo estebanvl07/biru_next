@@ -19,7 +19,7 @@ const LoginPage = () => {
     >
       <div className="my-auto flex h-full w-full flex-row justify-center px-4 py-6 pt-20">
         <section className="relative flex h-full w-full max-w-[25rem] flex-grow flex-col items-center justify-center gap-2">
-          <h1 className="text-pretty text-2xl font-bold tracking-tight text-primary">
+          <h1 className="text-pretty text-2xl font-bold tracking-tight text-primary dark:text-white">
             ¡Bienvenido de vuelta!
           </h1>
           <p className="text-pretty text-center text-slate-400">

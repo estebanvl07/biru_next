@@ -65,7 +65,7 @@ const DashboardLayout = ({
           <SideBar />
           {isMobile && <BottomMobileNav />}
           {isMobile && <DrawerOptions />}
-          <section className="z-0 h-full w-full flex-grow overflow-hidden overflow-y-auto rounded-xl bg-default-50/50 pb-10 scrollbar-hide md:pt-4 dark:border-white/10 dark:bg-slate-950">
+          <section className="relative z-0 h-full w-full flex-grow overflow-hidden overflow-y-auto rounded-xl bg-default-50/50 pb-10 scrollbar-hide md:pt-4 dark:border-white/10 dark:bg-slate-950">
             <div className="container mx-auto flex flex-col md:px-8">
               <Breadcrum />
               <div className="flex flex-row items-center justify-between">

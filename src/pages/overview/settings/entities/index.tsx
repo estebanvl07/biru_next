@@ -133,6 +133,7 @@ export default function EntitiesPage() {
             })}
           ></div>
         </CardHeader>
+
         <CardBody className="p-6">
           {!isMobile ? (
             <Table

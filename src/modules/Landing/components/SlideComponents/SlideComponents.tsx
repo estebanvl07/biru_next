@@ -99,33 +99,6 @@ const SlideComponents = () => {
         </aside>
         <Chip className="bg-red-600/20 text-red-600">13%</Chip>
       </Card>
-
-      <Card>
-        <section className="flex h-full w-full max-w-[15rem] flex-wrap items-center justify-center py-2">
-          <Swiper
-            slidesPerView={1}
-            spaceBetween={20}
-            navigation={true}
-            pagination={{
-              type: "bullets",
-            }}
-            color="#d3d3d3"
-            modules={[Pagination]}
-            className="mySwiper w-full"
-          >
-            {categoriesEx.map((category, index) => {
-              return (
-                <SwiperSlide key={category.id}>
-                  <SpendingParams
-                    category={category as any}
-                    percent={getPercent(250350, 500000)}
-                  />
-                </SwiperSlide>
-              );
-            })}
-          </Swiper>
-        </section>
-      </Card>
     </Marquee>
   );
 };

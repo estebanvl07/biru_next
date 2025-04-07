@@ -3,85 +3,129 @@ import Link from "next/link";
 
 import type { FC } from "react";
 import type { LinkListProps } from "./Footer.types";
+import { Button } from "@heroui/button";
+import { Icon } from "@iconify/react/dist/iconify.js";
+import { useResize } from "~/lib/hooks/useResize";
 
 export const Footer = () => {
+  const { isMobile } = useResize();
+
   return (
-    <footer className="flex min-h-80 w-full justify-center bg-slate-100 dark:bg-black">
-      <div className="flex w-full flex-col px-8 md:max-w-[72rem]">
-        <section className="flex flex-grow flex-col items-center gap-16 py-8 sm:flex-row sm:py-0">
-          <aside className="w-full flex-grow sm:w-auto">
-            <Image src="/logo.svg" alt="Logo de Biru" width={100} height={6} />
-            <p className="mt-2 max-w-[26rem] text-sm">
-              Te ayudamos a organizar tus finanzas personales o las de tu
-              negocio
-            </p>
-          </aside>
-          <section className="grid w-full flex-grow gap-10 py-4 sm:grid-cols-2 sm:place-content-around sm:py-8 md:grid-cols-3 md:py-0">
-            <LinkList
-              title="Conoce Biru"
-              links={[
-                {
-                  text: "Descubre Biru",
-                  to: "#",
-                },
-                {
-                  text: "Como funciona",
-                  to: "#",
-                },
-                {
-                  text: "Contáctanos",
-                  to: "#",
-                },
-                {
-                  text: "Términos & Servicios",
-                  to: "#",
-                },
-              ]}
-            />
-            <LinkList
-              title="Ayuda"
-              links={[
-                {
-                  text: "Funcionalidades",
-                  to: "#",
-                },
-                {
-                  text: "Recuperar contraseña",
-                  to: "/recover",
-                },
-                {
-                  text: "Soporte",
-                  to: "#",
-                },
-              ]}
-            />
-            <LinkList
-              title="Como inicio"
-              links={[
-                {
-                  text: "Iniciar Sesión",
-                  to: "/login",
-                },
-                {
-                  text: "Registrarme",
-                  to: "/register",
-                },
-              ]}
-            />
+    <footer className="border-t border-divider py-10">
+      <section className="container mx-auto flex w-full flex-row items-center justify-between gap-x-10 gap-y-5">
+        <section className="flex-grow basis-0 flex-col">
+          <section className="flex flex-col gap-2">
+            <Link href="/" className="flex items-center gap-3">
+              <Image
+                src={"/logo.svg"}
+                alt="Logo de Biru"
+                width={isMobile ? 32 : 20}
+                height={20}
+              />
+              <p className="font-semibold md:text-2xl dark:text-white">Biru</p>
+            </Link>
           </section>
         </section>
-        <section className="flex w-full justify-between border-t py-4 text-sm dark:border-white/10">
-          <p>
-            <span className="mr-4">Copyright ©</span>
-            <span>2024 Biru. Todos los derechos reservados</span>
-          </p>
-          <nav>
-            <p>Networks</p>
-          </nav>
+        <p>© 2025 DevForgx. All rights reserved.</p>
+        <section className="flex flex-grow basis-0 items-center justify-end gap-2">
+          <Button as={Link} href="https://www.facebook.com" isIconOnly>
+            <Icon icon="mdi:facebook" width={24} />
+          </Button>
+          <Button as={Link} href="https://www.twitter.com" isIconOnly>
+            <Icon icon="mdi:twitter" width={24} />
+          </Button>
+
+          <Button as={Link} href="https://www.instagram.com" isIconOnly>
+            <Icon icon="mdi:instagram" width={24} />
+          </Button>
+          <Button as={Link} href="https://www.linkedin.com" isIconOnly>
+            <Icon icon="mdi:linkedin" width={24} />
+          </Button>
+
+          <Button as={Link} href="https://www.youtube.com" isIconOnly>
+            <Icon icon="mdi:youtube" width={24} />
+          </Button>
         </section>
-      </div>
+      </section>
     </footer>
   );
+  // return (
+  //   <footer className="flex min-h-80 w-full justify-center bg-slate-100 dark:bg-black">
+  //     <div className="flex w-full flex-col px-8 md:max-w-[72rem]">
+  //       <section className="flex flex-grow flex-col items-center gap-16 py-8 sm:flex-row sm:py-0">
+  //         <aside className="w-full flex-grow sm:w-auto">
+  //           <Image src="/logo.svg" alt="Logo de Biru" width={100} height={6} />
+  //           <p className="mt-2 max-w-[26rem] text-sm">
+  //             Te ayudamos a organizar tus finanzas personales o las de tu
+  //             negocio
+  //           </p>
+  //         </aside>
+  //         <section className="grid w-full flex-grow gap-10 py-4 sm:grid-cols-2 sm:place-content-around sm:py-8 md:grid-cols-3 md:py-0">
+  //           <LinkList
+  //             title="Conoce Biru"
+  //             links={[
+  //               {
+  //                 text: "Descubre Biru",
+  //                 to: "#",
+  //               },
+  //               {
+  //                 text: "Como funciona",
+  //                 to: "#",
+  //               },
+  //               {
+  //                 text: "Contáctanos",
+  //                 to: "#",
+  //               },
+  //               {
+  //                 text: "Términos & Servicios",
+  //                 to: "#",
+  //               },
+  //             ]}
+  //           />
+  //           <LinkList
+  //             title="Ayuda"
+  //             links={[
+  //               {
+  //                 text: "Funcionalidades",
+  //                 to: "#",
+  //               },
+  //               {
+  //                 text: "Recuperar contraseña",
+  //                 to: "/recover",
+  //               },
+  //               {
+  //                 text: "Soporte",
+  //                 to: "#",
+  //               },
+  //             ]}
+  //           />
+  //           <LinkList
+  //             title="Como inicio"
+  //             links={[
+  //               {
+  //                 text: "Iniciar Sesión",
+  //                 to: "/login",
+  //               },
+  //               {
+  //                 text: "Registrarme",
+  //                 to: "/register",
+  //               },
+  //             ]}
+  //           />
+  //         </section>
+  //       </section>
+  //       <section className="flex w-full justify-between border-t py-4 text-sm dark:border-white/10">
+  //         <p>
+  //           <span className="mr-4">Copyright ©</span>
+  //           <span>2024 Biru. Todos los derechos reservados</span>
+  //         </p>
+  //         <nav>
+  //           <p>Networks</p>
+  //         </nav>
+  //       </section>
+  //     </div>
+  //   </footer>
+  // );
 };
 
 const LinkList: FC<LinkListProps> = ({ title, links }) => {

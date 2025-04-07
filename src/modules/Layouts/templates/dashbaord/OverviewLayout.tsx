@@ -37,7 +37,7 @@ const OverviewLayout: FC<DashboardProps> = ({
       </Head>
 
       <main className="mx-auto flex min-h-screen w-full flex-grow flex-col overflow-x-hidden bg-default-50/50 dark:bg-slate-950">
-        <div className="border border-divider/10 bg-white md:px-8 dark:bg-slate-900">
+        <div className="border-b border-divider/10 bg-white md:px-8 dark:bg-slate-900">
           {isMobile ? (
             <HeaderMobile title={title} />
           ) : (

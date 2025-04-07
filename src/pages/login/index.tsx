@@ -5,12 +5,6 @@ import { LoginForm } from "~/modules/Login";
 import { SignInOptions } from "~/modules/components";
 import withAuthRedirect from "~/lib/helpers/withAuthRedirect";
 
-export async function getStaticProps() {
-  return {
-    props: {},
-  };
-}
-
 const LoginPage = () => {
   return (
     <BasicLayout

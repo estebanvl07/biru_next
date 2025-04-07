@@ -11,7 +11,7 @@ export const DEFAULT_DATES = "PP";
 export const BASIC_DATE = "MMM d";
 
 export const BOOK_TYPE = {
-  1: "Personal",
-  2: "Negocio",
-  3: "Familia",
+  1: "Libro Personal",
+  2: "Libro de Negocio",
+  3: "Libro Familiar",
 };

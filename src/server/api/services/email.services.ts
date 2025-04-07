@@ -59,7 +59,6 @@ export async function recoverUserEmail(
     expireAt,
   );
 
-  // TODO: send the link the recovery page
   mailer.recoverUser({
     name,
     to: user.email,
@@ -73,48 +72,48 @@ type GroupedData = {
   [key: string]: FixedMovements[];
 };
 
-export async function reminderMovement(db: PrismaClient) {
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
+// export async function reminderMovement(db: PrismaClient) {
+//   const today = new Date();
+//   today.setHours(0, 0, 0, 0);
 
-  const users = await db.user.findMany({
-    where: {
-      movements: {
-        some: {
-          next_ocurrence: {
-            lte: today,
-          },
-        },
-      },
-    },
-    include: {
-      movements: {
-        where: {
-          next_ocurrence: {
-            lte: today,
-          },
-          reminder_sent: false,
-        },
-      },
-    },
-  });
+//   const users = await db.user.findMany({
+//     where: {
+//       movements: {
+//         some: {
+//           next_ocurrence: {
+//             lte: today,
+//           },
+//         },
+//       },
+//     },
+//     include: {
+//       movements: {
+//         where: {
+//           next_ocurrence: {
+//             lte: today,
+//           },
+//           reminder_sent: false,
+//         },
+//       },
+//     },
+//   });
 
-  console.log(users);
+//   console.log(users);
 
-  if (users) {
-    users.map(({ email, name, movements }) => {
-      console.log({
-        name: name || "",
-        to: email,
-        movements: movements,
-      });
-      mailer.remiderMovement({
-        name: name || "",
-        to: email,
-        movements: movements,
-      });
-    });
-  }
+//   if (users) {
+//     users.map(({ email, name, movements }) => {
+//       console.log({
+//         name: name || "",
+//         to: email,
+//         movements: movements,
+//       });
+//       mailer.remiderMovement({
+//         name: name || "",
+//         to: email,
+//         movements: movements,
+//       });
+//     });
+//   }
 
-  return [];
-}
+//   return [];
+// }

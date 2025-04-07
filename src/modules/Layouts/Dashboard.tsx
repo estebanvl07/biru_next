@@ -11,6 +11,7 @@ import { motion } from "framer-motion";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import DrawerOptions from "./templates/DrawerOptions";
 import Breadcrum from "./templates/Breadcrum";
+import { Toaster } from "sonner";
 
 const variants = {
   hidden: { opacity: 0, x: -200, y: 0 },
@@ -25,7 +26,6 @@ const DashboardLayout = ({
   hasFilter = false,
   subtitle,
   activityContent,
-  serviceOptions = true,
   headerProps,
 }: {
   children: React.ReactNode;
@@ -55,7 +55,6 @@ const DashboardLayout = ({
             logo
             rightContent={headerProps?.rightContent}
             subtitle={headerProps?.subtitle}
-            title={title}
             hasFilter={hasFilter}
           />
         ) : (
@@ -92,6 +91,7 @@ const DashboardLayout = ({
                 exit={{ opacity: 0 }}
                 transition={{ duration: 0.8 }}
               >
+                <Toaster position="bottom-right" />
                 {children}
                 {!isMobile && (
                   <footer className="z-0 mt-4 flex w-full items-center justify-between text-xs">

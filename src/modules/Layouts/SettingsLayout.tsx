@@ -1,9 +1,6 @@
 import React from "react";
 import OverviewLayout from "./templates/dashbaord/OverviewLayout";
 import Link from "next/link";
-import { Input, Tab, Tabs } from "@heroui/react";
-import { Icon } from "@iconify/react/dist/iconify.js";
-import { Spotlight } from "../components/ui/spotLight";
 
 const routes = [
   {
@@ -39,7 +36,6 @@ const routes = [
 const SettingsLayout = ({ children }: { children: React.ReactNode }) => {
   return (
     <OverviewLayout>
-      <Spotlight />
       <div className="border-b py-10">
         <h2 className="text-3xl -tracking-wide">Configuración</h2>
         <p>Lorem ipsum dolor sit amet.</p>

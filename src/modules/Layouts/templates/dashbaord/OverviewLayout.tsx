@@ -1,26 +1,22 @@
 import Head from "next/head";
-import React, { FC, useState, useEffect } from "react";
+import React, { FC } from "react";
 
 import { HeaderApp } from "~/modules/Layouts/templates/dashbaord";
 import HeaderMobile from "./Header/HeaderMobile";
 
 import { useResize } from "~/lib/hooks/useResize";
-import { Tab, Tabs } from "@heroui/tabs";
-import { usePathname } from "next/navigation";
-import { AnimatePresence } from "framer-motion";
 import Link from "next/link";
+import { Button } from "@heroui/button";
+import { Toaster } from "sonner";
 
 interface DashboardProps {
   children: React.ReactNode;
   title?: string;
   headDescription?: string;
-  hasFilter?: boolean;
   subtitle?: string;
   showOptions?: boolean;
   hasLogout?: boolean;
-  hasLeftContent?: boolean;
   headerChildren?: React.ReactNode;
-  hasLogo?: boolean;
   hasNotifications?: boolean;
 }
 
@@ -30,15 +26,8 @@ const OverviewLayout: FC<DashboardProps> = ({
   headDescription,
   hasNotifications,
   subtitle,
-  hasLogout,
 }) => {
-  const pathname = usePathname();
   const { isMobile } = useResize();
-  const [isClient, setIsClient] = useState(false);
-
-  useEffect(() => {
-    setIsClient(true);
-  }, []);
 
   return (
     <>
@@ -47,18 +36,30 @@ const OverviewLayout: FC<DashboardProps> = ({
         <meta name="description" content={headDescription} />
       </Head>
 
-      <main className="mx-auto flex min-h-screen w-full flex-grow flex-col overflow-x-hidden bg-default-100 dark:bg-slate-950">
-        <div className="border-b border-divider  bg-white py-2 md:px-8 dark:bg-slate-900">
+      <main className="mx-auto flex min-h-screen w-full flex-grow flex-col overflow-x-hidden bg-default-50/50 dark:bg-slate-950">
+        <div className="border border-divider/10 bg-white md:px-8 dark:bg-slate-900">
           {isMobile ? (
             <HeaderMobile title={title} />
           ) : (
             <HeaderApp
               hasGoBack={false}
-              hasLogout={hasLogout}
+              hasLogout={false}
               hasNotifications={hasNotifications}
-              title={title}
               subtitle={subtitle}
+              className="!px-0"
               hasFilter={false}
+              rightContent={
+                <div className="flex items-center gap-4">
+                  <Button
+                    variant="ghost"
+                    className="border border-divider font-medium"
+                  >
+                    Feedback
+                  </Button>
+                  <Link href={"/overview/settings"}>Ayuda</Link>
+                  <Link href={"/overview/settings"}>Configuración</Link>
+                </div>
+              }
               hasLeftContent={false}
               logo
             >
@@ -73,11 +74,8 @@ const OverviewLayout: FC<DashboardProps> = ({
             </HeaderApp>
           )}
         </div>
-        <AnimatePresence>
-          <div className="mx-auto w-full max-w-[80rem] p-4">
-            {isClient && children}
-          </div>
-        </AnimatePresence>
+        <div className="mx-auto w-full max-w-[1360px] p-6">{children}</div>
+        <Toaster position="bottom-left" />
       </main>
     </>
   );

@@ -171,7 +171,7 @@ const CreateOcurrenceForm = ({
             <li>
               <span>Tipo:</span>
               <div>
-                {movement.type === 1 ? (
+                {movement?.type === 1 ? (
                   <Chip variant="flat" color="success" size="sm">
                     <span className="flex flex-row items-center gap-2 font-semibold">
                       <Icon icon="iconamoon:arrow-top-right-1" width={16} />{" "}

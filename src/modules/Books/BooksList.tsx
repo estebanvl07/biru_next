@@ -11,20 +11,25 @@ import { CreateBookButton } from "./Views/CreateBookButton";
 import BookItem from "./Views/BookItem";
 import clsx from "clsx";
 import { motion } from "framer-motion";
+import { ArrowRight, BookPlus } from "lucide-react";
 
 const BooksList = React.memo(() => {
-  const [mode, setMode] = useState<number>(1); // 1 cards, 2 list
+  const [mode, setMode] = useState<number>(1);
+  const [orderBy, setOrderBy] = useState<"activity" | "name">("activity");
   const { data } = api.books.getBooksByUserId.useQuery();
 
-  const {
-    newList: books,
-    onSearch,
-    refreshList,
-  } = useSearch<Book>({
+  const { newList, onSearch, query, refreshList } = useSearch<Book>({
     data: data || [],
     keys: "name",
   });
 
+  const books = newList.sort((a, b) => {
+    if (orderBy === "name") {
+      return a.name.localeCompare(b.name);
+    } else {
+      return a.lastAccess!.getTime()! - b.lastAccess!.getTime();
+    }
+  });
   return (
     <div>
       <div className="mb-4 flex gap-3">
@@ -50,6 +55,9 @@ const BooksList = React.memo(() => {
             }}
             selectionMode="single"
             placeholder="Ordenar"
+            onChange={(e) =>
+              setOrderBy((e.target.value as typeof orderBy) ?? "activity")
+            }
             defaultSelectedKeys={["activity"]}
           >
             <SelectItem
@@ -90,6 +98,7 @@ const BooksList = React.memo(() => {
           <CreateBookButton />
         </aside>
       </div>
+
       <motion.section
         layout
         className={clsx({
@@ -101,6 +110,21 @@ const BooksList = React.memo(() => {
           if (mode === 1) return <BookCard key={book.id} {...book} />;
           return <BookItem key={book.id} {...book} />;
         })}
+        {books.length === 0 && query === "" && (
+          <div className="flex h-full w-full cursor-pointer flex-col items-center justify-center rounded-xl border-2 border-divider py-10 opacity-60 shadow-md transition-colors hover:bg-default-200 hover:opacity-100">
+            <BookPlus size={40} />
+            <p className="mt-2 text-center text-lg">Crear Libro</p>
+          </div>
+        )}
+        {books.length === 0 && query !== "" && (
+          <div className="border- col-span-3 flex h-full w-full flex-col items-center justify-center rounded-xl border-divider py-20">
+            <h3>No se encontraron resultados</h3>
+            <p>
+              No encontramos libros que coincidan con la búsqueda "{" "}
+              <span>{query?.slice(0, 10)}</span> "
+            </p>
+          </div>
+        )}
       </motion.section>
     </div>
   );

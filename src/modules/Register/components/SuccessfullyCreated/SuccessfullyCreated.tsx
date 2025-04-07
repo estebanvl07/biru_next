@@ -4,7 +4,7 @@ import Link from "next/link";
 
 export const SuccessfullyCreated = () => {
   return (
-    <div className="z-20 m-auto flex flex-col items-center justify-center px-6">
+    <div className="z-20 m-auto flex h-full flex-col items-center justify-center border border-divider px-6">
       <Icon
         icon="icon-park-outline:success"
         width={42}

@@ -51,10 +51,10 @@ const Menu = ({
         opacity: 1,
       }}
       transition={{
-        duration: 0.4,
+        duration: 0.2,
       }}
       className={clsx(
-        "absolute  top-16 flex w-52 flex-col rounded-md border bg-white pb-1 pt-2 backdrop-blur-sm md:right-0 dark:border-white/10 dark:bg-default-100",
+        "absolute  top-12 flex w-52 flex-col rounded-md border bg-white pb-1 pt-2 backdrop-blur-sm md:right-0 dark:border-white/10 dark:bg-default-100",
         className,
       )}
     >

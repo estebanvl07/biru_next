@@ -16,7 +16,7 @@ import {
   DropdownTrigger,
 } from "@heroui/react";
 import { es } from "date-fns/locale";
-import { Ellipsis, OptionIcon } from "lucide-react";
+import { Briefcase, Ellipsis, Home, OptionIcon, Users } from "lucide-react";
 import { BOOK_TYPE } from "~/lib/constants/config";
 import Link from "next/link";
 
@@ -43,9 +43,17 @@ const BookItem = ({
       >
         <aside>
           <aside className="flex items-center gap-2">
-            <div className="h-10 w-10 rounded-full bg-default-100"></div>
+            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-default-100">
+              {type === 1 ? (
+                <Home size={20} />
+              ) : type === 3 ? (
+                <Users size={20} />
+              ) : (
+                type === 2 && <Briefcase size={20} />
+              )}
+            </div>
             <div>
-              <h4 className="text-base font-semibold">{capitalize(name)}</h4>
+              <h4 className="text-base font-medium">{capitalize(name)}</h4>
               <Chip
                 size="sm"
                 variant="flat"

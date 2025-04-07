@@ -11,8 +11,8 @@ const AvatarMenu = () => {
     <div className="relative flex items-center justify-center">
       <Avatar
         src={session?.user.image || ""}
-        isBordered
-        className="outline-divider"
+        color="primary"
+        size="sm"
         name={session?.user.name || ""}
       />
     </div>

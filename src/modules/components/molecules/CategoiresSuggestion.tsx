@@ -46,7 +46,6 @@ const CategoiresSuggestion = () => {
       title="Seleccionar categorías"
     >
       <p>
-        <span className="font-semibold">Recuerda: </span>
         Crear categorías te ayuda a saber con mas detalle como se mueve tu
         dinero.
       </p>

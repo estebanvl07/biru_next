@@ -36,7 +36,6 @@ const MyApp: AppType<{ session: Session | null }> = ({
               <div id="portal-root"></div>
               <Component {...pageProps} />
             </div>
-            <Toaster />
           </FilterProvider>
         </ThemeProvider>
       </HeroUIProvider>

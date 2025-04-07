@@ -8,13 +8,13 @@ import CategoiresSuggestion from "~/modules/components/molecules/CategoiresSugge
 import DashboardLayout from "~/modules/Layouts/Dashboard";
 import MobileDashboard from "~/modules/Dashboard/MobileDashboard";
 import DesktopDashboard from "~/modules/Dashboard/DesktopDashboard";
+import { useCurrentBook } from "~/modules/Books/hooks/useBooks.hook";
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
-  const accountId = Number(ctx.params!.acc);
+  const bookId = String(ctx.params!.bookId);
 
   const helpers = await createServerSideCaller(ctx);
-  await helpers.userAccount.getOne.prefetch({ id: accountId });
-  await helpers.userAccount.setLastAccess.prefetch({ id: Number(accountId) });
+  await helpers.books.lastAccess.fetch(bookId);
 
   const trpcState = helpers.dehydrate();
 
@@ -28,10 +28,12 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
 const HomePage = () => {
   const { categories, isLoading } = useCategory();
   const { isMobile } = useResize();
+  const { book } = useCurrentBook();
 
   return (
     <DashboardLayout
       title="Dashboard"
+      subtitle={book?.name}
       headDescription="Dashboard de la cuenta seleccionada"
       hasFilter
     >

@@ -12,11 +12,15 @@ import BookItem from "./Views/BookItem";
 import clsx from "clsx";
 import { motion } from "framer-motion";
 import { ArrowRight, BookPlus } from "lucide-react";
+import { useResize } from "~/lib/hooks/useResize";
+import { FiltersDrawer } from "./Views/FiltersDrawer";
 
 const BooksList = React.memo(() => {
   const [mode, setMode] = useState<number>(1);
   const [orderBy, setOrderBy] = useState<"activity" | "name">("activity");
   const { data } = api.books.getBooksByUserId.useQuery();
+
+  const { isDesktop } = useResize();
 
   const { newList, onSearch, query, refreshList } = useSearch<Book>({
     data: data || [],
@@ -44,57 +48,69 @@ const BooksList = React.memo(() => {
           placeholder="Buscar Libro"
           startContent={<Icon icon={"mynaui:search"} width={18} />}
         />
-        <aside className="flex items-center gap-x-3">
-          <Select
-            radius="sm"
-            className="w-[200px]"
-            aria-label="Filtro de books"
-            classNames={{
-              trigger:
-                "bg-white text-xs border border-divider dark:bg-default-100",
-            }}
-            selectionMode="single"
-            placeholder="Ordenar"
-            onChange={(e) =>
-              setOrderBy((e.target.value as typeof orderBy) ?? "activity")
-            }
-            defaultSelectedKeys={["activity"]}
-          >
-            <SelectItem
-              className="font-montserrat"
-              classNames={{
-                title: "text-xs",
-              }}
-              key={"activity"}
-            >
-              Ordernar por Actividad
-            </SelectItem>
-            <SelectItem
-              className="font-montserrat"
-              classNames={{
-                title: "text-xs",
-              }}
-              key={"name"}
-            >
-              Ordenar por Nombre
-            </SelectItem>
-          </Select>
-          <Tabs
-            radius="sm"
-            color="primary"
-            variant="bordered"
-            classNames={{
-              tab: "px-2 rounded-lg",
-              tabList: "border bg-white gap-x-0",
-            }}
-            onSelectionChange={(key) => setMode(Number(key))}
-          >
-            <Tab
-              key={1}
-              title={<Icon icon="mingcute:grid-line" width={18} />}
+        <aside className="flex items-center gap-2 md:gap-x-3">
+          {isDesktop && (
+            <>
+              <Select
+                radius="sm"
+                className="w-[200px]"
+                aria-label="Filtro de books"
+                classNames={{
+                  trigger:
+                    "bg-white text-xs border border-divider dark:bg-default-100",
+                }}
+                selectionMode="single"
+                placeholder="Ordenar"
+                onChange={(e) =>
+                  setOrderBy((e.target.value as typeof orderBy) ?? "activity")
+                }
+                defaultSelectedKeys={["activity"]}
+              >
+                <SelectItem
+                  className="font-montserrat"
+                  classNames={{
+                    title: "text-xs",
+                  }}
+                  key={"activity"}
+                >
+                  Ordernar por Actividad
+                </SelectItem>
+                <SelectItem
+                  className="font-montserrat"
+                  classNames={{
+                    title: "text-xs",
+                  }}
+                  key={"name"}
+                >
+                  Ordenar por Nombre
+                </SelectItem>
+              </Select>
+              <Tabs
+                radius="sm"
+                color="primary"
+                variant="bordered"
+                classNames={{
+                  tab: "px-2 rounded-lg",
+                  tabList: "border bg-white gap-x-0",
+                }}
+                onSelectionChange={(key) => setMode(Number(key))}
+              >
+                <Tab
+                  key={1}
+                  title={<Icon icon="mingcute:grid-line" width={18} />}
+                />
+                <Tab key={2} title={<Icon icon="ph:table-fill" width={18} />} />
+              </Tabs>
+            </>
+          )}
+          {!isDesktop && (
+            <FiltersDrawer
+              setMode={setMode}
+              mode={mode}
+              orderBy={orderBy}
+              setOrderBy={setOrderBy}
             />
-            <Tab key={2} title={<Icon icon="ph:table-fill" width={18} />} />
-          </Tabs>
+          )}
           <CreateBookButton />
         </aside>
       </div>
@@ -111,9 +127,9 @@ const BooksList = React.memo(() => {
           return <BookItem key={book.id} {...book} />;
         })}
         {books.length === 0 && query === "" && (
-          <div className="flex h-full w-full cursor-pointer flex-col items-center justify-center rounded-xl border-2 border-divider py-10 opacity-60 shadow-md transition-colors hover:bg-default-200 hover:opacity-100">
-            <BookPlus size={40} />
-            <p className="mt-2 text-center text-lg">Crear Libro</p>
+          <div className="border- col-span-3 flex h-full w-full flex-col items-center justify-center rounded-xl border-divider py-20">
+            <h3>Aún tienes libros</h3>
+            <p>Crea tu primer libro de contabilidad</p>
           </div>
         )}
         {books.length === 0 && query !== "" && (

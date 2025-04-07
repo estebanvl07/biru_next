@@ -21,6 +21,7 @@ import { createBook, type CreateBook } from "../schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { api } from "~/utils/api";
 import { toast } from "sonner";
+import { useResize } from "~/lib/hooks/useResize";
 
 export function CreateBookButton() {
   const [open, setOpen] = useState(false);
@@ -36,6 +37,8 @@ export function CreateBookButton() {
   });
 
   const booksRefresh = api.useUtils().books;
+
+  const { isMobile } = useResize();
 
   const { mutateAsync: CreateBookMutation } =
     api.books.createBook.useMutation();
@@ -71,11 +74,17 @@ export function CreateBookButton() {
         className="w-full"
         onPress={() => setOpen(true)}
         color="primary"
+        isIconOnly={isMobile}
         startContent={<PlusIcon className="h-4 w-4" />}
       >
-        Crear Nuevo Libro
+        {!isMobile && "Crear Nuevo Libro"}
       </Button>
-      <Drawer isOpen={open} onOpenChange={setOpen}>
+      <Drawer
+        size={isMobile ? "full" : "md"}
+        placement={isMobile ? "bottom" : "right"}
+        isOpen={open}
+        onOpenChange={setOpen}
+      >
         <DrawerContent className="font-montserrat">
           {(onClose) => (
             <>

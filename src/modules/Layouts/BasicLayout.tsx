@@ -1,7 +1,6 @@
 import type { FC } from "react";
 import { Header } from "~/modules/components/Header";
 import Head from "next/head";
-import { Spotlight } from "../components/ui/spotLight";
 
 interface LayoutProps {
   children?: React.ReactNode;
@@ -21,7 +20,6 @@ export const BasicLayout: FC<LayoutProps> = ({
         <meta name="description" content={description} />
       </Head>
       <main className="relative flex h-full flex-col overflow-hidden px-2 pb-16 sm:px-0">
-        <Spotlight smallWidth={200} />
         <Header />
         {children}
       </main>

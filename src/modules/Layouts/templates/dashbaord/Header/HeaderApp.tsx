@@ -4,6 +4,7 @@ import { SearchIcon } from "lucide-react";
 import NavigationLogo from "./NavigationLogo";
 import Nav from "./Nav";
 import clsx from "clsx";
+import BookSwitcher from "./BookSwitcher";
 
 interface HeaderAppProps {
   hasFilter?: boolean;
@@ -29,7 +30,7 @@ const HeaderApp = memo(
   }: HeaderAppProps) => {
     return (
       <header
-        className={clsx("z-10 flex w-full flex-col px-8 py-2", className)}
+        className={clsx("z-50 flex w-full flex-col px-8 py-2", className)}
       >
         <div className="flex items-center justify-between">
           <aside className="flex items-center">
@@ -38,12 +39,15 @@ const HeaderApp = memo(
                 <NavigationLogo isExpanded />
               </aside>
             )}
-            <Input
-              startContent={<SearchIcon width={18} />}
-              placeholder="Buscar"
-              radius="full"
-              className="w-80"
-            />
+            <div className="flex items-center gap-2">
+              <Input
+                startContent={<SearchIcon width={18} />}
+                placeholder="Buscar"
+                radius="full"
+                className="w-80"
+              />
+              <BookSwitcher />
+            </div>
           </aside>
           <div className="flex items-center gap-x-4">
             {rightContent}

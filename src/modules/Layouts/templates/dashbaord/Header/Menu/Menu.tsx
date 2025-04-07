@@ -1,4 +1,4 @@
-import { signOut } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
 import { motion } from "framer-motion";
 import { Icon } from "@iconify/react/dist/iconify.js";
 
@@ -10,17 +10,27 @@ import { Listbox, ListboxItem } from "@heroui/react";
 import { useRouter } from "next/router";
 import { useParams } from "next/navigation";
 import clsx from "clsx";
+import { HandlerTheme } from "~/modules/components";
 
 const OPTIONS: ListMenu[] = [
   {
     label: "Libros",
     href: "/overview",
-    icon: "ph:books-light",
+  },
+  {
+    label: "Cuentas",
+    href: "/overview/settings/account",
   },
   {
     label: "Configuración",
     href: "/overview/settings",
-    icon: "mingcute:settings-6-line",
+  },
+];
+
+const APP_NAVIGATION: ListMenu[] = [
+  {
+    label: "Pagina de Inicio",
+    href: "/",
   },
   {
     label: "Cerrar Sesión",
@@ -40,27 +50,31 @@ const Menu = ({
   className?: string;
   onHide: () => void;
 }) => {
+  const { data: session } = useSession();
   const router = useRouter();
 
   return (
     <motion.div
-      initial={{
-        opacity: 0,
-      }}
-      animate={{
-        opacity: 1,
-      }}
-      transition={{
-        duration: 0.2,
-      }}
+      initial={{ opacity: 0, y: -10 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.2 }}
       className={clsx(
-        "absolute  top-12 flex w-52 flex-col rounded-md border bg-white pb-1 pt-2 backdrop-blur-sm md:right-0 dark:border-white/10 dark:bg-default-100",
+        "absolute top-12 z-50 flex w-72 flex-col rounded-xl border border-divider bg-white px-2 pb-1 pt-2 shadow-xl backdrop-blur-sm md:right-0 dark:bg-default-100",
         className,
       )}
     >
-      <AccountsOptions />
+      <div className="my-2 px-4">
+        <p className="font-medium">{session?.user.name}</p>
+        <p>{session?.user.email}</p>
+      </div>
+
+      {/* <AccountsOptions /> */}
       <ul className="flex w-full flex-col">
-        <Listbox variant="flat" aria-label="options the app">
+        <Listbox
+          className="border-b border-divider pb-2"
+          variant="flat"
+          aria-label="options the app"
+        >
           {OPTIONS.map((option, index) => {
             return (
               <ListboxItem
@@ -70,10 +84,36 @@ const Menu = ({
                   option.onClick && option.onClick();
                   onHide();
                 }}
-                color="primary"
-                className="px-3 hover:rounded-md dark:!text-white"
+                // color="primary"
+                className="px-3 py-2 hover:rounded-md hover:!bg-default-200 dark:!text-white"
                 showDivider={option.showLine}
-                startContent={<Icon icon={option.icon ?? ""} />}
+                endContent={<Icon icon={option.icon ?? ""} />}
+              >
+                {option.label}
+              </ListboxItem>
+            );
+          })}
+        </Listbox>
+        <div className="mb-1 flex items-center justify-between border-b border-divider py-2 pl-4 pr-3">
+          <p>Cambiar Tema</p>
+          <HandlerTheme isSmall />
+        </div>
+        <Listbox variant="flat" aria-label="options the app">
+          {APP_NAVIGATION.map((option, index) => {
+            return (
+              <ListboxItem
+                key={index}
+                onPress={() => {
+                  if (option.href) return router.push(option.href);
+                  option.onClick && option.onClick();
+                  onHide();
+                }}
+                classNames={{
+                  wrapper: "",
+                }}
+                className="px-3 py-2 hover:rounded-md hover:!bg-default-200 dark:!text-white"
+                showDivider={option.showLine}
+                endContent={<Icon icon={option.icon ?? ""} width={18} />}
               >
                 {option.label}
               </ListboxItem>

@@ -5,7 +5,7 @@
 
 body {
   box-sizing: border-box;
-  @apply text-sm tracking-tight text-slate-900 dark:text-slate-200;
+  @apply text-sm tracking-tight;
 }
 
 .fc-toolbar-title {

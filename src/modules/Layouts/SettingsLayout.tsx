@@ -55,7 +55,7 @@ const SettingsLayout = ({ children }: { children: React.ReactNode }) => {
         <h2 className="text-4xl -tracking-wide">Configuración</h2>
       </div>
       <main className="flex flex-col items-start gap-4 md:mt-10 md:flex-row md:gap-8">
-        <aside className="flex w-full flex-col rounded-xl md:w-64">
+        <aside className="sticky top-4 flex w-full flex-col rounded-xl md:w-64">
           <ul className="flex  flex-row overflow-x-auto py-1 scrollbar-hide md:flex-col md:py-0">
             {routes.map(({ href, name }) => {
               const isActive = pathname.includes(href);

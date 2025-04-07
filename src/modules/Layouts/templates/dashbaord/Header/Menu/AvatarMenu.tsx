@@ -12,6 +12,7 @@ const AvatarMenu = () => {
       <Avatar
         src={session?.user.image || ""}
         color="primary"
+        className="h-9 w-9"
         size="sm"
         name={session?.user.name || ""}
       />

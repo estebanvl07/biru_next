@@ -8,6 +8,8 @@ import { useResize } from "~/lib/hooks/useResize";
 import Link from "next/link";
 import { Button } from "@heroui/button";
 import { Toaster } from "sonner";
+import clsx from "clsx";
+import { usePathname } from "next/navigation";
 
 interface DashboardProps {
   children: React.ReactNode;
@@ -28,6 +30,7 @@ const OverviewLayout: FC<DashboardProps> = ({
   subtitle,
 }) => {
   const { isMobile } = useResize();
+  const pathname = usePathname();
 
   return (
     <>
@@ -56,8 +59,30 @@ const OverviewLayout: FC<DashboardProps> = ({
                   >
                     Feedback
                   </Button>
-                  <Link href={"/overview/settings"}>Ayuda</Link>
-                  <Link href={"/overview/settings"}>Configuración</Link>
+                  <Link
+                    className={clsx({
+                      "font-semibold": pathname === "/overview",
+                    })}
+                    href={"/overview"}
+                  >
+                    Inicio
+                  </Link>
+                  <Link
+                    className={clsx({
+                      "font-semibold": pathname === "/#",
+                    })}
+                    href={"/overview/#"}
+                  >
+                    Ayuda
+                  </Link>
+                  <Link
+                    className={clsx({
+                      "font-semibold": pathname === "/overview/settings",
+                    })}
+                    href={"/overview/settings"}
+                  >
+                    Configuración
+                  </Link>
                 </div>
               }
               hasLeftContent={false}

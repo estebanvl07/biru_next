@@ -113,6 +113,7 @@ const config = {
               foreground: "#fff",
             },
             content1: "#0f172a",
+            content2: "#1e293b",
             default: {
               DEFAULT: "#0f172a",
               50: "#0f172a",

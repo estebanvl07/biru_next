@@ -37,7 +37,7 @@ const BookCard = ({
       <Card className="h-full cursor-pointer border border-divider px-4 py-2 shadow-sm">
         <CardHeader>
           <aside className="flex items-center gap-2">
-            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-default-100">
+            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-default-100 dark:bg-default-200">
               {type === 1 ? (
                 <Home size={20} />
               ) : type === 3 ? (
@@ -57,7 +57,7 @@ const BookCard = ({
             size="sm"
             variant="flat"
             color="primary"
-            className="!text-primary"
+            className="!text-primary dark:!text-indigo-300"
           >
             {description}
           </Chip>

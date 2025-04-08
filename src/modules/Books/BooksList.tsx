@@ -31,7 +31,7 @@ const BooksList = React.memo(() => {
     if (orderBy === "name") {
       return a.name.localeCompare(b.name);
     } else {
-      return a.lastAccess!.getTime()! - b.lastAccess!.getTime();
+      return b.lastAccess!.getTime()! - a.lastAccess!.getTime();
     }
   });
   return (

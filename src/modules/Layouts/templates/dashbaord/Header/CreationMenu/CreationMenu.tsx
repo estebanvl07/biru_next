@@ -1,123 +1,71 @@
-import { useRouter } from "next/router";
-import React, { useRef, useState } from "react";
+import React, { useState } from "react";
 import { useParams } from "next/navigation";
 
 import { useOutsideClick } from "~/lib/hooks";
 
 import { Icon } from "@iconify/react/dist/iconify.js";
-import {
-  Button,
-  Listbox,
-  ListboxItem,
-  ListboxSection,
-  useDisclosure,
-} from "@heroui/react";
+import { Button, Listbox, ListboxItem, ListboxSection } from "@heroui/react";
 
 import type { ListMenu } from "~/types/root.types";
-import { useResize } from "~/lib/hooks/useResize";
 import Link from "next/link";
-import CreateTransaction from "~/modules/Transactions/CreateTransaction";
-import CreateGoal from "~/modules/Goals/CreateGoal";
-import CreateCategory from "~/modules/Category/CreateCategory";
-import CreateEntity from "~/modules/Entities/CreateEntity";
+import { PlusIcon } from "lucide-react";
+import { DASHBOARD_MAIN_PATH } from "~/lib/constants/config";
 
 interface OptionsProps {
   title: string;
   menus: ListMenu[];
 }
 
-const CreationMenu = () => {
-  const router = useRouter();
-  const { acc } = useParams();
-  const [formComponent, setFormComponent] = useState<React.ReactElement | null>(
-    null,
-  );
-  const { isOpen, onClose, onOpen } = useDisclosure({ isOpen: false });
+const OPTIONS = [
+  {
+    title: "Transacciones",
+    menus: [
+      {
+        label: "Ingreso",
+        icon: "iconamoon:arrow-top-right-1-light",
+        href: "transactions/new",
+      },
+      {
+        label: "Egreso",
+        icon: "iconamoon:arrow-bottom-left-1-light",
+        href: "transactions/new?type=2",
+      },
+      {
+        label: "Meta",
+        icon: "mdi:cash-minus",
+        href: "transactions/new?transferType=goal",
+      },
+    ],
+  },
+  {
+    title: "Servicios",
+    menus: [
+      {
+        label: "Nueva Meta",
+        icon: "ph:target",
+        href: "goals/new",
+      },
+      {
+        label: "Categoria",
+        icon: "iconamoon:category",
+        href: "category/new",
+      },
+      {
+        label: "Entidad",
+        icon: "ph:users-bold",
+        href: "entities/new",
+      },
+    ],
+  },
+];
 
+const CreationMenu = () => {
   const [showMenu, setShowMenu] = useState(false);
 
+  const params = useParams<{ bookId?: string }>();
   const ref = useOutsideClick<HTMLDivElement>(() => setShowMenu(false));
-  const { isDesktop } = useResize();
 
-  const BASIC_URL = `/account/${acc}/`;
-
-  const OPTIONS: OptionsProps[] = [
-    {
-      title: "Transacciones",
-      menus: [
-        {
-          component: (
-            <CreateTransaction
-              isOpen
-              onClose={() => setFormComponent(null)}
-              options={{
-                transferType: "transfer",
-                onlyForm: true,
-                defaultType: 1,
-              }}
-            />
-          ),
-          label: "Ingreso",
-          icon: "iconamoon:arrow-top-right-1-light",
-        },
-        {
-          label: "Egreso",
-          icon: "iconamoon:arrow-bottom-left-1-light",
-          component: (
-            <CreateTransaction
-              isOpen
-              onClose={() => setFormComponent(null)}
-              options={{
-                transferType: "transfer",
-                onlyForm: true,
-                defaultType: 2,
-              }}
-            />
-          ),
-        },
-        {
-          label: "Meta",
-          icon: "mdi:cash-minus",
-          component: (
-            <CreateTransaction
-              isOpen
-              onClose={() => setFormComponent(null)}
-              options={{
-                transferType: "goal",
-                onlyForm: true,
-              }}
-            />
-          ),
-        },
-      ],
-    },
-    {
-      title: "Servicios",
-      menus: [
-        {
-          label: "Nueva Meta",
-          icon: "ph:target",
-          component: (
-            <CreateGoal isOpen onClose={() => setFormComponent(null)} />
-          ),
-        },
-        {
-          label: "Categoria",
-          icon: "iconamoon:category",
-          component: (
-            <CreateCategory isOpen onClose={() => setFormComponent(null)} />
-          ),
-        },
-        {
-          label: "Entidad",
-          icon: "ph:users-bold",
-          component: (
-            <CreateEntity isOpen onClose={() => setFormComponent(null)} />
-          ),
-        },
-      ],
-    },
-  ];
+  const BASIC_URL = `${DASHBOARD_MAIN_PATH}/${params.bookId}`;
 
   return (
     <div
@@ -126,58 +74,42 @@ const CreationMenu = () => {
       className="relative flex items-center"
     >
       <Button
-        color="primary"
-        radius="full"
-        isIconOnly={!isDesktop}
-        title="Crear"
-        onClick={() => setShowMenu(!showMenu)}
+        isIconOnly
+        variant="bordered"
+        className="border border-divider"
+        onPress={() => setShowMenu(!showMenu)}
       >
-        <Icon
-          icon="uil:plus-circle"
-          className="text-primary-lighter"
-          width={22}
-        />
-        {isDesktop && "Crear"}
+        <PlusIcon />
       </Button>
       {showMenu && (
-        <div className="absolute right-0 top-12 w-[165px] rounded-small border-small border-default-200 bg-default-100/50 backdrop-blur-xl  dark:border-default-100 dark:border-white/5">
-          <Listbox
-            variant="flat"
-            aria-label="Creation menu"
-            className="bg-opacity-65 backdrop-blur-lg"
-          >
+        <div className="absolute right-0 top-12 w-60 overflow-hidden rounded-xl border-small border-divider bg-white px-2 py-2 dark:bg-default-100">
+          <Listbox variant="flat" aria-label="Creation menu">
             {OPTIONS.map(({ title, menus }, index) => {
               return (
-                <ListboxSection key={title} title={title}>
-                  {menus.map(
-                    (
-                      { href, label, showLine = false, icon, component },
-                      index,
-                    ) => (
-                      <ListboxItem
-                        key={index}
-                        color="primary"
-                        className="px-3 hover:!rounded-small dark:!text-slate-100"
-                        showDivider={showLine}
-                        startContent={<Icon icon={icon ?? ""} />}
-                        onClick={() => {
-                          if (component) {
-                            setFormComponent(component);
-                            onOpen();
-                          }
-                        }}
-                      >
-                        {label}
-                      </ListboxItem>
-                    ),
-                  )}
+                <ListboxSection
+                  key={title}
+                  classNames={{
+                    heading: "dark:text-foreground-200",
+                  }}
+                  title={title}
+                >
+                  {menus.map(({ href, label, icon }, index) => (
+                    <ListboxItem
+                      key={index}
+                      className="px-3 hover:!rounded-small hover:!bg-default-100 dark:!text-slate-100 dark:hover:!bg-default-200"
+                      endContent={<Icon icon={icon ?? ""} width={18} />}
+                      as={Link}
+                      href={`${BASIC_URL}/${href}`}
+                    >
+                      {label}
+                    </ListboxItem>
+                  ))}
                 </ListboxSection>
               );
             })}
           </Listbox>
         </div>
       )}
-      {formComponent || null}
     </div>
   );
 };

@@ -21,17 +21,16 @@ const NotificationMenu = () => {
   return (
     <div ref={element} className="relative">
       <Badge
-        content={notifications?.length || 0}
-        classNames={{
-          badge: notifications?.length === 0 && "hidden",
-        }}
+        content={notifications?.length ?? 0}
+        // classNames={{
+        //   badge: notifications?.length === 0 && "hidden",
+        // }}
         color="primary"
       >
         <Button
           isIconOnly
           variant="bordered"
-          className="border-none"
-          radius="full"
+          className="border border-divider"
           onPress={() => setShowMenu(!showMenu)}
         >
           {" "}
@@ -46,7 +45,7 @@ const NotificationMenu = () => {
           animate={{
             opacity: 1,
           }}
-          className="absolute left-0 top-12 max-h-[32rem] w-[24rem] overflow-y-auto rounded-xl border bg-default-100/80 px-3 py-4 shadow-2xl backdrop-blur-xl scrollbar-hide dark:border-white/10"
+          className="absolute -right-4 top-12 max-h-[32rem] w-[24rem] overflow-y-auto rounded-xl border bg-default-100/80 px-3 py-4 shadow-2xl backdrop-blur-xl scrollbar-hide dark:border-white/10"
         >
           <header className="mb-2 flex items-center justify-between px-4">
             <h2 className="whitespace-nowrap text-lg">Tus Notificaciones</h2>

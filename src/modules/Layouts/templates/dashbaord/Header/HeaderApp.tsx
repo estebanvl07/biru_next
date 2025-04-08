@@ -44,6 +44,9 @@ const HeaderApp = memo(
                 startContent={<SearchIcon width={18} />}
                 placeholder="Buscar"
                 radius="full"
+                classNames={{
+                  inputWrapper: "border border-divider/10 shadow-none",
+                }}
                 className="w-80"
               />
               <BookSwitcher />
@@ -51,11 +54,7 @@ const HeaderApp = memo(
           </aside>
           <div className="flex items-center gap-x-4">
             {rightContent}
-            <Nav
-              hasLogout={hasLogout}
-              hasFilter={hasFilter}
-              hasNotifications={hasNotifications}
-            />
+            <Nav hasNotifications={hasNotifications} />
           </div>
         </div>
       </header>

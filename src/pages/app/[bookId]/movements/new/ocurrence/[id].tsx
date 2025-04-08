@@ -6,18 +6,25 @@ import { useRouter } from "next/router";
 import DashboardLayout from "~/modules/Layouts/Dashboard";
 import { createServerSideCaller } from "~/utils/serverSideCaller/serverSideCaller";
 import CreateOcurrenceForm from "~/modules/Movements/CreateOcurrenceForm";
+import NotFound from "~/modules/components/404";
 
 const NewOcurrencePage = ({ data }: { data: string }) => {
-  const router = useRouter();
   const movement: MovementsIncludes = data ? JSON.parse(data) : null;
 
   if (!movement) {
-    router.back();
+    return (
+      <DashboardLayout
+        title="Detalle de transacción"
+        headDescription="detalle de transacción"
+      >
+        <NotFound />
+      </DashboardLayout>
+    );
   }
 
   return (
     <DashboardLayout title="Nueva Ocurrencia">
-      <CreateOcurrenceForm {...movement} />
+      <CreateOcurrenceForm movement={movement} />
     </DashboardLayout>
   );
 };

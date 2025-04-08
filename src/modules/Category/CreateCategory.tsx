@@ -20,6 +20,7 @@ const CreateCategory = (props: createDialogFormProps) => {
       isOpen={props.isOpen}
       onClose={props.onClose}
       title="Crear Categoría"
+      className="backdrop-blur-xl dark:bg-default-200/80"
     >
       <DrawerContent className="font-montserrat">
         <DrawerHeader>

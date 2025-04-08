@@ -5,7 +5,7 @@ const BooksPage = () => {
   return (
     <WithoutSideBar title="Mis Libros">
       <div className="my-4">
-        <h4 className="text-4xl font-semibold !tracking-tight">
+        <h4 className="text-4xl font-semibold tracking-tight">
           Libros de Finanzas
         </h4>
         <p className="text-sm">

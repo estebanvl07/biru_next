@@ -12,6 +12,17 @@ const MakeTransactionSchedule = () => {
 
   const currentMovement = expenses?.find((ex) => ex.id === Number(params.id));
 
+  if (!currentMovement) {
+    return (
+      <DashboardLayout
+        title="Detalle de transacción"
+        headDescription="detalle de transacción"
+      >
+        <NotFound />
+      </DashboardLayout>
+    );
+  }
+
   return (
     <DashboardLayout title="Realizar Transacción"
       headDescription="Realizar una transacción"
@@ -23,7 +34,7 @@ const MakeTransactionSchedule = () => {
           {!currentMovement ? (
             <NotFound />
           ) : (
-            <CreateOcurrenceForm {...currentMovement} />
+            <CreateOcurrenceForm movement={currentMovement} />
           )}
         </>
       )}

@@ -47,7 +47,9 @@ const SideBar = React.memo(({ className }: SideBarProps) => {
         >
           {menuOptions.map(({ options, title }, index) => (
             <div className="mb-4" key={index}>
-              <h6 className="mb-1 px-2 text-xs">{title}</h6>
+              <h6 className="mb-1 px-2 text-xs dark:text-foreground-300">
+                {title}
+              </h6>
               <ul>
                 {options.map((item) => (
                   <OptionItem

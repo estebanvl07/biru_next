@@ -51,7 +51,7 @@ const SettingsLayout = ({ children }: { children: React.ReactNode }) => {
 
   return (
     <OverviewLayout title="Configuración">
-      <div className="hidden border-b py-4 pb-8 md:block">
+      <div className="hidden border-b border-divider py-4 pb-8 md:block">
         <h2 className="text-4xl -tracking-wide">Configuración</h2>
       </div>
       <main className="flex flex-col items-start gap-4 md:mt-10 md:flex-row md:gap-8">

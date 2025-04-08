@@ -87,64 +87,6 @@ const DesktopDashboard = () => {
       ),
     },
   };
-  // const widgets: { [Key: string]: JSX.Element } = {
-  //   total_balance: (
-  //     <Balance
-  //       title="Total de Cuenta"
-  //       amount={account?.balance || 0}
-  //       isLoading={isLoading}
-  //       color="default"
-  //       percent="10%"
-  //       titlePercent="De Ingresos"
-  //     />
-  //   ),
-  //   income_balance: (
-  //     <Balance
-  //       title="Total de Ingresos"
-  //       amount={balance?.incomes || 0}
-  //       isLoading={isLoading}
-  //       color="success"
-  //       percent={getPercent(
-  //         balance?.incomes || 0,
-  //         balance?.transactonTotal || 0,
-  //       )}
-  //       titlePercent="De Ingresos"
-  //     />
-  //   ),
-  //   egress_balance: (
-  //     <Balance
-  //       title="Total de Engresos"
-  //       amount={balance?.egress || 0}
-  //       color="danger"
-  //       percent={getPercent(
-  //         balance?.egress || 0,
-  //         balance?.transactonTotal || 0,
-  //       )}
-  //       titlePercent="De Egresos"
-  //     />
-  //   ),
-  //   savings_balance: (
-  //     <Balance
-  //       title="Total de Ahorros"
-  //       amount={balance?.savings || 0}
-  //       color="warning"
-  //       percent={getPercent(
-  //         balance?.savings || 0,
-  //         balance?.transactonTotal || 0,
-  //       )}
-  //       titlePercent="De Egresos"
-  //     />
-  //   ),
-  //   account_balance: <BalanceAccount className="h-fit" />,
-  //   // goal_list: <GoalList />,
-  //   balance_by_categories: <PieChartAmountByCategoires />,
-  //   last_transactions: (
-  //     <LastTransactions transactionsMaxLength={6} cardClassName="h-full" />
-  //   ),
-  //   // quick_transaction: <QuickTransaction />,
-  //   // categories_percent: <CategoriesPercent />,
-  //   // annual_balance: <AnnualBalance />,
-  // };
 
   const [list, setList] = useState<OrderComponent[]>();
 

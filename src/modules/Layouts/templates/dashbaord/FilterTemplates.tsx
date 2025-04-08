@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { options } from "./filterOptions";
+import { options } from "./Header/filterOptions";
 import { RangeCalendar, Select, SelectItem } from "@heroui/react";
 
 import { Icon } from "@iconify/react/dist/iconify.js";

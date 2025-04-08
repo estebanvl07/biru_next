@@ -3,12 +3,10 @@ import { motion } from "framer-motion";
 import { Icon } from "@iconify/react/dist/iconify.js";
 
 import { CALLBACK_SIGN_OUT_URL } from "~/lib/constants/config";
-import AccountsOptions from "./AccountsOptions";
 import type { ListMenu } from "~/types/root.types";
 
 import { Listbox, ListboxItem } from "@heroui/react";
 import { useRouter } from "next/router";
-import { useParams } from "next/navigation";
 import clsx from "clsx";
 import { HandlerTheme } from "~/modules/components";
 
@@ -84,8 +82,7 @@ const Menu = ({
                   option.onClick && option.onClick();
                   onHide();
                 }}
-                // color="primary"
-                className="px-3 py-2 hover:rounded-md hover:!bg-default-200 dark:!text-white"
+                className="px-3 py-2 hover:rounded-md hover:!bg-default-100 dark:!text-white dark:hover:!bg-default-200"
                 showDivider={option.showLine}
                 endContent={<Icon icon={option.icon ?? ""} />}
               >
@@ -108,10 +105,7 @@ const Menu = ({
                   option.onClick && option.onClick();
                   onHide();
                 }}
-                classNames={{
-                  wrapper: "",
-                }}
-                className="px-3 py-2 hover:rounded-md hover:!bg-default-200 dark:!text-white"
+                className="rounded-md px-3 py-2 hover:!bg-default-100 dark:!text-white dark:hover:!bg-default-200"
                 showDivider={option.showLine}
                 endContent={<Icon icon={option.icon ?? ""} width={18} />}
               >

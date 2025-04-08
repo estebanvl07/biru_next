@@ -9,6 +9,7 @@ import DashboardLayout from "~/modules/Layouts/Dashboard";
 import MobileDashboard from "~/modules/Dashboard/MobileDashboard";
 import DesktopDashboard from "~/modules/Dashboard/DesktopDashboard";
 import { useCurrentBook } from "~/modules/Books/hooks/useBooks.hook";
+import FilterTemplates from "~/modules/Layouts/templates/dashbaord/FilterTemplates";
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const bookId = String(ctx.params!.bookId);
@@ -35,6 +36,7 @@ const HomePage = () => {
       title="Dashboard"
       subtitle={book?.name}
       headDescription="Dashboard de la cuenta seleccionada"
+      activityContent={<FilterTemplates />}
       hasFilter
     >
       {isMobile ? <MobileDashboard /> : <DesktopDashboard />}

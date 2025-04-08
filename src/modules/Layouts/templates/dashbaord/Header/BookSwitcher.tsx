@@ -22,7 +22,11 @@ const BookSwitcher = () => {
 
   return (
     <div ref={divEle} className="relative z-50">
-      <Button isIconOnly onPress={() => (isOpen ? onClose() : onOpen())}>
+      <Button
+        className="border border-divider/10 shadow-none"
+        isIconOnly
+        onPress={() => (isOpen ? onClose() : onOpen())}
+      >
         <Inbox width={20} />
       </Button>
       {isOpen && (

@@ -1,15 +1,15 @@
 import { useResize } from "~/lib/hooks/useResize";
 import { Header } from "../components/Header";
-import { Spotlight } from "../components/ui/spotLight";
+import { Spotlight } from "../components/ui/SpotLight";
 import { HeroSection, Footer } from "./components";
 import Features from "./components/Features/Features";
 import Presentation from "./components/Presentation/Presentation";
-import Inprovements from "./components/Inprovements/Inprovements";
 import Problem from "./components/Problem";
 import WorkingSection from "./components/Working";
 import CTA from "./components/CTA";
 import FAQ from "./components/FAQ";
-
+import { motion } from "framer-motion";
+import SlideComponents from "./components/SlideComponents/SlideComponents";
 export const Landing = () => {
   return (
     <>
@@ -26,6 +26,14 @@ export const Landing = () => {
           animationStyle={"fade"}
           className="mx-auto max-w-5xl px-4"
         />
+        <motion.div
+          initial={{ opacity: 0, y: 60 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 1 }}
+          className="fade-x mx-auto flex w-full max-w-7xl scale-75 justify-center overflow-x-hidden md:scale-100"
+        >
+          <SlideComponents />
+        </motion.div>
         <Problem />
         <div className=" rounded-t-xl bg-default-100 bg-[url('/background-content.webp')] py-20 pt-20 md:space-y-44 dark:bg-default-100/40">
           <Features />

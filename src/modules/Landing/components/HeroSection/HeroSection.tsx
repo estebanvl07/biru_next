@@ -4,20 +4,19 @@ import { motion } from "framer-motion";
 import { Avatar, Button, Chip } from "@heroui/react";
 import TypewriterComponent from "typewriter-effect";
 import { ChevronRight } from "lucide-react";
-import SlideComponents from "../SlideComponents/SlideComponents";
 import { TextAnimate } from "~/modules/components/ui/TextAnimate";
 
 export const HeroSection = () => {
   const title = "El Control Financiero que Necesitas";
 
   return (
-    <section className="relative mx-auto flex w-full max-w-7xl flex-col gap-16 py-20">
+    <section className="relative mx-auto flex w-full max-w-7xl flex-col gap-14 pb-8 pt-28">
       <div className="relative z-30 flex w-full flex-col items-center justify-center gap-8 px-8">
         <Chip
           avatar={<Avatar name="B" color="primary" />}
           color="primary"
           variant="bordered"
-          className="border-1 border-primary bg-primary/5 dark:border-indigo-200 dark:border-white/10 dark:text-indigo-200"
+          className="border-1 border-primary bg-primary/5 text-base dark:border-indigo-200 dark:border-white/10 dark:text-indigo-200"
         >
           <TypewriterComponent
             options={{
@@ -73,14 +72,6 @@ export const HeroSection = () => {
           </Button>
         </motion.div>
       </div>
-      <motion.div
-        initial={{ opacity: 0, y: 60 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5, delay: 1 }}
-        className="fade-x flex w-full scale-75 justify-center overflow-x-hidden md:scale-100"
-      >
-        <SlideComponents />
-      </motion.div>
     </section>
   );
 };

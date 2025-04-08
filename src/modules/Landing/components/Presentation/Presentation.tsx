@@ -84,10 +84,10 @@ export default function HeroVideoDialog({
       initial={{ opacity: 0, y: 40, filter: "blur(6px)" }}
       whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
       transition={{ duration: 0.5 }}
-      className={cn("relative", className)}
+      className={cn("fade-bottom relative rounded-xl", className)}
     >
       <div
-        className="fade-bottom group relative cursor-pointer overflow-hidden rounded-xl border-4 transition-colors"
+        className="group relative cursor-pointer overflow-hidden rounded-xl border border-divider transition-colors"
         onClick={() => setIsVideoOpen(true)}
       >
         <img
@@ -95,7 +95,7 @@ export default function HeroVideoDialog({
           alt={thumbnailAlt}
           width={1920}
           height={1080}
-          className="w-full border object-cover shadow-lg transition-all duration-200 ease-out group-hover:brightness-[0.8]"
+          className="w-full object-cover shadow-lg transition-all duration-200 ease-out group-hover:brightness-[0.8]"
         />
         <div className="absolute inset-0 flex scale-[0.9] items-center justify-center rounded-2xl transition-all duration-200 ease-out group-hover:scale-100">
           <div className="flex size-28 items-center justify-center rounded-full bg-primary/10 backdrop-blur-md">

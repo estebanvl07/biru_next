@@ -41,12 +41,11 @@ const Empty = ({
       </p>
       {href && (
         <Button
-          color="primary"
           size="sm"
           as={Link}
           href={href}
           variant="flat"
-          className="dark:text-primary-light text-xs font-medium dark:font-normal"
+          className="bg-default-100 text-xs font-medium dark:bg-default-200 dark:font-normal"
         >
           <Icon icon="ph:plus" width={16} /> {buttonText || "Crear"}
         </Button>

@@ -76,7 +76,7 @@ const RedirectionLink = ({
       className="z-0 flex items-center gap-2"
       title={item.name}
     >
-      <Icon icon={item.icon} width={18} />
+      <Icon icon={item.icon} width={isExpanded ? 18 : 20} />
       {isExpanded && <p>{item.name}</p>}
     </Link>
   );

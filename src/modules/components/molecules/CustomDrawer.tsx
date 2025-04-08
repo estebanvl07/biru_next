@@ -14,6 +14,7 @@ interface CustomDrawerProps extends DrawerProps {
   subtitle?: string;
   footerContent?: JSX.Element;
   content?: string;
+  customHeader?: JSX.Element;
 }
 
 const CustomDrawer = ({
@@ -23,6 +24,7 @@ const CustomDrawer = ({
   subtitle,
   title,
   footerContent,
+  customHeader,
   classNames,
   ...props
 }: CustomDrawerProps) => {
@@ -31,10 +33,14 @@ const CustomDrawer = ({
       <DrawerContent
         className={clsx("px-2 pb-4 font-montserrat", classNames?.base)}
       >
-        <DrawerHeader className="flex flex-col">
-          {title && <h3 className="text-2xl">{title}</h3>}
-          {subtitle && <p className="text-sm font-normal">{subtitle}</p>}
-        </DrawerHeader>
+        {customHeader ? (
+          <DrawerHeader className="flex flex-col">{customHeader}</DrawerHeader>
+        ) : (
+          <DrawerHeader className="flex flex-col">
+            {title && <h3 className="text-2xl tracking-tight">{title}</h3>}
+            {subtitle && <p className="text-sm font-normal">{subtitle}</p>}
+          </DrawerHeader>
+        )}
         <DrawerBody>
           <div className="overflow-auto">{children}</div>
         </DrawerBody>

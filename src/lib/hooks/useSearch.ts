@@ -6,12 +6,14 @@ interface Props<T> {
 }
 
 export const useSearch = <T>({ data, keys }: Props<T>) => {
-  const [query, setQuery] = useState<string>();
+  const [query, setQuery] = useState<string>("");
   const [newList, setNewList] = useState<T[]>(data);
   const [loading, setLoading] = useState(false);
 
   const onSearch = useCallback(
     (param: string) => {
+      if (typeof keys === "undefined") return [] as T[];
+
       setQuery(param);
       if (param === "") return refreshList();
       setLoading(true);

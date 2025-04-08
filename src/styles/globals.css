@@ -16,7 +16,7 @@ body {
 }
 
 [data-slot="input-wrapper"] {
-  @apply dark:!border-divider;
+  @apply dark:border dark:!border-divider;
 }
 
 main {

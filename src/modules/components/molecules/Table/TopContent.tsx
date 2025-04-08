@@ -51,7 +51,7 @@ const TopContent = React.memo(
   ({
     lenght,
     hasExport = false,
-    hasNew = true,
+    hasNew = false,
     hasSearch = true,
     hasFilters = true,
     newButtonText,

@@ -5,10 +5,13 @@ import { Button } from "@heroui/button";
 import { menuOptions } from "./dashbaord/SideBar/options";
 import Link from "next/link";
 import CustomDrawer from "~/modules/components/molecules/CustomDrawer";
+import { DASHBOARD_MAIN_PATH } from "~/lib/constants/config";
+import { useParams } from "next/navigation";
+import NavigationLogo from "./dashbaord/Header/NavigationLogo";
 
 const DrawerOptions = () => {
   const [drawerOptions, setDrawerOptions] = useState(false);
-
+  const params = useParams();
   return (
     <>
       <Button
@@ -24,23 +27,30 @@ const DrawerOptions = () => {
         size="full"
         isOpen={drawerOptions}
         onClose={() => setDrawerOptions(false)}
-        title="Menu de Opciones"
-        subtitle="Selecciona la opción que desees"
+        customHeader={
+          <div className="flex flex-col items-center justify-center gap-4">
+            <div className="flex items-center gap-2">
+              <img src="/logo.svg" width={18} />
+              <span>Biru</span>
+            </div>
+            <h2 className="tracking-tight">Menu de Opciones</h2>
+          </div>
+        }
       >
         <div className="flex flex-col gap-6">
           {menuOptions.map(({ options, title }, index) => {
             return (
               <div key={index} className="flex flex-col">
-                <h4 className="mb-2">{title}</h4>
-                <div className="grid grid-cols-4 gap-y-6">
+                <h4 className="mb-2 font-semibold">{title}</h4>
+                <div className="grid grid-cols-4 gap-y-6 border-b border-divider pb-4">
                   {options.map(({ href, icon, name, id }) => (
                     <Link
                       key={id}
-                      href={href}
+                      href={`${DASHBOARD_MAIN_PATH}/${params?.bookId}${href}`}
                       className="flex flex-col items-center justify-center gap-2"
                       title={name}
                     >
-                      <div className="flex h-12 w-12 items-center justify-center rounded-full bg-default-100">
+                      <div className="flex h-12 w-12 items-center justify-center rounded-full bg-default-100 dark:bg-default-200">
                         <Icon
                           icon={icon}
                           className="text-black dark:text-white"

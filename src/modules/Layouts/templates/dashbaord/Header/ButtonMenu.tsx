@@ -1,33 +1,37 @@
 import { Icon } from "@iconify/react/dist/iconify.js";
 import { Button } from "@heroui/button";
-import React, { useState } from "react";
-import { useOutsideClick } from "~/lib/hooks";
-import Menu from "./Menu/Menu";
+import { useDisclosure } from "@heroui/modal";
+import { Drawer, DrawerBody, DrawerContent } from "@heroui/drawer";
+import MenuContent from "./Menu/MenuContent";
 
 const ButtonMenu = () => {
-  const [showSideBar, setShowSideBar] = useState<boolean>(false);
-  const menuRef = useOutsideClick<HTMLDivElement>(() => setShowSideBar(false));
+  const { isOpen, onClose, onOpen } = useDisclosure();
 
   return (
-    <div ref={menuRef} className="relative">
+    <>
       <Button
         variant="bordered"
         isIconOnly
         radius="full"
         className="border-none bg-default-100"
-        onClick={() => {
-          setShowSideBar(!showSideBar);
-        }}
+        onPress={onOpen}
       >
         <Icon icon="iconamoon:menu-burger-horizontal-bold" width={20} />
       </Button>
-      {showSideBar && (
-        <Menu
-          className="absolute right-0 top-12 !w-44 border bg-white shadow-xl dark:border-white"
-          onHide={() => setShowSideBar(false)}
-        />
-      )}
-    </div>
+      <Drawer
+        backdrop="blur"
+        isOpen={isOpen}
+        onClose={onClose}
+        size="md"
+        placement="top"
+      >
+        <DrawerContent className="pb-4 font-montserrat">
+          <DrawerBody>
+            <MenuContent onHide={onClose} />
+          </DrawerBody>
+        </DrawerContent>
+      </Drawer>
+    </>
   );
 };
 

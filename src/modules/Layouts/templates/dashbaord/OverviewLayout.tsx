@@ -41,63 +41,60 @@ const OverviewLayout: FC<DashboardProps> = ({
 
       <main className="mx-auto flex min-h-screen w-full flex-grow flex-col  bg-default-50/50 dark:bg-slate-950">
         <div className="border-b border-divider/10 bg-white md:px-8 dark:bg-slate-900">
-          {isMobile ? (
-            <HeaderMobile title={title} />
-          ) : (
-            <HeaderApp
-              hasGoBack={false}
-              hasLogout={false}
-              hasNotifications={hasNotifications}
-              subtitle={subtitle}
-              className="!px-0"
-              hasFilter={false}
-              rightContent={
-                <div className="flex items-center gap-4">
-                  <Button
-                    variant="ghost"
-                    className="border border-divider font-medium"
-                  >
-                    Feedback
-                  </Button>
-                  <Link
-                    className={clsx({
-                      "font-semibold": pathname === "/overview",
-                    })}
-                    href={"/overview"}
-                  >
-                    Inicio
-                  </Link>
-                  <Link
-                    className={clsx({
-                      "font-semibold": pathname === "/#",
-                    })}
-                    href={"/overview/#"}
-                  >
-                    Ayuda
-                  </Link>
-                  <Link
-                    className={clsx({
-                      "font-semibold": pathname === "/overview/settings",
-                    })}
-                    href={"/overview/settings"}
-                  >
-                    Configuración
-                  </Link>
-                </div>
-              }
-              hasLeftContent={false}
-              logo
-            >
-              <div className="flex items-center gap-6">
-                <Link title="Libros" href="/overview">
-                  Libros
+          <HeaderMobile title={title} />
+          <HeaderApp
+            hasGoBack={false}
+            hasLogout={false}
+            hasNotifications={hasNotifications}
+            subtitle={subtitle}
+            className="!px-0"
+            hasFilter={false}
+            rightContent={
+              <div className="flex items-center gap-4">
+                <Button
+                  variant="ghost"
+                  className="border border-divider font-medium"
+                >
+                  Feedback
+                </Button>
+                <Link
+                  className={clsx({
+                    "font-semibold": pathname === "/overview",
+                  })}
+                  href={"/overview"}
+                >
+                  Inicio
                 </Link>
-                <Link title="Configuración" href="/overview/settings">
+                <Link
+                  className={clsx({
+                    "font-semibold": pathname === "/#",
+                  })}
+                  href={"/overview/#"}
+                >
+                  Ayuda
+                </Link>
+                <Link
+                  className={clsx({
+                    "font-semibold": pathname === "/overview/settings",
+                  })}
+                  href={"/overview/settings"}
+                >
                   Configuración
                 </Link>
               </div>
-            </HeaderApp>
-          )}
+            }
+            hasLeftContent={false}
+            logo
+          >
+            <div className="flex items-center gap-6">
+              <Link title="Libros" href="/overview">
+                Libros
+              </Link>
+              <Link title="Configuración" href="/overview/settings">
+                Configuración
+              </Link>
+            </div>
+          </HeaderApp>
         </div>
         <div className="mx-auto w-full max-w-[1360px] p-6">{children}</div>
         <Toaster position="bottom-left" />

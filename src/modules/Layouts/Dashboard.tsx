@@ -9,7 +9,7 @@ import BottomMobileNav from "./templates/dashbaord/BottomMobileNav";
 
 import { motion } from "framer-motion";
 import { Icon } from "@iconify/react/dist/iconify.js";
-import DrawerOptions from "./templates/DrawerOptions";
+import DrawerOptions from "./templates/DrawerNavigationMenu";
 import Breadcrum from "./templates/Breadcrum";
 import { Toaster } from "sonner";
 
@@ -48,6 +48,10 @@ const DashboardLayout = ({
         <title>Biru - {title}</title>
         <meta name="description" content={headDescription} />
       </Head>
+      <Toaster
+        className="z-50"
+        position={isMobile ? "top-center" : "bottom-right"}
+      />
       <div className="flex w-full flex-col">
         {!isMobile ? (
           <HeaderApp
@@ -58,26 +62,30 @@ const DashboardLayout = ({
         ) : (
           <HeaderMobile title={title} />
         )}
-        <div className="relative flex h-full w-full flex-row pb-20 pr-4">
+        <div className="relative flex h-full w-full flex-row pb-20 md:pr-4">
           <SideBar />
           {isMobile && <BottomMobileNav />}
           {isMobile && <DrawerOptions />}
-          <section className="relative z-0 h-full w-full flex-grow overflow-hidden overflow-y-auto rounded-xl border border-divider/10 bg-default-50/50 pb-10 scrollbar-hide md:pt-4 dark:border-white/10 dark:bg-slate-950">
+          <section className="relative z-0 h-full w-full flex-grow overflow-hidden overflow-y-auto rounded-xl border-divider/10 bg-white pb-10 scrollbar-hide md:border md:bg-default-50/50 md:pt-4 dark:bg-slate-900 md:dark:bg-slate-950">
             <div className="container mx-auto flex flex-col md:px-8">
-              <Breadcrum />
-              <div className="flex flex-row items-center justify-between">
-                <aside>
-                  <h1 className="text-start text-xl font-semibold -tracking-wide text-primary lg:text-3xl dark:text-slate-200">
-                    {title}
-                  </h1>
-                  {subtitle && (
-                    <p className="text-gray-600 dark:text-slate-200">
-                      {subtitle}
-                    </p>
-                  )}
-                </aside>
-                {activityContent}
-              </div>
+              {!isMobile && (
+                <>
+                  <Breadcrum />
+                  <div className="flex flex-row items-center justify-between">
+                    <aside>
+                      <h1 className="text-start text-xl font-semibold -tracking-wide text-primary lg:text-3xl dark:text-slate-200">
+                        {title}
+                      </h1>
+                      {subtitle && (
+                        <p className="text-gray-600 dark:text-slate-200">
+                          {subtitle}
+                        </p>
+                      )}
+                    </aside>
+                    {activityContent}
+                  </div>
+                </>
+              )}
               <motion.main
                 className={clsx("z-0 mt-4 px-content md:px-0", {
                   "pb-16": isMobile,
@@ -89,7 +97,6 @@ const DashboardLayout = ({
                 exit={{ opacity: 0 }}
                 transition={{ duration: 0.8 }}
               >
-                <Toaster position="bottom-right" />
                 {children}
                 {!isMobile && (
                   <footer className="z-0 mt-4 flex w-full items-center justify-between text-xs">

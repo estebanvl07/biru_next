@@ -30,7 +30,10 @@ const HeaderApp = memo(
   }: HeaderAppProps) => {
     return (
       <header
-        className={clsx("z-50 flex w-full flex-col px-8 py-2", className)}
+        className={clsx(
+          "z-50 hidden w-full flex-col px-8 py-2 md:flex",
+          className,
+        )}
       >
         <div className="flex items-center justify-between">
           <aside className="flex items-center">

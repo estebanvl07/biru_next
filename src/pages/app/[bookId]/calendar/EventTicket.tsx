@@ -11,6 +11,9 @@ const EventTicket = (eventInfo: EventContentArg) => {
       classNames={{
         content: "font-montserrat bg-transparent p-0",
       }}
+      triggerScaleOnOpen
+      delay={3000}
+      closeDelay={0}
       content={<EventSummaryCard {...eventInfo.event.extendedProps.movement} />}
       placement="right"
     >

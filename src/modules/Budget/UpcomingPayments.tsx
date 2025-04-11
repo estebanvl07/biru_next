@@ -8,7 +8,9 @@ const UpcomingPayments = () => {
 
   return (
     <div className="space-y-4">
-      {expenses?.map((payment) => <PaymentItem {...payment} />)}
+      {expenses?.map((payment) => (
+        <PaymentItem key={payment.id} {...payment} />
+      ))}
 
       <div className="pt-2">
         <Button variant="ghost" size="sm" className="w-full">

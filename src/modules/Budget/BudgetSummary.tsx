@@ -40,7 +40,6 @@ const BudgetSummary = () => {
             className="text-danger-600"
             width={18}
           />
-          {/* <DollarSignIcon className="h-4 w-4 text-muted-foreground" /> */}
         </CardHeader>
         <CardBody>
           <div className="text-2xl font-bold">

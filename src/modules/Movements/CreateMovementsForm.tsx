@@ -7,6 +7,7 @@ import {
   Select,
   SelectItem,
   Tooltip,
+  Switch,
   User,
 } from "@heroui/react";
 import React, { useEffect, useMemo, useState } from "react";
@@ -29,6 +30,9 @@ import {
   useCurrentMonthBudget,
   useExpensesCurrentMonth,
 } from "../Budget/hooks/useBudget";
+import { motion } from "framer-motion";
+import { useGoals } from "../Goals/hook/goal.hook";
+import { GoalsIncludes } from "~/types/goal/goal.types";
 
 interface MovementFormProps {
   mode?: "create" | "edit";
@@ -40,6 +44,10 @@ const CreateMovementsForm = ({
   mode = "create",
 }: MovementFormProps) => {
   const [amountValue, setAmountValue] = useState<string>("");
+  const [goalSelected, setGoalSelected] = useState<GoalsIncludes>();
+  const [schedule, setSchedule] = useState<boolean>(
+    defaultMovement?.goalId !== null,
+  );
   const [customFrecuency, setCustomFrecuency] = useState(false);
 
   const {
@@ -60,7 +68,7 @@ const CreateMovementsForm = ({
   const { invalidateMovements } = useMovements();
   const { invalidateBudget } = useCurrentMonthBudget();
   const { invalidateExpenses } = useExpensesCurrentMonth();
-
+  const { goals, isLoading: goalsIsLoading } = useGoals();
   const { mutateAsync: CreateMovementsMutation } =
     api.movements.create.useMutation({
       onSuccess: () => {
@@ -74,6 +82,11 @@ const CreateMovementsForm = ({
 
   const { categories, isLoading: categoryisLoading } = useCategory();
   const { entities, isLoading: entitiesIsLoading } = useEntity();
+
+  const defaultGoalKey = useMemo(
+    () => (defaultMovement?.goalId ? [`${defaultMovement.goalId}`] : undefined),
+    [defaultMovement],
+  );
 
   const defaultDate = new Date();
   const defaultType = defaultMovement?.type ? defaultMovement.type : 1;
@@ -308,9 +321,114 @@ const CreateMovementsForm = ({
           {...register("frecuency")}
         />
       )}
+      <motion.div className="mb-2 mt-4 flex w-full flex-col gap-3">
+        <div className="flex items-center justify-between">
+          <aside>
+            <h4 className="text-base font-semibold">Asociar a una Meta</h4>
+            <p className="text-sm text-foreground-500 dark:text-zinc-400">
+              Habilita esta opción si deseas Asociar este movimiento a una meta
+              creada
+            </p>
+          </aside>
+          <Switch
+            onValueChange={setSchedule}
+            defaultChecked={schedule}
+            defaultSelected={schedule}
+            size="sm"
+          />
+        </div>
+        {schedule && (
+          <motion.div
+            initial={{
+              opacity: 0,
+            }}
+            exit={{
+              opacity: 0,
+            }}
+            animate={{
+              opacity: 1,
+            }}
+            transition={{
+              type: "tween",
+              stiffness: 500,
+              damping: 30,
+              duration: 0.6,
+            }}
+          >
+            <Select
+              items={goals ?? []}
+              placeholder="Seleccione la meta"
+              label="Meta"
+              isRequired
+              classNames={{
+                label: "group-data-[filled=true]:-translate-y-5",
+                trigger: "min-h-[70px]",
+                listboxWrapper: "max-h-[200px]",
+              }}
+              renderValue={(items) => {
+                return items.map(({ data }) => (
+                  <div key={data?.id} className="flex items-center gap-2">
+                    <div className="grid h-8 w-8 place-items-center rounded-full bg-primary">
+                      {data?.icon ? (
+                        <Icon icon={data?.icon} className="text-white" />
+                      ) : (
+                        <Avatar name={data?.name} />
+                      )}
+                    </div>
+                    <aside className="flex flex-col">
+                      <span>{data?.name}</span>
+                      <span className="text-xs">
+                        $ {data?.saved.toLocaleString()}
+                      </span>
+                    </aside>
+                  </div>
+                ));
+              }}
+              defaultSelectedKeys={defaultGoalKey}
+              isInvalid={Boolean(errors?.categoryId)}
+              errorMessage={errors?.categoryId?.message ?? ""}
+            >
+              {(goal) => (
+                <SelectItem
+                  color="primary"
+                  variant="flat"
+                  onPress={() => {
+                    setGoalSelected(goal as GoalsIncludes);
+                    setValue("type", goal.type as 1 | 2);
+                    setValue("goalId", goal.id);
+                    goal?.entityId && setValue("entityId", goal?.entityId);
+                  }}
+                  className="font-montserrat dark:text-white"
+                  textValue={goal.name}
+                  key={goal.id}
+                >
+                  <div className="flex items-center gap-2">
+                    <div className="grid h-8 w-8 place-items-center rounded-full bg-primary">
+                      {goal?.icon && (
+                        <Icon icon={goal?.icon} className="text-white" />
+                      )}
+                    </div>
+                    <aside className="flex flex-col">
+                      <span>{goal?.name}</span>
+                      <span className="text-xs">
+                        $ {goal?.saved.toLocaleString()}
+                      </span>
+                    </aside>
+                  </div>
+                </SelectItem>
+              )}
+            </Select>
+          </motion.div>
+        )}
+      </motion.div>
       <Accordion
         defaultExpandedKeys={["1"]}
         showDivider={false}
+        className="m-0 rounded-lg !p-0 !shadow-none"
+        itemClasses={{
+          trigger: "!shadow-none",
+          base: "!px-0 !shadow-none",
+        }}
         motionProps={{
           variants: {
             enter: {

@@ -15,11 +15,6 @@ const columns = [
     sortable: true,
   },
   {
-    name: "COMPLETADO",
-    uid: "saved",
-    sortable: true,
-  },
-  {
     name: "PROGRESO",
     uid: "prog",
     sortable: true,

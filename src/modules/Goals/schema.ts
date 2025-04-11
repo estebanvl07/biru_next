@@ -8,6 +8,7 @@ import {
 
 export const input = {
   name: Z_STRING,
+  bookId: Z_STRING,
   goal: Z_NUMBER,
   type: Z_NUMBER,
   description: z.optional(z.string()),

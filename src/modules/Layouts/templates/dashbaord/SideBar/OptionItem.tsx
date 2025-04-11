@@ -56,6 +56,8 @@ const OptionItem = React.memo(
               }}
             >
               <AccordionItem
+                key="menu"
+                textValue={item.name}
                 title={
                   <div className="flex w-full items-center gap-2 px-1 text-sm">
                     {showIcon && (
@@ -101,6 +103,7 @@ const OptionItem = React.memo(
                     key={option.id}
                     as={Link}
                     href={href}
+                    textValue={option.name}
                   >
                     {option.name}
                   </DropdownItem>

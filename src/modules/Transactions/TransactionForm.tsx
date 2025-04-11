@@ -365,7 +365,7 @@ const TransactionForm = ({
 
   return (
     <AnimatePresence>
-      <div className="flex w-full flex-col items-start gap-4">
+      <div className="flex w-full max-w-[36rem] flex-col items-start gap-4">
         <motion.form
           layout
           initial={{ x: -40, opacity: 0 }}
@@ -377,7 +377,7 @@ const TransactionForm = ({
             damping: 30,
             duration: 1,
           }}
-          className="flex w-full flex-col items-center justify-center gap-2 rounded-xl "
+          className="app-form flex w-full flex-col items-center justify-center gap-2 rounded-xl "
           onSubmit={handleSubmit(onSubmit)}
         >
           <div className="flex w-full flex-col items-start">

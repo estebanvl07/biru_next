@@ -1,5 +1,5 @@
 import { Input } from "@heroui/input";
-import { Button, Link } from "@heroui/react";
+import { Button, Link, Spinner } from "@heroui/react";
 import { PlusIcon, Search } from "lucide-react";
 import React, { Dispatch, SetStateAction } from "react";
 import { HoldableItem } from "../../atoms/HoldableItem";
@@ -19,6 +19,7 @@ interface DataListProps<T> {
   hrefButtonNew?: string;
   hasNew?: boolean;
   newButtonText?: string;
+  isLoading?: boolean;
   drawerProps?: DrawerProps<T>;
   content: (data: T) => JSX.Element;
   setDataSelected: Dispatch<SetStateAction<T>>;
@@ -31,6 +32,7 @@ const DataList = <T,>({
   hasNew = true,
   hrefButtonNew,
   filterKeys,
+  isLoading,
   onNew,
   drawerProps,
   dataSelected,
@@ -46,6 +48,7 @@ const DataList = <T,>({
   } = useSearch({
     data,
     keys: filterKeys ?? [],
+    isLoading,
   });
 
   return (
@@ -78,36 +81,42 @@ const DataList = <T,>({
           </div>
         </Button>
       )}
-      {items && (
-        <ul className="mt-2">
-          {items?.map((item: T) => (
-            <HoldableItem
-              holdTime={1000}
-              onHold={() => {
-                setDataSelected(item);
-                drawerProps?.onOpen?.();
-              }}
-              className="flex items-center justify-between gap-4 px-4 py-2"
-            >
-              {content(item)}
-            </HoldableItem>
-          ))}
-        </ul>
-      )}
-      {items?.length === 0 && query === "" && (
-        <div className="col-span-3 flex h-full w-full flex-col items-center justify-center rounded-xl border-divider py-20 text-center">
-          <h3>Aun no tienes registros</h3>
-          <p>No encontramos ningún registro</p>
-        </div>
-      )}
-      {items?.length === 0 && query !== "" && (
-        <div className="col-span-3 flex h-full w-full flex-col items-center justify-center rounded-xl border-divider py-20 text-center">
-          <h3>No se encontraron resultados</h3>
-          <p>
-            No encontramos resultados que coincidan con la búsqueda "{" "}
-            <span>{query?.slice(0, 10)}</span> "
-          </p>
-        </div>
+      {loading ? (
+        <Spinner />
+      ) : (
+        <>
+          {items && (
+            <ul className="mt-2">
+              {items?.map((item: T) => (
+                <HoldableItem
+                  holdTime={1000}
+                  onHold={() => {
+                    setDataSelected(item);
+                    drawerProps?.onOpen?.();
+                  }}
+                  className="flex items-center justify-between gap-4 px-4 py-2"
+                >
+                  {content(item)}
+                </HoldableItem>
+              ))}
+            </ul>
+          )}
+          {items?.length === 0 && query === "" && (
+            <div className="col-span-3 flex h-full w-full flex-col items-center justify-center rounded-xl border-divider py-20 text-center">
+              <h3>Aun no tienes registros</h3>
+              <p>No encontramos ningún registro</p>
+            </div>
+          )}
+          {items?.length === 0 && query !== "" && (
+            <div className="col-span-3 flex h-full w-full flex-col items-center justify-center rounded-xl border-divider py-20 text-center">
+              <h3>No se encontraron resultados</h3>
+              <p>
+                No encontramos resultados que coincidan con la búsqueda "{" "}
+                <span>{query?.slice(0, 10)}</span> "
+              </p>
+            </div>
+          )}
+        </>
       )}
       <DrawerOptions
         isOpen={drawerProps?.isOpen}

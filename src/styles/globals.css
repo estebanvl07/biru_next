@@ -16,7 +16,11 @@ body {
 }
 
 [data-slot="input-wrapper"] {
-  @apply dark:border dark:!border-divider;
+  @apply border !border-divider shadow-none;
+}
+
+[data-slot="mainWrapper"] > [data-slot="trigger"] {
+  @apply border !border-divider shadow-none;
 }
 
 main {

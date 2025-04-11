@@ -15,7 +15,7 @@ import { columns } from "~/modules/Goals/table";
 import { Table } from "~/modules/components";
 import DashboardLayout from "~/modules/Layouts/Dashboard";
 import { GoalsIncludes } from "~/types/goal/goal.types";
-import { Button, Chip, Link } from "@heroui/react";
+import { Button, Chip } from "@heroui/react";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import { useResize } from "~/lib/hooks/useResize";
 import { ListTransactions } from "~/modules/Common";
@@ -28,14 +28,10 @@ import CreateTransaction from "~/modules/Transactions/CreateTransaction";
 import useShowForm from "~/lib/hooks/useShowForm";
 import { TransactionIncludes } from "~/types/transactions";
 import EditGoal from "~/modules/Goals/EditGoal";
+import { api } from "~/utils/api";
+import { toast } from "sonner";
 
-const DetailGoalPage = ({
-  goalData,
-  acc,
-}: {
-  goalData: GoalsIncludes;
-  acc: number;
-}) => {
+const DetailGoalPage = ({ goalData }: { goalData: GoalsIncludes }) => {
   const {
     data,
     onChageData,
@@ -53,6 +49,9 @@ const DetailGoalPage = ({
     onShowEdit: onShowEditGoal,
     data: defaultGoal,
   } = useShowForm<GoalsIncludes>({ defaultData: goalData });
+
+  const { mutateAsync: cancelTransaction } =
+    api.transaction.cancel.useMutation();
 
   const router = useRouter();
   const params = useParams();
@@ -77,13 +76,12 @@ const DetailGoalPage = ({
         case "type":
           return (
             <Chip
-              size="lg"
-              variant="flat"
+              size="md"
+              variant="dot"
               color={transaction.type === 1 ? "success" : "danger"}
+              className="flex items-center gap-1 whitespace-nowrap border-none"
             >
-              <Icon
-                icon={transaction.type === 1 ? "ph:trend-up" : "ph:trend-down"}
-              />
+              {transaction.type === 1 ? "Ingreso" : "Egreso"}
             </Chip>
           );
         case "createdAt":
@@ -112,7 +110,26 @@ const DetailGoalPage = ({
                 onChageData(transaction);
                 onShowEdit();
               }}
-              onClickDelete={() => {}}
+              onClickDelete={() => {
+                toast("¿Estas seguro de cancelar esta transacción?", {
+                  action: {
+                    label: "Realizar",
+                    onClick: () => {
+                      toast.promise(
+                        cancelTransaction({
+                          id: transaction.id,
+                          bookId: String(params?.bookId),
+                        }),
+                        {
+                          loading: "Cancelando Transacción...",
+                          success: "La transacción se ha cancelado con éxito.",
+                          error: "Hubo un error, intente de nuevo",
+                        },
+                      );
+                    },
+                  },
+                });
+              }}
             />
           );
         default:
@@ -139,7 +156,7 @@ const DetailGoalPage = ({
               color="primary"
               isIconOnly={isMobile}
               className="sm:w-fit"
-              onClick={() => onShowEditGoal()}
+              onPress={() => onShowEditGoal()}
             >
               <Icon icon="akar-icons:edit" width={18} />
               {!isMobile && "Editar Meta"}
@@ -249,17 +266,19 @@ const DetailGoalPage = ({
 };
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
-  const { id, acc } = ctx.params!;
+  const { id, bookId } = ctx.params!;
 
   const helper = await createServerSideCaller(ctx);
-  const goal = await helper.goals.getGoalById.fetch({ id: Number(id) });
+  const goal = await helper.goals.getGoalById.fetch({
+    id: Number(id),
+    bookId: String(bookId),
+  });
 
   const [goalData] = formatDatesOfGoals(goal as any);
 
   return {
     props: {
       goalData,
-      acc,
     },
   };
 };

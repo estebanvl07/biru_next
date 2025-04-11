@@ -8,7 +8,7 @@ import {
 } from "@heroui/drawer";
 import clsx from "clsx";
 import React from "react";
-import { DrawerDescription, DrawerTitle } from "../atoms/Drawer.component";
+import { useResize } from "~/lib/hooks/useResize";
 
 interface CustomDrawerProps extends DrawerProps {
   subtitle?: string;
@@ -28,8 +28,15 @@ const CustomDrawer = ({
   classNames,
   ...props
 }: CustomDrawerProps) => {
+  const { isMobile } = useResize();
+
   return (
-    <Drawer isOpen={isOpen} onClose={onClose} {...props}>
+    <Drawer
+      placement={isMobile ? "bottom" : "right"}
+      isOpen={isOpen}
+      onClose={onClose}
+      {...props}
+    >
       <DrawerContent
         className={clsx("px-2 pb-4 font-montserrat", classNames?.base)}
       >

@@ -11,6 +11,7 @@ const input = {
   next_ocurrence: z.date(),
   frecuency: z.number(),
   categoryId: z.optional(z.number()),
+  goalId: z.optional(z.number()),
   entityId: z.optional(z.number()),
 };
 

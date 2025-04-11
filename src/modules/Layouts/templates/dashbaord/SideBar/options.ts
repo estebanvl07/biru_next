@@ -41,60 +41,78 @@ export const MENU_OPTIONS: MenuProps[] = [
     options: [
       {
         id: 1,
-        name: "Ingresos",
+        name: "Transacciones",
         icon: "mynaui:arrow-up-right",
-        href: "#",
+        href: "/transactions",
         options: [
           {
-            id: 4,
-            name: "Resumen de Ingresos",
-            href: "/incomes",
-          },
-          {
             id: 1,
-            name: "Nuevo Ingreso",
-            href: "/incomes/new?type=1",
-          },
-          {
-            id: 3,
-            name: "Ingreso Programado",
-            href: "/incomes/new?type=1",
+            name: "Resumen de Transacciones",
+            href: "/transactions",
           },
           {
             id: 2,
-            name: "Análisis de Ingresos",
-            href: "/incomes/analytics",
+            name: "Nueva Transacción",
+            href: "/transactions/new",
           },
         ],
       },
-      {
-        id: 2,
-        name: "Egresos",
-        icon: "mynaui:arrow-down-left",
-        href: "#",
-        options: [
-          {
-            id: 4,
-            name: "Resumen de Egresos",
-            href: "/expenses",
-          },
-          {
-            id: 1,
-            name: "Nuevo Egreso",
-            href: "/expenses/new?type=2",
-          },
-          {
-            id: 3,
-            name: "Egreso Programado",
-            href: "/expenses/new?type=2",
-          },
-          {
-            id: 2,
-            name: "Análisis de Egresos",
-            href: "/expenses/analytics",
-          },
-        ],
-      },
+      // {
+      //   id: 1,
+      //   name: "Ingresos",
+      //   icon: "mynaui:arrow-up-right",
+      //   href: "#",
+      //   options: [
+      //     {
+      //       id: 4,
+      //       name: "Resumen de Ingresos",
+      //       href: "/incomes",
+      //     },
+      //     {
+      //       id: 1,
+      //       name: "Nuevo Ingreso",
+      //       href: "/incomes/new?type=1",
+      //     },
+      //     {
+      //       id: 3,
+      //       name: "Ingreso Programado",
+      //       href: "/incomes/new?type=1",
+      //     },
+      //     {
+      //       id: 2,
+      //       name: "Análisis de Ingresos",
+      //       href: "/incomes/analytics",
+      //     },
+      //   ],
+      // },
+      // {
+      //   id: 2,
+      //   name: "Egresos",
+      //   icon: "mynaui:arrow-down-left",
+      //   href: "#",
+      //   options: [
+      //     {
+      //       id: 4,
+      //       name: "Resumen de Egresos",
+      //       href: "/expenses",
+      //     },
+      //     {
+      //       id: 1,
+      //       name: "Nuevo Egreso",
+      //       href: "/expenses/new?type=2",
+      //     },
+      //     {
+      //       id: 3,
+      //       name: "Egreso Programado",
+      //       href: "/expenses/new?type=2",
+      //     },
+      //     {
+      //       id: 2,
+      //       name: "Análisis de Egresos",
+      //       href: "/expenses/analytics",
+      //     },
+      //   ],
+      // },
       // {
       //   id: 3,
       //   name: "Facturas",
@@ -123,7 +141,7 @@ export const MENU_OPTIONS: MenuProps[] = [
       // },
       {
         id: 4,
-        name: "Pagos Recurrentes",
+        name: "Movimientos Recurrentes",
         icon: "grommet-icons:power-cycle",
         href: "/movements",
       },
@@ -218,20 +236,20 @@ export const mobileOptions = [
   },
   {
     id: 4,
-    name: "Entidades",
-    icon: "ph:users-bold",
-    href: "/entities",
+    name: "Movimientos Recurrentes",
+    icon: "grommet-icons:power-cycle",
+    href: "/movements",
   },
   {
     id: 5,
-    name: "Categorías",
-    icon: "iconamoon:category",
-    href: "/category",
+    name: "Presupuesto de Mes",
+    icon: "mynaui:bitcoin-circle",
+    href: "/budget",
   },
   {
     id: 6,
-    name: "Análisis",
-    icon: "material-symbols:analytics-outline",
-    href: "/analytics",
+    name: "Calendario",
+    icon: "mynaui:calendar-up",
+    href: "/calendar",
   },
 ];

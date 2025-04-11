@@ -7,6 +7,7 @@ import { MovementsIncludes } from "~/types/movements";
 import {
   Avatar,
   Chip,
+  DropdownItem,
   Listbox,
   ListboxItem,
   Tooltip,
@@ -31,9 +32,13 @@ import {
   Edit,
   EllipsisVertical,
   Plus,
+  PlusIcon,
+  ShieldCheck,
+  ShieldOff,
   Trash,
 } from "lucide-react";
 import DataListOptions from "~/modules/components/molecules/DataList/DataListOptions";
+import { toast } from "sonner";
 
 const MovementsTable = () => {
   const [movementSelected, setMovementSelected] = useState<MovementsIncludes>(
@@ -43,8 +48,16 @@ const MovementsTable = () => {
   const params = useParams();
   const router = useRouter();
   const { isMobile } = useResize();
-  const { movements, isLoading } = useMovements();
+  const { movements, isLoading, invalidateMovements } = useMovements();
   const { isOpen, onClose, onOpen } = useDisclosure();
+
+  const { mutateAsync: disableMovement } = api.movements.disable.useMutation({
+    onSuccess: async () => await invalidateMovements(),
+  });
+  const { mutateAsync: availableMovement } =
+    api.movements.available.useMutation({
+      onSuccess: async () => await invalidateMovements(),
+    });
 
   const renderCell = useCallback(
     (movement: MovementsIncludes, columnKey: React.Key) => {
@@ -92,9 +105,9 @@ const MovementsTable = () => {
             <Chip
               size="sm"
               variant="flat"
-              color={movement.status ? "success" : "default"}
+              color={movement.status ? "success" : "warning"}
             >
-              {movement.status ? "Activo" : "Incativo"}
+              {movement.status ? "Activo" : "Inactivo"}
             </Chip>
           );
         case "actions":
@@ -102,32 +115,88 @@ const MovementsTable = () => {
             <Actions
               onClickView={() =>
                 router.push({
-                  pathname: `${DASHBOARD_MAIN_PATH}/[bookId]/movements/[id]`,
+                  pathname: `${DASHBOARD_MAIN_PATH}/${params?.bookId}/movements/[id]`,
                   query: {
-                    bookId: params?.bookId,
                     id: String(movement.id),
                   },
                 })
               }
               onClickEdit={() =>
                 router.push({
-                  pathname: `${DASHBOARD_MAIN_PATH}/[bookId]/movements/[id]/edit`,
+                  pathname: `${DASHBOARD_MAIN_PATH}/${params?.bookId}/movements/[id]/edit`,
                   query: {
-                    bookId: params?.bookId,
                     id: String(movement.id),
                   },
                 })
               }
               hasDelete={false}
             >
-              <Tooltip content={"Crear ocurrencia"} className="font-montserrat">
-                <Link
-                  href={`${DASHBOARD_MAIN_PATH}/${params?.bookId}/movements/new/ocurrence/${movement.id}`}
-                  className="cursor-pointer text-lg text-default-400 active:opacity-50"
-                >
-                  <Icon icon="ic:round-plus" width={24} />
-                </Link>
-              </Tooltip>
+              <DropdownItem
+                startContent={<ShieldOff width={20} />}
+                key="disabled"
+                className={clsx({
+                  hidden: movement.status === false,
+                })}
+                onPress={() => {
+                  toast(
+                    "Ya no aparecerá en tu calendario, ¿Estas seguro de desactivar este movimiento?",
+                    {
+                      action: {
+                        label: "Realizar",
+                        onClick: () => {
+                          toast.promise(
+                            disableMovement({
+                              bookId: String(params?.bookId),
+                              id: movement.id,
+                            }),
+                            {
+                              loading: "Deshabilitando Movimiento...",
+                              success:
+                                "El movimiento se ha deshabilitado con éxito.",
+                              error: "Hubo un error, intente de nuevo",
+                            },
+                          );
+                        },
+                      },
+                    },
+                  );
+                }}
+              >
+                Desactivar
+              </DropdownItem>
+              <DropdownItem
+                startContent={<ShieldCheck width={20} />}
+                key="active"
+                className={clsx({
+                  hidden: movement.status === true,
+                })}
+                onPress={() => {
+                  toast("¿Desea habiitar este movimiento?", {
+                    action: {
+                      label: "Realizar",
+                      onClick: () => {
+                        toast.promise(
+                          availableMovement({
+                            bookId: String(params?.bookId),
+                            id: movement.id,
+                          }),
+                          {
+                            loading: "Habilitando Movimiento...",
+                            success:
+                              "El movimiento se ha habilitado con éxito.",
+                            error: "Hubo un error, intente de nuevo",
+                          },
+                        );
+                      },
+                    },
+                  });
+                }}
+              >
+                Activar
+              </DropdownItem>
+              <DropdownItem startContent={<PlusIcon />} key="create">
+                Crear Ocurrencia
+              </DropdownItem>
             </Actions>
           );
         default:
@@ -154,7 +223,9 @@ const MovementsTable = () => {
               )}
             </div>
             <div>
-              <h3>{capitalize(name)}</h3>
+              <h3 className="max-w-[200px] overflow-hidden text-ellipsis whitespace-nowrap text-sm font-semibold">
+                {capitalize(name)}
+              </h3>
               <p
                 className={clsx("", {
                   "text-green-600": type === 1,
@@ -217,7 +288,7 @@ const MovementsTable = () => {
                   className="px-0 py-2 !text-lg"
                   startContent={<Trash width={18} />}
                 >
-                  <span className="text-base">Eliminar Movimiento</span>
+                  <span className="text-base">Desactivar Movimiento</span>
                 </ListboxItem>
               </Listbox>
               // <DataListOptions data={movement} />

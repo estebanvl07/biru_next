@@ -6,18 +6,23 @@ import { api } from "~/utils/api";
 
 export const useAccounts = () => {
   const queryClient = useQueryClient();
+  const params = useParams();
+  const bookId = String(params?.bookId);
+
   const hasAccountCached = useMemo(() => {
-    const accountKey = getQueryKey(api.userAccount.getAll, undefined, "query");
+    const accountKey = getQueryKey(
+      api.userAccount.getAccountByBook,
+      bookId,
+      "query",
+    );
     const accountsCache = queryClient.getQueryData(accountKey);
     return Boolean(accountsCache);
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [bookId]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  const { data: accounts = [], isLoading } = api.userAccount.getAll.useQuery(
-    undefined,
-    {
-      enabled: !hasAccountCached,
-    },
-  );
+  const { data: accounts = [], isLoading } =
+    api.userAccount.getAccountByBook.useQuery(bookId, {
+      enabled: !!bookId && !hasAccountCached,
+    });
 
   return { accounts, isLoading };
 };

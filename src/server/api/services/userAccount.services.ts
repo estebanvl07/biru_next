@@ -14,6 +14,19 @@ export async function getMainAccount(
   });
 }
 
+export async function getAccountsByBook(
+  db: PrismaClient,
+  userId: string,
+  bookId: string,
+) {
+  return await db.userAccount.findMany({
+    where: {
+      bookId,
+      userId,
+    },
+  });
+}
+
 export async function createAccount(
   db: PrismaClient,
   data: Prisma.UserAccountUncheckedCreateInput,

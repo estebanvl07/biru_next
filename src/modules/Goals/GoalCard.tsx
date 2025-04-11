@@ -9,6 +9,7 @@ import { groupedAnimation } from "../animations";
 import { capitalize } from "../components/molecules/Table/utils";
 
 import type { Goals } from "@prisma/client";
+import { DASHBOARD_MAIN_PATH } from "~/lib/constants/config";
 
 const GoalCard = ({ goalInfo }: { goalInfo: Goals }) => {
   const { id, name, saved, goal, icon } = goalInfo;
@@ -23,7 +24,9 @@ const GoalCard = ({ goalInfo }: { goalInfo: Goals }) => {
       variants={{
         ...groupedAnimation.item,
       }}
-      onClick={() => router.push(`/account/${params?.acc}/goals/${id}`)}
+      onClick={() =>
+        router.push(`${DASHBOARD_MAIN_PATH}/${params?.bookId}/goals/${id}`)
+      }
       className="col-span-2 cursor-pointer rounded-xl border bg-default-100 transition-all duration-300 sm:col-span-1 dark:border-white/10 dark:bg-default-100 dark:shadow-md"
     >
       <div className=" flex flex-col px-6 py-4">
@@ -42,7 +45,7 @@ const GoalCard = ({ goalInfo }: { goalInfo: Goals }) => {
           </aside>
           <aside>
             <p>Meta</p>
-            <h4 className="font-semibold text-primary dark:text-primary-light">
+            <h4 className="dark:text-primary-light font-semibold text-primary">
               $ {goal.toLocaleString()}
             </h4>
           </aside>

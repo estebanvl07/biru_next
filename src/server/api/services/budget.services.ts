@@ -70,6 +70,7 @@ export async function getCurrentMovementsMonth(
         description,
         createdAt,
         updatedAt,
+        goalId,
         categoryId,
         entityId,
         entity,
@@ -82,6 +83,7 @@ export async function getCurrentMovementsMonth(
           userId,
           amount,
           type,
+          goalId,
           bookId,
           description,
           name: description

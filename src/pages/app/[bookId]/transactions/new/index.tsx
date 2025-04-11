@@ -45,14 +45,7 @@ const NewTransactionPage = () => {
             </div>
           }
         >
-          <Card className="px-4 py-2 shadow-sm md:max-w-[36rem]">
-            <CardBody>
-              <TransactionForm
-                type="transfer"
-                onSuccess={() => router.back()}
-              />
-            </CardBody>
-          </Card>
+          <TransactionForm type="transfer" onSuccess={() => router.back()} />
         </Tab>
         <Tab
           className="w-full"

@@ -17,11 +17,16 @@ import GoalForm from "../../GoalForm";
 import CreateGoal from "../../CreateGoal";
 import useShowForm from "~/lib/hooks/useShowForm";
 import EditGoal from "../../EditGoal";
+import { DASHBOARD_MAIN_PATH } from "~/lib/constants/config";
+import { toast } from "sonner";
+import { api } from "~/utils/api";
 
 const TableGoals = () => {
   const [showSheetCreate, setShowSheetCreate] = useState(false);
   const [showSheetEdit, setShowSheetEdit] = useState(false);
   const [goalSelected, setGoalSelected] = useState<GoalsIncludes>();
+
+  const { mutateAsync: cancelGoal } = api.goals.cancel.useMutation();
 
   const {
     data,
@@ -69,18 +74,21 @@ const TableGoals = () => {
           );
         case "goal":
           return (
-            <span className="font-medium">$ {goal.goal.toLocaleString()}</span>
-          );
-        case "saved":
-          return (
-            <span className="font-medium">$ {goal.saved.toLocaleString()}</span>
+            <span className="font-semibold">
+              $ {goal.goal.toLocaleString()}
+            </span>
           );
         case "prog":
           return (
-            <div className="flex flex-col items-start justify-center">
-              <span className="text-enter whitespace-nowrap font-medium">
-                {getPercent(goal.saved, goal.goal)}
-              </span>
+            <>
+              <div className="flex w-full items-center justify-between gap-8">
+                <span className="text-enter whitespace-nowrap">
+                  {getPercent(goal.saved, goal.goal)}
+                </span>
+                <p className="text-end font-semibold">
+                  ${goal.saved.toLocaleString()}
+                </p>
+              </div>
               <Progress
                 size="sm"
                 color="primary"
@@ -92,22 +100,17 @@ const TableGoals = () => {
                 }}
                 className="my-1 rounded-full border bg-gray-200 dark:border-none dark:bg-white/30"
               />
-            </div>
+            </>
           );
         case "type":
           return (
             <Chip
-              size="lg"
-              variant="flat"
+              size="md"
+              variant="dot"
               color={goal.type === 1 ? "success" : "danger"}
+              className="flex items-center gap-1 whitespace-nowrap border-none"
             >
-              <Icon
-                icon={
-                  goal.type === 1
-                    ? "iconamoon:arrow-bottom-left-1"
-                    : "iconamoon:arrow-top-right-1"
-                }
-              />
+              {goal.type === 1 ? "Ingreso" : "Egreso"}
             </Chip>
           );
         case "goalDate":
@@ -123,11 +126,35 @@ const TableGoals = () => {
         case "actions":
           return (
             <Actions
+              onClickDelete={() => {
+                toast(
+                  "Se cancelarán todas las transacciones relazionadas a esta Meta, ¿Estas seguro de cancelar esta meta?",
+                  {
+                    action: {
+                      label: "Eliminar",
+                      onClick: () => {
+                        toast.promise(
+                          cancelGoal({
+                            id: goal.id,
+                            bookId: String(params?.bookId),
+                          }),
+                          {
+                            loading: "Cancelando Transacción...",
+                            success:
+                              "La transacción se ha cancelado con éxito.",
+                            error: "Hubo un error, intente de nuevo",
+                          },
+                        );
+                      },
+                    },
+                  },
+                );
+              }}
               onClickView={() =>
                 router.push({
-                  pathname: "/account/[acc]/goals/[id]",
+                  pathname: `${DASHBOARD_MAIN_PATH}/[bookId]/goals/[id]`,
                   query: {
-                    acc: String(params?.acc),
+                    bookId: params?.bookId,
                     id: String(goal.id),
                   },
                 })
@@ -136,7 +163,6 @@ const TableGoals = () => {
                 onChageData(goal);
                 onShowEdit();
               }}
-              hasDelete={false}
             />
           );
         default:

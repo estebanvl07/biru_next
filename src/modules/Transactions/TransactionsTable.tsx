@@ -24,6 +24,8 @@ import {
 import { DASHBOARD_MAIN_PATH } from "~/lib/constants/config";
 import { useCategory } from "~/modules/Category/hook/category.hook";
 import { useEntity } from "~/modules/Entities/hook/entities.hook";
+import { api } from "~/utils/api";
+import { toast } from "sonner";
 
 interface TransactionsTableProps {
   transactions: TransactionIncludes[];
@@ -36,6 +38,9 @@ const TransactionsTable = ({
 }: TransactionsTableProps) => {
   const router = useRouter();
   const params = useParams<{ bookId: string }>();
+
+  const { mutateAsync: cancelTransaction } =
+    api.transaction.cancel.useMutation();
 
   const { categories: categoriesData } = useCategory();
   const { entities: entitiesData } = useEntity();
@@ -140,6 +145,26 @@ const TransactionsTable = ({
         case "actions":
           return (
             <Actions
+              onClickDelete={() => {
+                toast("¿Estas seguro de cancelar esta transacción?", {
+                  action: {
+                    label: "Realizar",
+                    onClick: () => {
+                      toast.promise(
+                        cancelTransaction({
+                          id: transaction.id,
+                          bookId: params?.bookId,
+                        }),
+                        {
+                          loading: "Cancelando Transacción...",
+                          success: "La transacción se ha cancelado con éxito.",
+                          error: "Hubo un error, intente de nuevo",
+                        },
+                      );
+                    },
+                  },
+                });
+              }}
               onClickView={() =>
                 router.push({
                   pathname: `${DASHBOARD_MAIN_PATH}/[bookId]/transactions/[id]`,
@@ -158,7 +183,6 @@ const TransactionsTable = ({
                   },
                 });
               }}
-              hasDelete={false}
             />
           );
         default:

@@ -19,8 +19,6 @@ export const InputSelectAccount = ({
   const { accounts, isLoading } = useAccounts();
   const { account } = useCurrentAccount();
 
-  console.log(defaultSelected);
-
   return (
     <Select
       items={accounts ?? []}

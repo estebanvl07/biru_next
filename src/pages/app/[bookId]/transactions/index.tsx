@@ -16,7 +16,7 @@ import { TransactionIncludes } from "~/server/api/services/transactions.services
 const TransactionPage = () => {
   const params = useParams<{ bookId: string }>();
 
-  const { transactions } = useTransactions({});
+  const { transactions, isLoading } = useTransactions({});
   const { isMobile } = useResize();
 
   return (
@@ -39,6 +39,7 @@ const TransactionPage = () => {
       <Tabs
         variant="underlined"
         color="primary"
+        fullWidth={isMobile}
         classNames={{
           tab: "px-0 pt-0",
           cursor: "w-[90%]",
@@ -53,6 +54,7 @@ const TransactionPage = () => {
           ) : (
             <MobileTransactionPage
               transactions={transactions as TransactionIncludes[]}
+              isLoading={isLoading}
             />
           )}
         </Tab>

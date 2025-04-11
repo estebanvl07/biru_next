@@ -203,6 +203,7 @@ model Goals {
   createdAt    DateTime       @default(now())
   updatedAt    DateTime       @updatedAt
   transactions Transaction[]
+  fixedMovements FixedMovements[]
   entity       Entities?      @relation(fields: [entityId], references: [id])
   book         Book           @relation(fields: [bookId], references: [id])
 }
@@ -250,6 +251,7 @@ model FixedMovements {
   reminder_date  DateTime // fecha para enviar recordatorio
   reminder_sent  Boolean?  @default(true) // recordatorio enviado
   next_ocurrence DateTime
+  goalId         Int?
   entityId       Int?
   categoryId     Int?
   last_ocurrence DateTime?
@@ -260,6 +262,7 @@ model FixedMovements {
 
   entity        Entities? @relation(fields: [entityId], references: [id], onDelete: Cascade)
   category      Category? @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  goal          Goals? @relation(fields: [goalId], references: [id], onDelete: Cascade)
   userAccount   UserAccount? @relation(fields: [accountId], references: [id], onDelete: Cascade)
   book          Book @relation(fields: [bookId], references: [id], onDelete: Cascade)
   

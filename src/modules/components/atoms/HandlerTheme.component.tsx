@@ -21,7 +21,7 @@ const DarkMode = ({
       size={isSmall ? "sm" : "md"}
       isIconOnly
       radius="full"
-      onClick={toggleTheme}
+      onPress={toggleTheme}
     >
       {theme === "dark" ? (
         <Icon icon="akar-icons:sun-fill" width={20} className="text-white" />

@@ -3,12 +3,13 @@ import { useState, useEffect, useCallback } from "react";
 interface Props<T> {
   data: T[];
   keys: string | string[];
+  isLoading?: boolean;
 }
 
-export const useSearch = <T>({ data, keys }: Props<T>) => {
+export const useSearch = <T>({ data, keys, isLoading }: Props<T>) => {
   const [query, setQuery] = useState<string>("");
   const [newList, setNewList] = useState<T[]>(data);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(isLoading);
 
   const onSearch = useCallback(
     (param: string) => {

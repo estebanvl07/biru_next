@@ -349,6 +349,53 @@ export async function getTransactionById(
   });
 }
 
+export async function cancelTransaction(
+  db: PrismaClient,
+  id: number,
+  bookId: string,
+  userId: string,
+) {
+  const transaction = await db.transaction.update({
+    where: { id, bookId, userId },
+    include: { goal: true },
+    data: { state: 2 },
+  });
+
+  let validate;
+
+  if (transaction.goalId) {
+    if (transaction.goal?.type === 1) {
+      validate = transaction.type === 1 ? -1 : 1;
+    } else {
+      validate = transaction.type === 1 ? 1 : -1;
+    }
+  } else {
+    validate = transaction.type === 1 ? -1 : 1;
+  }
+
+  db.userAccount.update({
+    where: { id: transaction.accountId!, bookId, userId },
+    data: {
+      balance: {
+        increment: -transaction.amount * validate,
+      },
+    },
+  });
+
+  if (transaction.goalId) {
+    db.goals.update({
+      where: { id: Number(transaction.goalId) },
+      data: {
+        saved: {
+          decrement: transaction.amount,
+        },
+      },
+    });
+  }
+
+  return transaction;
+}
+
 type ThenArg<T> = T extends PromiseLike<infer U> ? U : T;
 export type TransactionIncludes = ThenArg<
   ReturnType<typeof getTransactionById>

@@ -22,10 +22,16 @@ export const goalsRouter = createTRPCRouter({
       userId,
     });
   }),
+  cancel: protectedProcedure
+    .input(z.object({ id: z.number(), bookId: z.string() }))
+    .mutation(({ ctx, input }) => {
+      const userId = ctx.session.user.id;
+      return GoalsServices.cancelGoal(ctx.db, { ...input, userId });
+    }),
   getGoalById: protectedProcedure
-    .input(z.object({ id: z.number() }))
+    .input(z.object({ id: z.number(), bookId: z.string() }))
     .query(({ input, ctx }) => {
       const userId = ctx.session.user.id;
-      return GoalsServices.getGoalById(ctx.db, { id: input.id, userId });
+      return GoalsServices.getGoalById(ctx.db, { ...input, userId });
     }),
 });

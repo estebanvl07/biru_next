@@ -15,6 +15,8 @@ import { InputSelectAccount } from "../components";
 import { useCurrentAccount } from "../Account/hooks";
 import { useMovements } from "./hooks/useMovements";
 import { useExpensesCurrentMonth } from "../Budget/hooks/useBudget";
+import { GoalsIncludes } from "~/types/goal/goal.types";
+import { es } from "date-fns/locale";
 
 interface CreateOcurrenceFormProps {
   movement: MovementsIncludes;
@@ -27,7 +29,10 @@ const CreateOcurrenceForm = ({
 }: CreateOcurrenceFormProps) => {
   const [amount, setAmount] = useState("");
   const [amountValue, setAmountValue] = useState<number>(0);
-  const [accountSelected, setAccountSelected] = useState<number>(0);
+  const [accountSelected, setAccountSelected] = useState<number>(
+    movement.accountId ?? 0,
+  );
+  const goalSelected = movement.goal;
 
   const router = useRouter();
   const params = useParams<{ bookId: string }>();
@@ -150,7 +155,7 @@ const CreateOcurrenceForm = ({
         <InputSelectAccount
           isRequired
           defaultSelected={defaultAccountKey}
-          onChange={() => setAccountSelected(account?.id)}
+          onChange={(acc) => setAccountSelected(acc)}
         />
       </div>
       <Accordion
@@ -228,6 +233,70 @@ const CreateOcurrenceForm = ({
         </AccordionItem>
         <AccordionItem
           key="2"
+          aria-label="Accordion 2"
+          hidden={!movement.goalId}
+          className="border-1 !shadow-none dark:border-white/5 dark:!bg-default-200"
+          classNames={{
+            subtitle: "dark:text-zinc-400",
+          }}
+          title="Información de Meta"
+          subtitle="Avance de tu meta"
+        >
+          <ul className="mb-2 grid grid-cols-1 gap-2 md:flex-grow md:grid-cols-2 [&>li>span]:font-semibold [&>li]:text-sm">
+            <li>
+              <span>Nombre:</span>
+              <p>{goalSelected?.name}</p>
+            </li>
+            <li>
+              <span>Monto de Meta:</span>
+              <p>$ {goalSelected?.goal.toLocaleString()}</p>
+            </li>
+            <li>
+              <span>Total Ahorrado:</span>
+              <p>$ {goalSelected?.saved.toLocaleString()}</p>
+            </li>
+            <li>
+              <span>Estado:</span>
+              <p>
+                <Chip
+                  color={
+                    goalSelected?.state === 1
+                      ? "primary"
+                      : goalSelected?.state === 2
+                        ? "success"
+                        : "danger"
+                  }
+                  size="sm"
+                  className="text-white"
+                >
+                  {goalSelected?.state === 1
+                    ? "Progreso"
+                    : goalSelected?.state === 2
+                      ? "Terminado"
+                      : "Cancelado"}
+                </Chip>
+              </p>
+            </li>
+            <li>
+              <span>Descripción:</span>
+              <p>{goalSelected?.description}</p>
+            </li>
+            <li>
+              <span>Fecha limite:</span>
+              <p>
+                {goalSelected?.goalDate
+                  ? capitalize(
+                      format(new Date(String(goalSelected?.goalDate)), "PPP", {
+                        locale: es,
+                      }),
+                    )
+                  : "N/A"}
+              </p>
+            </li>
+          </ul>
+        </AccordionItem>
+        <AccordionItem
+          key="3"
           title="Destinatario"
           hidden={movement.type === 1}
           subtitle="Datos del destinatario"

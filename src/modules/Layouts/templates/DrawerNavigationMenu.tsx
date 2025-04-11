@@ -2,12 +2,11 @@ import { Icon } from "@iconify/react/dist/iconify.js";
 import React, { useState } from "react";
 
 import { Button } from "@heroui/button";
-import { menuOptions } from "./dashbaord/SideBar/options";
+import { MENU_OPTIONS } from "./dashbaord/SideBar/options";
 import Link from "next/link";
 import CustomDrawer from "~/modules/components/molecules/CustomDrawer";
 import { DASHBOARD_MAIN_PATH } from "~/lib/constants/config";
 import { useParams } from "next/navigation";
-import NavigationLogo from "./dashbaord/Header/NavigationLogo";
 
 const DrawerOptions = () => {
   const [drawerOptions, setDrawerOptions] = useState(false);
@@ -38,7 +37,7 @@ const DrawerOptions = () => {
         }
       >
         <div className="flex flex-col gap-6">
-          {menuOptions.map(({ options, title }, index) => {
+          {MENU_OPTIONS.map(({ options, title }, index) => {
             return (
               <div key={index} className="flex flex-col">
                 <h4 className="mb-2 font-semibold">{title}</h4>
@@ -52,7 +51,7 @@ const DrawerOptions = () => {
                     >
                       <div className="flex h-12 w-12 items-center justify-center rounded-full bg-default-100 dark:bg-default-200">
                         <Icon
-                          icon={icon}
+                          icon={icon ?? ""}
                           className="text-black dark:text-white"
                           width={22}
                         />

@@ -111,6 +111,18 @@ export const transactionsRouter = createTRPCRouter({
       );
       return response;
     }),
+  cancel: protectedProcedure
+    .input(z.object({ id: z.number(), bookId: z.string() }))
+    .mutation(async ({ ctx, input }) => {
+      const userId = ctx.session.user.id;
+      const response = await TransactionServices.cancelTransaction(
+        ctx.db,
+        input.id,
+        input.bookId,
+        userId,
+      );
+      return response;
+    }),
   search: protectedProcedure.input(advanceSchema).query(({ input, ctx }) => {
     const userId = ctx.session.user.id;
     return TransactionServices.searchTransactions(ctx.db, input, userId);

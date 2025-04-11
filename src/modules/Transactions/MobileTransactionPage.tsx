@@ -18,17 +18,15 @@ import { EllipsisVertical } from "lucide-react";
 
 const MobileTransactionPage = ({
   transactions,
+  isLoading,
 }: {
   transactions: TransactionIncludes[];
+  isLoading: boolean;
 }) => {
-  const params = useParams();
   const { isOpen, onClose, onOpen } = useDisclosure();
   const [transactionSelected, setTransactionSelected] = useState(
     {} as TransactionIncludes,
   );
-
-  const { showCreate, onShowCreate, onCloseCreate } =
-    useShowForm<TransactionIncludes>({});
 
   const renderContent = useCallback(
     (transaction: TransactionIncludes) => {
@@ -144,6 +142,7 @@ const MobileTransactionPage = ({
         filterKeys={["description", "amount", "recipient"]}
         dataSelected={transactionSelected}
         setDataSelected={setTransactionSelected}
+        isLoading={isLoading}
       />
     </div>
   );

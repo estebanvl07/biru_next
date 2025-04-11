@@ -52,7 +52,7 @@ const BookItem = ({
             <div className="flex flex-col">
               <Link
                 href={{
-                  pathname: `/${DASHBOARD_MAIN_PATH}/[bookId]`,
+                  pathname: `${DASHBOARD_MAIN_PATH}/[bookId]`,
                   query: { bookId: id },
                 }}
                 className="mb-1 pl-1 font-medium hover:underline"

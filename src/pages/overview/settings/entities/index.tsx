@@ -168,7 +168,7 @@ export default function EntitiesPage() {
               data={entities ?? []}
             />
           ) : (
-            <MobileEntityPage entities={entities ?? []} />
+            <MobileEntityPage entities={entities as EntityIncludes[]} />
           )}
         </CardBody>
       </Card>

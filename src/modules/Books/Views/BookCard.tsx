@@ -27,7 +27,7 @@ const BookCard = ({
   return (
     <Link
       href={{
-        pathname: `/${DASHBOARD_MAIN_PATH}/[bookId]/`,
+        pathname: `${DASHBOARD_MAIN_PATH}/[bookId]/`,
         query: {
           bookId: id,
         },

@@ -48,6 +48,7 @@ export async function getMovementById({ bookId, db, id, userId }: GetMovement) {
       transactions: true,
       category: true,
       entity: true,
+      goal: true,
     },
   });
   return result;
@@ -95,6 +96,7 @@ export async function makeMovement({
         recipient: movement.entity?.name,
         categoryId: movement.categoryId,
         entityId: movement.entityId,
+        goalId: movement.goalId,
         fiexedId: id,
         type: movement.type,
         transferType: 1,
@@ -122,9 +124,71 @@ export async function makeMovement({
         },
       });
 
+      if (movement.goalId) {
+        await db.goals.update({
+          where: { id: Number(movement.goalId) },
+          data: {
+            saved: {
+              increment: amount,
+            },
+          },
+        });
+      }
+
       return movementModifed;
     } catch (error) {
       return error;
     }
   }
+}
+
+interface DeleteMovement {
+  db: PrismaClient;
+  userId: string;
+  id: number;
+  bookId: string;
+}
+
+export async function availableMovement({
+  db,
+  userId,
+  id,
+  bookId,
+}: DeleteMovement) {
+  const movement = await getMovementById({ db, userId, id, bookId });
+
+  if (movement) {
+    await db.fixedMovements.update({
+      data: { status: true },
+      where: {
+        id,
+        userId,
+        bookId,
+      },
+    });
+  }
+
+  return movement;
+}
+
+export async function disableMovement({
+  db,
+  userId,
+  id,
+  bookId,
+}: DeleteMovement) {
+  const movement = await getMovementById({ db, userId, id, bookId });
+
+  if (movement) {
+    await db.fixedMovements.update({
+      data: { status: false },
+      where: {
+        id,
+        userId,
+        bookId,
+      },
+    });
+  }
+
+  return movement;
 }

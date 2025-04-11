@@ -19,6 +19,12 @@ export const userAccountRouter = createTRPCRouter({
       const userId = ctx.session.user.id;
       return userAccount.getMainAccount(ctx.db, userId, bookId);
     }),
+  getAccountByBook: protectedProcedure
+    .input(z.string())
+    .query(async ({ ctx, input: bookId }) => {
+      const userId = ctx.session.user.id;
+      return userAccount.getAccountsByBook(ctx.db, userId, bookId);
+    }),
   getAll: protectedProcedure.query(async ({ ctx }) => {
     const userId = ctx.session.user.id;
     return userAccount.getAllAccounts(ctx.db, userId);

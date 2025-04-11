@@ -110,7 +110,7 @@ export const useTransactions = (options: Omit<FilterOptions, "bookId">) => {
     },
   );
 
-  return { transactions: data!, isLoading };
+  return { transactions: data! as TransactionIncludes[], isLoading };
 };
 
 export const useFilterByType = ({ type, options }: FilterByTypeProps) => {

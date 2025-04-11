@@ -12,6 +12,11 @@ export const columns: ColumnsProps[] = [
     sortable: true,
   },
   {
+    name: "TIPO",
+    uid: "type",
+    sortable: true,
+  },
+  {
     name: "FECHA",
     uid: "next_ocurrence",
     sortable: true,

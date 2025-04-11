@@ -251,8 +251,6 @@ export async function getTransactionsByFilter(
     },
   });
 
-  console.log(transactionsFound.find((tr) => tr.id === 50));
-
   return transactionsFound;
 }
 

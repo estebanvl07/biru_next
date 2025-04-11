@@ -128,7 +128,11 @@ const UpcomingTable = () => {
               <h4 className="text-bases whitespace-nowrap font-semibold">
                 {movement.name}
               </h4>
-              <p className="!text-xs">Recurrente</p>
+              <p className="!text-xs">
+                {movement.transferType === "transaction"
+                  ? "Transacción Programada"
+                  : "Recurrente"}
+              </p>
             </div>
           );
         case "categoryId":
@@ -148,6 +152,24 @@ const UpcomingTable = () => {
             >
               Sin categoría
             </p>
+          );
+        case "type":
+          return (
+            <Chip
+              variant="dot"
+              color={movement.type === 1 ? "success" : "danger"}
+              className={clsx({
+                "opacity-30": isPay,
+              })}
+            >
+              <p
+                className={clsx({
+                  "line-through": isPay,
+                })}
+              >
+                {movement.type === 1 ? "Ingreso" : "Egreso"}
+              </p>
+            </Chip>
           );
         case "next_ocurrence":
           return (

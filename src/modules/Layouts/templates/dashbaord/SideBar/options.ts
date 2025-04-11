@@ -1,4 +1,18 @@
-export const menuOptions = [
+export type OptionsProps = {
+  id: number;
+  name: string;
+  icon?: string;
+  href: string;
+  cleanPath?: boolean;
+  options?: OptionsProps[];
+};
+
+export type MenuProps = {
+  title: string;
+  options: OptionsProps[];
+};
+
+export const MENU_OPTIONS: MenuProps[] = [
   {
     title: "Principal",
     options: [
@@ -14,6 +28,12 @@ export const menuOptions = [
         icon: "mynaui:calendar-up",
         href: "/calendar",
       },
+      {
+        id: 4,
+        name: "Presupuesto de Mes",
+        icon: "mynaui:bitcoin-circle",
+        href: "/budget",
+      },
     ],
   },
   {
@@ -21,27 +41,103 @@ export const menuOptions = [
     options: [
       {
         id: 1,
-        name: "Transacciones",
-        icon: "mynaui:arrow-left-right",
-        href: "/transactions",
+        name: "Ingresos",
+        icon: "mynaui:arrow-up-right",
+        href: "#",
+        options: [
+          {
+            id: 4,
+            name: "Resumen de Ingresos",
+            href: "/incomes",
+          },
+          {
+            id: 1,
+            name: "Nuevo Ingreso",
+            href: "/incomes/new?type=1",
+          },
+          {
+            id: 3,
+            name: "Ingreso Programado",
+            href: "/incomes/new?type=1",
+          },
+          {
+            id: 2,
+            name: "Análisis de Ingresos",
+            href: "/incomes/analytics",
+          },
+        ],
       },
       {
-        id: 6,
-        name: "Movimientos Fijos",
-        icon: "heroicons:wallet-solid",
-        href: "/movements",
+        id: 2,
+        name: "Egresos",
+        icon: "mynaui:arrow-down-left",
+        href: "#",
+        options: [
+          {
+            id: 4,
+            name: "Resumen de Egresos",
+            href: "/expenses",
+          },
+          {
+            id: 1,
+            name: "Nuevo Egreso",
+            href: "/expenses/new?type=2",
+          },
+          {
+            id: 3,
+            name: "Egreso Programado",
+            href: "/expenses/new?type=2",
+          },
+          {
+            id: 2,
+            name: "Análisis de Egresos",
+            href: "/expenses/analytics",
+          },
+        ],
       },
-      {
-        id: 3,
-        name: "Metas",
-        icon: "mynaui:target",
-        href: "/goals",
-      },
+      // {
+      //   id: 3,
+      //   name: "Facturas",
+      //   icon: "mingcute:bill-line",
+      //   href: "#",
+      //   options: [
+      //     {
+      //       id: 1,
+      //       name: "Historial",
+      //       icon: "mynaui:clock-circle",
+      //       href: "/bills",
+      //     },
+      //     {
+      //       id: 2,
+      //       name: "Facturas Pendientes",
+      //       icon: "mynaui:calendar-up",
+      //       href: "/bills",
+      //     },
+      //     {
+      //       id: 2,
+      //       name: "Nueva Factura",
+      //       icon: "mynaui:plus",
+      //       href: "/bills/new",
+      //     },
+      //   ],
+      // },
       {
         id: 4,
-        name: "Presupuesto",
-        icon: "mynaui:bitcoin-circle",
-        href: "/budget",
+        name: "Pagos Recurrentes",
+        icon: "grommet-icons:power-cycle",
+        href: "/movements",
+      },
+      // {
+      //   id: 5,
+      //   name: "Ahorros",
+      //   icon: "fluent:savings-24-regular",
+      //   href: "/movements",
+      // },
+      {
+        id: 6,
+        name: "Metas de Pago",
+        icon: "mynaui:target",
+        href: "/goals",
       },
     ],
   },
@@ -54,12 +150,18 @@ export const menuOptions = [
         icon: "mynaui:chart-bubble",
         href: "/analytics",
       },
-      {
-        id: 2,
-        name: "Reportes",
-        icon: "mynaui:archive",
-        href: "/#",
-      },
+      // {
+      //   id: 2,
+      //   name: "Reportes",
+      //   icon: "mynaui:archive",
+      //   href: "/#",
+      // },
+      // {
+      //   id: 3,
+      //   name: "Conciliaciones",
+      //   icon: "ri:shake-hands-line",
+      //   href: "/analytics",
+      // },
     ],
   },
   {
@@ -69,8 +171,7 @@ export const menuOptions = [
         id: 1,
         name: "Configuración",
         icon: "mynaui:config",
-        href: "/overview/settings",
-        cleanPath: true,
+        href: "/settings",
       },
       {
         id: 2,

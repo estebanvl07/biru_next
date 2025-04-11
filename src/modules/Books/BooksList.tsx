@@ -127,13 +127,13 @@ const BooksList = React.memo(() => {
           return <BookItem key={book.id} {...book} />;
         })}
         {books.length === 0 && query === "" && (
-          <div className="border- col-span-3 flex h-full w-full flex-col items-center justify-center rounded-xl border-divider py-20">
+          <div className="border col-span-3 flex h-full w-full flex-col items-center justify-center rounded-xl border-divider py-20">
             <h3>Aún tienes libros</h3>
             <p>Crea tu primer libro de contabilidad</p>
           </div>
         )}
         {books.length === 0 && query !== "" && (
-          <div className="border- col-span-3 flex h-full w-full flex-col items-center justify-center rounded-xl border-divider py-20">
+          <div className="border col-span-3 flex h-full w-full flex-col items-center justify-center rounded-xl border-divider py-20">
             <h3>No se encontraron resultados</h3>
             <p>
               No encontramos libros que coincidan con la búsqueda "{" "}

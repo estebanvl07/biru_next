@@ -1,5 +1,5 @@
 import clsx from "clsx";
-import { menuOptions } from "./options";
+import { MENU_OPTIONS } from "./options";
 import NavigationLogo from "../Header/NavigationLogo";
 import React, { useEffect, useState } from "react";
 import OptionItem from "./OptionItem";
@@ -33,7 +33,7 @@ const SideBar = React.memo(({ className }: SideBarProps) => {
           className,
           {
             "w-[85px]": !isExpanded,
-            "w-[246px]": isExpanded,
+            "w-[254px]": isExpanded,
           },
         )}
       >
@@ -45,22 +45,21 @@ const SideBar = React.memo(({ className }: SideBarProps) => {
             },
           )}
         >
-          {menuOptions.map(({ options, title }, index) => (
+          {MENU_OPTIONS.map(({ options, title }, index) => (
             <div className="mb-4" key={index}>
               {isExpanded && (
-                <h6 className="mb-1 px-2 text-xs dark:text-foreground-300">
+                <h6 className="mb-1 px-2 text-xs font-medium dark:text-foreground-300">
                   {title}
                 </h6>
               )}
-              <ul>
-                {options.map((item) => (
-                  <OptionItem
-                    isExpanded={isExpanded}
-                    key={item.id}
-                    item={item}
-                  />
-                ))}
-              </ul>
+              {options.map((item) => (
+                <OptionItem
+                  showIcon
+                  isExpanded={isExpanded}
+                  key={item.id}
+                  item={item}
+                />
+              ))}
             </div>
           ))}
         </nav>

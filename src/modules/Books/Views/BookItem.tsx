@@ -17,8 +17,9 @@ import {
 } from "@heroui/react";
 import { es } from "date-fns/locale";
 import { Briefcase, Ellipsis, Home, OptionIcon, Users } from "lucide-react";
-import { BOOK_TYPE } from "~/lib/constants/config";
+import { BOOK_TYPE, DASHBOARD_MAIN_PATH } from "~/lib/constants/config";
 import Link from "next/link";
+import { useParams } from "next/navigation";
 
 const BookItem = ({
   name,
@@ -28,19 +29,15 @@ const BookItem = ({
   lastAccess,
   type,
 }: Book) => {
+  const params = useParams();
+
   return (
     <div className="flex flex-col gap-2">
       <p>
         Ultima Modificación -{" "}
         {capitalize(format(createdAt, "PPPP", { locale: es }))}
       </p>
-      <Link
-        href={{
-          pathname: "/app/[bookId]",
-          query: { bookId: id },
-        }}
-        className="flex items-center justify-between rounded-lg border border-divider bg-white p-4 shadow-sm dark:bg-default-50"
-      >
+      <div className="flex items-center justify-between rounded-lg border border-divider bg-white p-4 shadow-sm dark:bg-default-50">
         <aside>
           <aside className="flex items-center gap-2">
             <div className="flex h-10 w-10 items-center justify-center rounded-full bg-default-100 dark:bg-default-200">
@@ -52,8 +49,16 @@ const BookItem = ({
                 type === 2 && <Briefcase size={20} />
               )}
             </div>
-            <div>
-              <h4 className="mb-1 pl-1 font-medium">{capitalize(name)}</h4>
+            <div className="flex flex-col">
+              <Link
+                href={{
+                  pathname: `/${DASHBOARD_MAIN_PATH}/[bookId]`,
+                  query: { bookId: id },
+                }}
+                className="mb-1 pl-1 font-medium hover:underline"
+              >
+                {capitalize(name)}
+              </Link>
               <Chip
                 size="sm"
                 variant="flat"
@@ -76,13 +81,24 @@ const BookItem = ({
               </button>
             </DropdownTrigger>
             <DropdownMenu className="font-montserrat" color="primary">
-              <DropdownItem key={"create"}>Abrir Libri</DropdownItem>
-              <DropdownItem key={"update"}>Editar Libri</DropdownItem>
-              <DropdownItem key={"analytics"}>Ver Estadisticas</DropdownItem>
+              <DropdownItem
+                as={Link}
+                href={`/${DASHBOARD_MAIN_PATH}/${id}`}
+                key={"create"}
+              >
+                Abrir Libro
+              </DropdownItem>
+              <DropdownItem
+                as={Link}
+                href={`/${DASHBOARD_MAIN_PATH}/${id}/settings`}
+                key={"analytics"}
+              >
+                Configuración
+              </DropdownItem>
             </DropdownMenu>
           </Dropdown>
         </aside>
-      </Link>
+      </div>
     </div>
   );
 };

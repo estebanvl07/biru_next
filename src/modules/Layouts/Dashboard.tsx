@@ -48,10 +48,7 @@ const DashboardLayout = ({
         <title>Biru - {title}</title>
         <meta name="description" content={headDescription} />
       </Head>
-      <Toaster
-        className="z-50"
-        position={isMobile ? "top-center" : "bottom-right"}
-      />
+      <Toaster position={isMobile ? "top-center" : "bottom-left"} />
       <div className="flex w-full flex-col">
         {!isMobile ? (
           <HeaderApp

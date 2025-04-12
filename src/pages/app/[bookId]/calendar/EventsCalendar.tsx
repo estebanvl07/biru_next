@@ -1,17 +1,16 @@
-import { Button, Card, CardBody, CardHeader } from "@heroui/react";
+import dynamic from "next/dynamic";
 import React from "react";
 import esLocale from "@fullcalendar/core/locales/es";
-import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import { api } from "~/utils/api";
 import { useParams } from "next/navigation";
-import { format, isAfter, isBefore, isSameDay, isSameMonth } from "date-fns";
+import { format, isSameMonth } from "date-fns";
 import { EventInput } from "@fullcalendar/core/index.js";
-import { MovementsIncludes } from "~/types/movements";
 import { DASHBOARD_MAIN_PATH } from "~/lib/constants/config";
-import EventCard from "./EventCard";
-import EventTicket from "./EventTicket";
-import EventList from "./EventList";
+
+const FullCalendar = dynamic(() => import("@fullcalendar/react"));
+const EventTicket = dynamic(() => import("./EventTicket"));
+const EventList = dynamic(() => import("./EventList"));
 
 const EventsCalendar = () => {
   const params = useParams<{ bookId: string }>();

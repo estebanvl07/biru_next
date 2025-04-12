@@ -1,9 +1,13 @@
 import DashboardLayout from "~/modules/Layouts/Dashboard";
-import EventsCalendar from "./EventsCalendar";
 import { Tab, Tabs } from "@heroui/tabs";
 import EventList from "./EventList";
-import { Button, Card, CardBody, CardHeader } from "@heroui/react";
+import { Button, Card, CardBody } from "@heroui/react";
 import { useResize } from "~/lib/hooks/useResize";
+import dynamic from "next/dynamic";
+
+const EventsCalendar = dynamic(() => import("./EventsCalendar"), {
+  ssr: false,
+});
 
 const CalendarPage = () => {
   const { isMobile } = useResize();

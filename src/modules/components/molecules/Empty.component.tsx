@@ -3,7 +3,7 @@ import clsx from "clsx";
 import Link from "next/link";
 
 import { Icon } from "@iconify/react/dist/iconify.js";
-import { Button } from "@nextui-org/button";
+import { Button } from "@heroui/button";
 
 interface EmptyProps {
   href?: string;
@@ -41,12 +41,11 @@ const Empty = ({
       </p>
       {href && (
         <Button
-          color="primary"
           size="sm"
           as={Link}
           href={href}
           variant="flat"
-          className="text-xs font-medium dark:font-normal dark:text-primary-light"
+          className="bg-default-100 text-xs font-medium dark:bg-default-200 dark:font-normal"
         >
           <Icon icon="ph:plus" width={16} /> {buttonText || "Crear"}
         </Button>

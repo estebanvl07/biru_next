@@ -2,7 +2,7 @@ import React from "react";
 
 import Section from "~/modules/Profile/Section";
 import { Icon } from "@iconify/react/dist/iconify.js";
-import { Avatar } from "@nextui-org/react";
+import { Avatar } from "@heroui/react";
 
 import { CALLBACK_SIGN_OUT_URL } from "~/lib/constants/config";
 

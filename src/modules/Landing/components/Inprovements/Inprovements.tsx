@@ -1,5 +1,5 @@
 import { Icon } from "@iconify/react/dist/iconify.js";
-import { Chip } from "@nextui-org/react";
+import { Chip } from "@heroui/react";
 import Link from "next/link";
 import React from "react";
 import { motion } from "framer-motion";
@@ -31,13 +31,14 @@ const Inprovements = () => {
         </Chip>
       </div>
       <div className="flex gap-4 py-8 transition-all">
-        {/* {[1, 2, 3, 4].map((p, index) => (
+        {[1, 2, 3, 4].map((p, index) => (
           <InprovementsCard
+            key={index}
             title="Ejemplo"
             icon="hugeicons:internet"
             description="Lorem ipsum dolor sit, amet consectetur adipisicing elit. Cupiditate, itaque!"
           />
-        ))} */}
+        ))}
       </div>
     </div>
   );

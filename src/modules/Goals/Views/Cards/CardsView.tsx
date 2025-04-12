@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 import Link from "next/link";
 
 import { Icon } from "@iconify/react/dist/iconify.js";
-import { Button, Input } from "@nextui-org/react";
+import { Button, Input } from "@heroui/react";
 import { Empty } from "~/modules/components";
 import { LoaderSkeleton } from "~/modules/Loaders";
 import GoalCard from "~/modules/Goals/GoalCard";

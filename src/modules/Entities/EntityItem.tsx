@@ -5,7 +5,7 @@ import clsx from "clsx";
 import Link from "next/link";
 import { DATE_FORMAT_TRANS } from "~/lib/constants/config";
 import { format } from "date-fns";
-import { Avatar, Chip, Tooltip } from "@nextui-org/react";
+import { Avatar, Chip, Tooltip } from "@heroui/react";
 
 import { Entities } from "@prisma/client";
 import { Icon } from "@iconify/react/dist/iconify.js";

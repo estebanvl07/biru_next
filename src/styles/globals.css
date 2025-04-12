@@ -5,7 +5,22 @@
 
 body {
   box-sizing: border-box;
-  @apply text-sm text-slate-900 dark:text-slate-200;
+  @apply text-sm tracking-tight;
+}
+
+.fc-toolbar-title {
+  @apply capitalize -tracking-wide;
+}
+.fc-col-header-cell-cushion {
+  @apply capitalize;
+}
+
+[data-slot="input-wrapper"] {
+  @apply border !border-divider shadow-none;
+}
+
+[data-slot="mainWrapper"] > [data-slot="trigger"] {
+  @apply border !border-divider shadow-none;
 }
 
 main {
@@ -31,7 +46,7 @@ h3 {
 
 /* Track */
 .scrollbar-customize .scrollbar-y-customize::-webkit-scrollbar-track {
-  @apply rounded-full !bg-black dark:!bg-white; 
+  @apply rounded-full !bg-black dark:!bg-white;
 }
 
 /* Handle */
@@ -53,6 +68,48 @@ h3 {
 
 .fade-top-sm {
   mask-image: linear-gradient(transparent, black 90%);
+}
+
+.fade-x {
+  mask-image: linear-gradient(
+    to right,
+    transparent,
+    black 20%,
+    black 80%,
+    transparent
+  );
+  -webkit-mask-image: linear-gradient(
+    to right,
+    transparent,
+    black 20%,
+    black 80%,
+    transparent
+  );
+  mask-size: 100% 100%;
+  -webkit-mask-size: 100% 100%;
+  mask-repeat: no-repeat;
+  -webkit-mask-repeat: no-repeat;
+}
+
+.fade-y {
+  mask-image: linear-gradient(
+    to bottom,
+    transparent,
+    black 20%,
+    black 80%,
+    transparent
+  );
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    transparent,
+    black 20%,
+    black 80%,
+    transparent
+  );
+  mask-size: 100% 100%;
+  -webkit-mask-size: 100% 100%;
+  mask-repeat: no-repeat;
+  -webkit-mask-repeat: no-repeat;
 }
 
 .floating-animation {

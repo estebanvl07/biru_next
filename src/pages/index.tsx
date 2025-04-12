@@ -1,5 +1,6 @@
 import Head from "next/head";
 import withAuthRedirect from "~/lib/helpers/withAuthRedirect";
+import { Spotlight } from "~/modules/components/ui/spotLight";
 import { Landing } from "~/modules/Landing";
 
 export async function getStaticProps() {
@@ -18,9 +19,10 @@ const Home = () => {
           content="Biru es una aplicación que te ayuda a gestionar tus finanzas"
         />
       </Head>
-      <div className="flex h-full min-h-screen flex-col bg-white dark:bg-slate-950 px-0">
+
+      <main className="relative flex h-full min-h-screen w-full flex-col bg-white px-0 dark:bg-slate-950">
         <Landing />
-      </div>
+      </main>
     </>
   );
 };

@@ -2,6 +2,7 @@ import { Prisma, PrismaClient } from "@prisma/client";
 
 type savingByIdType = {
   userId: string;
+  bookId: string;
   id: number;
 };
 
@@ -31,6 +32,28 @@ export async function updateGoal(
   return result;
 }
 
+export async function cancelGoal(
+  db: PrismaClient,
+  { bookId, userId, id }: savingByIdType,
+) {
+  const goal = await db.goals.update({
+    data: { state: 2 },
+    where: { id: Number(id), bookId, userId },
+    include: {
+      transactions: true,
+    },
+  });
+
+  goal.transactions.forEach(async (transaction) => {
+    await db.transaction.update({
+      where: { id: transaction.id, bookId, userId },
+      data: { state: 2 },
+    });
+  });
+
+  return goal;
+}
+
 export async function getGoals(db: PrismaClient, userId: string) {
   return await db.goals.findMany({
     where: { userId },
@@ -47,6 +70,9 @@ export async function getGoalById(
     include: {
       entity: true,
       transactions: {
+        where: {
+          state: 1,
+        },
         include: {
           category: true,
           entity: true,

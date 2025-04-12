@@ -1,5 +1,5 @@
 import { useForm } from "react-hook-form";
-import { Button, Input } from "@nextui-org/react";
+import { Button, Input } from "@heroui/react";
 import { Icon } from "@iconify/react/dist/iconify.js";
 
 import { createEntity } from "~/modules/Entities/schema";
@@ -31,8 +31,18 @@ const EntityForm = ({ hasEdit, entityDefault }: EntityFormProps) => {
   } = useForm<createEntity>({
     resolver: zodResolver(createEntity),
   });
-  const { mutateAsync: EntityCreateMutation } = api.entity.create.useMutation();
-  const { mutateAsync: EntityUpdateMutation } = api.entity.update.useMutation();
+  const entitiesRefresh = api.useUtils();
+
+  const { mutateAsync: EntityCreateMutation } = api.entity.create.useMutation({
+    onSuccess() {
+      entitiesRefresh.invalidate();
+    },
+  });
+  const { mutateAsync: EntityUpdateMutation } = api.entity.update.useMutation({
+    onSuccess() {
+      entitiesRefresh.invalidate();
+    },
+  });
 
   const alertConfig: any = {
     type: "quest",

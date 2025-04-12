@@ -1,50 +1,68 @@
-import { usePathname } from "next/navigation";
-
-import Nav from "./Nav";
-import NavigationBack from "./NavigationBack";
-
-import { useCurrentAccount } from "~/modules/Account/hooks";
+import React, { memo } from "react";
+import { Input } from "@heroui/input";
+import { SearchIcon } from "lucide-react";
 import NavigationLogo from "./NavigationLogo";
-import { useSession } from "next-auth/react";
-import Breadcrum from "../../Breadcrum";
+import Nav from "./Nav";
+import clsx from "clsx";
+import BookSwitcher from "./BookSwitcher";
 
-const HeaderApp = ({
-  title = "Dashboard",
-  hasFilter,
-  hasLogout,
-  logo = false,
-}: {
+interface HeaderAppProps {
   hasFilter?: boolean;
-  title?: string;
+  rightContent?: React.ReactNode;
+  subtitle?: string;
+  hasLeftContent?: boolean;
+  hasGoBack?: boolean;
+  className?: string;
   logo?: boolean;
   hasLogout?: boolean;
-}) => {
-  const pathname = usePathname();
-  const { account } = useCurrentAccount();
+  children?: React.ReactNode;
+  hasNotifications?: boolean;
+}
 
-  return (
-    <>
-      <header className="z-10 flex w-full items-center justify-between">
-        <aside className="flex items-center gap-3">
-          {/* {
-          logo &&
-        <NavigationLogo className="mr-8" />
-        } */}
-          {!pathname?.includes("main") && <NavigationBack />}
-          <div className="flex flex-col items-start justify-center">
-            <span className="text-gray-600 dark:text-slate-200">
-              {account?.name || "Bienvenido"}
-            </span>
-            <h1 className="text-start text-xl font-semibold text-primary lg:text-2xl dark:text-slate-200">
-              {title}
-            </h1>
+const HeaderApp = memo(
+  ({
+    hasFilter,
+    hasLogout,
+    className,
+    rightContent,
+    logo = false,
+    hasNotifications = true,
+  }: HeaderAppProps) => {
+    return (
+      <header
+        className={clsx(
+          "z-50 hidden w-full flex-col px-8 py-2 md:flex",
+          className,
+        )}
+      >
+        <div className="flex items-center justify-between">
+          <aside className="flex items-center">
+            {logo && (
+              <aside className="min-w-[246px]">
+                <NavigationLogo isExpanded />
+              </aside>
+            )}
+            <div className="flex items-center gap-2">
+              <Input
+                startContent={<SearchIcon width={18} />}
+                placeholder="Buscar"
+                radius="full"
+                classNames={{
+                  inputWrapper: "border border-divider/10 shadow-none",
+                }}
+                className="w-80"
+              />
+              <BookSwitcher />
+            </div>
+          </aside>
+          <div className="flex items-center gap-x-4">
+            {rightContent}
+            <Nav hasNotifications={hasNotifications} />
           </div>
-        </aside>
-        <Nav hasLogout={hasLogout} hasFilter={hasFilter} />
+        </div>
       </header>
-      {/* <Breadcrum /> */}
-    </>
-  );
-};
+    );
+  },
+);
 
 export default HeaderApp;

@@ -38,6 +38,7 @@ const config = {
     "@typescript-eslint/no-unnecessary-type-assertion": "off",
     "@typescript-eslint/no-misused-promises": "off",
     "@typescript-eslint/no-extra-non-null-assertion": "off",
+    "@typescript-eslint/unbound-method": "off",
     // end rules
 
     "@typescript-eslint/array-type": "off",

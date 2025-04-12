@@ -1,5 +1,5 @@
-import { CircularProgress } from "@nextui-org/progress";
-import { Spinner } from "@nextui-org/spinner";
+import { CircularProgress } from "@heroui/progress";
+import { Spinner } from "@heroui/spinner";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import React, { useEffect } from "react";
@@ -11,7 +11,7 @@ const withAuthRedirect = (WrappedComponent: React.ComponentType) => {
 
     useEffect(() => {
       if (status === "loading") return; // Do nothing while loading
-      if (session) router.push("/account"); // Redirect to home if authenticated
+      if (session) router.push("/overview"); // Redirect to home if authenticated
     }, [session, status, router]);
 
     if (status === "loading" || session) {

@@ -54,7 +54,8 @@ const BarChart = ({
           position: "top",
           horizontalAlign: "left",
           markers: {
-            size: 12,
+            size: 6,
+            shape: "circle",
             offsetX: -3,
           },
           offsetX: -28,
@@ -143,6 +144,7 @@ const BarChart = ({
         },
         yaxis: {
           labels: {
+            show: showYAxis,
             align: "left",
             padding: 15,
             formatter: (val, opt) => parseAmount(val) ?? val,

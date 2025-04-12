@@ -34,7 +34,7 @@ const ButtonGroup = ({
   return (
     <div
       className={clsx(
-        "flex overflow-hidden rounded-lg border shadow-sm dark:border-white/10",
+        "flex overflow-hidden rounded-xl border border-divider shadow-sm dark:border-white/10",
         containerClassName,
       )}
       role="group"
@@ -44,7 +44,7 @@ const ButtonGroup = ({
           key={option.id}
           type="button"
           className={clsx(
-            "flex w-fit flex-1 items-center justify-center gap-2 whitespace-nowrap bg-default-100 px-6 py-2 text-sm font-medium dark:border-white/10 dark:text-white dark:hover:bg-default-200",
+            "flex w-fit flex-1 items-center justify-center gap-2 whitespace-nowrap bg-white px-6 py-2.5 text-sm font-medium dark:border-white/10 dark:bg-default-100 dark:text-white dark:hover:bg-default-200",
             buttonClass,
             {
               "border border-primary !bg-primary !text-primary-foreground dark:border-white dark:!bg-white":

@@ -1,17 +1,20 @@
-import clsx from "clsx";
-import React from "react";
 import {
   Drawer,
+  DrawerBody,
   DrawerContent,
-  DrawerDescription,
   DrawerFooter,
   DrawerHeader,
-  DrawerTitle,
-} from "~/modules/components/atoms/Drawer.component";
-import { DialogProps } from "~/types/component/dialog";
+  type DrawerProps,
+} from "@heroui/drawer";
+import clsx from "clsx";
+import React from "react";
+import { useResize } from "~/lib/hooks/useResize";
 
-interface CustomDrawerProps extends DialogProps {
+interface CustomDrawerProps extends DrawerProps {
+  subtitle?: string;
   footerContent?: JSX.Element;
+  content?: string;
+  customHeader?: JSX.Element;
 }
 
 const CustomDrawer = ({
@@ -21,18 +24,33 @@ const CustomDrawer = ({
   subtitle,
   title,
   footerContent,
+  customHeader,
   classNames,
+  ...props
 }: CustomDrawerProps) => {
+  const { isMobile } = useResize();
+
   return (
-    <Drawer open={isOpen} onClose={onClose}>
+    <Drawer
+      placement={isMobile ? "bottom" : "right"}
+      isOpen={isOpen}
+      onClose={onClose}
+      {...props}
+    >
       <DrawerContent
-        className={clsx("h-[70vh] px-2 pb-4", classNames?.content)}
+        className={clsx("px-2 pb-4 font-montserrat", classNames?.base)}
       >
-        <DrawerHeader>
-          {title && <DrawerTitle className="text-2xl">{title}</DrawerTitle>}
-          {subtitle && <DrawerDescription>{subtitle}</DrawerDescription>}
-        </DrawerHeader>
-        <div className="overflow-auto">{children}</div>
+        {customHeader ? (
+          <DrawerHeader className="flex flex-col">{customHeader}</DrawerHeader>
+        ) : (
+          <DrawerHeader className="flex flex-col">
+            {title && <h3 className="text-2xl tracking-tight">{title}</h3>}
+            {subtitle && <p className="text-sm font-normal">{subtitle}</p>}
+          </DrawerHeader>
+        )}
+        <DrawerBody>
+          <div className="overflow-auto">{children}</div>
+        </DrawerBody>
         {footerContent && <DrawerFooter>{footerContent}</DrawerFooter>}
       </DrawerContent>
     </Drawer>

@@ -1,31 +1,52 @@
+import { useResize } from "~/lib/hooks/useResize";
 import { Header } from "../components/Header";
-import { HeroSection, Advantages, Explore, Footer } from "./components";
+import { Spotlight } from "../components/ui/SpotLight";
+import { HeroSection, Footer } from "./components";
 import Features from "./components/Features/Features";
-import SlideComponents from "./components/SlideComponents/SlideComponents";
+import Presentation from "./components/Presentation/Presentation";
+import Problem from "./components/Problem";
+import WorkingSection from "./components/Working";
+import CTA from "./components/CTA";
+import FAQ from "./components/FAQ";
 import { motion } from "framer-motion";
-
+import SlideComponents from "./components/SlideComponents/SlideComponents";
 export const Landing = () => {
   return (
-    <div className="relative flex flex-col items-center gap-6 overflow-x-hidden bg-gradient-to-r from-zinc-100 to-zinc-100 dark:from-default-50 dark:via-default-100 dark:to-default-50">
-      <div className="absolute -top-20 left-[50%] h-[50dvh] w-[100dvh] -translate-x-[50%] rounded-full bg-slate-100 blur-3xl dark:bg-zinc-700/30" />
-
+    <>
+      <div className="absolute top-0 h-full w-full overflow-hidden">
+        <Spotlight smallWidth={320} />
+      </div>
       <Header />
-      <HeroSection />
-      <SlideComponents />
-      <motion.div
-        initial={{
-          width: "32rem",
-        }}
-        whileInView={{
-          width: "100%",
-        }}
-        className="rounded-t-xl bg-default-200 bg-[url('/background-content.webp')] dark:bg-default-100/40"
-      >
-        <Features />
-        <Advantages />
-        <Explore />
-        <Footer />
-      </motion.div>
-    </div>
+      <div className="relative space-y-20">
+        <HeroSection />
+        <Presentation
+          thumbnailAlt="Video de Presentación de Biru"
+          videoSrc="https://www.youtube.com/watch?v=N3sAUKkjxts"
+          thumbnailSrc="/thumbnail.png"
+          animationStyle={"fade"}
+          className="mx-auto max-w-5xl px-4"
+        />
+        <motion.div
+          initial={{ opacity: 0, y: 60 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 1 }}
+          className="fade-x mx-auto flex w-full max-w-7xl scale-75 justify-center overflow-x-hidden md:scale-100"
+        >
+          <SlideComponents />
+        </motion.div>
+        <Problem />
+        <div className=" rounded-t-xl bg-default-100 bg-[url('/background-content.webp')] py-20 pt-20 md:space-y-44 dark:bg-default-100/40">
+          <Features />
+        </div>
+        <WorkingSection />
+        {/* <Testimonials /> */}
+        {/* <Pricing /> */}
+        <FAQ />
+        <div>
+          <CTA />
+          <Footer />
+        </div>
+      </div>
+    </>
   );
 };

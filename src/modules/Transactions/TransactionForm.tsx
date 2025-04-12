@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/router";
 import { useParams } from "next/navigation";
@@ -12,9 +12,15 @@ import {
   Input,
   Select,
   SelectItem,
+  Switch,
+  Tooltip,
   User,
-} from "@nextui-org/react";
-import { ButtonGroup, Card, InputDate } from "~/modules/components";
+} from "@heroui/react";
+import {
+  ButtonGroup,
+  InputDate,
+  InputSelectAccount,
+} from "~/modules/components";
 
 import { api } from "~/utils/api";
 import { Icon } from "@iconify/react/dist/iconify.js";
@@ -36,12 +42,61 @@ import { format } from "date-fns";
 import { es } from "date-fns/locale";
 
 import type { Goals, Templates, Transaction } from "@prisma/client";
-import type { TransactionIncludes } from "~/types/transactions";
+import { STATUS_TRANS, type TransactionIncludes } from "~/types/transactions";
 import { toast } from "sonner";
 import { GoalsIncludes } from "~/types/goal/goal.types";
 import { CategoryIncludes } from "~/types/category/category.types";
 import { EntityIncludes } from "~/types/entities/entity.types";
 import TemplatesSection from "./TemplatesSection";
+import {
+  getTransactionStatus,
+  statusColor,
+  statusIcon,
+} from "~/utils/transactionStatus";
+import { set } from "lodash";
+import { useQueryClient } from "@tanstack/react-query";
+
+const statusOptions = [
+  {
+    value: STATUS_TRANS.confirmed,
+    text: "Confirmado",
+  },
+  {
+    value: STATUS_TRANS.cancelled,
+    text: "Cancelado",
+  },
+  {
+    value: STATUS_TRANS.scheduled,
+    text: "Programado",
+  },
+];
+
+const frecuency = [
+  {
+    text: "Diario",
+    value: 1,
+  },
+  {
+    text: "Semanal",
+    value: 7,
+  },
+  {
+    text: "Quincenal",
+    value: 15,
+  },
+  {
+    text: "Mensual",
+    value: 30,
+  },
+  {
+    text: "Trimestral",
+    value: 90,
+  },
+  {
+    text: "Anual",
+    value: 365,
+  },
+];
 
 interface TransactionFormProps {
   type: "goal" | "transfer";
@@ -66,6 +121,9 @@ const TransactionForm = ({
 }: TransactionFormProps) => {
   const [amountValue, setAmountValue] = useState("");
   const [goalSelected, setGoalSelected] = useState<GoalsIncludes>();
+  const [schedule, setSchedule] = useState<boolean>(
+    transactionDefault?.state === 3,
+  );
 
   const { account } = useCurrentAccount();
   const { entities } = useEntity();
@@ -73,16 +131,31 @@ const TransactionForm = ({
   const { categories } = useCategory();
   const { goals } = useGoals();
 
-  const params = useParams();
   const router = useRouter();
 
   const query = router.query;
 
+  const trpcQuery = api.useUtils();
+
   const { mutateAsync: createTransactionMutation } =
-    api.transaction.create.useMutation();
+    api.transaction.create.useMutation({
+      onSuccess: () => {
+        trpcQuery.transaction.getTransactions.invalidate();
+      },
+    });
 
   const { mutateAsync: updateTransactionMutation } =
-    api.transaction.update.useMutation();
+    api.transaction.update.useMutation({
+      onSuccess: () => {
+        const queryClient = useQueryClient();
+        queryClient.invalidateQueries();
+      },
+    });
+
+  const defaultState =
+    transactionDefault && transactionDefault.state
+      ? [String(transactionDefault.state)]
+      : undefined;
 
   const defaultCategory =
     categories && defCategory
@@ -112,7 +185,7 @@ const TransactionForm = ({
 
   const defaultGoalKey = transactionDefault?.goalId
     ? [`${transactionDefault.goalId}`]
-    : defaultGoal?.id ?? undefined
+    : (defaultGoal?.id ?? undefined)
       ? [`${defaultGoal?.id}`]
       : undefined;
 
@@ -126,45 +199,41 @@ const TransactionForm = ({
     register,
     formState: { errors },
     setValue,
-    getValues,
+    handleSubmit,
     watch,
     reset,
   } = useForm<createTransaction>({
     resolver: zodResolver(createTransaction),
   });
 
-  const alertConfig = {
-    cancel: true,
-    confirmProps: {
-      onClick: () => {
-        onClose();
-        onSubmit();
-      },
-    },
-    type: "quest",
-  } as any;
+  const onSubmit = (data: createTransaction) => {
+    const payload = { ...data, state: schedule ? 3 : 1 };
 
-  const { isOpen, onClose, onOpen, props, setProps } = useAlert(alertConfig);
-
-  const onSubmit = () => {
-    const payload = getValues();
     if (mode === "create") {
-      toast.promise(
-        createTransactionMutation(
-          { ...payload, date: new Date() },
-          {
-            onSuccess(data) {
-              onSuccess && onSuccess();
-              reset();
-            },
+      toast("Esta seguro de realizar esta acción", {
+        icon: "❓",
+        action: {
+          label: "Crear",
+          onClick: () => {
+            toast.promise(
+              createTransactionMutation(
+                { ...payload },
+                {
+                  onSuccess(data) {
+                    onSuccess && onSuccess();
+                    reset();
+                  },
+                },
+              ),
+              {
+                loading: "Creando Transacción...",
+                success: "La transacción se ha creado con éxito.",
+                error: "Hubo un error, intente de nuevo",
+              },
+            );
           },
-        ),
-        {
-          loading: "Creando Transacción...",
-          success: "La transacción se ha creado con éxito.",
-          error: "Hubo un error, intente de nuevo",
         },
-      );
+      });
       return;
     }
     if (transactionDefault) {
@@ -189,8 +258,6 @@ const TransactionForm = ({
 
   const setTemplate = (template: Templates | null | undefined): void => {
     if (template) {
-      console.log(template);
-
       setValue("categoryId", template.categoryId || undefined);
       setValue("entityId", template.entityId || undefined);
       setValue("recipient", template.recipient || undefined);
@@ -207,7 +274,7 @@ const TransactionForm = ({
     }
   };
 
-  useEffect(() => {
+  useMemo(() => {
     if (!account && transactionDefault) return;
 
     setValue("accountId", account?.id);
@@ -257,7 +324,7 @@ const TransactionForm = ({
     }
   }, [account, query]);
 
-  useEffect(() => {
+  useMemo(() => {
     if (transactionDefault) {
       const {
         amount,
@@ -267,10 +334,12 @@ const TransactionForm = ({
         date,
         reference,
         recipient,
+        accountId,
         type: typeDef,
       } = transactionDefault;
 
       setValue("amount", amount);
+      setValue("accountId", Number(accountId));
       setAmountValue(amountFormatter(String(amount)).formatted);
       setValue("type", typeDef as 1 | 2);
       setValue("transferType", type === "transfer" ? 1 : 2);
@@ -290,25 +359,40 @@ const TransactionForm = ({
     }
   }, [goalSelected]);
 
+  useEffect(() => {
+    setValue("bookId", String(query.bookId));
+  }, []);
+
   return (
     <AnimatePresence>
-      <div className="flex w-full flex-col items-start gap-4">
-        <Alert isOpen={isOpen} onClose={onClose} {...props} />
-        {type === "transfer" && (
-          <TemplatesSection onChange={(template) => setTemplate(template)} />
-        )}
+      <div className="flex w-full max-w-[36rem] flex-col items-start gap-4">
         <motion.form
           layout
           initial={{ x: -40, opacity: 0 }}
           animate={{ x: 0, opacity: 1 }}
           exit={{ opacity: 0 }}
-          className="flex w-full flex-col items-center justify-center gap-2 pt-6 md:max-w-[36rem] md:pt-0"
-          onSubmit={(e) => {
-            e.preventDefault();
-            setProps(alertConfig);
-            onOpen();
+          transition={{
+            type: "spring",
+            stiffness: 500,
+            damping: 30,
+            duration: 1,
           }}
+          className="app-form flex w-full flex-col items-center justify-center gap-2 rounded-xl "
+          onSubmit={handleSubmit(onSubmit)}
         >
+          <div className="flex w-full flex-col items-start">
+            <h2 className="text-base">Información Requerida</h2>
+            <p className="text-foreground-500">
+              Completa el formulario para registrar una nueva transacción.
+            </p>
+          </div>
+          {type === "transfer" && (
+            <div className="flex w-full items-center justify-between">
+              <TemplatesSection
+                onChange={(template) => setTemplate(template)}
+              />
+            </div>
+          )}
           <Input
             type="text"
             isRequired
@@ -372,145 +456,196 @@ const TransactionForm = ({
             isInvalid={Boolean(errors?.amount)}
             errorMessage={errors?.amount?.message}
           />
-          {type === "goal" && (
-            <>
-              <Select
-                items={goals ?? []}
-                placeholder="Seleccione la meta"
-                label="Meta"
-                isRequired
-                classNames={{
-                  label: "group-data-[filled=true]:-translate-y-5",
-                  trigger: "min-h-[70px]",
-                  listboxWrapper: "max-h-[200px]",
-                }}
-                renderValue={(items) => {
-                  return items.map(({ data }) => (
-                    <div key={data?.id} className="flex items-center gap-2">
-                      <div className="grid h-8 w-8 place-items-center rounded-full bg-primary">
-                        {data?.icon ? (
-                          <Icon icon={data?.icon} className="text-white" />
-                        ) : (
-                          <Avatar name={data?.name} />
-                        )}
-                      </div>
-                      <aside className="flex flex-col">
-                        <span>{data?.name}</span>
-                        <span className="text-xs">
-                          $ {data?.saved.toLocaleString()}
-                        </span>
-                      </aside>
-                    </div>
-                  ));
-                }}
-                defaultSelectedKeys={defaultGoalKey}
-                isInvalid={Boolean(errors?.categoryId)}
-                errorMessage={errors?.categoryId?.message ?? ""}
-              >
-                {(goal) => (
-                  <SelectItem
-                    color="primary"
+          {mode === "edit" && (
+            <Select
+              items={statusOptions}
+              placeholder="Seleccione un estado"
+              label="Estado"
+              classNames={{
+                label: "group-data-[filled=true]:-translate-y-4",
+                trigger: "min-h-[70px]",
+                listboxWrapper: "max-h-[200px]",
+              }}
+              renderValue={(items) => {
+                return items.map(({ data }) => (
+                  <Chip
+                    key={data!.value}
+                    size="sm"
                     variant="flat"
-                    onClick={() => {
-                      setGoalSelected(goal as GoalsIncludes);
-                      setValue("type", goal.type as 1 | 2);
-                      setValue("goalId", goal.id);
-                      goal?.entityId && setValue("entityId", goal?.entityId);
-                      if (goal?.entityId) {
-                        const currentEntity = entities.find(
-                          (entity) => entity.id === goal.entityId,
-                        );
-                        if (currentEntity) {
-                          setValue("recipient", currentEntity.name || "");
-                          currentEntity?.reference &&
-                            setValue(
-                              "reference",
-                              currentEntity.reference || "",
-                            );
-                          // currentEntity?.description &&
-                          //   setValue(
-                          //     "description",
-                          //     |.description || "",
-                          //   );
-                        }
-                      } else {
-                        setValue("recipient", undefined);
-                        setValue("reference", undefined);
-                        setValue("description", undefined);
-                      }
-                    }}
-                    className="font-montserrat dark:text-white"
-                    textValue={goal.name}
-                    value={goal.id}
-                    key={goal.id}
+                    color={statusColor(data!.value) as any}
+                    startContent={
+                      <Icon icon={statusIcon(data!.value) || ""} width={14} />
+                    }
                   >
-                    <div className="flex items-center gap-2">
-                      <div className="grid h-8 w-8 place-items-center rounded-full bg-primary">
-                        {goal?.icon && (
-                          <Icon icon={goal?.icon} className="text-white" />
-                        )}
-                      </div>
-                      <aside className="flex flex-col">
-                        <span>{goal?.name}</span>
-                        <span className="text-xs">
-                          $ {goal?.saved.toLocaleString()}
-                        </span>
-                      </aside>
-                    </div>
-                  </SelectItem>
-                )}
-              </Select>
-              <Select
-                items={accounts ?? []}
-                placeholder="Seleccione una cuenta"
-                label="Cuenta"
-                classNames={{
-                  label: "group-data-[filled=true]:-translate-y-7",
-                  trigger: "min-h-[86px]",
-                  listboxWrapper: "max-h-[200px]",
-                }}
-                renderValue={(items) => {
-                  return items.map(({ data }) => (
-                    <div
-                      key={data?.id}
-                      className="dark:text-primary-light flex flex-col rounded-xl bg-primary/10 px-4 py-2 pr-6 text-primary dark:bg-default-300/50"
-                    >
-                      <span className="font-semibold">{data?.name}</span>
-                      <span className="text-xs">
-                        $ {data?.balance?.toLocaleString()}
-                      </span>
-                    </div>
-                  ));
-                }}
-                required
-                isRequired
-                defaultSelectedKeys={defaultAccountKey}
-                isInvalid={Boolean(errors?.categoryId)}
-                errorMessage={errors?.categoryId?.message ?? ""}
-              >
-                {(account) => (
-                  <SelectItem
-                    color="primary"
-                    onClick={() => setValue("accountId", account.id)}
-                    key={account.id}
-                    className="font-montserrat dark:text-white"
-                    textValue={account.name}
-                    value={account.id}
-                  >
-                    <div className="flex flex-col px-2 py-1">
-                      <span className="font-medium">{account.name}</span>
-                      <span className="text-xs">
-                        $ {account.balance?.toLocaleString()}
-                      </span>
-                    </div>
-                  </SelectItem>
-                )}
-              </Select>
-            </>
+                    {getTransactionStatus(data!.value)}
+                  </Chip>
+                ));
+              }}
+              defaultSelectedKeys={defaultState}
+              isRequired
+              // isInvalid={Boolean(errors?.categoryId)}
+              // errorMessage={errors?.categoryId?.message ?? ""}
+            >
+              {(state) => (
+                <SelectItem
+                  color="primary"
+                  onPress={() => setValue("categoryId", state.value)}
+                  key={state.value}
+                  className="font-montserrat dark:text-white"
+                  textValue={state.text}
+                >
+                  {state.text}
+                </SelectItem>
+              )}
+            </Select>
           )}
+          {type === "goal" && (
+            <Select
+              items={goals ?? []}
+              placeholder="Seleccione la meta"
+              label="Meta"
+              isRequired
+              classNames={{
+                label: "group-data-[filled=true]:-translate-y-5",
+                trigger: "min-h-[70px]",
+                listboxWrapper: "max-h-[200px]",
+              }}
+              renderValue={(items) => {
+                return items.map(({ data }) => (
+                  <div key={data?.id} className="flex items-center gap-2">
+                    <div className="grid h-8 w-8 place-items-center rounded-full bg-primary">
+                      {data?.icon ? (
+                        <Icon icon={data?.icon} className="text-white" />
+                      ) : (
+                        <Avatar name={data?.name} />
+                      )}
+                    </div>
+                    <aside className="flex flex-col">
+                      <span>{data?.name}</span>
+                      <span className="text-xs">
+                        $ {data?.saved.toLocaleString()}
+                      </span>
+                    </aside>
+                  </div>
+                ));
+              }}
+              defaultSelectedKeys={defaultGoalKey}
+              isInvalid={Boolean(errors?.categoryId)}
+              errorMessage={errors?.categoryId?.message ?? ""}
+            >
+              {(goal) => (
+                <SelectItem
+                  color="primary"
+                  variant="flat"
+                  onPress={() => {
+                    setGoalSelected(goal as GoalsIncludes);
+                    setValue("type", goal.type as 1 | 2);
+                    setValue("goalId", goal.id);
+                    goal?.entityId && setValue("entityId", goal?.entityId);
+                    if (goal?.entityId) {
+                      const currentEntity = entities.find(
+                        (entity) => entity.id === goal.entityId,
+                      );
+                      if (currentEntity) {
+                        setValue("recipient", currentEntity.name || "");
+                        currentEntity?.reference &&
+                          setValue("reference", currentEntity.reference || "");
+                        // currentEntity?.description &&
+                        //   setValue(
+                        //     "description",
+                        //     |.description || "",
+                        //   );
+                      }
+                    } else {
+                      setValue("recipient", undefined);
+                      setValue("reference", undefined);
+                      setValue("description", undefined);
+                    }
+                  }}
+                  className="font-montserrat dark:text-white"
+                  textValue={goal.name}
+                  key={goal.id}
+                >
+                  <div className="flex items-center gap-2">
+                    <div className="grid h-8 w-8 place-items-center rounded-full bg-primary">
+                      {goal?.icon && (
+                        <Icon icon={goal?.icon} className="text-white" />
+                      )}
+                    </div>
+                    <aside className="flex flex-col">
+                      <span>{goal?.name}</span>
+                      <span className="text-xs">
+                        $ {goal?.saved.toLocaleString()}
+                      </span>
+                    </aside>
+                  </div>
+                </SelectItem>
+              )}
+            </Select>
+          )}
+          <InputSelectAccount
+            isRequired
+            defaultSelected={defaultAccountKey}
+            hasError={Boolean(errors.accountId)}
+            errorMessage={errors.accountId?.message}
+            onChange={() => setValue("accountId", account?.id)}
+          />
+          <motion.div className="mb-2 mt-4 flex w-full flex-col gap-3">
+            <div className="flex items-center justify-between">
+              <aside>
+                <h4 className="text-base font-semibold">
+                  Transacción Programada
+                </h4>
+                <p className="text-sm text-foreground-500 dark:text-zinc-400">
+                  Habilita esta opción si deseas realizar la transacción en una
+                  fecha futura.
+                </p>
+              </aside>
+              <Switch
+                onValueChange={setSchedule}
+                defaultChecked={schedule}
+                defaultSelected={schedule}
+                size="sm"
+              />
+            </div>
+            {schedule && (
+              <motion.div
+                initial={{
+                  opacity: 0,
+                }}
+                exit={{
+                  opacity: 0,
+                }}
+                animate={{
+                  opacity: 1,
+                }}
+                transition={{
+                  type: "tween",
+                  stiffness: 500,
+                  damping: 30,
+                  duration: 0.6,
+                }}
+              >
+                <InputDate
+                  label="Fecha Programada"
+                  containerClassName="mt-4"
+                  changeValue={(newDate) => setValue("date", newDate)}
+                  value={watch("date")}
+                  required
+                  defaultValue={transactionDefault && defaultDate}
+                />
+              </motion.div>
+            )}
+          </motion.div>
           <Accordion
+            className="m-0 rounded-lg !p-0 !shadow-none"
+            itemClasses={{
+              trigger: "!shadow-none",
+              base: "px-0 !shadow-none",
+            }}
             defaultExpandedKeys={type === "transfer" ? ["1"] : []}
             showDivider={type === "goal"}
+            selectionMode="multiple"
             motionProps={{
               variants: {
                 enter: {
@@ -552,20 +687,21 @@ const TransactionForm = ({
               key="1"
               aria-label="Accordion 1"
               classNames={{
-                base: "border-red-600",
                 subtitle: "dark:text-zinc-400",
               }}
               title="Información Adicional"
               subtitle="Agrega más información sobre tu transacción"
             >
-              <div className="flex flex-col gap-2 pb-8">
-                <InputDate
-                  label="Fecha de transacción"
-                  containerClassName="mt-4"
-                  changeValue={(newDate) => setValue("date", newDate)}
-                  value={watch("date")}
-                  defaultValue={defaultDate}
-                />
+              <div className="flex flex-col gap-2 pb-2">
+                {!schedule && (
+                  <InputDate
+                    label="Fecha de transacción"
+                    containerClassName="mt-4"
+                    changeValue={(newDate) => setValue("date", newDate)}
+                    value={watch("date")}
+                    defaultValue={defaultDate}
+                  />
+                )}
                 <section className="flex w-full flex-col gap-2 sm:flex-row">
                   <Select
                     items={categories ?? []}
@@ -600,11 +736,10 @@ const TransactionForm = ({
                     {(category) => (
                       <SelectItem
                         color="primary"
-                        onClick={() => setValue("categoryId", category.id)}
+                        onPress={() => setValue("categoryId", category.id)}
                         key={category.id}
                         className="font-montserrat dark:text-white"
                         textValue={category.name}
-                        value={category.id}
                       >
                         {category.name}
                       </SelectItem>
@@ -728,7 +863,7 @@ const TransactionForm = ({
               subtitle="Aquí podrás ver el avance de tu meta"
             >
               {Boolean(goalSelected) ? (
-                <ul className="grid grid-cols-1 gap-2 md:flex-grow md:grid-cols-2 [&>li>span]:font-semibold [&>li]:text-xs">
+                <ul className="mb-2 grid grid-cols-1 gap-2 md:flex-grow md:grid-cols-2 [&>li>span]:font-semibold [&>li]:text-xs">
                   <li>
                     <span>Nombre:</span>
                     <p>{goalSelected?.name}</p>
@@ -789,6 +924,7 @@ const TransactionForm = ({
               )}
             </AccordionItem>
           </Accordion>
+
           <div className="flex w-full flex-col gap-2 sm:flex-row">
             <Button
               className="py-1 text-sm sm:w-fit"
@@ -800,7 +936,7 @@ const TransactionForm = ({
             </Button>
             <Button
               className="py-1 text-sm sm:w-fit"
-              onClick={() => onSuccess && onSuccess()}
+              onPress={() => onSuccess && onSuccess()}
             >
               Cancelar
             </Button>

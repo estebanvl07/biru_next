@@ -7,7 +7,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import clsx from "clsx";
 
-import { Button, Input } from "@nextui-org/react";
+import { Button, Input } from "@heroui/react";
 import { ButtonGroup } from "~/modules/components";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import { IconSearcher } from "~/modules/Category/IconSelector";
@@ -19,6 +19,7 @@ import { Alert } from "../components/molecules/Alert.component";
 import { useAlert } from "~/lib/hooks/useAlert";
 import { CategoryIncludes } from "~/types/category/category.types";
 import { toast } from "sonner";
+import { useCategory } from "./hook/category.hook";
 
 interface CategoryFormProps {
   hasEdit?: boolean;
@@ -47,6 +48,8 @@ const CreateCategoryForm = ({
     resolver: zodResolver(createCategory),
   });
 
+  const { invalidate } = useCategory();
+
   const icon = watch("icon") || "";
 
   const alertConfig: any = {
@@ -74,6 +77,7 @@ const CreateCategoryForm = ({
           { ...data, id: String(categoryDefault?.id) },
           {
             onSuccess(data) {
+              invalidate();
               onSuccess && onSuccess();
               reset();
             },
@@ -95,6 +99,7 @@ const CreateCategoryForm = ({
         },
         {
           onSuccess() {
+            invalidate();
             onSuccess && onSuccess();
             reset();
           },

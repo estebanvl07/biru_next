@@ -6,10 +6,10 @@ import { es } from "date-fns/locale";
 
 import { useOnActive, useOutsideClick } from "~/lib/hooks";
 
-import { Input } from "@nextui-org/react";
+import { Input } from "@heroui/react";
 
 import type { InputProps } from "./input.types";
-import { Calendar, type DateValue } from "@nextui-org/react";
+import { Calendar, type DateValue } from "@heroui/react";
 import { DATE_FORMAT_TRANS } from "~/lib/constants/config";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import { today, getLocalTimeZone } from "@internationalized/date";
@@ -76,7 +76,6 @@ const InputDate: FC<InputDateProps> = ({
       onKeyDown={(e) => e.key === "Escape" && onDisabled()}
     >
       <Input
-        // {...props}
         autoComplete="off"
         readOnly
         isRequired={props.required}

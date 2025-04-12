@@ -7,9 +7,10 @@ import {
   Select,
   SelectItem,
   Tooltip,
+  Switch,
   User,
-} from "@nextui-org/react";
-import React, { useState } from "react";
+} from "@heroui/react";
+import React, { useEffect, useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 import { amountFormatter } from "~/utils/formatters";
 import { ButtonGroup, InputDate } from "../components";
@@ -22,9 +23,31 @@ import { api } from "~/utils/api";
 import { toast } from "sonner";
 import { useCategory } from "../Category/hook/category.hook";
 import { useEntity } from "../Entities/hook/entities.hook";
+import { useParams } from "next/navigation";
+import { MovementsIncludes } from "~/types/movements";
+import { useMovements } from "./hooks/useMovements";
+import {
+  useCurrentMonthBudget,
+  useExpensesCurrentMonth,
+} from "../Budget/hooks/useBudget";
+import { motion } from "framer-motion";
+import { useGoals } from "../Goals/hook/goal.hook";
+import { GoalsIncludes } from "~/types/goal/goal.types";
 
-const CreateMovementsForm = ({ defaultMovement }: any) => {
+interface MovementFormProps {
+  mode?: "create" | "edit";
+  defaultMovement?: MovementsIncludes;
+}
+
+const CreateMovementsForm = ({
+  defaultMovement,
+  mode = "create",
+}: MovementFormProps) => {
   const [amountValue, setAmountValue] = useState<string>("");
+  const [goalSelected, setGoalSelected] = useState<GoalsIncludes>();
+  const [schedule, setSchedule] = useState<boolean>(
+    defaultMovement?.goalId !== null,
+  );
   const [customFrecuency, setCustomFrecuency] = useState(false);
 
   const {
@@ -40,16 +63,35 @@ const CreateMovementsForm = ({ defaultMovement }: any) => {
   });
   const router = useRouter();
   const query = router.query;
+  const params = useParams();
 
+  const { invalidateMovements } = useMovements();
+  const { invalidateBudget } = useCurrentMonthBudget();
+  const { invalidateExpenses } = useExpensesCurrentMonth();
+  const { goals, isLoading: goalsIsLoading } = useGoals();
   const { mutateAsync: CreateMovementsMutation } =
-    api.movements.create.useMutation();
+    api.movements.create.useMutation({
+      onSuccess: () => {
+        invalidateMovements();
+        invalidateBudget();
+        invalidateExpenses({ hasRefetch: false });
+      },
+    });
+  const { mutateAsync: UpdateMovementMutation } =
+    api.movements.update.useMutation();
 
   const { categories, isLoading: categoryisLoading } = useCategory();
   const { entities, isLoading: entitiesIsLoading } = useEntity();
 
+  const defaultGoalKey = useMemo(
+    () => (defaultMovement?.goalId ? [`${defaultMovement.goalId}`] : undefined),
+    [defaultMovement],
+  );
+
   const defaultDate = new Date();
   const defaultType = defaultMovement?.type ? defaultMovement.type : 1;
   setValue("type", defaultType);
+  setValue("bookId", String(params?.bookId));
 
   const defaultCategory =
     categories && defaultMovement && defaultMovement.categoryId
@@ -61,21 +103,54 @@ const CreateMovementsForm = ({ defaultMovement }: any) => {
       ? [String(defaultMovement.entityId)]
       : undefined;
 
+  const currentFrecuency = FRECUENCY_MOVEMENTS_OPTIONS.find(
+    (op) => op.value === defaultMovement?.frecuency,
+  )?.id;
+
+  const defaultFrecuency =
+    defaultMovement && currentFrecuency ? [`${currentFrecuency}`] : undefined;
+
   const onSubmit = (payload: createMovements) => {
+    if (mode === "create") {
+      toast("Esta seguro de realizar esta acción", {
+        action: {
+          label: "Crear",
+          onClick: () => {
+            toast.promise(
+              CreateMovementsMutation(payload, {
+                onSuccess(data) {
+                  reset();
+                  setAmountValue("");
+                },
+              }),
+              {
+                loading: "Creando Movimiento...",
+                success: "El movimiento se ha creado con éxito.",
+                error: "Hubo un error, intente de nuevo",
+              },
+            );
+          },
+        },
+      });
+      return;
+    }
     toast("Esta seguro de realizar esta acción", {
       action: {
-        label: "Crear",
+        label: "Editar",
         onClick: () => {
           toast.promise(
-            CreateMovementsMutation(payload, {
-              onSuccess(data) {
-                reset();
-                setAmountValue("");
+            UpdateMovementMutation(
+              { ...payload, id: defaultMovement!.id },
+              {
+                onSuccess(data) {
+                  router.back();
+                  setAmountValue("");
+                },
               },
-            }),
+            ),
             {
-              loading: "Creando Movimiento...",
-              success: "El movimiento se ha creado con éxito.",
+              loading: "Editando Movimiento...",
+              success: "El movimiento se ha editado con éxito.",
               error: "Hubo un error, intente de nuevo",
             },
           );
@@ -84,7 +159,20 @@ const CreateMovementsForm = ({ defaultMovement }: any) => {
     });
   };
 
-  console.log(errors);
+  useMemo(() => {
+    if (defaultMovement) {
+      const { formatted, raw } = amountFormatter(
+        defaultMovement.amount.toString(),
+      );
+      setValue("amount", raw ?? 0);
+      setAmountValue(formatted);
+
+      setValue("description", defaultMovement.description || "");
+      setValue("type", defaultMovement.type);
+      setValue("name", defaultMovement.name);
+      setValue("frecuency", defaultMovement.frecuency);
+    }
+  }, [defaultMovement]);
 
   return (
     <form
@@ -163,6 +251,7 @@ const CreateMovementsForm = ({ defaultMovement }: any) => {
         containerClassName="mt-4"
         changeValue={(newDate) => {
           setValue("next_ocurrence", newDate);
+          // recuerda 3 dias antes
           const reminder = newDate.setDate(newDate.getDate() - 3);
           setValue("reminder_date", new Date(reminder));
         }}
@@ -183,10 +272,11 @@ const CreateMovementsForm = ({ defaultMovement }: any) => {
         defaultValue={defaultDate}
       />
       <Select
+        isRequired
         items={FRECUENCY_MOVEMENTS_OPTIONS ?? []}
         placeholder="Seleccionar Frecuencia"
         label="Frecuencia"
-        isRequired
+        defaultSelectedKeys={defaultFrecuency}
         isInvalid={Boolean(errors?.frecuency)}
         errorMessage={errors?.frecuency?.message ?? ""}
       >
@@ -194,18 +284,15 @@ const CreateMovementsForm = ({ defaultMovement }: any) => {
           <SelectItem
             color="primary"
             variant="flat"
-            onClick={() => {
-              if (frecuency.id !== 4 && frecuency.value) {
-                setValue("frecuency", frecuency.value);
+            onPress={() => {
+              if (frecuency.id !== 7 && frecuency.value) {
+                setValue("frecuency", frecuency.value!);
                 setCustomFrecuency(false);
-              }
-              if (frecuency.id === 4) {
+              } else {
                 setCustomFrecuency(true);
               }
             }}
             className="font-montserrat dark:text-white"
-            textValue={frecuency.name}
-            value={frecuency.id}
             key={frecuency.id}
           >
             {frecuency.name}
@@ -234,9 +321,114 @@ const CreateMovementsForm = ({ defaultMovement }: any) => {
           {...register("frecuency")}
         />
       )}
+      <motion.div className="mb-2 mt-4 flex w-full flex-col gap-3">
+        <div className="flex items-center justify-between">
+          <aside>
+            <h4 className="text-base font-semibold">Asociar a una Meta</h4>
+            <p className="text-sm text-foreground-500 dark:text-zinc-400">
+              Habilita esta opción si deseas Asociar este movimiento a una meta
+              creada
+            </p>
+          </aside>
+          <Switch
+            onValueChange={setSchedule}
+            defaultChecked={schedule}
+            defaultSelected={schedule}
+            size="sm"
+          />
+        </div>
+        {schedule && (
+          <motion.div
+            initial={{
+              opacity: 0,
+            }}
+            exit={{
+              opacity: 0,
+            }}
+            animate={{
+              opacity: 1,
+            }}
+            transition={{
+              type: "tween",
+              stiffness: 500,
+              damping: 30,
+              duration: 0.6,
+            }}
+          >
+            <Select
+              items={goals ?? []}
+              placeholder="Seleccione la meta"
+              label="Meta"
+              isRequired
+              classNames={{
+                label: "group-data-[filled=true]:-translate-y-5",
+                trigger: "min-h-[70px]",
+                listboxWrapper: "max-h-[200px]",
+              }}
+              renderValue={(items) => {
+                return items.map(({ data }) => (
+                  <div key={data?.id} className="flex items-center gap-2">
+                    <div className="grid h-8 w-8 place-items-center rounded-full bg-primary">
+                      {data?.icon ? (
+                        <Icon icon={data?.icon} className="text-white" />
+                      ) : (
+                        <Avatar name={data?.name} />
+                      )}
+                    </div>
+                    <aside className="flex flex-col">
+                      <span>{data?.name}</span>
+                      <span className="text-xs">
+                        $ {data?.saved.toLocaleString()}
+                      </span>
+                    </aside>
+                  </div>
+                ));
+              }}
+              defaultSelectedKeys={defaultGoalKey}
+              isInvalid={Boolean(errors?.categoryId)}
+              errorMessage={errors?.categoryId?.message ?? ""}
+            >
+              {(goal) => (
+                <SelectItem
+                  color="primary"
+                  variant="flat"
+                  onPress={() => {
+                    setGoalSelected(goal as GoalsIncludes);
+                    setValue("type", goal.type as 1 | 2);
+                    setValue("goalId", goal.id);
+                    goal?.entityId && setValue("entityId", goal?.entityId);
+                  }}
+                  className="font-montserrat dark:text-white"
+                  textValue={goal.name}
+                  key={goal.id}
+                >
+                  <div className="flex items-center gap-2">
+                    <div className="grid h-8 w-8 place-items-center rounded-full bg-primary">
+                      {goal?.icon && (
+                        <Icon icon={goal?.icon} className="text-white" />
+                      )}
+                    </div>
+                    <aside className="flex flex-col">
+                      <span>{goal?.name}</span>
+                      <span className="text-xs">
+                        $ {goal?.saved.toLocaleString()}
+                      </span>
+                    </aside>
+                  </div>
+                </SelectItem>
+              )}
+            </Select>
+          </motion.div>
+        )}
+      </motion.div>
       <Accordion
         defaultExpandedKeys={["1"]}
         showDivider={false}
+        className="m-0 rounded-lg !p-0 !shadow-none"
+        itemClasses={{
+          trigger: "!shadow-none",
+          base: "!px-0 !shadow-none",
+        }}
         motionProps={{
           variants: {
             enter: {
@@ -288,6 +480,7 @@ const CreateMovementsForm = ({ defaultMovement }: any) => {
               <Select
                 items={categories ?? []}
                 placeholder="Seleccione una categoría"
+                isLoading={categoryisLoading}
                 label="Categoría"
                 classNames={{
                   label: "group-data-[filled=true]:-translate-y-5",
@@ -315,11 +508,10 @@ const CreateMovementsForm = ({ defaultMovement }: any) => {
                 {(category) => (
                   <SelectItem
                     color="primary"
-                    onClick={() => setValue("categoryId", category.id)}
+                    onPress={() => setValue("categoryId", category.id)}
                     key={category.id}
                     className="font-montserrat dark:text-white"
                     textValue={category.name}
-                    value={category.id}
                   >
                     {category.name}
                   </SelectItem>
@@ -329,6 +521,7 @@ const CreateMovementsForm = ({ defaultMovement }: any) => {
                 items={entities ?? []}
                 placeholder="Seleccionar entidad"
                 label="Entidad"
+                isLoading={entitiesIsLoading}
                 defaultSelectedKeys={defaultEntity ?? query.entity}
                 classNames={{
                   label: "group-data-[filled=true]:-translate-y-5",
@@ -366,7 +559,7 @@ const CreateMovementsForm = ({ defaultMovement }: any) => {
                     <SelectItem
                       color="primary"
                       variant="solid"
-                      onClick={() => {
+                      onPress={() => {
                         entity.id && setValue("entityId", entity.id);
                       }}
                       key={entity.id}
@@ -392,9 +585,9 @@ const CreateMovementsForm = ({ defaultMovement }: any) => {
       </Accordion>
       <div className="flex gap-2">
         <Button type="submit" color="primary">
-          Crear Movimiento
+          {mode === "create" ? "Crear Movimiento" : "Editar Movimiento"}
         </Button>
-        <Button type="button" onClick={() => router.back()}>
+        <Button type="button" onPress={() => router.back()}>
           Cancelar
         </Button>
       </div>

@@ -3,10 +3,11 @@ import { usePathname, useParams } from "next/navigation";
 import NavigationBack from "./NavigationBack";
 
 import { useCurrentAccount } from "~/modules/Account/hooks";
-import { Avatar } from "@nextui-org/react";
+import { Avatar } from "@heroui/react";
 import { useSession } from "next-auth/react";
 import ButtonMenu from "./ButtonMenu";
 import Link from "next/link";
+import { DASHBOARD_MAIN_PATH } from "~/lib/constants/config";
 
 const HeaderMobile = ({ title = "Dashboard" }: { title?: string }) => {
   const pathname = usePathname();
@@ -15,17 +16,16 @@ const HeaderMobile = ({ title = "Dashboard" }: { title?: string }) => {
   const { account } = useCurrentAccount();
 
   return (
-    <header className="z-10 flex w-full items-center justify-between px-content py-2">
+    <header className="z-10 flex w-full items-center justify-between px-content py-3 md:hidden">
       <aside className="flex items-center gap-3">
-        {pathname?.includes("main") || pathname === "/account" ? (
+        {pathname === `${DASHBOARD_MAIN_PATH}/${params?.bookId}` ? (
           <aside className="flex items-center gap-3">
             <Avatar
-              isBordered
               aria-label="User logged"
               classNames={{
                 name: "text-primary-foreground",
               }}
-              color={Boolean(data?.user.image) ? "primary" : "default"}
+              color={"primary"}
               src={data?.user.image || undefined}
               name={data?.user.name || ""}
               as={Link}
@@ -42,12 +42,7 @@ const HeaderMobile = ({ title = "Dashboard" }: { title?: string }) => {
           <>
             <NavigationBack />
             <div className="flex flex-col items-start justify-center">
-              {account?.name && (
-                <span className="text-xs text-gray-600 dark:text-slate-200">
-                  {account?.name}
-                </span>
-              )}
-              <h1 className="text-xl font-semibold text-primary md:text-2xl dark:text-slate-200">
+              <h1 className=" text-2xl font-semibold text-primary dark:text-slate-200">
                 {title}
               </h1>
             </div>

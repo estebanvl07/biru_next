@@ -1,84 +1,91 @@
 import React, { useEffect, useState } from "react";
 import {
-  AnnualBalance,
   Balance,
   BalanceAccount,
   CategoriesPercent,
   LastTransactions,
 } from "../Common";
-import GoalList from "../Goals/widget/GoalList";
-import { useCurrentAccount } from "../Account/hooks";
-import { PieChartAmountByCategoires } from "../Charts";
-import QuickTransaction from "../components/molecules/QuickTransaction";
 import { ReactSortable } from "react-sortablejs";
 import clsx from "clsx";
 import { api } from "~/utils/api";
 import { getPercent } from "~/lib/helpers";
 import { OrderComponent, UI_ORDER } from "~/lib/constants/ui";
+import { PieChartAmountByCategoires } from "../Charts";
+import { useBookBalance } from "../Books/hooks/useBooks.hook";
 
 const DesktopDashboard = () => {
-  const { account, isLoading } = useCurrentAccount();
-  const { data: balance } = api.userAccount.getBalance.useQuery();
+  const { balance, isLoading } = useBookBalance();
   const { data: defaultSetting } = api.users.getUiSetting.useQuery();
   const { mutate } = api.users.setSetting.useMutation();
 
-  const widgets: { [Key: string]: JSX.Element } = {
-    total_balance: (
-      <Balance
-        title="Total de Cuenta"
-        amount={account?.balance || 0}
-        isLoading={isLoading}
-        color="bg-green-500/30 text-green-600"
-        percent="10%"
-        titlePercent="De Ingresos"
-      />
-    ),
-    income_balance: (
-      <Balance
-        title="Total de Ingresos"
-        amount={balance?.incomes || 0}
-        isLoading={isLoading}
-        color="bg-green-500/30 text-green-600"
-        percent={getPercent(
-          balance?.incomes || 0,
-          balance?.transactonTotal || 0,
-        )}
-        titlePercent="De Ingresos"
-      />
-    ),
-    egress_balance: (
-      <Balance
-        title="Total de Engresos"
-        amount={balance?.egress || 0}
-        color="bg-red-500/30 text-red-600"
-        percent={getPercent(
-          balance?.egress || 0,
-          balance?.transactonTotal || 0,
-        )}
-        titlePercent="De Egresos"
-      />
-    ),
-    savings_balance: (
-      <Balance
-        title="Total de Ahorros"
-        amount={balance?.savings || 0}
-        color="bg-default-300/30 text-default-500"
-        percent={getPercent(
-          balance?.savings || 0,
-          balance?.transactonTotal || 0,
-        )}
-        titlePercent="De Egresos"
-      />
-    ),
-    account_balance: <BalanceAccount className="h-fit" />,
-    goal_list: <GoalList />,
-    balance_by_categories: <PieChartAmountByCategoires />,
-    last_transactions: (
-      <LastTransactions transactionsMaxLength={6} cardClassName="h-full" />
-    ),
-    quick_transaction: <QuickTransaction />,
-    categories_percent: <CategoriesPercent />,
-    annual_balance: <AnnualBalance />,
+  const widgets: {
+    [Key: string]: { children: JSX.Element; className: string };
+  } = {
+    total_balance: {
+      className: "col-span-1",
+      children: (
+        <Balance
+          title="Total de Cuenta"
+          amount={balance?.transactionTotal || 0}
+          isLoading={isLoading}
+          color="default"
+          percent="10%"
+          titlePercent="De Ingresos"
+        />
+      ),
+    },
+    income_balance: {
+      className: "col-span-1",
+      children: (
+        <Balance
+          title="Total de Ingresos"
+          amount={balance?.incomes || 0}
+          isLoading={isLoading}
+          color="success"
+          percent={getPercent(
+            balance?.incomes || 0,
+            balance?.transactionTotal || 0,
+          )}
+          titlePercent="De Ingresos"
+        />
+      ),
+    },
+    egress_balance: {
+      className: "col-span-1",
+      children: (
+        <Balance
+          title="Total de Engresos"
+          amount={balance?.egress || 0}
+          color="danger"
+          percent={getPercent(
+            balance?.egress || 0,
+            balance?.transactionTotal || 0,
+          )}
+          titlePercent="De Egresos"
+        />
+      ),
+    },
+    last_transactions: {
+      className: "col-span-2",
+      children: (
+        <LastTransactions transactionsMaxLength={3} cardClassName="h-full" />
+      ),
+    },
+    balance_by_categories: {
+      className: "col-span-1 row-span-2",
+      children: <PieChartAmountByCategoires />,
+    },
+    account_balance: {
+      className: "col-span-2",
+      children: (
+        <BalanceAccount
+          chartOptions={{
+            heightChart: "150",
+          }}
+          className="col-span-2 h-fit"
+        />
+      ),
+    },
   };
 
   const [list, setList] = useState<OrderComponent[]>();
@@ -109,11 +116,11 @@ const DesktopDashboard = () => {
           list={list || []}
           setList={setList}
           animation={600}
-          className="grid grid-cols-4 grid-rows-[130px] gap-2"
+          className="grid grid-cols-3 gap-2"
         >
           {list?.map((option) => (
-            <div key={option.id} className={clsx(option.className)}>
-              {widgets[option.name]}
+            <div key={option.id} className={widgets[option.name]?.className}>
+              {widgets[option.name]?.children}
             </div>
           ))}
         </ReactSortable>

@@ -1,7 +1,7 @@
 import React, { ReactElement } from "react";
 
 import { Icon } from "@iconify/react/dist/iconify.js";
-import { Listbox, ListboxItem } from "@nextui-org/listbox";
+import { Listbox, ListboxItem } from "@heroui/listbox";
 
 interface SectionsProps {
   title?: string;
@@ -17,7 +17,7 @@ interface SectionsProps {
 
 const Section = ({ title, options }: SectionsProps) => {
   return (
-    <section className="mb-4">
+    <section>
       {title && (
         <h4 className="mb-2 font-semibold text-primary dark:text-indigo-300">
           {title}

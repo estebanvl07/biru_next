@@ -1,7 +1,7 @@
 import type { FC } from "react";
 import type { ActivationResultProps } from "./ActivationResult.types";
 import { Icon } from "@iconify/react/dist/iconify.js";
-import { Button } from "@nextui-org/button";
+import { Button } from "@heroui/button";
 import Link from "next/link";
 import { BasicLayout } from "~/modules/Layouts";
 import { ICONS, MESSAGES } from "./ActivationResult.constants";
@@ -37,7 +37,7 @@ const ActivationCTA: FC<ActivationResultProps> = ({ status }) => {
 export const ActivationResult: FC<ActivationResultProps> = ({ status }) => {
   return (
     <BasicLayout>
-      <div className="z-10 flex flex-col items-center justify-center px-6">
+      <div className="z-10 flex h-full flex-col items-center justify-center px-6">
         <ActivationIcon status={status} />
         <ActivationMessage status={status} />
         <ActivationCTA status={status} />

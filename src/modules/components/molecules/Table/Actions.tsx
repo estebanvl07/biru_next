@@ -1,5 +1,12 @@
-import { Icon } from "@iconify/react/dist/iconify.js";
-import { Tooltip } from "@nextui-org/react";
+import {
+  Dropdown,
+  DropdownItem,
+  DropdownMenu,
+  DropdownTrigger,
+} from "@heroui/react";
+import clsx from "clsx";
+import { Edit2Icon, EllipsisVertical, Eye, Trash2 } from "lucide-react";
+import React from "react";
 
 interface ActionsProps {
   detailText?: string;
@@ -28,41 +35,46 @@ const Actions = ({
 }: ActionsProps) => {
   return (
     <div className="relative flex items-center gap-2">
-      {children}
-      {hasView && (
-        <Tooltip content={detailText} className="font-montserrat">
-          <span
-            className="cursor-pointer text-lg text-default-400 active:opacity-50"
-            onClick={onClickView}
+      <Dropdown>
+        <DropdownTrigger>
+          <EllipsisVertical width={20} />
+        </DropdownTrigger>
+        <DropdownMenu className="font-montserrat">
+          <DropdownItem
+            startContent={<Eye width={20} />}
+            className={clsx({
+              hidden: !hasView,
+            })}
+            onPress={onClickView}
+            key="detail"
           >
-            <Icon icon="ph:eye" width={24} />
-          </span>
-        </Tooltip>
-      )}
-      {hasEdit && (
-        <Tooltip content={editText} className="font-montserrat">
-          <span
-            className="cursor-pointer text-lg text-default-400 active:opacity-50"
-            onClick={onClickEdit}
+            {detailText}
+          </DropdownItem>
+
+          <DropdownItem
+            startContent={<Edit2Icon width={20} />}
+            hidden={!hasEdit}
+            className={clsx({
+              hidden: !hasEdit,
+            })}
+            onPress={onClickEdit}
+            key="edit"
           >
-            <Icon icon="akar-icons:edit" width={24} />
-          </span>
-        </Tooltip>
-      )}
-      {hasDelete && (
-        <Tooltip
-          color="danger"
-          content={deleteText}
-          className="font-montserrat"
-        >
-          <span
-            className="cursor-pointer text-lg text-danger active:opacity-50"
-            onClick={onClickDelete}
+            {editText}
+          </DropdownItem>
+          <DropdownItem
+            startContent={<Trash2 width={20} />}
+            className={clsx({
+              hidden: !hasDelete,
+            })}
+            onPress={onClickDelete}
+            key="delete"
           >
-            <Icon icon="tabler:trash" width={24} />
-          </span>
-        </Tooltip>
-      )}
+            {deleteText}
+          </DropdownItem>
+          {children as JSX.Element}
+        </DropdownMenu>
+      </Dropdown>
     </div>
   );
 };

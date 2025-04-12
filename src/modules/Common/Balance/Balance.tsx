@@ -1,13 +1,7 @@
 import React from "react";
-import clsx from "clsx";
 
-import { Card, Empty } from "~/modules/components";
-import { LineChart } from "~/modules/Charts";
-
-import { useResize } from "~/lib/hooks/useResize";
 import { Series } from "~/types/chart.types";
-import { Spinner, Tooltip, Chip, Skeleton } from "@nextui-org/react";
-import { parseAmount } from "~/lib/helpers";
+import { Card, CardBody, CardHeader, Chip, Skeleton } from "@heroui/react";
 
 type Props = {
   cardClassName?: string;
@@ -18,52 +12,61 @@ type Props = {
   title: string;
   isLoading?: boolean;
   iconClassName?: string;
+  icon?: string;
   color?: string;
   badgeColor?: string;
   titlePercent?: string;
 };
 
-const CardDetailAmount = React.memo(
+const SummaryCard = React.memo(
   ({
     title,
     amount,
     color,
     percent,
     isLoading,
+    icon,
+    iconClassName,
     cardClassName,
     titlePercent,
   }: Props) => {
     return (
-      <Card
-        className={clsx(
-          "flex h-full flex-grow flex-col overflow-hidden",
-          cardClassName,
-        )}
-      >
-        <h4 className="md:mb-4">{title}</h4>
-        {isLoading ? (
-          <div>
-            <Skeleton />
-            <Skeleton />
+      <Card className="h-full border border-divider px-4 py-2 shadow-sm">
+        <CardHeader>
+          <div className="flex items-center justify-between">
+            <h4>{title}</h4>
           </div>
-        ) : (
-          <div className="flex h-full flex-col justify-end">
-            <span className="text-nowrap text-3xl font-medium">
-              $ {amount.toLocaleString()}
-            </span>
-            {percent && (
-              <p className="text-nowrap !text-xs">
-                <Chip size="sm" variant="flat" className={color}>
-                  {percent}
-                </Chip>{" "}
-                {titlePercent}
-              </p>
-            )}
-          </div>
-        )}
+        </CardHeader>
+        <CardBody>
+          {isLoading ? (
+            <div>
+              <Skeleton />
+              <Skeleton />
+            </div>
+          ) : (
+            <div className="full flex flex-col justify-end">
+              <span className="whitespace-nowrap text-2xl font-semibold">
+                $ {amount.toLocaleString()}
+              </span>
+              {percent && (
+                <div className="flex items-center gap-2">
+                  <p className="text-nowrap !text-xs">{titlePercent}</p>
+                  <Chip
+                    size="sm"
+                    variant="dot"
+                    className="items-center border-none px-0"
+                    color={color as any}
+                  >
+                    <span>{percent}</span>
+                  </Chip>
+                </div>
+              )}
+            </div>
+          )}
+        </CardBody>
       </Card>
     );
   },
 );
 
-export default CardDetailAmount;
+export default SummaryCard;

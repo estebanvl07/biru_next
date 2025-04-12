@@ -1,7 +1,7 @@
 import clsx from "clsx";
 import { FC, useCallback } from "react";
 
-import { Card, Table } from "~/modules/components";
+import { Table } from "~/modules/components";
 import { ListTransactions } from "~/modules/Common";
 
 import Link from "next/link";
@@ -13,6 +13,7 @@ import {
 import { LoaderSkeleton } from "~/modules/Loaders";
 
 import type { TransactionIncludes } from "~/types/transactions";
+import { Card, CardHeader } from "@heroui/react";
 
 interface LastTransactionsProps {
   transactions?: TransactionIncludes[] | undefined;
@@ -34,9 +35,14 @@ const LastTransactions: FC<LastTransactionsProps> = ({
   const formatted = formatterTransactions(transactions as any);
 
   return (
-    <Card className={clsx("flex flex-col !px-0 py-4", cardClassName)}>
+    <Card
+      className={clsx(
+        "flex flex-col border border-divider !px-4 py-2 shadow-sm",
+        cardClassName,
+      )}
+    >
       {showHeader && (
-        <div className="mb-4 flex items-center justify-between px-content md:px-6">
+        <CardHeader className="flex items-center justify-between">
           <h3>Últimas Transacciones</h3>
           <Link
             href={{
@@ -47,7 +53,7 @@ const LastTransactions: FC<LastTransactionsProps> = ({
           >
             Ver todas
           </Link>
-        </div>
+        </CardHeader>
       )}
       {isLoading ? (
         <LoaderSkeleton skeletonType="ListItem" />

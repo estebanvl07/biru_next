@@ -123,9 +123,9 @@ const CategoriesPercent = () => {
               modules={[Pagination]}
               className="mySwiper w-full"
             >
-              {chartPieInfo.map((info) => {
+              {chartPieInfo.map((info, index) => {
                 return (
-                  <SwiperSlide key={info.category?.id}>
+                  <SwiperSlide key={index}>
                     <SpendingParams
                       category={info.category}
                       percent={getPercent(info.amount, totalBalance)}

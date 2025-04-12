@@ -3,6 +3,7 @@ import TransactionForm from "./TransactionForm";
 import { TransactionIncludes } from "~/types/transactions";
 import Dialog from "../components/molecules/Dialog.component";
 import { GoalsIncludes } from "~/types/goal/goal.types";
+import CustomDrawer from "../components/molecules/CustomDrawer";
 
 type FormSetting = {
   transferType?: "transfer" | "goals";
@@ -23,13 +24,10 @@ const EditTransaction = ({
   options,
 }: EditTransactionProps) => {
   return (
-    <Dialog
+    <CustomDrawer
       title={`Editar Transacción (${transaction.transferType === 1 ? "Movimiento" : "Meta"})`}
       subtitle="Actualiza los detalles de tus ingresos o gastos"
       isOpen={isOpen}
-      classNames={{
-        content: "h-[98vh]",
-      }}
       onClose={onClose}
     >
       <TransactionForm
@@ -39,7 +37,7 @@ const EditTransaction = ({
         defaultGoal={options?.defaultGoal}
         onSuccess={onClose}
       />
-    </Dialog>
+    </CustomDrawer>
   );
 };
 

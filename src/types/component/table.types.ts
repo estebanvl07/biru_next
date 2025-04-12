@@ -1,17 +1,31 @@
+import { SharedSelection } from "@heroui/system";
+import {
+  type SelectionMode,
+  TableProps as TableHeroProps,
+} from "@heroui/table";
 import { Dispatch, SetStateAction } from "react";
 
+export type FilterValidate = { by: string; value: string | number };
 export interface TopContentProps {
   title?: string;
   hasSearch?: boolean;
   hasExport?: boolean;
   hasNew?: boolean;
+  hasFilters?: boolean;
   lenght?: number;
+  visibleColumns?: SharedSelection;
+  setVisibleColumns?: Dispatch<SetStateAction<SharedSelection>>;
+  onCustomSearch?: (value: string) => void;
+  isQueryLoading?: boolean;
   redirectTo?: string;
   inputPlaceholder?: string;
+  columns?: ColumnsProps[];
+  filterBy?: FilterByProps[];
   filterValue?: string;
   setFilterValue?: Dispatch<SetStateAction<string>>;
   onNew?: () => void;
   setPage?: Dispatch<SetStateAction<number>>;
+  onChangeFilters: (filters: FilterValidate[]) => void;
   setRowsPerPage?: Dispatch<SetStateAction<number>>;
   newButtonText?: string;
 }
@@ -21,19 +35,36 @@ export interface BottomConfig {
   navButtons?: boolean;
 }
 
-type ColumnsProps = {
+export type ColumnsProps = {
   uid: string;
   name: string;
   align?: "start" | "center" | "end";
-  sorting?: boolean;
+  sortable?: boolean;
 };
 
-export interface TableProps<T> {
-  headerConfig: TopContentProps;
+export type FilterByProps = {
+  by: string;
+  title: string;
+  selectionMode?: SelectionMode;
+  onChangeFilters?: (opt: FilterValidate) => void;
+  options: { text: string; value: string | number }[];
+};
+export interface TableProps<T> extends Omit<TableHeroProps<T>, "children"> {
+  headerConfig: Omit<
+    TopContentProps,
+    | "columns"
+    | "filterBy"
+    | "onChangeFilters"
+    | "setVisibleColumns"
+    | "visibleColumns"
+  >;
   columns: ColumnsProps[];
   footerConfig?: BottomConfig;
+  pages?: number;
   hasTopContent?: boolean;
+  onChangeTable?: (page: number, limit: number) => void;
   hasBottomContent?: boolean;
+  filterBy?: FilterByProps[];
   filterKeys?: string | string[];
   renderCell?: (item: any, columnKey: any) => void;
   isLoading?: boolean;

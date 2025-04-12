@@ -3,7 +3,7 @@ import { useRouter } from "next/router";
 import { useResize } from "~/lib/hooks/useResize";
 import { useGoals } from "~/modules/Goals/hook/goal.hook";
 
-import { Tab, Tabs } from "@nextui-org/react";
+import { Tab, Tabs } from "@heroui/react";
 import TransactionForm from "~/modules/Transactions/TransactionForm";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import { Card, Empty } from "~/modules/components";
@@ -12,6 +12,7 @@ import Dialog from "../components/molecules/Dialog.component";
 import { GoalsIncludes } from "~/types/goal/goal.types";
 import { CategoryIncludes } from "~/types/category/category.types";
 import { EntityIncludes } from "~/types/entities/entity.types";
+import CustomDrawer from "../components/molecules/CustomDrawer";
 
 export type FormSetting = {
   transferType?: "transfer" | "goal";
@@ -40,18 +41,15 @@ const CreateTransaction = ({
   const { goals, isLoading: goalIsLoading } = useGoals();
 
   return (
-    <Dialog
+    <CustomDrawer
       title="Crear Transacción"
       subtitle="Añade transacciones para mantener tus finanzas al día"
       isOpen={isOpen}
       onClose={onClose}
-      classNames={{
-        content: "h-[98vh]",
-      }}
     >
       {options.onlyForm ? (
         <TransactionForm
-          mode="edit"
+          mode="create"
           defType={options.defaultType}
           type={options.transferType ?? "transfer"}
           defaultGoal={options.defaultGoal}
@@ -126,7 +124,7 @@ const CreateTransaction = ({
           </Tab>
         </Tabs>
       )}
-    </Dialog>
+    </CustomDrawer>
   );
 };
 

@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
-import { useWebSocket } from '~/lib//hooks/useWebSocket';
+import React, { useState } from "react";
+// import { useWebSocket } from '~/lib//hooks/useWebSocket';
 
+// TODO: web socket
 const WebSocketComponent = () => {
   // const [message, setMessage] = useState('');
-  const { isConnected, transport } = useWebSocket();
+  // const { isConnected, transport } = useWebSocket();
 
   // const handleSubmit = (event: React.FormEvent) => {
   //   event.preventDefault();
@@ -16,10 +17,10 @@ const WebSocketComponent = () => {
       <h1>Componente WebSocket</h1>
 
       <div>
-      <p>Status: { isConnected ? "connected" : "disconnected" }</p>
-      <p>Transport: { transport }</p>
-    </div>
-{/* 
+        {/* <p>Status: { isConnected ? "connected" : "disconnected" }</p>
+      <p>Transport: { transport }</p> */}
+      </div>
+      {/* 
       <form onSubmit={handleSubmit}>
         <input
           type="text"

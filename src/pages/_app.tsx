@@ -3,7 +3,7 @@ import { type AppType } from "next/app";
 import { Inter, Montserrat, Mukta, Poppins, Ubuntu } from "next/font/google";
 
 import { api } from "~/utils/api";
-import { NextUIProvider } from "@nextui-org/react";
+import { HeroUIProvider } from "@heroui/react";
 
 import { type Session } from "next-auth";
 
@@ -29,17 +29,16 @@ const MyApp: AppType<{ session: Session | null }> = ({
 }) => {
   return (
     <SessionProvider session={session}>
-      <NextUIProvider>
+      <HeroUIProvider>
         <ThemeProvider>
           <FilterProvider>
-            <div className={`font-sans ${poppins.variable}`}>
+            <div className={`font-sans ${montserrat.variable}`}>
               <div id="portal-root"></div>
               <Component {...pageProps} />
             </div>
-            <Toaster />
           </FilterProvider>
         </ThemeProvider>
-      </NextUIProvider>
+      </HeroUIProvider>
     </SessionProvider>
   );
 };

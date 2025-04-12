@@ -2,7 +2,7 @@ import React from "react";
 import { Icon } from "@iconify/react";
 import IconItem from "./iconItem.component";
 import { useGetIcons } from "./useGetIcons";
-import { Button, Input } from "@nextui-org/react";
+import { Button, Input } from "@heroui/react";
 
 interface IconSearchResult {
   selected: (icon: string) => void;

@@ -24,46 +24,93 @@ interface FilterByTypeProps {
   options: FilterOptions;
 }
 
-export const useTransactions = (options: FilterOptions) => {
+interface TablePagination {
+  limit: number;
+  page: number;
+}
+
+export const useTransactionsTable = (pagination: TablePagination) => {
   const params = useParams();
   const queryClient = useQueryClient();
-  const accountId = params?.acc ? String(params?.acc) : undefined;
+  const bookId = String(params?.bookId);
 
   const transactionKey = useMemo(() => {
     return getQueryKey(
       api.transaction.getTransactions,
       {
-        accountId: Number(accountId),
-        filter: options?.filter ?? FILTERS.none,
-        startDate: options?.startDate,
-        endDate: options?.endDate,
+        bookId: bookId!,
+        ...pagination,
       },
       "query",
     );
-  }, [accountId, options]);
+  }, [bookId, pagination]);
 
   const hasTransactionsCached = useMemo(() => {
     const transactionCache = queryClient.getQueryData(transactionKey);
     return Boolean(transactionCache);
   }, [transactionKey, queryClient]);
 
-  const { data, isLoading } = api.transaction.getTransactions.useQuery(
+  const { data, isLoading, refetch } = api.transaction.getTransactions.useQuery(
     {
-      accountId: Number(accountId),
+      bookId: bookId!,
+      ...pagination,
+    },
+    {
+      enabled: !!bookId && !hasTransactionsCached,
+    },
+  );
+
+  const invalidateTractionsTable = async () => {
+    queryClient.removeQueries({ queryKey: transactionKey });
+    await queryClient.invalidateQueries({ queryKey: transactionKey });
+  };
+
+  return {
+    transactions: data?.transaction,
+    total: data?.total,
+    totalPages: data?.totalPages,
+    invalidateTractionsTable,
+    refetch,
+    isLoading,
+  };
+};
+
+export const useTransactions = (options: Omit<FilterOptions, "bookId">) => {
+  const params = useParams();
+  const queryClient = useQueryClient();
+  const bookId = String(params?.bookId);
+
+  const transactionKey = useMemo(() => {
+    return getQueryKey(
+      api.transaction.getTransactionsByFilter,
+      {
+        bookId: bookId!,
+        filter: options?.filter ?? FILTERS.none,
+        startDate: options?.startDate,
+        endDate: options?.endDate,
+      },
+      "query",
+    );
+  }, [bookId, options]);
+
+  const hasTransactionsCached = useMemo(() => {
+    const transactionCache = queryClient.getQueryData(transactionKey);
+    return Boolean(transactionCache);
+  }, [transactionKey, queryClient]);
+
+  const { data, isLoading } = api.transaction.getTransactionsByFilter.useQuery(
+    {
+      bookId: bookId!,
       filter: options?.filter ?? FILTERS.none,
       startDate: options?.startDate,
       endDate: options?.endDate,
     },
     {
-      enabled: !!accountId && !hasTransactionsCached,
+      enabled: !!bookId && !hasTransactionsCached,
     },
   );
 
-  const refreshTransactions = useCallback(() => {
-    queryClient.invalidateQueries(transactionKey as any);
-  }, [queryClient, transactionKey]);
-
-  return { transactions: data!, isLoading, refreshTransactions };
+  return { transactions: data! as TransactionIncludes[], isLoading };
 };
 
 export const useFilterByType = ({ type, options }: FilterByTypeProps) => {

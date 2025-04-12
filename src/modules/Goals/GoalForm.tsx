@@ -12,7 +12,7 @@ import {
   SelectItem,
   Textarea,
   User,
-} from "@nextui-org/react";
+} from "@heroui/react";
 import { IconSearcher } from "~/modules/Category/IconSelector";
 import { ButtonGroup, InputDate } from "~/modules/components";
 import { Alert } from "~/modules/components/molecules/Alert.component";
@@ -28,6 +28,7 @@ import { useEntity } from "../Entities/hook/entities.hook";
 import { accordionItemAnimate } from "../animations";
 import { toast } from "sonner";
 import { Goals } from "@prisma/client";
+import { useParams } from "next/navigation";
 
 interface GoalFormProps {
   hasEdit?: boolean;
@@ -39,6 +40,7 @@ const GoalForm = ({ hasEdit, goalDefault, onSuccess }: GoalFormProps) => {
   const [goalAmount, setGoalAmount] = useState("");
 
   const router = useRouter();
+  const params = useParams();
   const { entities } = useEntity();
 
   const { isActive, onActive, onDisabled } = useOnActive();
@@ -143,6 +145,12 @@ const GoalForm = ({ hasEdit, goalDefault, onSuccess }: GoalFormProps) => {
     setInitialValues();
   }, []);
 
+  useEffect(() => {
+    if (params.bookId) {
+      setValue("bookId", String(params.bookId));
+    }
+  }, [params]);
+
   return (
     <>
       <Alert isOpen={isOpen} onClose={onClose} {...props} />
@@ -214,7 +222,14 @@ const GoalForm = ({ hasEdit, goalDefault, onSuccess }: GoalFormProps) => {
           isInvalid={Boolean(errors?.goal)}
           errorMessage={errors?.goal?.message}
         />
-        <Accordion motionProps={accordionItemAnimate}>
+        <Accordion
+          className="m-0 rounded-lg !p-0 !shadow-none"
+          itemClasses={{
+            trigger: "!shadow-none",
+            base: "!px-0 !shadow-none",
+          }}
+          motionProps={accordionItemAnimate}
+        >
           <AccordionItem
             key="1"
             title="Información Adicional"

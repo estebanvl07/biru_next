@@ -1,35 +1,30 @@
 const columns = [
   {
-    name: "ID",
-    uid: "id",
-    sortable: false,
-  },
-  {
-    name: "NOMBRE",
+    name: "Nombre",
     uid: "name",
     sortable: true,
   },
   {
-    name: "CATEGORÍA",
+    name: "Categoría",
     uid: "categoryId",
     sortable: true,
   },
   {
-    name: "TIPO",
+    name: "Tipo",
     uid: "type",
   },
   {
-    name: "SIGUIENTE OCURRENCIA",
+    name: "Siguiente Ocurrencia",
     uid: "next_ocurrence",
     sortable: true,
   },
   {
-    name: "ESTADO",
+    name: "Estado",
     uid: "status",
     sortable: true,
   },
   {
-    name: "ACTIONS",
+    name: "Acciones",
     uid: "actions",
   },
 ];

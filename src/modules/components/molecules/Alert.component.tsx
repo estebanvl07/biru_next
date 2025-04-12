@@ -1,8 +1,8 @@
 import clsx from "clsx";
 
-import { Modal, ModalBody, ModalContent, ModalFooter } from "@nextui-org/modal";
+import { Modal, ModalBody, ModalContent, ModalFooter } from "@heroui/modal";
 import { Icon } from "@iconify/react/dist/iconify.js";
-import { Button, ButtonProps } from "@nextui-org/button";
+import { Button, ButtonProps } from "@heroui/button";
 
 type TypeAlerts = "success" | "warning" | "error" | "info" | "quest";
 

@@ -14,38 +14,136 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model UserAccount {
-  id           Int           @id @default(autoincrement())
-  name         String
-  type         Int
-  balance      Int?          @default(0)
-  reference    String?
-  state        Int?          @default(1) // 1: activo, 0: inactivo
-  createdAt    DateTime      @default(now())
-  updatedAt    DateTime      @updatedAt
-  lastAccess   DateTime?     @default(now())
-  userId       String
-  user         User          @relation(fields: [userId], references: [id], onDelete: Cascade)
-  transactions Transaction[]
-  fixedMovements FixedMovements[]
+
+enum ModuleType {
+  GOAL
+  TRANSACCION
+  CATEGORY
+  ENTITY
+  MOVEMENT
+  // Otros tipos de notificación según los módulos
 }
 
-model Goals {
-  id           Int           @id @default(autoincrement())
-  name         String
-  description  String?
-  icon         String?
-  goal         Int
-  saved        Int           @default(0)
-  type         Int           @default(1) // 1:Ingreso, 2:Egreso
-  state        Int           @default(1) // 1:En curso, 2: Terminado, 3: Cancelado 
+
+// config
+// Necessary for Next auth
+model Account {
+  id                String   @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? // @db.Text
+  access_token      String? // @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? // @db.Text
+  session_state     String?
+  user              User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt         DateTime @default(now())
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
   userId       String
-  goalDate     DateTime?
-  entityId     Int?
-  createdAt    DateTime      @default(now())
-  updatedAt    DateTime      @updatedAt
-  transactions Transaction[]
-  entity       Entities?     @relation(fields: [entityId], references: [id])
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model User {
+  id                   String                 @id @default(cuid())
+  email                String                 @unique
+  name                 String?
+  emailVerified        DateTime?
+  image                String?
+  createdAt            DateTime               @default(now())
+  userAccount          UserAccount[]
+  accounts             Account[]
+  category             Category[]
+  contacts             Entities[]
+  templates            Templates[]
+
+
+  sessions             Session[]
+  userPassword         UserPassword?
+  setting              UserSetting?
+  userVerificationCode UserVerificationCode[]
+  notifications        Notifications[]
+  books                Book[]
+}
+
+model Notifications {
+  id          String      @id @default(uuid())
+  userId      String     // Relación con el modelo User
+  type        ModuleType // Enum que representa el módulo o tipo de notificación
+  title       String      @db.VarChar(60)
+  link        String?
+  message     String
+  isRead      Boolean     @default(false)
+  createdAt   DateTime    @default(now())
+  viewedAt    DateTime?  // Fecha opcional, solo si ya fue vista
+  metadata    Json?      // Datos adicionales específicos para cada tipo de notificación
+  
+  // Relación con el usuario
+  user        User       @relation(fields: [userId], references: [id])
+  @@index([userId])
+}
+
+model Book {
+  id            String @id @default(uuid())
+  name          String
+  description   String
+  userId        String
+  type          Int           // 1: personal, 2: business, 3: family
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+  lastAccess    DateTime?     @default(now())
+  transactions  Transaction[]
+  movements     FixedMovements[]
+  goals         Goals[]
+  accounts      UserAccount[]
+  user          User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+// Admins
+
+model Category {
+  id            Int           @id @default(autoincrement())
+  name          String
+  type          Int
+  icon          String?
+  description   String?
+  state         Int           @default(1) // 1: activo, 0: inactivo
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+  userId        String
+  transactions  Transaction[]
+  movements     FixedMovements[]
+
+  user          User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Entities {
+  id            Int           @id @default(autoincrement())
+  name          String
+  userId        String
+  description   String?
+  avatar        String?
+  type          Int? // 1 : ingreso, 0: egreso
+  state         Int           @default(1) //1: activo, 0: inactivo
+  reference     String?       @unique
+  createdAt     DateTime      @default(now())
+  updateAt      DateTime      @updatedAt
+  
+  transactions  Transaction[]
+  goals         Goals[]
+  movements     FixedMovements[]
+
+  user          User          @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model Templates {
@@ -67,42 +165,54 @@ model Templates {
   user         User          @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
-model Entities {
-  id           Int           @id @default(autoincrement())
-  name         String
-  description  String?
-  avatar       String?
-  type         Int? // 1 : ingreso, 0: egreso
-  state        Int           @default(1) //1: activo, 0: inactivo
-  reference    String?       @unique
-  createdAt    DateTime      @default(now())
-  updateAt     DateTime      @updatedAt
-  userId       String
-  user         User          @relation(fields: [userId], references: [id], onDelete: Cascade)
-  transactions Transaction[]
-  goals        Goals[]
-  movements     FixedMovements[]
+// modules
+
+model UserAccount {
+  id            Int           @id @default(autoincrement())
+  name          String
+  type          Int
+  balance       Int?          @default(0)
+  reference     String?
+  isMain        Boolean?      @default(false)
+  state         Int?          @default(1) // 1: activo, 0: inactivo
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+  bookId        String
+  userId        String
+
+  user          User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  book          Book          @relation(fields: [bookId], references: [id], onDelete: Cascade)
+  
+  transactions    Transaction[]
+  fixedMovements  FixedMovements[]
 }
 
-model Category {
+model Goals {
   id           Int           @id @default(autoincrement())
   name         String
-  type         Int
-  icon         String?
   description  String?
-  state        Int           @default(1) // 1: activo, 0: inactivo
-  createdAt    DateTime      @default(now())
-  updatedAt    DateTime      @updatedAt
+  icon         String?
+  goal         Int
+  saved        Int           @default(0)
+  type         Int           @default(1) // 1:Ingreso, 2:Egreso
+  state        Int           @default(1) // 1:En curso, 2: Terminado, 3: Cancelado 
   userId       String
-  user         User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  goalDate     DateTime?
+  entityId     Int?
+  bookId       String
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
   transactions Transaction[]
-  movements   FixedMovements[]
+  fixedMovements FixedMovements[]
+  entity       Entities?      @relation(fields: [entityId], references: [id])
+  book         Book           @relation(fields: [bookId], references: [id])
 }
 
 model Transaction {
   id           Int             @id @default(autoincrement())
-  accountId    Int
+  accountId    Int?
   userId       String
+  bookId       String
   amount       Int
   type         Int
   transferType Int?            @default(1) // 1: normal, 2: ahorro
@@ -115,17 +225,52 @@ model Transaction {
   reference    String?
   categoryId   Int?
   templateId   Int?
-  state        Int?            @default(1) // 1: activo, 0: inactivo
+  state        Int?            @default(1) // 1: confirmado, 2: cancelado, 3: programado
   createdAt    DateTime        @default(now())
   updatedAt    DateTime        @updatedAt
-  user         User            @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userAccount  UserAccount     @relation(fields: [accountId], references: [id], onDelete: Cascade)
+
+  book         Book            @relation(fields: [bookId], references: [id], onDelete: Cascade)
+  userAccount  UserAccount?     @relation(fields: [accountId], references: [id], onDelete: Cascade)
+
   category     Category?       @relation(fields: [categoryId], references: [id], onDelete: Cascade)
   entity       Entities?       @relation(fields: [entityId], references: [id], onDelete: Cascade)
   movent       FixedMovements? @relation(fields: [fiexedId], references: [id], onDelete: Cascade)
   goal         Goals?          @relation(fields: [goalId], references: [id], onDelete: Cascade)
   Templates    Templates?      @relation(fields: [templateId], references: [id], onDelete: Cascade)
 }
+
+model FixedMovements {
+  id             Int      @id @default(autoincrement())
+  userId         String
+  name           String
+  type           Int    @default(1)
+  amount         Int
+  bookId         String
+  status         Boolean @default(true)
+  accountId      Int?
+  reminder_date  DateTime // fecha para enviar recordatorio
+  reminder_sent  Boolean?  @default(true) // recordatorio enviado
+  next_ocurrence DateTime
+  goalId         Int?
+  entityId       Int?
+  categoryId     Int?
+  last_ocurrence DateTime?
+  frecuency      Int   @default(30) // in days
+  description    String?
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  entity        Entities? @relation(fields: [entityId], references: [id], onDelete: Cascade)
+  category      Category? @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  goal          Goals? @relation(fields: [goalId], references: [id], onDelete: Cascade)
+  userAccount   UserAccount? @relation(fields: [accountId], references: [id], onDelete: Cascade)
+  book          Book @relation(fields: [bookId], references: [id], onDelete: Cascade)
+  
+  transactions  Transaction[]
+}
+
+
+// config
 
 model UserPassword {
   id        String   @id @default(cuid())
@@ -158,103 +303,5 @@ model UserVerificationCode {
   user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
-model FixedMovements {
-  id             Int      @id @default(autoincrement())
-  userId         String
-  name           String
-  type           Int @default(1)
-  amount         Int
-  status         Boolean @default(true)
-  accountId      Int?
-  reminder_date  DateTime // fecha para enviar recordatorio
-  reminder_sent  Boolean?  @default(true) // recordatorio enviado
-  next_ocurrence DateTime
-  entityId        Int?
-  categoryId      Int?
-  last_ocurrence DateTime?
-  frecuency      Int   @default(30) // in days
-  description    String?
-  createdAt      DateTime @default(now())
-  updatedAt      DateTime @updatedAt
 
-  transactions Transaction[]
-  entity      Entities? @relation(fields: [entityId], references: [id], onDelete: Cascade)
-  category    Category? @relation(fields: [categoryId], references: [id], onDelete: Cascade)
-  userAccount UserAccount? @relation(fields: [accountId], references: [id], onDelete: Cascade)
-  user        User @relation(fields: [userId], references: [id], onDelete: Cascade)
-}
 
-// Necessary for Next auth
-model Account {
-  id                String   @id @default(cuid())
-  userId            String
-  type              String
-  provider          String
-  providerAccountId String
-  refresh_token     String? // @db.Text
-  access_token      String? // @db.Text
-  expires_at        Int?
-  token_type        String?
-  scope             String?
-  id_token          String? // @db.Text
-  session_state     String?
-  user              User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  createdAt         DateTime @default(now())
-
-  @@unique([provider, providerAccountId])
-}
-
-model Session {
-  id           String   @id @default(cuid())
-  sessionToken String   @unique
-  userId       String
-  expires      DateTime
-  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-}
-
-model User {
-  id                   String                 @id @default(cuid())
-  name                 String?
-  email                String                 @unique
-  emailVerified        DateTime?
-  image                String?
-  createdAt            DateTime               @default(now())
-  accounts             Account[]
-  sessions             Session[]
-  userAccount          UserAccount[]
-  category             Category[]
-  transaction          Transaction[]
-  contacts             Entities[]
-  userPassword         UserPassword?
-  setting              UserSetting?
-  userVerificationCode UserVerificationCode[]
-  movements            FixedMovements[]
-  notifications        Notifications[]
-  templates            Templates[]
-}
-
-model Notifications {
-  id          String      @id @default(uuid())
-  userId      String     // Relación con el modelo User
-  type        ModuleType // Enum que representa el módulo o tipo de notificación
-  title       String      @db.VarChar(60)
-  link        String?
-  message     String
-  isRead      Boolean     @default(false)
-  createdAt   DateTime    @default(now())
-  viewedAt    DateTime?  // Fecha opcional, solo si ya fue vista
-  metadata    Json?      // Datos adicionales específicos para cada tipo de notificación
-  
-  // Relación con el usuario
-  user        User       @relation(fields: [userId], references: [id])
-  @@index([userId])
-}
-
-enum ModuleType {
-  GOAL
-  TRANSACCION
-  CATEGORY
-  ENTITY
-  MOVEMENT
-  // Otros tipos de notificación según los módulos
-}

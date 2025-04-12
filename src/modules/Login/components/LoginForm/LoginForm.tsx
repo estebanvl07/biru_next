@@ -1,11 +1,11 @@
 "use client";
-import { Button, Input } from "@nextui-org/react";
+import { Button, Input } from "@heroui/react";
 import { CALLBACK_SIGN_IN_URL } from "~/lib/constants/config";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import { InputPassword } from "~/modules/components";
 import { loginInput, type LoginInputType } from "~/modules/Login/resolver";
 import { signIn } from "next-auth/react";
-import { toast } from "sonner";
+import { toast, Toaster } from "sonner";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/router";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -33,7 +33,7 @@ export const LoginForm = () => {
         const errorMessage = response?.error ?? "Intente mas tarde.";
         throw new Error(errorMessage);
       }
-      await router.replace("/account");
+      await router.replace(CALLBACK_SIGN_IN_URL);
     } catch (error) {
       if (error instanceof Error) {
         toast.error(error.message);
@@ -46,6 +46,7 @@ export const LoginForm = () => {
       className="mt-2 flex w-full flex-col gap-2"
       onSubmit={handleSubmit(onSubmit)}
     >
+      <Toaster position="top-center" />
       <Input
         label="Correo"
         placeholder="john@doe.com"

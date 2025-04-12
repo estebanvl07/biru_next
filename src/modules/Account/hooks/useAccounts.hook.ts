@@ -6,18 +6,23 @@ import { api } from "~/utils/api";
 
 export const useAccounts = () => {
   const queryClient = useQueryClient();
+  const params = useParams();
+  const bookId = String(params?.bookId);
+
   const hasAccountCached = useMemo(() => {
-    const accountKey = getQueryKey(api.userAccount.getAll, undefined, "query");
+    const accountKey = getQueryKey(
+      api.userAccount.getAccountByBook,
+      bookId,
+      "query",
+    );
     const accountsCache = queryClient.getQueryData(accountKey);
     return Boolean(accountsCache);
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [bookId]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  const { data: accounts = [], isLoading } = api.userAccount.getAll.useQuery(
-    undefined,
-    {
-      enabled: !hasAccountCached,
-    },
-  );
+  const { data: accounts = [], isLoading } =
+    api.userAccount.getAccountByBook.useQuery(bookId, {
+      enabled: !!bookId && !hasAccountCached,
+    });
 
   return { accounts, isLoading };
 };
@@ -26,25 +31,23 @@ export const useCurrentAccount = () => {
   const params = useParams();
   const queryClient = useQueryClient();
 
-  const accountId = params?.acc ? Number(params?.acc) : null;
+  const bookId = String(params?.bookId);
 
   const hasAccountCached = useMemo(() => {
     const accountKey = getQueryKey(
-      api.userAccount.getOne,
-      { id: accountId! },
+      api.userAccount.getDefaultAccount,
+      bookId!,
       "query",
     );
 
     const accountCache = queryClient.getQueryData(accountKey);
     return Boolean(accountCache);
-  }, [accountId]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [bookId]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  const { data, isLoading } = api.userAccount.getOne.useQuery(
+  const { data, isLoading } = api.userAccount.getDefaultAccount.useQuery(
+    bookId!,
     {
-      id: accountId!,
-    },
-    {
-      enabled: !!accountId && !hasAccountCached,
+      enabled: !!bookId && !hasAccountCached,
     },
   );
 

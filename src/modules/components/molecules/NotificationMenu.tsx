@@ -1,17 +1,17 @@
 import { Icon } from "@iconify/react/dist/iconify.js";
-import { Button } from "@nextui-org/button";
+import { Button } from "@heroui/button";
 import React, { useState } from "react";
 import { useOutsideClick } from "~/lib/hooks";
-import { useWebSocket } from "~/lib/hooks/useWebSocket";
+// import { useWebSocket } from "~/lib/hooks/useWebSocket";
 import { motion } from "framer-motion";
-import { Badge } from "@nextui-org/badge";
-import { Avatar, Chip } from "@nextui-org/react";
+import { Badge } from "@heroui/badge";
+import { Avatar, Chip } from "@heroui/react";
 import { useNotification } from "~/lib/hooks/useNotification";
 
 const NotificationMenu = () => {
   const [showMenu, setShowMenu] = useState(false);
   const { notifications, isLoading } = useNotification();
-  const { isConnected } = useWebSocket();
+  // const { isConnected } = useWebSocket();
   const element = useOutsideClick<HTMLDivElement>(() => onHideMenu());
 
   const onHideMenu = () => {
@@ -21,13 +21,18 @@ const NotificationMenu = () => {
   return (
     <div ref={element} className="relative">
       <Badge
-        content={notifications?.length || 0}
-        classNames={{
-          badge: notifications?.length === 0 && "hidden",
-        }}
+        content={notifications?.length ?? 0}
+        // classNames={{
+        //   badge: notifications?.length === 0 && "hidden",
+        // }}
         color="primary"
       >
-        <Button isIconOnly radius="full" onClick={() => setShowMenu(!showMenu)}>
+        <Button
+          isIconOnly
+          variant="bordered"
+          className="border border-divider"
+          onPress={() => setShowMenu(!showMenu)}
+        >
           {" "}
           <Icon icon="flowbite:bell-outline" width={24} />{" "}
         </Button>
@@ -40,13 +45,13 @@ const NotificationMenu = () => {
           animate={{
             opacity: 1,
           }}
-          className="absolute left-0 top-12 max-h-[32rem] w-[24rem] overflow-y-auto rounded-xl border bg-default-100/80 px-3 py-4 shadow-2xl backdrop-blur-xl scrollbar-hide dark:border-white/10"
+          className="absolute -right-4 top-12 max-h-[32rem] w-[24rem] overflow-y-auto rounded-xl border bg-default-100/80 px-3 py-4 shadow-2xl backdrop-blur-xl scrollbar-hide dark:border-white/10"
         >
           <header className="mb-2 flex items-center justify-between px-4">
             <h2 className="whitespace-nowrap text-lg">Tus Notificaciones</h2>
             {/* <Button variant='ghost'>Marcar como leídas</Button> */}
           </header>
-          {isConnected ? <p>Conectado </p> : <p>Descontectado</p>}
+          {/* {isConnected ? <p>Conectado </p> : <p>Descontectado</p>} */}
           <nav className="mb-2 flex items-center gap-2 px-4">
             <Chip color="primary">Todas</Chip>
             <Chip className="bg-default-200">No Leídas</Chip>

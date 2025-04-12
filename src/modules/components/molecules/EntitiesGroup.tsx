@@ -2,7 +2,7 @@ import Link from "next/link";
 import { useParams } from "next/navigation";
 
 import { Icon } from "@iconify/react/dist/iconify.js";
-import { Avatar, AvatarGroup, Button } from "@nextui-org/react";
+import { Avatar, AvatarGroup, Button } from "@heroui/react";
 
 import { useEntity } from "~/modules/Entities/hook/entities.hook";
 

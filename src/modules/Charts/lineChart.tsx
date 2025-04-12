@@ -62,13 +62,13 @@ const LineChart = ({
         },
         stroke: {
           curve,
-          width: 2.6,
+          width: 1.6,
         },
         fill: {
           type: "gradient",
           gradient: {
-            opacityFrom: 0.5,
-            opacityTo: 0.2,
+            opacityFrom: 0.6,
+            opacityTo: 0,
           },
         },
         dataLabels: {
@@ -79,14 +79,14 @@ const LineChart = ({
           shared: false,
           custom: function ({ series, seriesIndex, dataPointIndex, w }: any) {
             return `
-                <div class="bg-white px-6 py-2 flex flex-col justify-center dark:border-white/10 items-center dark:bg-default-200 backdrop-blur-xl">
+                <div class="bg-white transition-all duration-500 px-4 py-1.5 flex flex-col justify-center dark:border-white/10 items-start dark:bg-default-200 backdrop-blur-xl">
                   <span class="text-xs">${
                     w.globals.initialSeries[seriesIndex].name
                   }</span>
-                  <span class="font-semibold text-base">$ ${series[seriesIndex][
+                  <span class="font-semibold text-sm">$ ${series[seriesIndex][
                     dataPointIndex
                   ]?.toLocaleString()}</span>
-                  
+
                 </div>
               `;
           },
@@ -115,8 +115,8 @@ const LineChart = ({
             style: {
               colors: isDark ? "#a1a1aa" : "#000",
               fontFamily: FONT_FAMILY,
-              fontWeight: 600,
-              fontSize: "13",
+              fontWeight: 400,
+              fontSize: "11",
             },
           },
         },
@@ -133,7 +133,8 @@ const LineChart = ({
             style: {
               colors: isDark ? "#a1a1aa" : "#000",
               fontFamily: FONT_FAMILY,
-              fontWeight: 600,
+              fontSize: "11",
+              fontWeight: 500,
             },
           },
         },

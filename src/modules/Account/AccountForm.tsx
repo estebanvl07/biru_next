@@ -1,5 +1,5 @@
 import { useForm } from "react-hook-form";
-import { Button, Input, Select, SelectItem } from "@nextui-org/react";
+import { Button, Input, Select, SelectItem } from "@heroui/react";
 import { useRouter } from "next/navigation";
 
 import { Icon } from "@iconify/react/dist/iconify.js";
@@ -125,8 +125,7 @@ const AccountForm = ({
             key={opt.value}
             color="primary"
             className="font-montserrat"
-            onClick={() => setValue("type", Number(opt.value))}
-            value={opt.value}
+            onPress={() => setValue("type", Number(opt.value))}
           >
             {opt.name}
           </SelectItem>

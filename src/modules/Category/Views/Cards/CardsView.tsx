@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { useParams } from "next/navigation";
 
-import { Button, Input } from "@nextui-org/react";
+import { Button, Input } from "@heroui/react";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import { motion } from "framer-motion";
 
@@ -53,7 +53,7 @@ const CategoryCardsView = () => {
         <Button
           radius="lg"
           color="primary"
-          onClick={onShowCreate}
+          onPress={onShowCreate}
           isIconOnly={isMobile as any}
         >
           <Icon icon="ph:plus" width={18} /> {!isMobile && "Crear Categoría"}

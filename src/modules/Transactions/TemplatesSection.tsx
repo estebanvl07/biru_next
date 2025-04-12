@@ -1,9 +1,10 @@
 import React, { useState } from "react";
 import { useTemplate } from "../Templates/hooks/useTemplate";
-import { Button, Chip, Select, SelectItem } from "@nextui-org/react";
+import { Button, Chip, Select, SelectItem } from "@heroui/react";
 import { Icon } from "@iconify/react";
 import { TemplatesIncludes } from "~/types/templates/templates";
 import { Templates } from "@prisma/client";
+import clsx from "clsx";
 
 interface TemplateSectionProps {
   onChange: (template: Templates | null) => void;
@@ -15,6 +16,8 @@ const TemplatesSection = ({ onChange }: TemplateSectionProps) => {
   );
   const { templates } = useTemplate();
 
+  if (templates.length === 0) return null;
+
   return (
     <div className="flex w-full justify-start">
       <Select
@@ -25,7 +28,7 @@ const TemplatesSection = ({ onChange }: TemplateSectionProps) => {
         radius="full"
         title={templateSelected?.name || "Plantillas"}
         classNames={{
-          trigger: "pl-1 border",
+          trigger: "pl-1 border dark:border-white/10",
         }}
         // className="w-48"
         onChange={(template) => {
@@ -42,7 +45,14 @@ const TemplatesSection = ({ onChange }: TemplateSectionProps) => {
           }
         }}
         startContent={
-          <Chip className="flex h-6 w-6 items-center justify-center rounded-full bg-default-300">
+          <Chip
+            className={clsx(
+              "flex h-6 w-6 items-center justify-center rounded-full bg-default-300",
+              {
+                "bg-primary": templateSelected?.icon,
+              },
+            )}
+          >
             <Icon
               icon={
                 templateSelected

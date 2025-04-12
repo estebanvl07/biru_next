@@ -10,12 +10,6 @@ import withAuthRedirect from "~/lib/helpers/withAuthRedirect";
 import { api } from "~/utils/api";
 import { toast } from "sonner";
 
-export async function getStaticProps() {
-  return {
-    props: {},
-  };
-}
-
 const Register = () => {
   const { mutateAsync: registerUser, isSuccess } =
     api.users.register.useMutation({
@@ -25,9 +19,7 @@ const Register = () => {
     });
 
   const onSubmitHandler: RegisterFormProps["onSubmit"] = async (data) => {
-    try {
-      await registerUser(data);
-    } catch {}
+    await registerUser(data);
   };
 
   return (
@@ -40,7 +32,7 @@ const Register = () => {
       ) : (
         <div className="my-auto flex h-full w-full justify-center px-4 py-6 pt-20">
           <section className="relative flex h-full w-full max-w-[25rem] flex-col items-center justify-center gap-2">
-            <h1 className="text-primar mb-1 text-pretty text-center text-2xl font-bold  tracking-tight">
+            <h1 className="mb-1 text-pretty text-center text-2xl font-bold tracking-tight text-primary  dark:text-white">
               ¡Crear nueva cuenta!
             </h1>
             <span className="text-pretty text-center text-sm text-slate-400">

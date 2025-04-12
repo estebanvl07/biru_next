@@ -1,9 +1,15 @@
 import { Icon } from "@iconify/react";
-import { Button } from "@nextui-org/button";
+import { Button } from "@heroui/button";
 
 import { useThemeContext } from "~/lib/context/Theme.context";
 
-const DarkMode = ({ className }: { className?: string }) => {
+const DarkMode = ({
+  className,
+  isSmall,
+}: {
+  className?: string;
+  isSmall?: boolean;
+}) => {
   const { theme, setTheme } = useThemeContext();
 
   const toggleTheme = () => {
@@ -11,7 +17,12 @@ const DarkMode = ({ className }: { className?: string }) => {
   };
 
   return (
-    <Button isIconOnly radius="full" onClick={toggleTheme}>
+    <Button
+      size={isSmall ? "sm" : "md"}
+      isIconOnly
+      radius="full"
+      onPress={toggleTheme}
+    >
       {theme === "dark" ? (
         <Icon icon="akar-icons:sun-fill" width={20} className="text-white" />
       ) : (

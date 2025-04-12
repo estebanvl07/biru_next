@@ -88,7 +88,7 @@ export const authOptions: NextAuthOptions = {
           credentials.password,
         );
 
-        if (!userFound) {
+        if (!userFound || !userFound?.emailVerified) {
           throw new RequestError({
             code: "INVALID_EMAIL_OR_PASSWORD",
             status: 400,

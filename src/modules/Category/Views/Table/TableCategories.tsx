@@ -5,12 +5,13 @@ import { useRouter } from "next/router";
 import { CategoryIncludes } from "~/types/category/category.types";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import Actions from "~/modules/components/molecules/Table/Actions";
-import { Chip } from "@nextui-org/react";
+import { Chip } from "@heroui/react";
 import { Table } from "~/modules/components";
 import { columns } from "./table";
 import CreateCategory from "../../CreateCategory";
 import useShowForm from "~/lib/hooks/useShowForm";
 import EditCategory from "../../EditCategory";
+import { DASHBOARD_MAIN_PATH } from "~/lib/constants/config";
 
 const TableCategories = () => {
   const { categories, isLoading } = useCategory();
@@ -36,7 +37,7 @@ const TableCategories = () => {
         case "name":
           return (
             <div className="flex items-center gap-2">
-              <div className="flex !h-10 !min-w-10 items-center justify-center whitespace-nowrap rounded-full bg-primary text-xl text-white">
+              <div className="flex !h-8 !w-8 items-center justify-center whitespace-nowrap rounded-full bg-primary text-xl text-white">
                 <Icon icon={category.icon ?? "ph:category"} />
               </div>
               <aside>
@@ -52,17 +53,11 @@ const TableCategories = () => {
         case "type":
           return (
             <Chip
-              size="lg"
-              variant="flat"
+              variant="dot"
+              className="border-none"
               color={category.type === 1 ? "success" : "danger"}
             >
-              <Icon
-                icon={
-                  category.type === 1
-                    ? "iconamoon:arrow-bottom-left-1"
-                    : "iconamoon:arrow-top-right-1"
-                }
-              />
+              {category.type === 1 ? "Ingreso" : "Egreso"}
             </Chip>
           );
         case "actions":
@@ -70,9 +65,9 @@ const TableCategories = () => {
             <Actions
               onClickView={() =>
                 router.push({
-                  pathname: "/account/[acc]/category/[id]",
+                  pathname: `${DASHBOARD_MAIN_PATH}/${params?.bookId}/category/[id]`,
                   query: {
-                    acc: String(params?.acc),
+                    bookId: String(params?.bookId),
                     id: String(category.id),
                   },
                 })
@@ -97,11 +92,15 @@ const TableCategories = () => {
         headerConfig={{
           newButtonText: "Crear Categoría",
           hasNew: true,
+          hasFilters: true,
+
           onNew() {
             onShowCreate();
           },
         }}
+        filterKeys={["name", "description"]}
         columns={columns}
+        isStriped
         data={categories}
         isLoading={isLoading}
         renderCell={renderCell}

@@ -130,10 +130,10 @@ const Navigator = () => {
         },
       )}
     >
-      {NAVIGATOR_LINKS.map(({ href, text }) => {
+      {NAVIGATOR_LINKS.map(({ href, text }, index) => {
         return (
           <div
-            key={href}
+            key={index}
             className="relative flex h-full w-fit flex-col items-center justify-center text-sm text-zinc-500 dark:text-white"
           >
             <Link href={href} className={"font-normal"}>

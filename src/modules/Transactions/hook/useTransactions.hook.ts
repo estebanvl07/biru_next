@@ -66,7 +66,7 @@ export const useTransactionsTable = (pagination: TablePagination) => {
   };
 
   return {
-    transactions: data?.transaction!,
+    transactions: data?.transaction,
     total: data?.total,
     totalPages: data?.totalPages,
     invalidateTractionsTable,

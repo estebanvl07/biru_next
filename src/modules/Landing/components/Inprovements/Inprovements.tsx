@@ -33,6 +33,7 @@ const Inprovements = () => {
       <div className="flex gap-4 py-8 transition-all">
         {[1, 2, 3, 4].map((p, index) => (
           <InprovementsCard
+            key={index}
             title="Ejemplo"
             icon="hugeicons:internet"
             description="Lorem ipsum dolor sit, amet consectetur adipisicing elit. Cupiditate, itaque!"

@@ -7,6 +7,7 @@ import Link from "next/link";
 import CustomDrawer from "~/modules/components/molecules/CustomDrawer";
 import { DASHBOARD_MAIN_PATH } from "~/lib/constants/config";
 import { useParams } from "next/navigation";
+import Image from "next/image";
 
 const DrawerOptions = () => {
   const [drawerOptions, setDrawerOptions] = useState(false);
@@ -29,7 +30,12 @@ const DrawerOptions = () => {
         customHeader={
           <div className="flex flex-col items-center justify-center gap-4">
             <div className="flex items-center gap-2">
-              <img src="/logo.svg" width={18} />
+              <Image
+                src="/logo.svg"
+                alt="Logo de Biru"
+                height={18}
+                width={18}
+              />
               <span>Biru</span>
             </div>
             <h2 className="tracking-tight">Menu de Opciones</h2>

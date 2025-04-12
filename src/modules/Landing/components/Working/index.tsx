@@ -1,4 +1,5 @@
 import { BrainIcon, Eye, FlagIcon } from "lucide-react";
+import Image from "next/image";
 import React from "react";
 import BlurFade from "~/modules/components/ui/BlurFade";
 
@@ -63,12 +64,13 @@ const WorkingSection = () => {
           </BlurFade>
         </div>
         <aside className="flex h-full flex-grow items-center">
-          <BlurFade inView>
-            <img
-              src="/thumbnail.png"
-              className="rounded-xl border-4 border-divider shadow-2xl"
-            />
-          </BlurFade>
+          <Image
+            src="/thumbnail.png"
+            alt="Thumbnail de Biru"
+            className="rounded-xl border-4 border-divider shadow-2xl"
+            width={500}
+            height={500}
+          />
         </aside>
       </div>
     </section>

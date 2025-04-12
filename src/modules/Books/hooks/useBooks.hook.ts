@@ -56,7 +56,7 @@ export const useCurrentBook = () => {
 export const useBookBalance = () => {
   const queryClient = useQueryClient();
   const params = useParams();
-  const bookId = String(params?.bookId!);
+  const bookId = String(params.bookId!);
 
   const hasBalanceCached = useMemo(() => {
     const balanceKey = getQueryKey(api.books.getBalance, bookId, "query");

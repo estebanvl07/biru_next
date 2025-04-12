@@ -32,7 +32,9 @@ const AdvancedSearch = () => {
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
-  const [transactions, setTransactions] = useState<TransactionIncludes[]>();
+  const [transactions, setTransactions] = useState<TransactionIncludes[]>(
+    [] as TransactionIncludes[],
+  );
   const { fetch: searchTransactions } = api.useUtils().transaction.search;
   const {
     handleSubmit,
@@ -49,13 +51,13 @@ const AdvancedSearch = () => {
     toast.promise(
       async () => {
         setIsLoading(true);
-        const response = await searchTransactions({
+        const transactions: TransactionIncludes[] = await searchTransactions({
           ...data,
           max: data.max === 0 ? undefined : data.max,
           min: data.min === 0 ? undefined : data.min,
         });
-        if (response) {
-          setTransactions(response);
+        if (transactions) {
+          setTransactions(transactions);
         }
         setIsLoading(false);
       },
@@ -231,9 +233,10 @@ const AdvancedSearch = () => {
           </form>
         </AccordionItem>
       </Accordion>
-      {transactions && (
-        <TransactionsTable transactions={transactions} isLoading={isLoading} />
-      )}
+      <TransactionsTable
+        transactions={transactions as any}
+        isLoading={isLoading}
+      />
     </div>
   );
 };

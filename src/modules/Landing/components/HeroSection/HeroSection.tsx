@@ -34,6 +34,7 @@ export const HeroSection = () => {
         <h1 className="text-center text-4xl font-medium leading-tight sm:text-5xl md:max-w-lg md:text-6xl lg:max-w-2xl">
           {title.split(" ").map((word, index) => (
             <TextAnimate
+              key={index}
               className="z-10 w-full overflow-hidden px-1 text-center text-5xl font-medium !leading-none -tracking-wider sm:text-6xl  md:px-2 "
               animate="blurInUp"
               by="word"

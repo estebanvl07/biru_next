@@ -2,8 +2,6 @@ import React from "react";
 
 import { Series } from "~/types/chart.types";
 import { Card, CardBody, CardHeader, Chip, Skeleton } from "@heroui/react";
-import { String } from "lodash";
-import { Icon } from "@iconify/react/dist/iconify.js";
 
 type Props = {
   cardClassName?: string;
@@ -14,7 +12,7 @@ type Props = {
   title: string;
   isLoading?: boolean;
   iconClassName?: string;
-  icon?: String;
+  icon?: string;
   color?: string;
   badgeColor?: string;
   titlePercent?: string;
@@ -33,19 +31,10 @@ const SummaryCard = React.memo(
     titlePercent,
   }: Props) => {
     return (
-      <Card
-        className="h-full border border-divider px-4 py-2 shadow-sm"
-        // className={clsx(
-        //   "h-full border border-divider p-4 shadow-sm",
-        //   cardClassName,
-        // )}
-      >
+      <Card className="h-full border border-divider px-4 py-2 shadow-sm">
         <CardHeader>
           <div className="flex items-center justify-between">
             <h4>{title}</h4>
-            {/* {icon && (
-              <Icon icon={icon || ""} width={20} clasName={iconClassName} />
-            )} */}
           </div>
         </CardHeader>
         <CardBody>

@@ -59,7 +59,6 @@ export async function searchTransactions(
         gte: start_date,
         lt: end_date,
       },
-
       userId,
     },
     include: { userAccount: true, category: true, entity: true, goal: true },
@@ -67,6 +66,8 @@ export async function searchTransactions(
       date: "desc",
     },
   });
+
+  console.log(transactionsFound);
 
   return transactionsFound;
 }

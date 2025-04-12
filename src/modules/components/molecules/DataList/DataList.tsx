@@ -87,8 +87,9 @@ const DataList = <T,>({
         <>
           {items && (
             <ul className="mt-2">
-              {items?.map((item: T) => (
+              {items?.map((item: T, index) => (
                 <HoldableItem
+                  key={index}
                   holdTime={1000}
                   onHold={() => {
                     setDataSelected(item);

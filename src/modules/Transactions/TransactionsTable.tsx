@@ -253,7 +253,7 @@ const TransactionsTable = ({
           label: "",
         },
       }}
-      data={transactions ?? []}
+      data={transactions as TransactionIncludes[]}
       renderCell={renderCell}
     />
   );

@@ -334,11 +334,10 @@ const TemplateForm = ({
                   {(category) => (
                     <SelectItem
                       color="primary"
-                      onClick={() => setValue("categoryId", category.id)}
+                      onPress={() => setValue("categoryId", category.id)}
                       key={category.id}
                       className="font-montserrat dark:text-white"
                       textValue={category.name}
-                      value={category.id}
                     >
                       {category.name}
                     </SelectItem>

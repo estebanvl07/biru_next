@@ -72,48 +72,73 @@ type GroupedData = {
   [key: string]: FixedMovements[];
 };
 
-// export async function reminderMovement(db: PrismaClient) {
-//   const today = new Date();
-//   today.setHours(0, 0, 0, 0);
+export async function reminderMovement(db: PrismaClient) {
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
 
-//   const users = await db.user.findMany({
-//     where: {
-//       movements: {
-//         some: {
-//           next_ocurrence: {
-//             lte: today,
-//           },
-//         },
-//       },
-//     },
-//     include: {
-//       movements: {
-//         where: {
-//           next_ocurrence: {
-//             lte: today,
-//           },
-//           reminder_sent: false,
-//         },
-//       },
-//     },
-//   });
+  // TODO: reminders
 
-//   console.log(users);
+  const users = await db.user.findMany({
+    where: {
+      books: {
+        some: {
+          OR: [
+            {
+              movements: {
+                some: {
+                  next_ocurrence: {
+                    lte: today,
+                  },
+                },
+              },
+            },
+            {
+              transactions: {
+                some: {
+                  state: 3,
+                  date: {
+                    lte: today,
+                  },
+                },
+              },
+            },
+          ],
+        },
+      },
+    },
+    include: {
+      books: {
+        include: {
+          movements: {
+            where: {
+              next_ocurrence: {
+                lte: today,
+              },
+              reminder_sent: false,
+            },
+          },
+        },
+      },
+    },
+  });
 
-//   if (users) {
-//     users.map(({ email, name, movements }) => {
-//       console.log({
-//         name: name || "",
-//         to: email,
-//         movements: movements,
-//       });
-//       mailer.remiderMovement({
-//         name: name || "",
-//         to: email,
-//         movements: movements,
-//       });
-//     });
-//   }
+  if (users) {
+    users.forEach((user) => {
+      const allMovements = user.books.flatMap((book) => book.movements);
+      if (allMovements.length > 0) {
+        console.log({
+          name: user.name || "",
+          to: user.email,
+          movements: allMovements,
+        });
+        mailer.remiderMovement({
+          name: user.name || "",
+          to: user.email,
+          movements: allMovements,
+        });
+      }
+    });
+  }
 
-//   return [];
-// }
+  return users;
+}

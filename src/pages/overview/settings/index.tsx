@@ -1,5 +1,13 @@
 import { Icon } from "@iconify/react/dist/iconify.js";
-import { Avatar, Button, Card, CardBody, CardHeader, Tab, Tabs } from "@heroui/react";
+import {
+  Avatar,
+  Button,
+  Card,
+  CardBody,
+  CardHeader,
+  Tab,
+  Tabs,
+} from "@heroui/react";
 import DashboardLayout from "~/modules/Layouts/Dashboard";
 import MobileSettingPage from "~/modules/Profile/MobileSettingPage";
 import Section from "~/modules/Profile/Section";
@@ -21,7 +29,6 @@ const ProfilePage = () => {
 
   return (
     <SettingsLayout
-    showOptions
     // title="Configuración"
     // headDescription="Configuracion de tu cuenta"
     >
@@ -29,11 +36,10 @@ const ProfilePage = () => {
         <MobileSettingPage />
       ) : (
         <Card shadow="none" className="border border-divider ">
-         
           <CardBody className="p-6 pt-8">
             <div className="mx-auto flex w-full flex-col items-center justify-center gap-10 rounded-xl dark:border-white/10">
               <div className="w-full">
-                <section className="flex w-full items-center justify-between gap-6 mb-8 px-6">
+                <section className="mb-8 flex w-full items-center justify-between gap-6 px-6">
                   <article className="flex flex-row items-center gap-4 rounded-xl">
                     <Avatar
                       src={avatarSrc ?? undefined}
@@ -49,7 +55,6 @@ const ProfilePage = () => {
                     </aside>
                   </article>
                   <aside>
-
                     <Button color="primary">Editar Perfil</Button>
                   </aside>
                 </section>
@@ -67,7 +72,7 @@ const ProfilePage = () => {
                   }}
                 >
                   <Tab key="setting" name="Configuración" title="Configuración">
-                    <div className="flex w-full flex-col px-4 py-6 pb-0 space-y-4">
+                    <div className="flex w-full flex-col space-y-4 px-4 py-6 pb-0">
                       <Section
                         title="Aplicación"
                         options={[
@@ -142,7 +147,12 @@ const ProfilePage = () => {
                     </Card>
                     <CardBalanceAccount defaultFilter={0} /> */}
                   </Tab>
-                  <Tab key="info" title="Información de perfil" disabled isDisabled>
+                  <Tab
+                    key="info"
+                    title="Información de perfil"
+                    disabled
+                    isDisabled
+                  >
                     <Card className="mt-4 flex w-full flex-col">
                       <h3>Información </h3>
                       <ul className="grid w-full grid-cols-4 gap-2 [&>li>span]:font-semibold [&>li]:text-xs">

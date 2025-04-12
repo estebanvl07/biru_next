@@ -11,10 +11,14 @@ import { useResize } from "~/lib/hooks/useResize";
 import MobileFilter from "~/modules/Layouts/templates/dashbaord/Header/MobileFilter";
 import { api } from "~/utils/api";
 import { getPercent } from "~/lib/helpers";
+import { useParams } from "next/navigation";
 
 const AnalyticsPage = () => {
   const { isMobile } = useResize();
-  const { data: balance, isLoading } = api.userAccount.getBalance.useQuery();
+  const params = useParams();
+  const bookId = String(params?.bookId);
+
+  const { data: balance, isLoading } = api.books.getBalance.useQuery(bookId);
 
   return (
     <DashboardLayout title="Análisis y estadisticas" hasFilter>
@@ -35,7 +39,7 @@ const AnalyticsPage = () => {
             color="bg-green-500/30 text-green-600"
             percent={getPercent(
               balance?.incomes || 0,
-              balance?.transactonTotal || 0,
+              balance?.transactionTotal || 0,
             )}
             titlePercent="De Ingresos"
           />
@@ -45,7 +49,7 @@ const AnalyticsPage = () => {
             color="bg-red-500/30 text-red-600"
             percent={getPercent(
               balance?.egress || 0,
-              balance?.transactonTotal || 0,
+              balance?.transactionTotal || 0,
             )}
             titlePercent="De Egresos"
           />

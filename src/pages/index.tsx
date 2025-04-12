@@ -1,6 +1,5 @@
 import Head from "next/head";
 import withAuthRedirect from "~/lib/helpers/withAuthRedirect";
-import { Spotlight } from "~/modules/components/ui/spotLight";
 import { Landing } from "~/modules/Landing";
 
 export async function getStaticProps() {

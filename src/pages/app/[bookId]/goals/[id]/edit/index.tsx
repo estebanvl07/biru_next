@@ -18,13 +18,16 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const { id } = ctx.params!;
 
   const helper = await createServerSideCaller(ctx);
-  const goals = await helper.goals.getGoalById.fetch({ id: Number(id) });
+  const goals = await helper.goals.getGoalById.fetch({
+    id: Number(id),
+    bookId: String(ctx.params?.bookId),
+  });
 
   const [goalData] = formatDatesOfGoals(goals as any);
 
   return {
     props: {
-      goal: goalData,
+      goalData,
     },
   };
 };

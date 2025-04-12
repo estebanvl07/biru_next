@@ -8,7 +8,7 @@ import WhitoutSideBar from "~/modules/Layouts/templates/dashbaord/OverviewLayout
 const EditAccountPage = ({ defaultAccount }: { defaultAccount: string }) => {
   const data = JSON.parse(defaultAccount) as UserAccount;
   return (
-    <WhitoutSideBar title="Editar Cuenta" hasFilter={false}>
+    <WhitoutSideBar title="Editar Cuenta">
       <section className="m-auto mt-4 flex w-full max-w-[32rem] flex-col ">
         <AccountForm hasEdit defaultAccount={data} />
       </section>

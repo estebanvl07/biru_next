@@ -6,7 +6,6 @@ import { AnimatePresence, motion } from "motion/react";
 import { Play, XIcon } from "lucide-react";
 
 import { cn } from "~/lib/utils";
-import { ContainerScroll } from "~/modules/components/ui/ContainerScrollAnimation";
 
 type AnimationStyle =
   | "from-bottom"

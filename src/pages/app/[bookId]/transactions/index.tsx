@@ -11,7 +11,6 @@ import { DASHBOARD_MAIN_PATH } from "~/lib/constants/config";
 import AdvancedSearch from "~/modules/Transactions/AdvancedSearch";
 import TransactionsTable from "~/modules/Transactions/TransactionsTable";
 import { PlusIcon } from "lucide-react";
-import { TransactionIncludes } from "~/server/api/services/transactions.services";
 
 const TransactionPage = () => {
   const params = useParams<{ bookId: string }>();
@@ -49,11 +48,12 @@ const TransactionPage = () => {
         <Tab title="Ultimas 50" key="all">
           {!isMobile ? (
             <TransactionsTable
-              transactions={transactions as TransactionIncludes[]}
+              transactions={transactions}
+              isLoading={isLoading}
             />
           ) : (
             <MobileTransactionPage
-              transactions={transactions as TransactionIncludes[]}
+              transactions={transactions}
               isLoading={isLoading}
             />
           )}

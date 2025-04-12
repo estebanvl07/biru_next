@@ -94,12 +94,12 @@ const TransactionsTable = ({
           );
         case "category":
           return transaction.category?.name ? (
-            <p className="flex items-center gap-2">
+            <div className="flex items-center gap-2">
               <Chip size="sm" className="bg-default-100 dark:bg-default-100">
                 <Icon icon={transaction.category.icon || ""} />
               </Chip>
               {transaction.category?.name}{" "}
-            </p>
+            </div>
           ) : (
             <NullChip />
           );
@@ -253,7 +253,7 @@ const TransactionsTable = ({
           label: "",
         },
       }}
-      data={transactions as TransactionIncludes[]}
+      data={transactions || []}
       renderCell={renderCell}
     />
   );

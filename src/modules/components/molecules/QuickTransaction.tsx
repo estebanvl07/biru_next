@@ -34,6 +34,7 @@ const QuickTransaction = () => {
           amount: amount ?? 0,
           type: type ?? 1,
           accountId: Number(params?.acc),
+          bookId: String(params?.bookId),
           entityId: entitySelected,
           date: new Date(),
         },

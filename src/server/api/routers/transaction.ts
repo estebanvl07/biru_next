@@ -15,8 +15,12 @@ import { advanceSchema } from "~/modules/Transactions/advanceSchema";
 export const transactionsRouter = createTRPCRouter({
   getTransactionsByFilter: protectedProcedure
     .input(filterInput)
-    .query(({ input, ctx }) => {
-      return TransactionServices.getTransactionsByFilter(ctx.db, input);
+    .query(async ({ input, ctx }) => {
+      const response = await TransactionServices.getTransactionsByFilter(
+        ctx.db,
+        input,
+      );
+      return response;
     }),
   getTransactions: protectedProcedure
     .input(

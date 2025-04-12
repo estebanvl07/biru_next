@@ -79,6 +79,7 @@ const DataTable = <T,>({
   }, [newList, customFilters]);
 
   const dataSorted = useMemo(() => {
+    if (!filteredItems) return [];
     return [...filteredItems].sort((a: T, b: T) => {
       const first = a[sortDescriptor.column as keyof T] as number;
       const second = b[sortDescriptor.column as keyof T] as number;

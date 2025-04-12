@@ -100,7 +100,7 @@ const AnnualBalance = () => {
             <p>Showing total visitors for the last 3 months</p>
           </div>
           <div className="flex">
-            {["income", "expenses"].map((key) => {
+            {/* } {["income", "expenses"].map((key) => {
               const chart = key;
               return (
                 <button
@@ -121,7 +121,7 @@ const AnnualBalance = () => {
                   </span>
                 </button>
               );
-            })}
+            })} */}
           </div>
         </CardHeader>
         <CardBody className="px-2 sm:p-6">

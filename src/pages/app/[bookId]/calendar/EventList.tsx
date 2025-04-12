@@ -1,18 +1,8 @@
-import { Button, Card, CardBody, CardHeader } from "@heroui/react";
 import React from "react";
-import esLocale from "@fullcalendar/core/locales/es";
-import FullCalendar from "@fullcalendar/react";
-import dayGridPlugin from "@fullcalendar/daygrid";
-import { api } from "~/utils/api";
-import { useParams } from "next/navigation";
-import { format, isAfter, isBefore, isSameDay, isSameMonth } from "date-fns";
-import { EventInput } from "@fullcalendar/core/index.js";
+import { isAfter, isBefore, isSameDay, isSameMonth } from "date-fns";
 import { MovementsIncludes } from "~/types/movements";
-import { DASHBOARD_MAIN_PATH } from "~/lib/constants/config";
 import EventCard from "./EventCard";
-import EventTicket from "./EventTicket";
 import clsx from "clsx";
-import { useMovements } from "~/modules/Movements/hooks/useMovements";
 import { useExpensesCurrentMonth } from "~/modules/Budget/hooks/useBudget";
 import { useResize } from "~/lib/hooks/useResize";
 

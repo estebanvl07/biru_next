@@ -5,8 +5,8 @@ import dayGridPlugin from "@fullcalendar/daygrid";
 import { api } from "~/utils/api";
 import { useParams } from "next/navigation";
 import { format, isSameMonth } from "date-fns";
-import { EventInput } from "@fullcalendar/core/index.js";
 import { DASHBOARD_MAIN_PATH } from "~/lib/constants/config";
+import { EventInput } from "@fullcalendar/core/index.js";
 
 const FullCalendar = dynamic(() => import("@fullcalendar/react"));
 const EventTicket = dynamic(() => import("./EventTicket"));

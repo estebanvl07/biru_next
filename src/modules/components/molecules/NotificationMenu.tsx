@@ -18,6 +18,8 @@ const NotificationMenu = () => {
     setShowMenu(false);
   };
 
+  return null;
+
   return (
     <div ref={element} className="relative">
       <Badge

@@ -1,5 +1,5 @@
 import { Input } from "@heroui/input";
-import { Button, Link, Spinner } from "@heroui/react";
+import { Button, Link, Skeleton, Spinner } from "@heroui/react";
 import { PlusIcon, Search } from "lucide-react";
 import React, { Dispatch, SetStateAction } from "react";
 import { HoldableItem } from "../../atoms/HoldableItem";
@@ -23,6 +23,7 @@ interface DataListProps<T> {
   drawerProps?: DrawerProps<T>;
   content: (data: T) => JSX.Element;
   setDataSelected: Dispatch<SetStateAction<T>>;
+  onPressItem?: (data: T) => void;
   dataSelected: T;
 }
 
@@ -37,6 +38,7 @@ const DataList = <T,>({
   drawerProps,
   dataSelected,
   setDataSelected,
+  onPressItem,
   newButtonText = "Crear Nuevo",
 }: DataListProps<T>) => {
   const {
@@ -82,7 +84,7 @@ const DataList = <T,>({
         </Button>
       )}
       {loading ? (
-        <Spinner />
+        <ListLoader />
       ) : (
         <>
           {items && (
@@ -91,6 +93,7 @@ const DataList = <T,>({
                 <HoldableItem
                   key={index}
                   holdTime={1000}
+                  onClick={() => onPressItem?.(item)}
                   onHold={() => {
                     setDataSelected(item);
                     drawerProps?.onOpen?.();
@@ -128,6 +131,20 @@ const DataList = <T,>({
       >
         {dataSelected && drawerProps?.drawerBodyContent?.(dataSelected)}
       </DrawerOptions>
+    </div>
+  );
+};
+
+const ListLoader = () => {
+  return (
+    <div className="mt-2 flex flex-col gap-2">
+      <Skeleton className="h-12 w-full rounded-xl" />
+      <Skeleton className="h-12 w-full rounded-xl" />
+      <Skeleton className="h-12 w-full rounded-xl opacity-75" />
+      <Skeleton className="h-12 w-full rounded-xl opacity-55" />
+      <Skeleton className="h-12 w-full rounded-xl opacity-35" />
+      <Skeleton className="h-12 w-full rounded-xl opacity-15" />
+      <Skeleton className="h-12 w-full rounded-xl opacity-5" />
     </div>
   );
 };

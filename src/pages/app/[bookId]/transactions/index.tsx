@@ -45,7 +45,7 @@ const TransactionPage = () => {
           tabList: "gap-x-4 pt-0",
         }}
       >
-        <Tab title="Ultimas 50" key="all">
+        <Tab title="Recientes" key="all">
           {!isMobile ? (
             <TransactionsTable
               transactions={transactions}

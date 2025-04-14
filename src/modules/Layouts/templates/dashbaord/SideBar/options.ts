@@ -47,13 +47,23 @@ export const MENU_OPTIONS: MenuProps[] = [
         options: [
           {
             id: 1,
-            name: "Resumen de Transacciones",
+            name: "Historial de Transacciones",
             href: "/transactions",
           },
           {
             id: 2,
             name: "Nueva Transacción",
             href: "/transactions/new",
+          },
+          {
+            id: 3,
+            name: "Análisis de Transacciones",
+            href: "/transactions/analytics",
+          },
+          {
+            id: 4,
+            name: "Plantillas de Transacciones",
+            href: "/transactions/templates",
           },
         ],
       },

@@ -105,6 +105,7 @@ model Book {
   transactions  Transaction[]
   movements     FixedMovements[]
   goals         Goals[]
+  templates     Templates[]
   accounts      UserAccount[]
   user          User @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
@@ -159,10 +160,12 @@ model Templates {
   type         Int           @default(1) // 1:Ingreso, 2:Egreso
   state        Int           @default(1) // 1: activo, 0: inactivo
   userId       String
+  bookId       String?
   createdAt    DateTime      @default(now())
   updatedAt    DateTime      @updatedAt
   transactions Transaction[]
   user         User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  book         Book?         @relation(fields: [bookId], references: [id], onDelete: Cascade)
 }
 
 // modules

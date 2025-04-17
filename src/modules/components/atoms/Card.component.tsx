@@ -23,7 +23,7 @@ const Card = ({ children, className, id, ref, onClick, label }: Props) => {
   return (
     <motion.div
       className={clsx(
-        "z-20 flex rounded-lg border border-gray-400/20 px-6 py-3 shadow-md shadow-gray-300/10 backdrop-blur-md md:rounded-lg dark:border-white/5  dark:bg-default-100 dark:shadow-black/30",
+        "z-20 flex rounded-lg border border-gray-400/20 px-6 py-3 shadow-md shadow-gray-300/10 backdrop-blur-md md:rounded-lg dark:border-white/5  dark:bg-content1 dark:shadow-black/30",
         className,
       )}
       ref={ref}

@@ -21,7 +21,7 @@ import { api } from "~/utils/api";
 import { toast } from "sonner";
 import TransactionsTable from "./TransactionsTable";
 import { useResize } from "~/lib/hooks/useResize";
-import MobileTransactionPage from "./MobileTransactionPage";
+import ListTransactions from "./ListTransactions";
 
 const AdvancedSearch = () => {
   const { entities } = useEntity();
@@ -247,7 +247,7 @@ const AdvancedSearch = () => {
         </AccordionItem>
       </Accordion>
       {isMobile ? (
-        <MobileTransactionPage
+        <ListTransactions
           transactions={transactions as any}
           isLoading={isLoading}
         />

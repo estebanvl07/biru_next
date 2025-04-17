@@ -20,14 +20,43 @@ export const templateRouter = createTRPCRouter({
         userId,
       });
     }),
-  getTemplates: protectedProcedure.query(async ({ ctx, input }) => {
-    const userId = ctx.session.user.id;
-    return TemplatesServices.getTemplates(ctx.db, userId);
-  }),
+  getTemplates: protectedProcedure
+    .input(z.string())
+    .query(async ({ ctx, input: bookId }) => {
+      const userId = ctx.session.user.id;
+      return TemplatesServices.getTemplates(ctx.db, userId, bookId);
+    }),
   getTemplateById: protectedProcedure
-    .input(z.object({ id: z.number() }))
+    .input(z.object({ id: z.number(), bookId: z.string() }))
     .query(async ({ ctx, input }) => {
       const userId = ctx.session.user.id;
-      return TemplatesServices.getTemplateById(ctx.db, input.id, userId);
+      return TemplatesServices.getTemplateById(
+        ctx.db,
+        input.id,
+        userId,
+        input.bookId,
+      );
+    }),
+  disabledTemplate: protectedProcedure
+    .input(z.object({ id: z.number(), bookId: z.string() }))
+    .mutation(async ({ ctx, input }) => {
+      const userId = ctx.session.user.id;
+      return TemplatesServices.disabledTemplate(
+        ctx.db,
+        input.id,
+        userId,
+        input.bookId,
+      );
+    }),
+  availableTemplate: protectedProcedure
+    .input(z.object({ id: z.number(), bookId: z.string() }))
+    .mutation(async ({ ctx, input }) => {
+      const userId = ctx.session.user.id;
+      return TemplatesServices.availableTemplate(
+        ctx.db,
+        input.id,
+        userId,
+        input.bookId,
+      );
     }),
 });

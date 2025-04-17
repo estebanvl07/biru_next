@@ -33,10 +33,15 @@ export async function updateTemplate(
   }
 }
 
-export async function getTemplates(db: PrismaClient, userId: string) {
+export async function getTemplates(
+  db: PrismaClient,
+  userId: string,
+  bookId: string,
+) {
   const templates = await db.templates.findMany({
     where: {
       userId,
+      bookId,
     },
   });
   return templates;
@@ -46,12 +51,14 @@ export async function getTemplateById(
   db: PrismaClient,
   id: number,
   userId: string,
+  bookId: string,
 ) {
   try {
     const template = await db.templates.findFirst({
       where: {
         id,
         userId,
+        bookId,
       },
       include: {
         user: true,
@@ -61,6 +68,52 @@ export async function getTemplateById(
             entity: true,
           },
         },
+      },
+    });
+    return template;
+  } catch (error) {
+    return error;
+  }
+}
+
+export async function disabledTemplate(
+  db: PrismaClient,
+  id: number,
+  userId: string,
+  bookId: string,
+) {
+  try {
+    const template = await db.templates.update({
+      data: {
+        state: 0,
+      },
+      where: {
+        id,
+        userId,
+        bookId,
+      },
+    });
+    return template;
+  } catch (error) {
+    return error;
+  }
+}
+
+export async function availableTemplate(
+  db: PrismaClient,
+  id: number,
+  userId: string,
+  bookId: string,
+) {
+  try {
+    const template = await db.templates.update({
+      data: {
+        state: 1,
+      },
+      where: {
+        id,
+        userId,
+        bookId,
       },
     });
     return template;

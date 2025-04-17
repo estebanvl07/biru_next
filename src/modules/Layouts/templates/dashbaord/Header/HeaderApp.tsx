@@ -46,7 +46,6 @@ const HeaderApp = memo(
               <Input
                 startContent={<SearchIcon width={18} />}
                 placeholder="Buscar"
-                radius="full"
                 classNames={{
                   inputWrapper: "border border-divider/10 shadow-none",
                 }}

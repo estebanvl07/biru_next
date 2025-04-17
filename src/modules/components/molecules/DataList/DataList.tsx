@@ -20,11 +20,12 @@ interface DataListProps<T> {
   hasNew?: boolean;
   newButtonText?: string;
   isLoading?: boolean;
+  hasCustomContent?: boolean;
   drawerProps?: DrawerProps<T>;
   content: (data: T) => JSX.Element;
-  setDataSelected: Dispatch<SetStateAction<T>>;
+  setDataSelected?: Dispatch<SetStateAction<T>>;
   onPressItem?: (data: T) => void;
-  dataSelected: T;
+  dataSelected?: T;
 }
 
 const DataList = <T,>({
@@ -34,6 +35,7 @@ const DataList = <T,>({
   hrefButtonNew,
   filterKeys,
   isLoading,
+  hasCustomContent,
   onNew,
   drawerProps,
   dataSelected,
@@ -50,7 +52,6 @@ const DataList = <T,>({
   } = useSearch({
     data,
     keys: filterKeys ?? [],
-    isLoading,
   });
 
   return (
@@ -83,26 +84,32 @@ const DataList = <T,>({
           </div>
         </Button>
       )}
-      {loading ? (
+      {isLoading ? (
         <ListLoader />
       ) : (
         <>
           {items && (
             <ul className="mt-2">
-              {items?.map((item: T, index) => (
-                <HoldableItem
-                  key={index}
-                  holdTime={1000}
-                  onClick={() => onPressItem?.(item)}
-                  onHold={() => {
-                    setDataSelected(item);
-                    drawerProps?.onOpen?.();
-                  }}
-                  className="flex items-center justify-between gap-4 px-4 py-2"
-                >
-                  {content(item)}
-                </HoldableItem>
-              ))}
+              {hasCustomContent ? (
+                items.map((item) => content(item))
+              ) : (
+                <>
+                  {items?.map((item: T, index) => (
+                    <HoldableItem
+                      key={index}
+                      holdTime={1000}
+                      onClick={() => onPressItem?.(item)}
+                      onHold={() => {
+                        setDataSelected?.(item);
+                        drawerProps?.onOpen?.();
+                      }}
+                      className="flex items-center justify-between gap-4 px-4 py-2"
+                    >
+                      {content(item)}
+                    </HoldableItem>
+                  ))}
+                </>
+              )}
             </ul>
           )}
           {items?.length === 0 && query === "" && (

@@ -22,7 +22,7 @@ export const DrawerOptions = ({
   onClose,
 }: OptionsDrawerProps) => {
   return (
-    <Drawer isOpen={isOpen} size="xl" placement="bottom" onClose={onClose}>
+    <Drawer isOpen={isOpen} size="sm" placement="bottom" onClose={onClose}>
       <DrawerContent className="h-full font-montserrat tracking-tight">
         <DrawerBody>
           <header className="mb-2 mt-4">{header}</header>

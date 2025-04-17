@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 
 import {
   Accordion,
@@ -8,6 +8,7 @@ import {
   Input,
   Select,
   SelectItem,
+  SharedSelection,
   useDisclosure,
   User,
 } from "@heroui/react";
@@ -26,6 +27,7 @@ import { api } from "~/utils/api";
 import { amountFormatter } from "~/utils/formatters";
 import { ButtonGroup } from "../components";
 import { TemplatesIncludes } from "~/types/templates/templates";
+import { useParams } from "next/navigation";
 
 interface TemplateFormProps {
   hasEdit?: boolean;
@@ -39,20 +41,21 @@ const TemplateForm = ({
   data: defTemplate,
 }: TemplateFormProps) => {
   const [amountValue, setAmountValue] = useState("");
+  const params = useParams();
+  const bookId = String(params?.bookId);
 
   const {
     register,
     formState: { errors },
-    getValues,
     setValue,
     watch,
     handleSubmit,
   } = useForm<createTemplate>({ resolver: zodResolver(createTemplate) });
 
-  const { mutateAsync: CreateTemplateMutation } =
+  const { mutateAsync: CreateTemplateMutation, isPending: isCreatePending } =
     api.templates.createTemplate.useMutation();
 
-  const { mutateAsync: UpdateTemplateMutation } =
+  const { mutateAsync: UpdateTemplateMutation, isPending: isUpdatePending } =
     api.templates.updateTemplate.useMutation();
 
   const { isOpen, onClose, onOpen } = useDisclosure();
@@ -141,8 +144,33 @@ const TemplateForm = ({
       ? [String(defTemplate.entityId)]
       : undefined;
 
-  useEffect(() => {
+  const onChangeEntity = (key: SharedSelection) => {
+    const entitySelected = entities?.find(
+      (entity) => entity.id === Number(key.currentKey),
+    );
+
+    if (entitySelected) {
+      setValue("entityId", entitySelected.id);
+
+      const updateFields = ["reference", "recipient", "description"];
+
+      updateFields.forEach((field) => {
+        if (watch(field as any) === "") {
+          console.log(field, "set value");
+
+          setValue(
+            field as any,
+            entitySelected[field as keyof typeof entitySelected] ?? "",
+          );
+        }
+      });
+    }
+  };
+
+  useMemo(() => {
     if (defTemplate) {
+      console.log("default setter");
+
       const {
         amount,
         categoryId,
@@ -160,15 +188,20 @@ const TemplateForm = ({
       setAmountValue(formatted);
 
       setValue("type", type);
-      setValue("reference", reference || "");
-      setValue("recipient", recipient || "");
-      setValue("name", name || "");
-      setValue("icon", icon || "");
-      setValue("description", description || "");
+      setValue("reference", reference ?? "");
+      setValue("recipient", recipient ?? "");
+      setValue("name", name ?? "");
+      setValue("icon", icon ?? "");
+      setValue("description", description ?? "");
       setValue("categoryId", categoryId || undefined);
       setValue("entityId", entityId || undefined);
     }
   }, [defTemplate]);
+
+  useEffect(() => {
+    setValue("state", 1);
+    setValue("bookId", bookId);
+  }, [params]);
 
   return (
     <>
@@ -186,7 +219,8 @@ const TemplateForm = ({
         />
         <Accordion
           defaultExpandedKeys={["1"]}
-          className="w-full"
+          className="m-0 rounded-lg !p-0 !shadow-none"
+          selectionMode="multiple"
           motionProps={{
             variants: {
               enter: {
@@ -347,27 +381,7 @@ const TemplateForm = ({
                   items={entities ?? []}
                   placeholder="Seleccionar entidad"
                   label="Entidad"
-                  onChange={(entity) => {
-                    const value = entity.target.value;
-                    const entitySelected = entities?.find(
-                      (entity) => entity.id === Number(value),
-                    );
-
-                    if (!entitySelected) {
-                      setValue("reference", "");
-                      setValue("recipient", "");
-                      setValue("description", "");
-                      return;
-                    }
-
-                    setValue("entityId", entitySelected.id);
-                    setValue(
-                      "reference",
-                      String(entitySelected.reference || ""),
-                    );
-                    setValue("recipient", String(entitySelected.name || ""));
-                    setValue("description", entitySelected.description || "");
-                  }}
+                  onSelectionChange={onChangeEntity}
                   defaultSelectedKeys={defaultEntity}
                   classNames={{
                     label: "group-data-[filled=true]:-translate-y-5",
@@ -464,23 +478,17 @@ const TemplateForm = ({
             </div>
           </AccordionItem>
         </Accordion>
-        <div className="mb-2 flex w-full flex-col gap-2 pt-3 sm:flex-row">
+        <div className="mb-2 flex w-full flex-col gap-2 sm:flex-row">
           <Button
             type="submit"
             className="w-full py-1 text-sm sm:w-fit"
             color="primary"
+            isLoading={isCreatePending || isUpdatePending}
           >
-            <Icon
-              icon="lucide:loader-circle"
-              className={clsx(
-                "-mr-4 opacity-0",
-                // category.isLoading && "animate-spin opacity-100",
-              )}
-            />
             {hasEdit ? "Actualizar Plantilla" : "Crear Plantilla"}
           </Button>
           <Button
-            onClick={() => onSuccess && onSuccess()}
+            onPress={() => onSuccess && onSuccess()}
             className="w-full bg-default-100 py-1 text-sm sm:w-fit"
           >
             Cancelar

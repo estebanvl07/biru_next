@@ -16,7 +16,7 @@ const Menu = ({
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.2 }}
       className={clsx(
-        "absolute top-12 z-50 flex w-80 flex-col rounded-xl border border-divider/10 bg-white px-2 pb-1 pt-2 shadow-xl backdrop-blur-sm md:right-0 md:w-72 dark:border-white/10 dark:bg-default-100",
+        "absolute top-12 z-50 flex w-80 flex-col rounded-xl border border-divider/10 bg-white px-1 pb-1 pt-2 shadow-xl backdrop-blur-sm md:right-0 md:w-64 dark:border-white/10 dark:bg-default-100",
         className,
       )}
     >

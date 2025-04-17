@@ -11,7 +11,7 @@ const NavigationLogo = ({
   isExpanded,
 }: {
   className?: string;
-  isExpanded: boolean;
+  isExpanded?: boolean;
 }) => {
   const { theme } = useThemeContext();
   const params = useParams();
@@ -21,7 +21,7 @@ const NavigationLogo = ({
       href={params?.acc ? `/app/${params?.bookId}` : "/overview"}
       className={clsx("flex items-center gap-2", className)}
     >
-      <Image src={"/logo.svg"} alt="Logo de Biru" width={25} height={35} />
+      <Image src={"/logo.svg"} alt="Logo de Biru" width={22} height={32} />
       {isExpanded && <span className="pt-1 text-2xl font-semibold">Biru</span>}
     </Link>
   );

@@ -22,12 +22,12 @@ export const MENU_OPTIONS: MenuProps[] = [
         icon: "mynaui:panel-left",
         href: "/",
       },
-      // {
-      //   id: 2,
-      //   name: "Calendario",
-      //   icon: "mynaui:calendar-up",
-      //   href: "/calendar",
-      // },
+      {
+        id: 2,
+        name: "Calendario",
+        icon: "mynaui:calendar-up",
+        href: "/calendar",
+      },
       {
         id: 4,
         name: "Presupuesto de Mes",

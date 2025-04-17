@@ -1,6 +1,13 @@
 import { SessionProvider } from "next-auth/react";
 import { type AppType } from "next/app";
-import { Inter, Montserrat, Mukta, Poppins, Ubuntu } from "next/font/google";
+import {
+  Inter,
+  Montserrat,
+  Mukta,
+  Poppins,
+  Ubuntu,
+  Open_Sans,
+} from "next/font/google";
 
 import { api } from "~/utils/api";
 import { HeroUIProvider } from "@heroui/react";

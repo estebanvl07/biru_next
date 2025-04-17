@@ -34,7 +34,7 @@ interface TransactionsTableProps {
 
 const TransactionsTable = ({
   transactions,
-  isLoading = false,
+  isLoading,
 }: TransactionsTableProps) => {
   const router = useRouter();
   const params = useParams<{ bookId: string }>();

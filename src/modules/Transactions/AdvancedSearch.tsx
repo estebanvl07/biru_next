@@ -20,12 +20,15 @@ import { TransactionIncludes } from "~/server/api/services/transactions.services
 import { api } from "~/utils/api";
 import { toast } from "sonner";
 import TransactionsTable from "./TransactionsTable";
+import { useResize } from "~/lib/hooks/useResize";
+import ListTransactions from "./ListTransactions";
 
 const AdvancedSearch = () => {
   const { entities } = useEntity();
   const { categories } = useCategory();
 
   const params = useParams<{ bookId: string }>();
+  const { isMobile } = useResize();
 
   const [maxAmountValue, setMaxAmountValue] = useState("");
   const [minAmountValue, setMinAmountValue] = useState("");
@@ -97,7 +100,7 @@ const AdvancedSearch = () => {
           subtitle={"Realize una búsqueda más detallada"}
         >
           <form
-            className="grid grid-cols-2 gap-4 lg:grid-cols-3"
+            className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3"
             onSubmit={handleSubmit(onSubmit)}
           >
             <DateRangePicker
@@ -106,7 +109,7 @@ const AdvancedSearch = () => {
               classNames={{
                 calendarContent: "font-montserrat",
               }}
-              visibleMonths={3}
+              visibleMonths={isMobile ? 1 : 3}
               onChange={(value) => {
                 if (value) {
                   setValue("start_date", new Date(value.start.toString()));
@@ -128,22 +131,14 @@ const AdvancedSearch = () => {
               isInvalid={!!errors.type?.message}
               errorMessage={errors.type?.message}
             >
-              <SelectItem key={1}>Ingreso</SelectItem>
-              <SelectItem key={2}>Egreso</SelectItem>
+              <SelectItem className="font-montserrat" key={1}>
+                Ingreso
+              </SelectItem>
+              <SelectItem className="font-montserrat" key={2}>
+                Egreso
+              </SelectItem>
             </Select>
             <div className="flex gap-4">
-              <Input
-                label="Monto Máximo"
-                placeholder="400.000"
-                value={maxAmountValue}
-                onValueChange={(val) => {
-                  const { formatted, raw } = amountFormatter(val);
-                  setValue("max", raw ?? undefined);
-                  setMaxAmountValue(formatted);
-                }}
-                isInvalid={!!errors.max?.message}
-                errorMessage={errors.max?.message}
-              />
               <Input
                 label="Monto Minimo"
                 value={minAmountValue}
@@ -155,6 +150,18 @@ const AdvancedSearch = () => {
                 placeholder="100.000"
                 isInvalid={!!errors.min?.message}
                 errorMessage={errors.min?.message}
+              />
+              <Input
+                label="Monto Máximo"
+                placeholder="400.000"
+                value={maxAmountValue}
+                onValueChange={(val) => {
+                  const { formatted, raw } = amountFormatter(val);
+                  setValue("max", raw ?? undefined);
+                  setMaxAmountValue(formatted);
+                }}
+                isInvalid={!!errors.max?.message}
+                errorMessage={errors.max?.message}
               />
             </div>
             <Select
@@ -214,9 +221,15 @@ const AdvancedSearch = () => {
                   : setValue("state", undefined)
               }
             >
-              <SelectItem key={1}>Confirmado</SelectItem>
-              <SelectItem key={2}>Cancelado</SelectItem>
-              <SelectItem key={3}>Programado</SelectItem>
+              <SelectItem className="font-montserrat" key={1}>
+                Confirmado
+              </SelectItem>
+              <SelectItem className="font-montserrat" key={2}>
+                Cancelado
+              </SelectItem>
+              <SelectItem className="font-montserrat" key={3}>
+                Programado
+              </SelectItem>
             </Select>
             <div className="flex gap-2">
               <Button type="submit" isDisabled={!isSubmitted} color="primary">
@@ -233,10 +246,17 @@ const AdvancedSearch = () => {
           </form>
         </AccordionItem>
       </Accordion>
-      <TransactionsTable
-        transactions={transactions as any}
-        isLoading={isLoading}
-      />
+      {isMobile ? (
+        <ListTransactions
+          transactions={transactions as any}
+          isLoading={isLoading}
+        />
+      ) : (
+        <TransactionsTable
+          transactions={transactions as any}
+          isLoading={isLoading}
+        />
+      )}
     </div>
   );
 };

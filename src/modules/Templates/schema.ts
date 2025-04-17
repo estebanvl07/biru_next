@@ -4,6 +4,7 @@ export const input = {
   name: Z_STRING,
   type: Z_NUMBER,
   state: Z_NUMBER,
+  bookId: Z_STRING,
   icon: z.optional(z.string()),
   amount: z.optional(z.number()),
   description: z.optional(z.string()),

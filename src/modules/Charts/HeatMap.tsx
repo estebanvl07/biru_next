@@ -1,4 +1,5 @@
 import dynamic from "next/dynamic";
+import React from "react";
 const Chart = dynamic(() => import("react-apexcharts"), {
   ssr: false, // Evita que se ejecute en el servidor
 });
@@ -9,8 +10,7 @@ import { useTheme } from "~/lib/hooks";
 import { ChartProps } from "~/types/chart.types";
 import { useThemeContext } from "~/lib/context/Theme.context";
 
-// TODO: refactorize component
-const BarChart = ({
+const HeatMap = ({
   series,
   keys,
   heightChart = "250",
@@ -20,12 +20,10 @@ const BarChart = ({
   showYAxis = true,
   showToolTip = true,
   showGrid = true,
-  position = "vertical",
   showToolBar = true,
   offsetX = 0,
   offsetY,
   bottomBorder = true,
-  hasformatNumber,
 }: ChartProps) => {
   const { theme } = useThemeContext();
   const isDark = theme === "dark";
@@ -36,19 +34,18 @@ const BarChart = ({
     <Chart
       options={{
         chart: {
-          type: "bar",
+          type: "heatmap",
           toolbar: {
             show: showToolBar,
           },
           offsetX,
           offsetY,
         },
+
         plotOptions: {
-          bar: {
-            horizontal: position === "horizontal",
-            columnWidth: "50%",
-            borderRadiusApplication: "end",
-            borderRadius: 6,
+          heatmap: {
+            enableShades: true,
+            distributed: true,
           },
         },
         legend: {
@@ -91,46 +88,46 @@ const BarChart = ({
 
             if (title === "Ingresos") {
               return `
-                    <div  class="bg-white px-4 py-2 flex flex-col dark:bg-slate-950">
-                        <span class="text-black font-semibold">
-                        ${currentLabelMonth}
-                        </span>
-
-                        <div class="flex gap-8 w-full justify-between">
-
-                            <div class="flex gap-2 items-center">
-                                <div class="w-3 h-3 bg-primary rounded-full"></div>
-                                ${title}
-                            </div>
-                            <span class="font-semibold">
-                                $ ${currentValue.toLocaleString()}
-                            </span>
-
-                        </div>
-
-                    </div>
-                    `;
+                     <div  class="bg-white px-4 py-2 flex flex-col dark:bg-slate-950">
+                         <span class="text-black font-semibold">
+                         ${currentLabelMonth}
+                         </span>
+ 
+                         <div class="flex gap-8 w-full justify-between">
+ 
+                             <div class="flex gap-2 items-center">
+                                 <div class="w-3 h-3 bg-primary rounded-full"></div>
+                                 ${title}
+                             </div>
+                             <span class="font-semibold">
+                                 $ ${currentValue.toLocaleString()}
+                             </span>
+ 
+                         </div>
+ 
+                     </div>
+                     `;
             }
             return `
-              <div  class="bg-white px-4 py-2 flex flex-col dark:bg-slate-950 border dark:border-white/10">
-                        <span class="text-black font-semibold">
-                        ${currentLabelMonth}
-                        </span>
-
-                        <div class="flex gap-8 w-full justify-between">
-
-                            <div class="flex gap-2 items-center">
-                                <div class="w-3 h-3 bg-indigo-300 rounded-full"></div>
-                                ${title}
-                            </div>
-                            <span class="font-semibold">
-                                $ ${currentValue.toLocaleString()}
-                            </span>
-
-                        </div>
-
-                    </div>
-                `;
+               <div  class="bg-white px-4 py-2 flex flex-col dark:bg-slate-950 border dark:border-white/10">
+                         <span class="text-black font-semibold">
+                         ${currentLabelMonth}
+                         </span>
+ 
+                         <div class="flex gap-8 w-full justify-between">
+ 
+                             <div class="flex gap-2 items-center">
+                                 <div class="w-3 h-3 bg-indigo-300 rounded-full"></div>
+                                 ${title}
+                             </div>
+                             <span class="font-semibold">
+                                 $ ${currentValue.toLocaleString()}
+                             </span>
+ 
+                         </div>
+ 
+                     </div>
+                 `;
           },
         },
         noData: {
@@ -149,9 +146,6 @@ const BarChart = ({
             show: showYAxis,
             align: "left",
             padding: 15,
-            formatter: hasformatNumber
-              ? (val, opt) => parseAmount(val) ?? val
-              : undefined,
             style: {
               fontFamily: FONT_FAMILY,
               colors: isDark ? "#64748b" : "#000",
@@ -178,7 +172,7 @@ const BarChart = ({
           },
         },
       }}
-      type="bar"
+      type="heatmap"
       series={series}
       width={widthChart}
       height={heightChart}
@@ -186,4 +180,4 @@ const BarChart = ({
   );
 };
 
-export default BarChart;
+export default HeatMap;

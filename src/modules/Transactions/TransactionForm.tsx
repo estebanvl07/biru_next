@@ -361,7 +361,7 @@ const TransactionForm = ({
 
   useEffect(() => {
     setValue("bookId", String(query.bookId));
-  }, []);
+  }, [query]);
 
   return (
     <AnimatePresence>

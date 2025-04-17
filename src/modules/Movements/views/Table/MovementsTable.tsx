@@ -236,14 +236,23 @@ const MovementsTable = () => {
               </p>
             </div>
           </aside>
-          <button
-            onClick={() => {
-              setMovementSelected(movement);
-              onOpen();
-            }}
-          >
-            <EllipsisVertical />
-          </button>
+          <aside className="flex items-center gap-4">
+            <Chip
+              size="sm"
+              variant="flat"
+              color={movement.status ? "success" : "danger"}
+            >
+              {movement.status ? "Activo" : "Inactivo"}
+            </Chip>
+            <button
+              onClick={() => {
+                setMovementSelected(movement);
+                onOpen();
+              }}
+            >
+              <EllipsisVertical />
+            </button>
+          </aside>
         </>
       );
     },

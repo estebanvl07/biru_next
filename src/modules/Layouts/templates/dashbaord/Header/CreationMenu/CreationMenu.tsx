@@ -82,12 +82,12 @@ const CreationMenu = () => {
         <PlusIcon />
       </Button>
       {showMenu && (
-        <div className="absolute right-0 top-12 w-60 overflow-hidden rounded-xl border-small border-divider bg-white px-2 py-2 dark:bg-default-100">
+        <div className="absolute right-0 top-12 w-52 overflow-hidden rounded-xl border-small border-divider bg-white px-1 py-2 dark:bg-default-100">
           <Listbox variant="flat" aria-label="Creation menu">
             {OPTIONS.map(({ title, menus }, index) => {
               return (
                 <ListboxSection
-                  key={title}
+                  key={index}
                   classNames={{
                     heading: "dark:text-foreground-200",
                   }}
@@ -96,8 +96,8 @@ const CreationMenu = () => {
                   {menus.map(({ href, label, icon }, index) => (
                     <ListboxItem
                       key={index}
-                      className="px-3 hover:!rounded-small hover:!bg-default-100 dark:!text-slate-100 dark:hover:!bg-default-200"
-                      endContent={<Icon icon={icon ?? ""} width={18} />}
+                      className="px-3 py-1.5 hover:!rounded-small hover:!bg-default-100 dark:!text-slate-100 dark:hover:!bg-default-200"
+                      startContent={<Icon icon={icon ?? ""} width={18} />}
                       as={Link}
                       href={`${BASIC_URL}/${href}`}
                     >

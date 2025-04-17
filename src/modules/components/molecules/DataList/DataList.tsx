@@ -1,5 +1,5 @@
 import { Input } from "@heroui/input";
-import { Button, Link, Spinner } from "@heroui/react";
+import { Button, Link, Skeleton, Spinner } from "@heroui/react";
 import { PlusIcon, Search } from "lucide-react";
 import React, { Dispatch, SetStateAction } from "react";
 import { HoldableItem } from "../../atoms/HoldableItem";
@@ -20,10 +20,12 @@ interface DataListProps<T> {
   hasNew?: boolean;
   newButtonText?: string;
   isLoading?: boolean;
+  hasCustomContent?: boolean;
   drawerProps?: DrawerProps<T>;
   content: (data: T) => JSX.Element;
-  setDataSelected: Dispatch<SetStateAction<T>>;
-  dataSelected: T;
+  setDataSelected?: Dispatch<SetStateAction<T>>;
+  onPressItem?: (data: T) => void;
+  dataSelected?: T;
 }
 
 const DataList = <T,>({
@@ -33,10 +35,12 @@ const DataList = <T,>({
   hrefButtonNew,
   filterKeys,
   isLoading,
+  hasCustomContent,
   onNew,
   drawerProps,
   dataSelected,
   setDataSelected,
+  onPressItem,
   newButtonText = "Crear Nuevo",
 }: DataListProps<T>) => {
   const {
@@ -48,7 +52,6 @@ const DataList = <T,>({
   } = useSearch({
     data,
     keys: filterKeys ?? [],
-    isLoading,
   });
 
   return (
@@ -81,25 +84,32 @@ const DataList = <T,>({
           </div>
         </Button>
       )}
-      {loading ? (
-        <Spinner />
+      {isLoading ? (
+        <ListLoader />
       ) : (
         <>
           {items && (
             <ul className="mt-2">
-              {items?.map((item: T, index) => (
-                <HoldableItem
-                  key={index}
-                  holdTime={1000}
-                  onHold={() => {
-                    setDataSelected(item);
-                    drawerProps?.onOpen?.();
-                  }}
-                  className="flex items-center justify-between gap-4 px-4 py-2"
-                >
-                  {content(item)}
-                </HoldableItem>
-              ))}
+              {hasCustomContent ? (
+                items.map((item) => content(item))
+              ) : (
+                <>
+                  {items?.map((item: T, index) => (
+                    <HoldableItem
+                      key={index}
+                      holdTime={1000}
+                      onClick={() => onPressItem?.(item)}
+                      onHold={() => {
+                        setDataSelected?.(item);
+                        drawerProps?.onOpen?.();
+                      }}
+                      className="flex items-center justify-between gap-4 px-4 py-2"
+                    >
+                      {content(item)}
+                    </HoldableItem>
+                  ))}
+                </>
+              )}
             </ul>
           )}
           {items?.length === 0 && query === "" && (
@@ -128,6 +138,20 @@ const DataList = <T,>({
       >
         {dataSelected && drawerProps?.drawerBodyContent?.(dataSelected)}
       </DrawerOptions>
+    </div>
+  );
+};
+
+const ListLoader = () => {
+  return (
+    <div className="mt-2 flex flex-col gap-2">
+      <Skeleton className="h-12 w-full rounded-xl" />
+      <Skeleton className="h-12 w-full rounded-xl" />
+      <Skeleton className="h-12 w-full rounded-xl opacity-75" />
+      <Skeleton className="h-12 w-full rounded-xl opacity-55" />
+      <Skeleton className="h-12 w-full rounded-xl opacity-35" />
+      <Skeleton className="h-12 w-full rounded-xl opacity-15" />
+      <Skeleton className="h-12 w-full rounded-xl opacity-5" />
     </div>
   );
 };

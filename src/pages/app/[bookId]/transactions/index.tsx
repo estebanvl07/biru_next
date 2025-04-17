@@ -4,7 +4,7 @@ import DashboardLayout from "~/modules/Layouts/Dashboard";
 import { Button, Tabs, Tab, Link } from "@heroui/react";
 
 import { useResize } from "~/lib/hooks/useResize";
-import MobileTransactionPage from "~/modules/Transactions/MobileTransactionPage";
+import ListTransactions from "~/modules/Transactions/ListTransactions";
 import { useTransactions } from "~/modules/Transactions/hook";
 
 import { DASHBOARD_MAIN_PATH } from "~/lib/constants/config";
@@ -45,14 +45,14 @@ const TransactionPage = () => {
           tabList: "gap-x-4 pt-0",
         }}
       >
-        <Tab title="Ultimas 50" key="all">
+        <Tab title="Recientes" key="all">
           {!isMobile ? (
             <TransactionsTable
               transactions={transactions}
               isLoading={isLoading}
             />
           ) : (
-            <MobileTransactionPage
+            <ListTransactions
               transactions={transactions}
               isLoading={isLoading}
             />

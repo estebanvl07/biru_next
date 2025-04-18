@@ -38,6 +38,7 @@ const NewTransactionPage = () => {
         <Tab
           key="transfer"
           className="w-full"
+          aria-label="Transferencia"
           title={
             <div className="flex items-center space-x-2 px-2">
               <Icon icon="bx:transfer" width={20} />
@@ -50,6 +51,7 @@ const NewTransactionPage = () => {
         <Tab
           className="w-full"
           key="goals"
+          aria-label="Transferencia de Meta"
           title={
             <div className="flex items-center space-x-2 px-2">
               <Icon icon="ph:target" width={20} />

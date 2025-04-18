@@ -14,6 +14,7 @@ const CalendarPage = () => {
   return (
     <DashboardLayout
       title="Calendario de Eventos"
+      subtitle="Organiza tus eventos de pagos y recordatorios"
       activityContent={
         <div className="flex items-center gap-x-2">
           <Button

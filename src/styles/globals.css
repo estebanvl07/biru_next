@@ -37,14 +37,86 @@ body {
   }
 }
 
+/* current date color */
+.fc .fc-daygrid-day.fc-day-today {
+  @apply !bg-primary/10;
+}
+
+.fc .fc-col-header-cell-cushion {
+  @apply px-1 py-2;
+}
+
+.fc-view {
+  @apply rounded-xl;
+}
+
+.fc-scrollgrid-liquid {
+  @apply overflow-hidden whitespace-nowrap rounded-xl border border-divider dark:border-white/10;
+}
+
+.fc-theme-standard td {
+  @apply !border-divider dark:!border-white/10;
+}
+
+.fc-theme-standard th {
+  @apply !border-divider dark:!border-white/10;
+}
+
+.fc-theme-standard .fc-scrollgrid {
+  @apply !border-divider dark:!border-white/10;
+}
+
+.fc-button-group {
+  @apply flex items-center gap-x-1 !rounded-2xl !bg-default-200/50 !p-1.5 dark:!bg-default-100;
+}
+
+.fc-button-group .fc-button {
+  @apply !border-none !bg-transparent px-4 !text-foreground-600;
+}
+
+.fc-button.fc-button-active {
+  @apply !bg-primary !text-white hover:!bg-primary;
+}
+
+.fc-button-active:focus {
+  @apply !shadow-none !outline-none;
+}
+
+.fc-button-active:active:focus {
+  @apply !shadow-none !outline-none;
+}
+
+.fc-toolbar-chunk {
+  @apply flex items-center gap-x-1;
+}
+.fc-button {
+  @apply !rounded-xl !border-divider transition-colors hover:!bg-default-200/50 dark:!bg-default-100/70;
+}
+
+.fc-today-button {
+  @apply !bg-transparent !px-4  !text-black dark:!text-white;
+}
+
+.fc-next-button {
+  @apply !mx-1 !flex !h-10 !w-10 !items-center !justify-center !rounded-full !border-none !bg-transparent !text-black outline-none dark:!text-white;
+}
+
+.fc-prev-button {
+  @apply !mx-1 !flex !h-10 !w-10 !items-center !justify-center !rounded-full !border-none !bg-transparent !text-black outline-none dark:!text-white;
+}
+
+.fc-day-other {
+  @apply bg-default-200/35;
+}
+
 .fc-header-toolbar {
   @apply flex flex-col items-center justify-start md:flex-row md:justify-between;
 }
 .fc-toolbar-title {
-  @apply capitalize -tracking-wide;
+  @apply uppercase -tracking-wide text-foreground-800 dark:text-white;
 }
 .fc-col-header-cell-cushion {
-  @apply capitalize;
+  @apply !font-semibold capitalize;
 }
 
 .fc-daygrid-day-events {

@@ -67,7 +67,7 @@ const DashboardLayout = ({
             <div className="mx-auto flex max-w-[90rem] flex-col md:px-8">
               {!isMobile && (
                 <>
-                  <Breadcrum />
+                  {/* <Breadcrum /> */}
                   <div className="flex flex-row items-center justify-between">
                     <aside>
                       <h1 className="text-start text-xl font-semibold -tracking-wide text-primary lg:text-3xl dark:text-slate-200">

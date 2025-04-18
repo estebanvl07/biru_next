@@ -158,17 +158,15 @@ const EventsCalendar = () => {
         <EventList />
       </aside>
       <div className="flex-grow">
-        <section className="w-full md:sticky md:top-0">
+        <section className="w-full md:sticky md:top-0 dark:text-white/80">
           <FullCalendar
             height={isMobile ? "70vh" : "85vh"}
             plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
             initialView={isMobile ? "timeGridDay" : "dayGridMonth"}
             events={events}
             locale={esLocale}
-            showNonCurrentDates={false}
-            // selectLongPressDelay={100}
             headerToolbar={{
-              left: "prev,next today",
+              left: "prev next today",
               center: "title",
               right: "dayGridMonth,timeGridWeek,timeGridDay",
             }}

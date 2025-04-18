@@ -8,4 +8,5 @@ export interface MovementsIncludes extends FixedMovements {
   goal?: GoalsIncludes;
   transactions?: TransactionIncludes[];
   transferType?: "goal" | "transaction" | "movement" | "saving";
+  isPaid?: boolean;
 }

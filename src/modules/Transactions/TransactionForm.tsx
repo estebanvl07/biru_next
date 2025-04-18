@@ -55,6 +55,7 @@ import {
 } from "~/utils/transactionStatus";
 import { set } from "lodash";
 import { useQueryClient } from "@tanstack/react-query";
+import { useExpensesCurrentMonth } from "../Budget/hooks/useBudget";
 
 const statusOptions = [
   {
@@ -103,10 +104,12 @@ interface TransactionFormProps {
   mode?: "create" | "edit";
   transactionDefault?: TransactionIncludes;
   defaultGoal?: GoalsIncludes;
+  defSchedule?: boolean;
   defCategory?: CategoryIncludes;
+  defScheduleDate?: Date;
   defEntity?: EntityIncludes;
-  defType?: 1 | 2;
-  onSuccess?: () => void;
+  defType?: 1 | 2 | 3;
+  onSuccess?: (data: TransactionIncludes) => void;
 }
 
 const TransactionForm = ({
@@ -114,7 +117,9 @@ const TransactionForm = ({
   mode = "create",
   transactionDefault,
   defaultGoal,
+  defSchedule = false,
   defCategory,
+  defScheduleDate,
   defEntity,
   defType = 1,
   onSuccess,
@@ -122,7 +127,7 @@ const TransactionForm = ({
   const [amountValue, setAmountValue] = useState("");
   const [goalSelected, setGoalSelected] = useState<GoalsIncludes>();
   const [schedule, setSchedule] = useState<boolean>(
-    transactionDefault?.state === 3,
+    transactionDefault?.state === 3 || defSchedule,
   );
 
   const { account } = useCurrentAccount();
@@ -130,6 +135,7 @@ const TransactionForm = ({
   const { accounts } = useAccounts();
   const { categories } = useCategory();
   const { goals } = useGoals();
+  const { invalidateExpenses } = useExpensesCurrentMonth();
 
   const router = useRouter();
 
@@ -139,14 +145,17 @@ const TransactionForm = ({
 
   const { mutateAsync: createTransactionMutation } =
     api.transaction.create.useMutation({
-      onSuccess: () => {
+      onSuccess: (data) => {
+        onSuccess?.(data);
+        invalidateExpenses({ hasRefetch: true });
         trpcQuery.transaction.getTransactions.invalidate();
       },
     });
-
   const { mutateAsync: updateTransactionMutation } =
     api.transaction.update.useMutation({
-      onSuccess: () => {
+      onSuccess: (data) => {
+        onSuccess?.(data);
+        invalidateExpenses({ hasRefetch: true });
         const queryClient = useQueryClient();
         queryClient.invalidateQueries();
       },
@@ -207,7 +216,12 @@ const TransactionForm = ({
   });
 
   const onSubmit = (data: createTransaction) => {
-    const payload = { ...data, state: schedule ? 3 : 1 };
+    const payload = {
+      ...data,
+      state: schedule ? 3 : 1,
+      isConfirmed: !schedule,
+      isProgramed: schedule,
+    };
 
     if (mode === "create") {
       toast("Esta seguro de realizar esta acción", {
@@ -220,7 +234,7 @@ const TransactionForm = ({
                 { ...payload },
                 {
                   onSuccess(data) {
-                    onSuccess && onSuccess();
+                    onSuccess?.(data);
                     reset();
                   },
                 },
@@ -239,10 +253,13 @@ const TransactionForm = ({
     if (transactionDefault) {
       toast.promise(
         updateTransactionMutation(
-          { id: String(transactionDefault.id), ...payload },
+          {
+            id: String(transactionDefault.id),
+            ...payload,
+          },
           {
             onSuccess(data) {
-              onSuccess && onSuccess();
+              onSuccess?.(data);
               reset();
             },
           },
@@ -631,8 +648,10 @@ const TransactionForm = ({
                   containerClassName="mt-4"
                   changeValue={(newDate) => setValue("date", newDate)}
                   value={watch("date")}
+                  defaultValue={
+                    defScheduleDate || (transactionDefault && defaultDate)
+                  }
                   required
-                  defaultValue={transactionDefault && defaultDate}
                 />
               </motion.div>
             )}
@@ -643,7 +662,6 @@ const TransactionForm = ({
               trigger: "!shadow-none",
               base: "px-0 !shadow-none",
             }}
-            defaultExpandedKeys={type === "transfer" ? ["1"] : []}
             showDivider={type === "goal"}
             selectionMode="multiple"
             motionProps={{
@@ -934,9 +952,10 @@ const TransactionForm = ({
             >
               {mode === "edit" ? "Actualizar Transacción" : "Crear Transacción"}
             </Button>
+            {/* TODO: Add cancel func */}
             <Button
               className="py-1 text-sm sm:w-fit"
-              onPress={() => onSuccess && onSuccess()}
+              // onPress={() => }
             >
               Cancelar
             </Button>

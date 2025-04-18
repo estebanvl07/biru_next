@@ -17,6 +17,8 @@ export const input = {
   description: z.optional(z.string()),
   transferType: z.optional(z.number()),
   state: z.optional(z.number()),
+  isProgramed: z.optional(z.boolean()),
+  isConfirmed: z.optional(z.boolean()),
   goalId: z.optional(z.number()),
   entityId: z.optional(z.number()),
   categoryId: z.optional(z.number()),

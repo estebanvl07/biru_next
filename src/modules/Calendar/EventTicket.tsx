@@ -1,49 +1,76 @@
-import { Chip, Tooltip } from "@heroui/react";
-import React from "react";
+import {
+  Button,
+  Chip,
+  Dropdown,
+  DropdownItem,
+  DropdownMenu,
+  DropdownTrigger,
+  Tooltip,
+  useDisclosure,
+} from "@heroui/react";
+import React, { useState } from "react";
 
 import { EventContentArg } from "@fullcalendar/core/index.js";
 import clsx from "clsx";
 import EventSummaryCard from "./EventSummaryCard";
+import { MovementsIncludes } from "~/types/movements";
+import Modal from "../components/atoms/Modal.component";
+import { EllipsisVertical, Trash, X } from "lucide-react";
 
 const EventTicket = (eventInfo: EventContentArg) => {
   return (
-    <Tooltip
-      classNames={{
-        content: "font-montserrat bg-transparent p-0",
-      }}
-      triggerScaleOnOpen
-      delay={3000}
-      closeDelay={0}
-      content={<EventSummaryCard {...eventInfo.event.extendedProps.movement} />}
-      placement="right"
-    >
+    <div className="relative w-full">
+      <Ticket
+        movement={eventInfo.event.extendedProps?.movement}
+        title={eventInfo.event.title}
+      />
+    </div>
+  );
+};
+
+const Ticket = ({
+  movement,
+  title,
+}: {
+  movement: MovementsIncludes;
+  title: string;
+}) => {
+  const { isOpen, onClose, onOpen } = useDisclosure();
+  if (!movement) return null;
+
+  const { type } = movement;
+  const isPaid = movement?.isPaid || false;
+  return (
+    <div className="relative w-full">
       <Chip
-        variant="bordered"
+        variant="flat"
         size="sm"
+        onClick={() => onOpen()}
         radius="sm"
-        className={clsx("h-fit border py-1", {
-          "bg-primary/10 dark:!bg-indigo-500/10 dark:text-indigo-300":
-            !eventInfo.event.extendedProps.isPay,
-          "border-divider bg-default-100/10":
-            eventInfo.event.extendedProps.isPay,
-        })}
-        color={eventInfo.event.extendedProps.isPay ? "default" : "primary"}
+        className={clsx(
+          "z-0 h-fit w-full max-w-full overflow-hidden text-ellipsis whitespace-nowrap py-1",
+          {
+            "": !isPaid,
+            "bg-default-100/10": isPaid,
+          },
+        )}
+        color={isPaid ? "default" : type === 1 ? "success" : "danger"}
       >
         <div
           className={clsx(
-            "relative flex flex-col items-center justify-center gap-x-2",
+            "relative flex flex-col items-center justify-center gap-x-2 ",
           )}
         >
           <p
-            className={clsx("w-16 overflow-hidden text-ellipsis", {
-              "line-through": eventInfo.event.extendedProps.isPay,
+            className={clsx("text-[11px]  md:text-xs", {
+              "line-through": isPaid,
             })}
           >
-            {eventInfo.event.title}
+            {title}
           </p>
         </div>
       </Chip>
-    </Tooltip>
+    </div>
   );
 };
 

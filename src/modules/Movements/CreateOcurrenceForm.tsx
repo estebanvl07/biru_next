@@ -46,6 +46,7 @@ const CreateOcurrenceForm = ({
         await invalidateExpenses({ hasRefetch: true });
         onSuccess?.();
         invalidateMovements();
+        router.back();
       },
     });
 
@@ -55,6 +56,7 @@ const CreateOcurrenceForm = ({
         await invalidateExpenses({ hasRefetch: true });
         onSuccess?.();
         invalidateMovements();
+        router.back();
       },
     });
 

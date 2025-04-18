@@ -84,7 +84,7 @@ const DashboardLayout = ({
                 </>
               )}
               <motion.main
-                className={clsx("z-0 mt-4 px-content md:px-0", {
+                className={clsx("z-0 px-content md:mt-4 md:px-0", {
                   "pb-16": isMobile,
                 })}
                 key={router.pathname}

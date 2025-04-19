@@ -17,7 +17,10 @@ export const InputSelectAccount = ({
   isRequired,
 }: InputSAccountProps) => {
   const { accounts, isLoading } = useAccounts();
-  const { account } = useCurrentAccount();
+
+  const hasDefaultSelected = defaultSelected ?? [
+    `${accounts?.find((acc) => acc.isMain)?.id}`,
+  ];
 
   return (
     <Select
@@ -43,9 +46,7 @@ export const InputSelectAccount = ({
       required={isRequired}
       isRequired={isRequired}
       endContent={isLoading ? <Spinner /> : null}
-      defaultSelectedKeys={
-        defaultSelected || account?.isMain ? [`${account?.id}`] : undefined
-      }
+      defaultSelectedKeys={hasDefaultSelected}
       isInvalid={hasError}
       errorMessage={errorMessage}
     >

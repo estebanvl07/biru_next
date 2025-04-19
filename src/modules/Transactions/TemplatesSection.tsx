@@ -24,6 +24,7 @@ const TemplatesSection = ({ onChange }: TemplateSectionProps) => {
         items={templates}
         size="sm"
         placeholder="Plantillas"
+        aria-label="Plantillas"
         className="w-48"
         radius="full"
         title={templateSelected?.name || "Plantillas"}

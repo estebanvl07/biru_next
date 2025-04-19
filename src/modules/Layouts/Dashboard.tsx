@@ -64,10 +64,10 @@ const DashboardLayout = ({
           {isMobile && <BottomMobileNav />}
           {isMobile && <DrawerOptions />}
           <section className="relative z-0 h-full w-full flex-grow overflow-hidden overflow-y-auto rounded-xl border-divider/10 bg-white pb-10 scrollbar-hide md:border md:bg-default-50/50 md:pt-4 dark:bg-slate-900 md:dark:bg-slate-950">
-            <div className="container mx-auto flex flex-col md:px-8">
+            <div className="mx-auto flex max-w-[90rem] flex-col md:px-8">
               {!isMobile && (
                 <>
-                  <Breadcrum />
+                  {/* <Breadcrum /> */}
                   <div className="flex flex-row items-center justify-between">
                     <aside>
                       <h1 className="text-start text-xl font-semibold -tracking-wide text-primary lg:text-3xl dark:text-slate-200">
@@ -84,7 +84,7 @@ const DashboardLayout = ({
                 </>
               )}
               <motion.main
-                className={clsx("z-0 mt-4 px-content md:px-0", {
+                className={clsx("z-0 px-content md:mt-4 md:px-0", {
                   "pb-16": isMobile,
                 })}
                 key={router.pathname}

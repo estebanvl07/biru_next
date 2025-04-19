@@ -93,6 +93,7 @@ export async function makeTransaction(
     await db.transaction.update({
       data: {
         state: 1,
+        isConfirmed: true,
       },
       where: {
         id: Number(data.id),
@@ -361,6 +362,11 @@ export async function cancelTransaction(
     include: { goal: true },
     data: { state: 2 },
   });
+
+  if (transaction.isProgramed && !transaction.isConfirmed) {
+    // si la transaccion programada no se ha confirmado, no se hace el ajuste de la cuenta
+    return transaction;
+  }
 
   let validate;
 

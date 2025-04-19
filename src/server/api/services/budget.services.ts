@@ -47,7 +47,15 @@ export async function getCurrentMovementsMonth(
       where: {
         userId,
         bookId,
-        state: 3,
+        isProgramed: true,
+        OR: [
+          {
+            state: 3,
+          },
+          {
+            state: 1,
+          },
+        ],
       },
       include: {
         category: true,
@@ -56,7 +64,9 @@ export async function getCurrentMovementsMonth(
     });
 
     const movemntsFormatted: MovementsIncludes[] = movements.map((m) => {
-      return { ...m, transferType: "movement" } as MovementsIncludes;
+      const isPaid =
+        m.last_ocurrence && isSameMonth(new Date(m.last_ocurrence), new Date());
+      return { ...m, transferType: "movement", isPaid } as MovementsIncludes;
     });
 
     const formattedTransactions: MovementsIncludes[] = transactions.map(
@@ -72,6 +82,7 @@ export async function getCurrentMovementsMonth(
         updatedAt,
         goalId,
         categoryId,
+        isConfirmed,
         entityId,
         entity,
         category,
@@ -96,7 +107,8 @@ export async function getCurrentMovementsMonth(
           reminder_sent: true,
           frecuency: 0,
           next_ocurrence: date as Date,
-          last_ocurrence: null,
+          last_ocurrence: date as Date,
+          isPaid: isConfirmed || false,
           createdAt,
           updatedAt,
           transferType: "transaction",

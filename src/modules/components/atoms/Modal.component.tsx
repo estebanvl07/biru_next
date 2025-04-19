@@ -7,16 +7,15 @@ import {
   ModalFooter,
   Button,
   useDisclosure,
+  type ModalProps,
 } from "@heroui/react";
 
-interface ModalProps {
+interface CustomModalProps extends ModalProps {
   children: React.ReactNode;
-  backdrop?: "opaque" | "blur" | "transparent";
-  isOpen: boolean;
   footerContent?: React.ReactNode;
+  customHeader?: React.ReactNode;
   title?: string;
-  size?: string;
-  onClose: () => void;
+  subtitle?: string;
 }
 
 const Modal = ({
@@ -25,9 +24,12 @@ const Modal = ({
   footerContent,
   title,
   onClose,
+  customHeader,
   size,
+  subtitle,
   isOpen,
-}: ModalProps) => {
+  ...props
+}: CustomModalProps) => {
   return (
     <ModalLayout
       size={(size as any) ?? "md"}
@@ -35,16 +37,24 @@ const Modal = ({
       placement="center"
       isOpen={isOpen}
       onClose={onClose}
+      {...props}
     >
       <ModalContent>
         {(onClose) => (
           <>
             <ModalHeader className="mb-0 flex flex-col gap-1 pb-0 font-montserrat">
-              <h2>{title ?? "Crear"}</h2>
+              {customHeader ? (
+                <>{customHeader}</>
+              ) : (
+                <>
+                  {title && <h2>{title}</h2>}
+                  {subtitle && <p>{subtitle}</p>}
+                </>
+              )}
             </ModalHeader>
             <ModalBody className="font-montserrat">{children}</ModalBody>
             {footerContent && (
-              <ModalFooter className="font-monserrat">
+              <ModalFooter className="font-montserrat">
                 {footerContent}
               </ModalFooter>
             )}

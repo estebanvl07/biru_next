@@ -1,9 +1,9 @@
 import { useSession } from "next-auth/react";
 import { useParams } from "next/navigation";
 
-export const getCurrentBookId = () => {
+export const getCurrentBookId = (): string => {
   const params = useParams();
-  return params?.bookId || null;
+  return String(params?.bookId);
 };
 
 export const getCurrentUserId = () => {

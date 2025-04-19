@@ -45,8 +45,8 @@ const CreateMovementsForm = ({
 }: MovementFormProps) => {
   const [amountValue, setAmountValue] = useState<string>("");
   const [goalSelected, setGoalSelected] = useState<GoalsIncludes>();
-  const [schedule, setSchedule] = useState<boolean>(
-    defaultMovement?.goalId !== null,
+  const [associated, setAssociated] = useState<boolean>(
+    Boolean(defaultMovement?.goalId),
   );
   const [customFrecuency, setCustomFrecuency] = useState(false);
 
@@ -171,6 +171,9 @@ const CreateMovementsForm = ({
       setValue("type", defaultMovement.type);
       setValue("name", defaultMovement.name);
       setValue("frecuency", defaultMovement.frecuency);
+      setAssociated(Boolean(defaultMovement?.goalId));
+    } else {
+      setAssociated(false);
     }
   }, [defaultMovement]);
 
@@ -331,13 +334,12 @@ const CreateMovementsForm = ({
             </p>
           </aside>
           <Switch
-            onValueChange={setSchedule}
-            defaultChecked={schedule}
-            defaultSelected={schedule}
+            onValueChange={setAssociated}
+            defaultChecked={associated}
             size="sm"
           />
         </div>
-        {schedule && (
+        {associated && (
           <motion.div
             initial={{
               opacity: 0,

@@ -122,6 +122,11 @@ const EventsCalendar = () => {
     }
   };
 
+  const module_name =
+    eventSelected?.transferType === "transaction"
+      ? "transactions"
+      : "movements";
+
   useEffect(() => {
     if (data) {
       const dataEvents = data?.map((movement) => {
@@ -207,12 +212,8 @@ const EventsCalendar = () => {
                 <DropdownItem
                   key="edit"
                   onPress={() => {
-                    const module =
-                      eventSelected?.transferType === "transaction"
-                        ? "transactions"
-                        : "movements";
                     router.push(
-                      `${DASHBOARD_MAIN_PATH}/${bookId}/${module}/${eventSelected?.id}/edit`,
+                      `${DASHBOARD_MAIN_PATH}/${bookId}/${module_name}/${eventSelected?.id}/edit`,
                     );
                   }}
                 >
@@ -221,12 +222,8 @@ const EventsCalendar = () => {
                 <DropdownItem
                   key="view"
                   onPress={() => {
-                    const module =
-                      eventSelected?.transferType === "transaction"
-                        ? "transactions"
-                        : "movements";
                     router.push(
-                      `${DASHBOARD_MAIN_PATH}/${bookId}/${module}/${eventSelected?.id}`,
+                      `${DASHBOARD_MAIN_PATH}/${bookId}/${module_name}/${eventSelected?.id}`,
                     );
                   }}
                 >

@@ -8,6 +8,7 @@ import * as TransactionServices from "~/server/api/services/transactions.service
 import { createTRPCRouter, protectedProcedure } from "~/server/api/trpc";
 import { z } from "zod";
 import { advanceSchema } from "~/modules/Transactions/advanceSchema";
+import { getIO } from "~/server/socket";
 // import { Server } from "socket.io";
 
 // const io = new Server();
@@ -85,6 +86,13 @@ export const transactionsRouter = createTRPCRouter({
         ...input,
         userId,
       });
+      const io = getIO();
+      console.log("🚀 Dbería emitir transacción", io);
+
+      if (io) {
+        console.log("🚀 Emitiendo transacción");
+        io.emit("newTransaction", response);
+      }
 
       return response;
     }),

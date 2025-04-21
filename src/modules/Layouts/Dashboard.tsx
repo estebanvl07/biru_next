@@ -52,9 +52,10 @@ const DashboardLayout = ({
       <div className="flex w-full flex-col">
         {!isMobile ? (
           <HeaderApp
-            logo
             rightContent={headerProps?.rightContent}
             subtitle={headerProps?.subtitle}
+            hasNotifications
+            logo
           />
         ) : (
           <HeaderMobile title={title} />

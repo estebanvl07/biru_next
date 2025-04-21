@@ -26,7 +26,7 @@ const HeaderApp = memo(
     className,
     rightContent,
     logo = false,
-    hasNotifications = true,
+    hasNotifications = false,
   }: HeaderAppProps) => {
     return (
       <header

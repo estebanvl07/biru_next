@@ -7,18 +7,17 @@ import { motion } from "framer-motion";
 import { Badge } from "@heroui/badge";
 import { Avatar, Chip } from "@heroui/react";
 import { useNotification } from "~/lib/hooks/useNotification";
+import { useWebSocket } from "~/lib/hooks/useWebSocket";
 
 const NotificationMenu = () => {
   const [showMenu, setShowMenu] = useState(false);
   const { notifications, isLoading } = useNotification();
-  // const { isConnected } = useWebSocket();
+  const { isConnected } = useWebSocket();
   const element = useOutsideClick<HTMLDivElement>(() => onHideMenu());
 
   const onHideMenu = () => {
     setShowMenu(false);
   };
-
-  return null;
 
   return (
     <div ref={element} className="relative">

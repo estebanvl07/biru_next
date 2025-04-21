@@ -254,7 +254,7 @@ model FixedMovements {
   status         Boolean @default(true)
   accountId      Int?
   reminder_date  DateTime // fecha para enviar recordatorio
-  reminder_sent  Boolean?  @default(true) // recordatorio enviado
+  reminder_sent  Boolean?  @default(false) // recordatorio enviado
   next_ocurrence DateTime
   goalId         Int?
   entityId       Int?

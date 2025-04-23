@@ -4,10 +4,7 @@ import { filtersHandler } from "../filterHandler";
 import { advanceSchema } from "~/modules/Transactions/advanceSchema";
 import { getIO } from "~/server/socket";
 import { NOTIFICATIONS } from "~/utils/notifications/factory";
-import {
-  emitNotification,
-  emitTransactionNewNotification,
-} from "~/server/ws/emmiter";
+import { emitNotification } from "~/server/ws/emmiter";
 import {
   createNotification,
   CreateNotificationInput,
@@ -35,6 +32,25 @@ export async function createTransaction(
   });
 
   return result;
+}
+
+export async function createNote(
+  db: PrismaClient,
+  transactionId: number,
+  note: string,
+  userId: string,
+) {
+  try {
+    return db.transactionNotes.create({
+      data: {
+        transactionId,
+        note,
+        userId,
+      },
+    });
+  } catch (error) {
+    throw new Error("Transaction not found");
+  }
 }
 
 export async function searchTransactions(
@@ -268,7 +284,13 @@ export async function getTransactionsByFilter(
         lt: filterEndDate,
       },
     },
-    include: { userAccount: true, category: true, entity: true, goal: true },
+    include: {
+      userAccount: true,
+      category: true,
+      entity: true,
+      goal: true,
+      notes: true,
+    },
     orderBy: {
       date: "desc",
     },
@@ -318,7 +340,13 @@ export async function getTransactionsByQuery(
         },
       ],
     },
-    include: { userAccount: true, category: true, entity: true, goal: true },
+    include: {
+      userAccount: true,
+      category: true,
+      entity: true,
+      goal: true,
+      notes: true,
+    },
     orderBy: {
       date: "desc",
     },
@@ -342,7 +370,13 @@ export async function getTransactions(
         bookId,
         userId,
       },
-      include: { userAccount: true, category: true, entity: true, goal: true },
+      include: {
+        userAccount: true,
+        category: true,
+        entity: true,
+        goal: true,
+        notes: true,
+      },
       orderBy: { createdAt: "desc" },
     }),
     db.transaction.count({
@@ -368,7 +402,13 @@ export async function getTransactionById(
 ) {
   return await db.transaction.findFirst({
     where: { id, bookId, userId },
-    include: { userAccount: true, category: true, entity: true, goal: true },
+    include: {
+      userAccount: true,
+      category: true,
+      entity: true,
+      goal: true,
+      notes: true,
+    },
   });
 }
 

@@ -65,6 +65,14 @@ export const useTransactionsTable = (pagination: TablePagination) => {
     await queryClient.invalidateQueries({ queryKey: transactionKey });
   };
 
+  const updateTransactionCache = (
+    updater: (
+      prev: TransactionIncludes[] | undefined,
+    ) => TransactionIncludes[] | undefined,
+  ) => {
+    queryClient.setQueryData(transactionKey, updater);
+  };
+
   return {
     transactions: data?.transaction,
     total: data?.total,
@@ -72,6 +80,7 @@ export const useTransactionsTable = (pagination: TablePagination) => {
     invalidateTractionsTable,
     refetch,
     isLoading,
+    updateTransactionCache,
   };
 };
 

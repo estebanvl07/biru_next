@@ -30,6 +30,7 @@ import { TransactionIncludes } from "~/types/transactions";
 import EditGoal from "~/modules/Goals/EditGoal";
 import { api } from "~/utils/api";
 import { toast } from "sonner";
+import { DASHBOARD_MAIN_PATH } from "~/lib/constants/config";
 
 const DetailGoalPage = ({ goalData }: { goalData: GoalsIncludes }) => {
   const {
@@ -55,6 +56,8 @@ const DetailGoalPage = ({ goalData }: { goalData: GoalsIncludes }) => {
 
   const router = useRouter();
   const params = useParams();
+  const bookId = String(params?.bookId);
+
   const { isMobile } = useResize();
   const [isClient, setIsClient] = useState(false);
   const { goal, saved, name, goalDate, description, state, id, entity } =
@@ -99,9 +102,8 @@ const DetailGoalPage = ({ goalData }: { goalData: GoalsIncludes }) => {
             <Actions
               onClickView={() =>
                 router.push({
-                  pathname: "/account/[acc]/transactions/[id]",
+                  pathname: `${DASHBOARD_MAIN_PATH}/${bookId}/transactions/[id]`,
                   query: {
-                    acc: String(params?.acc),
                     id: String(transaction?.id),
                   },
                 })

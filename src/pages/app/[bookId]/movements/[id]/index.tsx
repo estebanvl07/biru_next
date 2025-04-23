@@ -52,6 +52,8 @@ const MovementDetail = ({ data }: MovementDetailProps) => {
   } = movement;
 
   const params = useParams();
+  const bookId = String(params?.bookId);
+
   const router = useRouter();
   const { isMobile } = useResize();
 
@@ -165,18 +167,16 @@ const MovementDetail = ({ data }: MovementDetailProps) => {
             <Actions
               onClickView={() =>
                 router.push({
-                  pathname: "/account/[acc]/transactions/[id]",
+                  pathname: `${DASHBOARD_MAIN_PATH}/${bookId}/transactions/[id]`,
                   query: {
-                    acc: String(params?.acc),
                     id: String(transaction.id),
                   },
                 })
               }
               onClickEdit={() =>
                 router.push({
-                  pathname: "/account/[acc]/transactions/[id]/edit",
+                  pathname: `${DASHBOARD_MAIN_PATH}/${bookId}/transactions/[id]/edit`,
                   query: {
-                    acc: String(params?.acc),
                     id: String(transaction.id),
                   },
                 })

@@ -84,6 +84,18 @@ export const transactionsRouter = createTRPCRouter({
       });
       return transaction;
     }),
+  createNote: protectedProcedure
+    .input(z.object({ id: z.number(), note: z.string() }))
+    .mutation(async ({ ctx, input }) => {
+      const userId = ctx.session.user.id;
+      const response = await TransactionServices.createNote(
+        ctx.db,
+        input.id,
+        input.note,
+        userId,
+      );
+      return response;
+    }),
   makeTransaction: protectedProcedure
     .input(z.object({ bookId: z.string(), id: z.number() }))
     .mutation(async ({ ctx, input }) => {

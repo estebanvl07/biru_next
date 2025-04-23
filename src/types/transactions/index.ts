@@ -5,6 +5,7 @@ import {
   Transaction,
   User,
   UserAccount,
+  TransactionNotes,
 } from "@prisma/client";
 
 export enum FILTERS {
@@ -35,4 +36,5 @@ export interface TransactionIncludes extends Transaction {
   entity?: Entities;
   user?: User;
   userAccount?: UserAccount;
+  notes?: TransactionNotes[];
 }

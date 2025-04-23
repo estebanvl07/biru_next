@@ -8,10 +8,6 @@ import * as TransactionServices from "~/server/api/services/transactions.service
 import { createTRPCRouter, protectedProcedure } from "~/server/api/trpc";
 import { z } from "zod";
 import { advanceSchema } from "~/modules/Transactions/advanceSchema";
-import { getIO } from "~/server/socket";
-// import { Server } from "socket.io";
-
-// const io = new Server();
 
 export const transactionsRouter = createTRPCRouter({
   getTransactionsByFilter: protectedProcedure
@@ -82,19 +78,11 @@ export const transactionsRouter = createTRPCRouter({
     .input(createTransaction)
     .mutation(async ({ ctx, input }) => {
       const userId = ctx.session.user.id;
-      const response = await TransactionServices.createTransaction(ctx.db, {
+      const transaction = await TransactionServices.createTransaction(ctx.db, {
         ...input,
         userId,
       });
-      const io = getIO();
-      console.log("🚀 Dbería emitir transacción", io);
-
-      if (io) {
-        console.log("🚀 Emitiendo transacción");
-        io.emit("newTransaction", response);
-      }
-
-      return response;
+      return transaction;
     }),
   makeTransaction: protectedProcedure
     .input(z.object({ bookId: z.string(), id: z.number() }))

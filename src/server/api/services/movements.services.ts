@@ -1,6 +1,15 @@
+import { Success } from "./../../../lib/config/httpStatusCode";
 import { PrismaClient, Prisma } from "@prisma/client";
 import { addDays } from "date-fns";
 import { createTransaction } from "./transactions.services";
+import { NOTIFICATIONS } from "~/utils/notifications/factory";
+import { MovementsIncludes } from "~/types/movements";
+import {
+  createNotification,
+  CreateNotificationInput,
+} from "./notifications.services";
+import { NotificationInput } from "~/utils/notifications/types";
+import { emitNotification } from "~/server/ws/emmiter";
 type GetMovement = {
   db: PrismaClient;
   userId: string;
@@ -134,6 +143,15 @@ export async function makeMovement({
           },
         });
       }
+
+      // send notification
+      const notification = NOTIFICATIONS.movement.success(
+        movement as MovementsIncludes,
+      ) as CreateNotificationInput;
+
+      const created = await createNotification(db, notification);
+
+      emitNotification(created);
 
       return movementModifed;
     } catch (error) {

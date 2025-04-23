@@ -18,6 +18,7 @@ import { ThemeProvider } from "~/lib/context/Theme.context";
 import { FilterProvider } from "~/lib/context/Filter.context";
 import "~/styles/globals.css";
 import { Toaster } from "~/lib/context/Toaster.context";
+import { useResize } from "~/lib/hooks/useResize";
 
 const montserrat = Montserrat({
   subsets: ["latin"],
@@ -34,12 +35,15 @@ const MyApp: AppType<{ session: Session | null }> = ({
   Component,
   pageProps: { session, ...pageProps },
 }) => {
+  const { isMobile } = useResize();
+
   return (
     <SessionProvider session={session}>
       <HeroUIProvider>
         <ThemeProvider>
           <FilterProvider>
             <div className={`font-sans ${montserrat.variable}`}>
+              <Toaster position={isMobile ? "top-center" : "bottom-left"} />
               <div id="portal-root"></div>
               <Component {...pageProps} />
             </div>

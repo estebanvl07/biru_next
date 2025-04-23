@@ -1,21 +1,25 @@
+// hooks/useWebSocket.ts
 import { useEffect, useState } from "react";
-import { io } from "socket.io-client";
+import { io, Socket } from "socket.io-client";
 
-const socket = io("http://localhost:3000");
+const socket: Socket = io("http://localhost:3000", {
+  autoConnect: false,
+});
 
-export const useWebSocket = () => {
+type EventHandler = {
+  [event: string]: (...args: any[]) => void;
+};
+
+export const useWebSocket = (handlers?: EventHandler) => {
   const [isConnected, setIsConnected] = useState(false);
   const [transport, setTransport] = useState("N/A");
 
   useEffect(() => {
-    if (socket.connected) {
-      onConnect();
-    }
+    socket.connect();
 
     function onConnect() {
       setIsConnected(true);
       setTransport(socket.io.engine.transport.name);
-
       socket.io.engine.on("upgrade", (transport) => {
         setTransport(transport.name);
       });
@@ -28,22 +32,29 @@ export const useWebSocket = () => {
 
     socket.on("connect", onConnect);
     socket.on("disconnect", onDisconnect);
-    socket.on("newTransaction", (transaction) => {
-      console.log(
-        "EL SOKET HA RECIBIDO UN MESAJE, DONDE HAS CREADO UNA TRANSACCION",
-        transaction,
-      );
-    });
+
+    // Register custom handlers
+    if (handlers) {
+      Object.entries(handlers).forEach(([event, handler]) => {
+        socket.on(event, handler);
+      });
+    }
 
     return () => {
       socket.off("connect", onConnect);
       socket.off("disconnect", onDisconnect);
-      socket.off("newTransaction", () => {});
+
+      if (handlers) {
+        Object.entries(handlers).forEach(([event, handler]) => {
+          socket.off(event, handler);
+        });
+      }
     };
   }, []);
 
   return {
     isConnected,
     transport,
+    socket, // opcional si quieres usarlo directamente
   };
 };

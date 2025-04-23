@@ -2,7 +2,7 @@ import { useParams } from "next/navigation";
 
 import UserMenu from "~/modules/components/atoms/UserMenu";
 import CreationMenu from "./CreationMenu/CreationMenu";
-import NotificationMenu from "~/modules/components/molecules/NotificationMenu";
+import NotificationMenu from "~/modules/components/molecules/Notifications/NotificationMenu";
 
 export default function HeaderMenu({
   hasNotifications = true,

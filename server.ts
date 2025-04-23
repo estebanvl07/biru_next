@@ -1,8 +1,9 @@
-// server.ts
 import { createServer } from "http";
 import { Server as SocketIOServer } from "socket.io";
 import next from "next";
 import { setSocketIOInstance } from "~/server/socket";
+
+import "~/server/cron/notifications";
 
 const dev = process.env.NODE_ENV !== "production";
 const app = next({ dev });
@@ -23,11 +24,6 @@ app.prepare().then(() => {
 
   io.on("connection", (socket) => {
     console.log("🔌 New client connected:", socket.id);
-
-    socket.on("chat:message", (msg) => {
-      console.log("Received message:", msg);
-      io.emit("chat:broadcast", msg);
-    });
 
     socket.on("disconnect", () => {
       console.log("❌ Client disconnected");

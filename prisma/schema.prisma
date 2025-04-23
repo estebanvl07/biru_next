@@ -14,17 +14,6 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-
-enum ModuleType {
-  GOAL
-  TRANSACCION
-  CATEGORY
-  ENTITY
-  MOVEMENT
-  // Otros tipos de notificación según los módulos
-}
-
-
 // config
 // Necessary for Next auth
 model Account {
@@ -78,10 +67,12 @@ model User {
 
 model Notifications {
   id          String      @id @default(uuid())
-  userId      String     // Relación con el modelo User
-  type        ModuleType // Enum que representa el módulo o tipo de notificación
+  userId      String      // Relación con el modelo User
+  type        String      // tipo de notificación
   title       String      @db.VarChar(60)
   link        String?
+  bookId      String?
+  externalId  String?     @unique
   message     String
   isRead      Boolean     @default(false)
   createdAt   DateTime    @default(now())

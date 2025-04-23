@@ -4,6 +4,7 @@ import { endOfMonth, isSameMonth, startOfMonth } from "date-fns";
 import _ from "lodash";
 import { getPercent } from "~/lib/helpers";
 import { MovementsIncludes } from "~/types/movements";
+import { cU } from "node_modules/@fullcalendar/core/internal-common";
 
 export async function getCurrentMovementsMonth(
   db: PrismaClient,
@@ -153,18 +154,6 @@ export async function getBudgetSummary(
       },
     });
 
-    // Obtener transacciones programadas del mes actual
-    // const scheduleTransactions = await db.transaction.groupBy({
-    //   by: ["type", "transferType", "categoryId"],
-    //   where: {
-    //     state: 3, // Programado
-    //     userId,
-    //     bookId,
-    //     date: { gte: monthStart, lte: monthEnd },
-    //   },
-    //   _sum: { amount: true },
-    // });
-
     // Obtener movimientos fijos programados del mes actual
     const scheduleMovements = await db.fixedMovements.findMany({
       where: {
@@ -181,16 +170,6 @@ export async function getBudgetSummary(
         ],
       },
     });
-    // const scheduleMovements = await db.fixedMovements.groupBy({
-    //   by: ["type", "categoryId"],
-    //   where: {
-    //     status: true,
-    //     userId,
-    //     bookId,
-    //     next_ocurrence: { gte: monthStart, lte: monthEnd },
-    //   },
-    //   _sum: { amount: true },
-    // });
 
     // Calcular gastos actuales
     const currentExpenses = await db.transaction.aggregate({
@@ -220,45 +199,24 @@ export async function getBudgetSummary(
         .filter((m) => m.type === 2)
         .reduce((sum, m) => sum + m.amount, 0);
 
-    // Calcular ingresos planificados (programados)
-    // const plannedIncomes =
-    //   scheduleTransactions
-    //     .filter((t) => t.type === 1)
-    //     .reduce((acc, t) => acc + (t._sum.amount || 0), 0) +
-    //   scheduleMovements
-    //     .filter((m) => m.type === 1)
-    //     .reduce((acc, m) => acc + (m._sum.amount || 0), 0);
-
-    // Calcular gastos planificados (programados)
-    // const plannedExpenses =
-    //   scheduleTransactions
-    //     .filter((t) => t.type === 2)
-    //     .reduce((acc, t) => acc + (t._sum.amount || 0), 0) +
-    //   scheduleMovements
-    //     .filter((m) => m.type === 2)
-    //     .reduce((acc, m) => acc + (m._sum.amount || 0), 0);
-
     // Calcular presupuesto total y balance proyectado
     const budgetTotal = transactionTotal + plannedIncomes;
     const proyectedBalanceSheet = budgetTotal - plannedExpenses;
+
+    if (
+      currentExpenses._sum.amount &&
+      currentExpenses._sum.amount > proyectedBalanceSheet
+    ) {
+      // se han excedido los gastos del presupuesto calculado
+
+      // TODO: emit budget 
+    }
 
     // Agrupar ingresos y gastos programados
     const upcomingPayments = {
       movements: [...scheduleMovements],
       transactions: [...scheduleTransactions],
     };
-
-    // const transactionGroupedByCategory = _.groupBy(
-    //   scheduleTransactions,
-    //   (t) => t.categoryId,
-    // );
-
-    // const movementsGroupedByCategory = _.groupBy(
-    //   scheduleMovements,
-    //   (m) => m.categoryId,
-    // );
-
-    // console.log(movementsGroupedByCategory);
 
     // Progreso por categoría
     const categories = await db.category.findMany({

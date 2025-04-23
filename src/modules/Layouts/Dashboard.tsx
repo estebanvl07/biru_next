@@ -11,7 +11,7 @@ import { motion } from "framer-motion";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import DrawerOptions from "./templates/DrawerNavigationMenu";
 import Breadcrum from "./templates/Breadcrum";
-import { Toaster } from "sonner";
+import { NotificationListener } from "../components/molecules/Notifications/NotificationListener";
 
 const variants = {
   hidden: { opacity: 0, x: -200, y: 0 },
@@ -48,7 +48,6 @@ const DashboardLayout = ({
         <title>Biru - {title}</title>
         <meta name="description" content={headDescription} />
       </Head>
-      <Toaster position={isMobile ? "top-center" : "bottom-left"} />
       <div className="flex w-full flex-col">
         {!isMobile ? (
           <HeaderApp
@@ -62,6 +61,7 @@ const DashboardLayout = ({
         )}
         <div className="relative flex h-full w-full flex-row pb-20 md:pr-4">
           <SideBar />
+          <NotificationListener />
           {isMobile && <BottomMobileNav />}
           {isMobile && <DrawerOptions />}
           <section className="relative z-0 h-full w-full flex-grow overflow-hidden overflow-y-auto rounded-xl border-divider/10 bg-white pb-10 scrollbar-hide md:border md:bg-default-50/50 md:pt-4 dark:bg-slate-900 md:dark:bg-slate-950">

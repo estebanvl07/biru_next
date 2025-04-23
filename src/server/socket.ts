@@ -1,9 +1,11 @@
 // server/socket.ts
 import { Server as SocketIOServer } from "socket.io";
 
+/* eslint-disable no-var */
 declare global {
   var _io: SocketIOServer | null;
 }
+/* eslint-enable no-var */
 
 global._io = global._io || null;
 

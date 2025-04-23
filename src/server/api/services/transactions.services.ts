@@ -1,7 +1,17 @@
 import type { Prisma, PrismaClient } from "@prisma/client";
-import { FilterOptions } from "~/types/transactions";
+import { FilterOptions, TransactionIncludes } from "~/types/transactions";
 import { filtersHandler } from "../filterHandler";
 import { advanceSchema } from "~/modules/Transactions/advanceSchema";
+import { getIO } from "~/server/socket";
+import { NOTIFICATIONS } from "~/utils/notifications/factory";
+import {
+  emitNotification,
+  emitTransactionNewNotification,
+} from "~/server/ws/emmiter";
+import {
+  createNotification,
+  CreateNotificationInput,
+} from "./notifications.services";
 
 interface PaginationOptions {
   limit: number;
@@ -146,6 +156,17 @@ export async function makeTransaction(
       },
     });
   }
+
+  if (data.isProgramed) {
+    const notification = NOTIFICATIONS.transaction.success(data);
+    const notificationResponse = await createNotification(
+      db,
+      notification as CreateNotificationInput,
+    );
+    emitNotification(notificationResponse);
+  }
+
+  return data;
 }
 
 export async function updateTransaction(
@@ -402,8 +423,3 @@ export async function cancelTransaction(
 
   return transaction;
 }
-
-type ThenArg<T> = T extends PromiseLike<infer U> ? U : T;
-export type TransactionIncludes = ThenArg<
-  ReturnType<typeof getTransactionById>
->;

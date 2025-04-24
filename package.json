@@ -4,15 +4,16 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev-ws": "tsx server.ts",
-    "dev": "next dev",
-    "build": "next build",
+    "dev-next": "next dev",
+    "dev": "tsx server.ts",
+    "build:server": "tsc server.ts --outDir dist",
+    "build": "next build && tsc server.ts --outDir dist",
+    "start": "tsx dist/server.js",
     "db:push": "prisma db push",
     "db:studio": "prisma studio",
     "postinstall": "prisma generate",
     "lint": "next lint",
-    "test": "vitest",
-    "start": "next start"
+    "test": "vitest"
   },
   "dependencies": {
     "@auth/prisma-adapter": "^1.4.0",

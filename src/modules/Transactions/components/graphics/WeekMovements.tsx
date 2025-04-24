@@ -50,7 +50,7 @@ const WeekMovements = () => {
       <CardBody>
         <BarChart
           hasformatNumber
-          heightChart="350"
+          heightChart="270"
           keys={keys || undefined}
           series={series}
         />

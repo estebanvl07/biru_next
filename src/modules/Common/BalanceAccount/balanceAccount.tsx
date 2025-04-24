@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { Card } from "~/modules/components";
 import { LineChart } from "~/modules/Charts";
 
 import { useCurrentAccount } from "~/modules/Account/hooks";
@@ -20,6 +19,7 @@ import { useResize } from "~/lib/hooks/useResize";
 import clsx from "clsx";
 import { BASIC_DATE } from "~/lib/constants/config";
 import { useTransactionSeries } from "~/modules/Transactions/hook/useTransactionSeries";
+import { Card } from "@heroui/react";
 
 interface Props {
   defaultFilter?: FILTERS;
@@ -68,7 +68,12 @@ const BalanceAccount = ({
   if (isMobile && hideWhenEmpty && transactions?.length === 0) return null;
 
   return (
-    <Card className={clsx("flex h-full !w-full flex-col", className)}>
+    <Card
+      className={clsx(
+        " flex h-full !w-full flex-col border border-divider px-6 py-4 shadow-sm",
+        className,
+      )}
+    >
       {showHeader && (
         <header className="flex flex-col items-center justify-between md:flex-row">
           <div className="flex w-full flex-col items-start justify-center">

@@ -2,8 +2,8 @@ import React from "react";
 import Modal from "../components/atoms/Modal.component";
 import TransactionForm from "../Transactions/TransactionForm";
 import CustomDrawer from "../components/molecules/CustomDrawer";
-import { TransactionIncludes } from "~/server/api/services/transactions.services";
 import { useResize } from "~/lib/hooks/useResize";
+import { TransactionIncludes } from "~/types/transactions";
 
 interface CreateEventModalProps {
   isOpen: boolean;

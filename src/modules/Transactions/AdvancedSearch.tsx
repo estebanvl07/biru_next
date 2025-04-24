@@ -16,7 +16,7 @@ import { useCategory } from "../Category/hook/category.hook";
 import { useEntity } from "../Entities/hook/entities.hook";
 import { amountFormatter } from "~/utils/formatters";
 import { useParams } from "next/navigation";
-import { TransactionIncludes } from "~/server/api/services/transactions.services";
+import { TransactionIncludes } from "~/types/transactions";
 import { api } from "~/utils/api";
 import { toast } from "sonner";
 import TransactionsTable from "./TransactionsTable";
@@ -54,13 +54,13 @@ const AdvancedSearch = () => {
     toast.promise(
       async () => {
         setIsLoading(true);
-        const transactions: TransactionIncludes[] = await searchTransactions({
+        const transactions = await searchTransactions({
           ...data,
           max: data.max === 0 ? undefined : data.max,
           min: data.min === 0 ? undefined : data.min,
         });
         if (transactions) {
-          setTransactions(transactions);
+          setTransactions(transactions as TransactionIncludes[]);
         }
         setIsLoading(false);
       },

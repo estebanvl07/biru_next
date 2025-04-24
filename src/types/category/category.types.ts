@@ -1,5 +1,5 @@
 import { Category } from "@prisma/client";
-import { TransactionIncludes } from "~/server/api/services/transactions.services";
+import { TransactionIncludes } from "~/types/transactions";
 
 export interface CategoryIncludes extends Category {
   transactions: TransactionIncludes[];

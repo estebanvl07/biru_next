@@ -3,7 +3,7 @@ import {
   updateTransaction,
 } from "~/modules/Transactions/schema";
 import { filterInput } from "~/modules/Common/schema";
-import * as TransactionServices from "~/server/api/services/transactions.services";
+import * as TransactionServices from "../services/transactions.services";
 
 import { createTRPCRouter, protectedProcedure } from "~/server/api/trpc";
 import { z } from "zod";

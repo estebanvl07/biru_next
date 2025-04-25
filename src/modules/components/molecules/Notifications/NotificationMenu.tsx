@@ -170,7 +170,7 @@ const NotificationMenu = () => {
           classNames={{
             tabList: "dark:bg-slate-950/50 mx-4 mb-2",
             panel:
-              "md:max-h-[vh] scrollbar-hide md:scrollbar-auto overflow-y-auto",
+              "md:max-h-[57vh] scrollbar-hide md:scrollbar-auto overflow-y-auto",
           }}
         >
           <Tab

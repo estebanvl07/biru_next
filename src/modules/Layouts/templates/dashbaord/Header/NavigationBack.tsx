@@ -1,5 +1,6 @@
 "use client";
 import { Icon } from "@iconify/react/dist/iconify.js";
+import { ArrowLeft } from "lucide-react";
 import { usePathname, useRouter } from "next/navigation";
 import React from "react";
 
@@ -15,11 +16,7 @@ const NavigationBack = ({ width = 24 }: { width?: number }) => {
 
   return (
     <button onClick={onGoBack}>
-      <Icon
-        icon="la:angle-left"
-        className="dark:text-slate-300"
-        width={width}
-      />
+      <ArrowLeft width={20} />
     </button>
   );
 };

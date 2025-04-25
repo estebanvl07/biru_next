@@ -2,11 +2,11 @@ import { Icon } from "@iconify/react/dist/iconify.js";
 import React, { useState } from "react";
 
 import { Button } from "@heroui/button";
-import { MENU_OPTIONS } from "./dashbaord/SideBar/options";
+import { MENU_OPTIONS, OptionsProps } from "./dashbaord/SideBar/options";
 import Link from "next/link";
 import CustomDrawer from "~/modules/components/molecules/CustomDrawer";
 import { DASHBOARD_MAIN_PATH } from "~/lib/constants/config";
-import { useParams } from "next/navigation";
+import { useParams, usePathname } from "next/navigation";
 import Image from "next/image";
 
 const DrawerOptions = () => {
@@ -47,26 +47,33 @@ const DrawerOptions = () => {
             return (
               <div key={index} className="flex flex-col">
                 <h4 className="mb-2 font-semibold">{title}</h4>
-                <div className="grid grid-cols-4 gap-y-6 border-b border-divider pb-4">
-                  {options.map(({ href, icon, name, id }) => (
-                    <Link
-                      key={id}
-                      href={`${DASHBOARD_MAIN_PATH}/${params?.bookId}${href}`}
-                      className="flex flex-col items-center justify-center gap-2"
-                      title={name}
-                    >
-                      <div className="flex h-12 w-12 items-center justify-center rounded-full bg-default-100 dark:bg-default-200">
-                        <Icon
-                          icon={icon ?? ""}
-                          className="text-black dark:text-white"
-                          width={22}
-                        />
-                      </div>
-                      <h4 className="w-20 overflow-hidden text-ellipsis whitespace-nowrap text-center text-xs">
-                        {name}
-                      </h4>
-                    </Link>
-                  ))}
+                <div className="grid grid-cols-4 gap-x-1 gap-y-6 border-b border-divider pb-4">
+                  {options.map(
+                    ({ href, icon, name, id, options: subOptions }) => (
+                      <>
+                        <Link
+                          key={id}
+                          href={`${DASHBOARD_MAIN_PATH}/${params?.bookId}${href}`}
+                          className="flex flex-col items-center justify-center gap-2"
+                          title={name}
+                        >
+                          <div className="flex h-12 w-12 items-center justify-center rounded-full bg-default-100 dark:bg-default-200">
+                            <Icon
+                              icon={icon ?? ""}
+                              className="text-black dark:text-white"
+                              width={22}
+                            />
+                          </div>
+                          <h4 className="w-20 overflow-hidden text-ellipsis whitespace-nowrap text-center text-xs">
+                            {name}
+                          </h4>
+                        </Link>
+                        {subOptions?.map((option) => {
+                          return <Option {...option} key={option.id} />;
+                        })}
+                      </>
+                    ),
+                  )}
                 </div>
               </div>
             );
@@ -74,6 +81,30 @@ const DrawerOptions = () => {
         </div>
       </CustomDrawer>
     </>
+  );
+};
+
+const Option = ({ name, href, icon }: OptionsProps) => {
+  const params = useParams();
+  const pathname = usePathname();
+
+  return (
+    <Link
+      href={`${DASHBOARD_MAIN_PATH}/${params?.bookId}${href}`}
+      className="flex flex-col items-center justify-center gap-2"
+      title={name}
+    >
+      <div className="flex h-12 w-12 items-center justify-center rounded-full bg-default-100 dark:bg-default-200">
+        <Icon
+          icon={icon ?? ""}
+          className="text-black dark:text-white"
+          width={22}
+        />
+      </div>
+      <h4 className="w-20 overflow-hidden text-ellipsis whitespace-nowrap text-center text-xs">
+        {name}
+      </h4>
+    </Link>
   );
 };
 

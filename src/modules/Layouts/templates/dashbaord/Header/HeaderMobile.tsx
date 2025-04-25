@@ -8,6 +8,7 @@ import { useSession } from "next-auth/react";
 import ButtonMenu from "./ButtonMenu";
 import Link from "next/link";
 import { DASHBOARD_MAIN_PATH } from "~/lib/constants/config";
+import NotificationMenu from "~/modules/components/molecules/Notifications/NotificationMenu";
 
 const HeaderMobile = ({ title = "Dashboard" }: { title?: string }) => {
   const pathname = usePathname();
@@ -32,24 +33,28 @@ const HeaderMobile = ({ title = "Dashboard" }: { title?: string }) => {
               href={`/account/${params?.acc}/setting`}
             />
             <p>
-              Bienvenido, <br />
               <span className="text-base font-semibold">
                 {data?.user.name?.split(" ").slice(0, 2).join(" ")}
+              </span>
+              <br />
+              <span className="w-8 overflow-hidden text-ellipsis whitespace-nowrap text-sm">
+                @{data?.user.email?.split("@").at(0)}
               </span>
             </p>
           </aside>
         ) : (
           <>
             <NavigationBack />
-            <div className="flex flex-col items-start justify-center">
-              <h1 className=" text-2xl font-semibold text-primary dark:text-slate-200">
-                {title}
-              </h1>
-            </div>
+            <h1 className="ml-4 text-xl font-medium text-primary dark:text-slate-200">
+              {title}
+            </h1>
           </>
         )}
       </aside>
-      <ButtonMenu />
+      <div className="flex items-center gap-x-2">
+        <NotificationMenu />
+        <ButtonMenu />
+      </div>
     </header>
   );
 };

@@ -41,15 +41,19 @@ const CustomDrawer = ({
         className={clsx("px-2 pb-4 font-montserrat", classNames?.base)}
       >
         {customHeader ? (
-          <DrawerHeader className="flex flex-col">{customHeader}</DrawerHeader>
+          <DrawerHeader className={clsx("flex flex-col", classNames?.header)}>
+            {customHeader}
+          </DrawerHeader>
         ) : (
-          <DrawerHeader className="flex flex-col">
+          <DrawerHeader className={clsx("flex flex-col", classNames?.header)}>
             {title && <h3 className="text-2xl tracking-tight">{title}</h3>}
             {subtitle && <p className="text-sm font-normal">{subtitle}</p>}
           </DrawerHeader>
         )}
-        <DrawerBody>
-          <div className="overflow-auto">{children}</div>
+        <DrawerBody className={clsx(classNames?.body)}>
+          <div className=" overflow-auto scrollbar-hide md:scrollbar-default">
+            {children}
+          </div>
         </DrawerBody>
         {footerContent && <DrawerFooter>{footerContent}</DrawerFooter>}
       </DrawerContent>

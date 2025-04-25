@@ -11,9 +11,8 @@ const ButtonMenu = () => {
     <>
       <Button
         variant="bordered"
+        className="border border-divider"
         isIconOnly
-        radius="full"
-        className="border-none bg-default-100"
         onPress={onOpen}
       >
         <Icon icon="iconamoon:menu-burger-horizontal-bold" width={20} />

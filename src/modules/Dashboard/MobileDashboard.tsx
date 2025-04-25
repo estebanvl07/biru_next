@@ -16,7 +16,7 @@ const MobileDashboard = () => {
 
   return (
     <div className="z-0 flex flex-col gap-2">
-      <section className="z-20 flex flex-col items-center justify-center pt-4">
+      <section className="z-20 flex flex-col items-center justify-center py-8">
         <span className="text-lg">Balance actual</span>
         <motion.h2
           {...onlyScale}

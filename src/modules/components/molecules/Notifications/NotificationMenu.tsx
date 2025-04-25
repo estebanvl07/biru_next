@@ -15,10 +15,12 @@ import {
 import { useNotification } from "~/lib/hooks/useNotification";
 import { Notifications } from "@prisma/client";
 import NotificationItem from "./NotificationItem";
-import { Ellipsis } from "lucide-react";
+import { ArrowLeft, Ellipsis } from "lucide-react";
 import { api } from "~/utils/api";
 import { useParams } from "next/navigation";
 import { EventsType } from "~/server/ws/events";
+import { useResize } from "~/lib/hooks/useResize";
+import CustomDrawer from "../CustomDrawer";
 
 const NotificationMenu = () => {
   const [showMenu, setShowMenu] = useState(false);
@@ -27,6 +29,7 @@ const NotificationMenu = () => {
   );
 
   const params = useParams();
+  const { isMobile } = useResize();
 
   const { mutate: markAllAsRead } = api.notifications.markAllAsRead.useMutation(
     {
@@ -118,7 +121,7 @@ const NotificationMenu = () => {
   };
 
   return (
-    <div ref={element} className="relative">
+    <div ref={!isMobile ? element : undefined} className="relative">
       <Badge
         content={unseen?.length}
         color="danger"
@@ -135,7 +138,114 @@ const NotificationMenu = () => {
           <Icon icon="flowbite:bell-outline" width={24} />
         </Button>
       </Badge>
-      {showMenu && (
+
+      <MenuContent isOpen={showMenu} onClose={onHideMenu}>
+        <header className="md:mb-3md:py-0 sticky top-0 z-10 flex items-center  justify-between bg-white px-4 py-4 dark:bg-default-100">
+          <aside className="flex items-center gap-2">
+            <button className="p-2" onClick={onHideMenu}>
+              <ArrowLeft width={20} />
+            </button>
+            <h2 className="whitespace-nowrap text-xl font-semibold md:text-2xl">
+              Notificaciones
+            </h2>
+          </aside>
+          <Dropdown placement="bottom-end">
+            <DropdownTrigger>
+              <Button variant="bordered" isIconOnly>
+                <Ellipsis />
+              </Button>
+            </DropdownTrigger>
+            <DropdownMenu className="font-montserrat">
+              <DropdownItem
+                key="mark-all-as-read"
+                onPress={() => markAllAsRead(String(params?.bookId))}
+              >
+                Marcar todas como leidas
+              </DropdownItem>
+            </DropdownMenu>
+          </Dropdown>
+        </header>
+        <Tabs
+          fullWidth
+          classNames={{
+            tabList: "dark:bg-slate-950/50 mx-4 mb-2",
+            panel:
+              "md:max-h-[vh] scrollbar-hide md:scrollbar-auto overflow-y-auto",
+          }}
+        >
+          <Tab
+            key="all"
+            title={
+              <div className="flex items-center gap-2">
+                <span>Todos </span>
+                {notifications?.length > 0 && (
+                  <div className="flex h-5 w-5 items-center justify-center rounded-full bg-primary text-[11px] text-white">
+                    <span className="tracking-normal">
+                      {notifications.length}
+                    </span>
+                  </div>
+                )}
+              </div>
+            }
+          >
+            {renderList(notifications)}
+          </Tab>
+          <Tab
+            key="unseen"
+            title={
+              <div className="flex items-center gap-2">
+                <span>No leídas</span>
+                {unseen?.length > 0 && (
+                  <div className="flex h-5 w-5 items-center justify-center rounded-full bg-primary text-[11px] text-white">
+                    <span className="tracking-normal">{unseen.length}</span>
+                  </div>
+                )}
+              </div>
+            }
+          >
+            {renderList(unseen)}
+          </Tab>
+          <Tab
+            key="seen"
+            title={
+              <div className="flex items-center gap-2">
+                <span>leídas</span>
+                {seen?.length > 0 && (
+                  <div className="flex h-5 w-5 items-center justify-center rounded-full bg-primary text-[11px] text-white">
+                    <span className="tracking-normal">{seen.length}</span>
+                  </div>
+                )}
+              </div>
+            }
+          >
+            {renderList(seen)}
+          </Tab>
+        </Tabs>
+        <footer className="mt-2 flex items-center justify-between px-4">
+          <Button className="" fullWidth color="primary">
+            Ver Todas las Notificaciones
+          </Button>
+        </footer>
+      </MenuContent>
+    </div>
+  );
+};
+
+const MenuContent = ({
+  onClose,
+  isOpen,
+  children,
+}: {
+  onClose: () => void;
+  isOpen: boolean;
+  children: React.ReactNode;
+}) => {
+  const { isDesktop } = useResize();
+  if (isDesktop && !isOpen) return null;
+
+  return (
+    <>
+      {isDesktop ? (
         <motion.div
           layout
           initial={{
@@ -146,87 +256,24 @@ const NotificationMenu = () => {
           }}
           className="absolute -right-4 top-12 h-fit w-[26rem] overflow-y-auto rounded-xl border bg-white px-2 py-4 shadow-2xl backdrop-blur-xl transition-all scrollbar-hide dark:border-white/10 dark:bg-default-100"
         >
-          <header className="mb-3 flex items-center justify-between px-4">
-            <h2 className="whitespace-nowrap text-2xl">Notificaciones</h2>
-            <Dropdown placement="bottom-end">
-              <DropdownTrigger>
-                <Button variant="bordered" isIconOnly>
-                  <Ellipsis />
-                </Button>
-              </DropdownTrigger>
-              <DropdownMenu className="font-montserrat">
-                <DropdownItem
-                  key="mark-all-as-read"
-                  onPress={() => markAllAsRead(String(params?.bookId))}
-                >
-                  Marcar todas como leidas
-                </DropdownItem>
-              </DropdownMenu>
-            </Dropdown>
-          </header>
-          <Tabs
-            fullWidth
-            classNames={{
-              tabList: "dark:bg-slate-950/50 mx-4 mb-2",
-              panel: "max-h-[57vh] overflow-y-auto",
-            }}
-          >
-            <Tab
-              key="all"
-              title={
-                <div className="flex items-center gap-2">
-                  <span>Todos </span>
-                  {notifications?.length > 0 && (
-                    <div className="flex h-5 w-5 items-center justify-center rounded-full bg-primary text-[11px] text-white">
-                      <span className="tracking-normal">
-                        {notifications.length}
-                      </span>
-                    </div>
-                  )}
-                </div>
-              }
-            >
-              {renderList(notifications)}
-            </Tab>
-            <Tab
-              key="unseen"
-              title={
-                <div className="flex items-center gap-2">
-                  <span>No leídas</span>
-                  {unseen?.length > 0 && (
-                    <div className="flex h-5 w-5 items-center justify-center rounded-full bg-primary text-[11px] text-white">
-                      <span className="tracking-normal">{unseen.length}</span>
-                    </div>
-                  )}
-                </div>
-              }
-            >
-              {renderList(unseen)}
-            </Tab>
-            <Tab
-              key="seen"
-              title={
-                <div className="flex items-center gap-2">
-                  <span>leídas</span>
-                  {seen?.length > 0 && (
-                    <div className="flex h-5 w-5 items-center justify-center rounded-full bg-primary text-[11px] text-white">
-                      <span className="tracking-normal">{seen.length}</span>
-                    </div>
-                  )}
-                </div>
-              }
-            >
-              {renderList(seen)}
-            </Tab>
-          </Tabs>
-          <footer className="mt-2 flex items-center justify-between px-4">
-            <Button className="" fullWidth color="primary">
-              Ver Todas las Notificaciones
-            </Button>
-          </footer>
+          {children}
         </motion.div>
+      ) : (
+        <CustomDrawer
+          placement="right"
+          backdrop="transparent"
+          classNames={{
+            header: "hidden",
+            body: "px-0 pt-2",
+          }}
+          radius="none"
+          isOpen={isOpen}
+          onClose={onClose}
+        >
+          {children}
+        </CustomDrawer>
       )}
-    </div>
+    </>
   );
 };
 

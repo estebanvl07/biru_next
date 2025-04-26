@@ -1,29 +1,15 @@
-import {
-  Button,
-  Chip,
-  Dropdown,
-  DropdownItem,
-  DropdownMenu,
-  DropdownTrigger,
-  Tooltip,
-  useDisclosure,
-} from "@heroui/react";
-import React, { useState } from "react";
+import { Chip, useDisclosure } from "@heroui/react";
 
-import { EventContentArg } from "@fullcalendar/core/index.js";
 import clsx from "clsx";
-import EventSummaryCard from "./EventSummaryCard";
-import { MovementsIncludes } from "~/types/movements";
-import Modal from "../components/atoms/Modal.component";
-import { EllipsisVertical, Trash, X } from "lucide-react";
+import type { MovementsIncludes } from "~/types/movements";
 
-const EventTicket = (eventInfo: EventContentArg) => {
+import EventSummaryModal from "./EventSummaryModal";
+import { EventsProps } from "../components/molecules/FullCalendar/Calendar";
+
+const EventTicket = ({ title, movement }: EventsProps) => {
   return (
     <div className="relative w-full">
-      <Ticket
-        movement={eventInfo.event.extendedProps?.movement}
-        title={eventInfo.event.title}
-      />
+      <Ticket movement={movement} title={title} />
     </div>
   );
 };
@@ -45,7 +31,10 @@ const Ticket = ({
       <Chip
         variant="flat"
         size="sm"
-        onClick={() => onOpen()}
+        onClick={(e) => {
+          e.stopPropagation();
+          onOpen();
+        }}
         radius="sm"
         className={clsx(
           "z-0 h-fit w-full max-w-full overflow-hidden text-ellipsis whitespace-nowrap py-1",
@@ -70,6 +59,11 @@ const Ticket = ({
           </p>
         </div>
       </Chip>
+      <EventSummaryModal
+        isOpen={isOpen}
+        onClose={onClose}
+        eventSelected={movement}
+      />
     </div>
   );
 };

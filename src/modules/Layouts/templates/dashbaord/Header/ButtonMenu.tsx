@@ -17,7 +17,7 @@ const ButtonMenu = () => {
       >
         <Icon icon="iconamoon:menu-burger-horizontal-bold" width={20} />
       </Button>
-      <Drawer isOpen={isOpen} onClose={onClose} size="md" placement="top">
+      <Drawer isOpen={isOpen} onClose={onClose} size="sm" placement="right">
         <DrawerContent className="pb-4 font-montserrat">
           <DrawerBody>
             <MenuContent onHide={onClose} />

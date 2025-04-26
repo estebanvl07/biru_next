@@ -37,13 +37,13 @@ const LastTransactions: FC<LastTransactionsProps> = ({
   return (
     <Card
       className={clsx(
-        "flex flex-col border border-divider !px-4 py-2 shadow-sm",
+        "flex flex-col border-none border-divider px-0 py-2 shadow-none md:border md:px-4 md:shadow-sm",
         cardClassName,
       )}
     >
       {showHeader && (
         <CardHeader className="flex items-center justify-between">
-          <h3>Últimas Transacciones</h3>
+          <h3 className="font-semibold">Últimas Transacciones</h3>
           <Link
             href={{
               pathname: "/account/[acc]/transactions",

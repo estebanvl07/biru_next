@@ -53,10 +53,9 @@ const EventList = ({ orientation = "vertical" }: EventListProps) => {
 
   return (
     <aside
-      className={clsx("gap-4 px-4 py-3", {
+      className={clsx("gap-4", {
         "flex flex-row": orientation === "horizontal",
         "flex flex-col": orientation === "vertical",
-        "grid grid-cols-2": isMobile,
       })}
     >
       <div className="flex flex-grow flex-col gap-2  ">
